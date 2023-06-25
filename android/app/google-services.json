@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "466541803518",
+    "project_id": "meetmeup-69349",
+    "storage_bucket": "meetmeup-69349.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:466541803518:android:34982b4c68947f854632af",
+        "android_client_info": {
+          "package_name": "com.mycompany.authentication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "466541803518-gsnmbth4efjiajdpl1i9c2phrlu81njq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBRyXvA-8pvPIFZft5yEAbICAXU0C8Wj4w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "466541803518-gsnmbth4efjiajdpl1i9c2phrlu81njq.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "466541803518-nt9flfdbtaj2cfl3lv26suhfo79eifti.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mycompany.authentication"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:466541803518:android:8749a9fe54bf38224632af",
+        "android_client_info": {
+          "package_name": "com.mycompany.meetupapppm1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "466541803518-gsnmbth4efjiajdpl1i9c2phrlu81njq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBRyXvA-8pvPIFZft5yEAbICAXU0C8Wj4w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "466541803518-gsnmbth4efjiajdpl1i9c2phrlu81njq.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "466541803518-nt9flfdbtaj2cfl3lv26suhfo79eifti.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mycompany.authentication"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
