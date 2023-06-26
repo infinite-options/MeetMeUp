@@ -111,6 +111,17 @@ export '/pages/account_setup_p_m/accountsetup6_availability/accountsetup6_availa
     show Accountsetup6AvailabilityWidget;
 export '/pages/account_setup_p_m/accountsetup7_summary/accountsetup7_summary_widget.dart'
     show Accountsetup7SummaryWidget;
-export '/pages/mini_demo_abhi/test/test_widget.dart' show TestWidget;
 export '/pages/account_setup_p_m/account_match/account_match_widget.dart'
     show AccountMatchWidget;
+export '/pages/account_setup_p_m/account_setup4_bottom_sheet/account_setup4_bottom_sheet_widget.dart'
+    show AccountSetup4BottomSheetWidget;
+export '/pages/account_setup_p_m/profile_page4_copy/profile_page4_copy_widget.dart'
+    show ProfilePage4CopyWidget;
+export '/pages/account_setup_p_m/profile_page4_copy_copy/profile_page4_copy_copy_widget.dart'
+    show ProfilePage4CopyCopyWidget;
+export '/pages/account_setup_p_m/account_setup4_interests_bubble/account_setup4_interests_bubble_widget.dart'
+    show AccountSetup4InterestsBubbleWidget;
+export '/pages/account_setup_p_m/account_setup4_interests_bubble_grid_view/account_setup4_interests_bubble_grid_view_widget.dart'
+    show AccountSetup4InterestsBubbleGridViewWidget;
+export '/pages/account_setup_p_m/account_setup4_slider/account_setup4_slider_widget.dart'
+    show AccountSetup4SliderWidget;

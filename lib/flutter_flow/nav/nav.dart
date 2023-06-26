@@ -434,14 +434,40 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => Accountsetup7SummaryWidget(),
         ),
         FFRoute(
-          name: 'test',
-          path: '/test',
-          builder: (context, params) => TestWidget(),
-        ),
-        FFRoute(
           name: 'AccountMatch',
           path: '/accountMatch',
           builder: (context, params) => AccountMatchWidget(),
+        ),
+        FFRoute(
+          name: 'AccountSetup4-BottomSheet',
+          path: '/accountSetup4BottomSheet',
+          builder: (context, params) => AccountSetup4BottomSheetWidget(),
+        ),
+        FFRoute(
+          name: 'ProfilePage4Copy',
+          path: '/profilePage4Copy',
+          builder: (context, params) => ProfilePage4CopyWidget(),
+        ),
+        FFRoute(
+          name: 'ProfilePage4CopyCopy',
+          path: '/profilePage4CopyCopy',
+          builder: (context, params) => ProfilePage4CopyCopyWidget(),
+        ),
+        FFRoute(
+          name: 'AccountSetup4-InterestsBubble',
+          path: '/accountSetup4InterestsBubble',
+          builder: (context, params) => AccountSetup4InterestsBubbleWidget(),
+        ),
+        FFRoute(
+          name: 'AccountSetup4-InterestsBubbleGridView',
+          path: '/accountSetup4InterestsBubbleGridView',
+          builder: (context, params) =>
+              AccountSetup4InterestsBubbleGridViewWidget(),
+        ),
+        FFRoute(
+          name: 'AccountSetup4-Slider',
+          path: '/accountSetup4Slider',
+          builder: (context, params) => AccountSetup4SliderWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
       observers: [routeObserver],

@@ -34,8 +34,6 @@ class _AccountSetup3DetailsWidgetState
     _model = createModel(context, () => AccountSetup3DetailsModel());
 
     _model.textController8 ??= TextEditingController();
-    _model.sexualityTextFieldController ??= TextEditingController();
-    _model.openToTextFieldController ??= TextEditingController();
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
@@ -330,7 +328,7 @@ class _AccountSetup3DetailsWidgetState
                                   autofocus: true,
                                   obscureText: false,
                                   decoration: InputDecoration(
-                                    labelText: 'Email',
+                                    labelText: 'Phone Number',
                                     labelStyle: FlutterFlowTheme.of(context)
                                         .labelMedium
                                         .override(
@@ -387,8 +385,9 @@ class _AccountSetup3DetailsWidgetState
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           8.0, 0.0, 8.0, 0.0),
                                       child: TextFormField(
-                                        controller: _model.textController4 ??=
-                                            TextEditingController(
+                                        controller:
+                                            _model.ageTextFieldController ??=
+                                                TextEditingController(
                                           text:
                                               columnUsersRecord.age.toString(),
                                         ),
@@ -452,7 +451,7 @@ class _AccountSetup3DetailsWidgetState
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium,
                                         validator: _model
-                                            .textController4Validator
+                                            .ageTextFieldControllerValidator
                                             .asValidator(context),
                                       ),
                                     ),
@@ -537,8 +536,9 @@ class _AccountSetup3DetailsWidgetState
                                 padding: EdgeInsetsDirectional.fromSTEB(
                                     8.0, 0.0, 8.0, 0.0),
                                 child: TextFormField(
-                                  controller: _model.textController6 ??=
-                                      TextEditingController(
+                                  controller:
+                                      _model.suburbTextFieldController ??=
+                                          TextEditingController(
                                     text: columnUsersRecord.suburb,
                                   ),
                                   autofocus: true,
@@ -589,7 +589,8 @@ class _AccountSetup3DetailsWidgetState
                                   ),
                                   style:
                                       FlutterFlowTheme.of(context).bodyMedium,
-                                  validator: _model.textController6Validator
+                                  validator: _model
+                                      .suburbTextFieldControllerValidator
                                       .asValidator(context),
                                 ),
                               ),
@@ -597,8 +598,9 @@ class _AccountSetup3DetailsWidgetState
                                 padding: EdgeInsetsDirectional.fromSTEB(
                                     8.0, 0.0, 8.0, 0.0),
                                 child: TextFormField(
-                                  controller: _model.textController7 ??=
-                                      TextEditingController(
+                                  controller:
+                                      _model.profileTextFieldController ??=
+                                          TextEditingController(
                                     text: columnUsersRecord.profileBio,
                                   ),
                                   autofocus: true,
@@ -649,7 +651,8 @@ class _AccountSetup3DetailsWidgetState
                                   ),
                                   style:
                                       FlutterFlowTheme.of(context).bodyMedium,
-                                  validator: _model.textController7Validator
+                                  validator: _model
+                                      .profileTextFieldControllerValidator
                                       .asValidator(context),
                                 ),
                               ),
@@ -783,6 +786,7 @@ class _AccountSetup3DetailsWidgetState
                                 height: 63.0,
                                 decoration: BoxDecoration(
                                   color: Color(0xFFE2E2E2),
+                                  borderRadius: BorderRadius.circular(10.0),
                                 ),
                                 child: Stack(
                                   children: [
@@ -911,73 +915,126 @@ class _AccountSetup3DetailsWidgetState
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
                                   children: [
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0.0, 0.0, 0.0, 10.0),
-                                      child: Text(
-                                        'Select the fields that best describe your sexuality',
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .override(
-                                              fontFamily: 'Open Sans',
-                                            ),
+                                    Expanded(
+                                      child: Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0.0, 0.0, 0.0, 10.0),
+                                        child: Text(
+                                          'Select the fields that best describe your sexuality',
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium
+                                              .override(
+                                                fontFamily: 'Open Sans',
+                                              ),
+                                        ),
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
-                              Builder(
-                                builder: (context) {
-                                  final listofSexuality = columnListsRecord!
-                                      .sexuality
-                                      .map((e) => e)
-                                      .toList();
-                                  return ListView.builder(
-                                    padding: EdgeInsets.zero,
-                                    shrinkWrap: true,
-                                    scrollDirection: Axis.vertical,
-                                    itemCount: listofSexuality.length,
-                                    itemBuilder:
-                                        (context, listofSexualityIndex) {
-                                      final listofSexualityItem =
-                                          listofSexuality[listofSexualityIndex];
-                                      return InkWell(
-                                        splashColor: Colors.transparent,
-                                        focusColor: Colors.transparent,
-                                        hoverColor: Colors.transparent,
-                                        highlightColor: Colors.transparent,
-                                        onTap: () async {
-                                          setState(() {
-                                            _model.sexualityTextFieldController
-                                                ?.text = listofSexualityItem;
-                                          });
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    8.0, 0.0, 8.0, 0.0),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Expanded(
+                                      child: Builder(
+                                        builder: (context) {
+                                          final listofSexuality =
+                                              columnListsRecord!.sexuality
+                                                  .toList();
+                                          return GridView.builder(
+                                            padding: EdgeInsets.zero,
+                                            gridDelegate:
+                                                SliverGridDelegateWithFixedCrossAxisCount(
+                                              crossAxisCount: 3,
+                                              crossAxisSpacing: 12.0,
+                                              mainAxisSpacing: 12.0,
+                                              childAspectRatio: 3.0,
+                                            ),
+                                            shrinkWrap: true,
+                                            scrollDirection: Axis.vertical,
+                                            itemCount: listofSexuality.length,
+                                            itemBuilder: (context,
+                                                listofSexualityIndex) {
+                                              final listofSexualityItem =
+                                                  listofSexuality[
+                                                      listofSexualityIndex];
+                                              return Container(
+                                                width: 85.0,
+                                                height: 40.0,
+                                                decoration: BoxDecoration(
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .secondaryBackground,
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      blurRadius: 4.0,
+                                                      color: Color(0x33000000),
+                                                      offset: Offset(0.0, 2.0),
+                                                      spreadRadius: 4.0,
+                                                    )
+                                                  ],
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          60.0),
+                                                ),
+                                                alignment: AlignmentDirectional(
+                                                    0.0, 0.0),
+                                                child: InkWell(
+                                                  splashColor:
+                                                      Colors.transparent,
+                                                  focusColor:
+                                                      Colors.transparent,
+                                                  hoverColor:
+                                                      Colors.transparent,
+                                                  highlightColor:
+                                                      Colors.transparent,
+                                                  onTap: () async {
+                                                    setState(() {
+                                                      _model.sexualityTextFieldController
+                                                              ?.text =
+                                                          listofSexualityItem;
+                                                    });
 
-                                          await columnUsersRecord.reference
-                                              .update(createUsersRecordData(
-                                            sexuality: listofSexualityItem,
-                                          ));
+                                                    await columnUsersRecord
+                                                        .reference
+                                                        .update(
+                                                            createUsersRecordData(
+                                                      sexuality:
+                                                          listofSexualityItem,
+                                                    ));
+                                                  },
+                                                  child: Text(
+                                                    listofSexualityItem,
+                                                    style: FlutterFlowTheme.of(
+                                                            context)
+                                                        .bodyMedium,
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          );
                                         },
-                                        child: Text(
-                                          columnListsRecord!
-                                              .sexuality[listofSexualityIndex],
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium,
-                                        ),
-                                      );
-                                    },
-                                  );
-                                },
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
                                     8.0, 0.0, 8.0, 0.0),
                                 child: TextFormField(
                                   controller:
-                                      _model.sexualityTextFieldController,
+                                      _model.sexualityTextFieldController ??=
+                                          TextEditingController(
+                                    text: columnUsersRecord.sexuality,
+                                  ),
                                   autofocus: true,
                                   obscureText: false,
                                   decoration: InputDecoration(
-                                    labelText: 'Label here...',
+                                    labelText: 'Current Selection',
                                     labelStyle: FlutterFlowTheme.of(context)
                                         .labelMedium,
                                     hintStyle: FlutterFlowTheme.of(context)
@@ -1051,71 +1108,125 @@ class _AccountSetup3DetailsWidgetState
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
                                   children: [
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0.0, 0.0, 0.0, 10.0),
-                                      child: Text(
-                                        'Select the fields that best describe what you are open to in a partner',
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .override(
-                                              fontFamily: 'Open Sans',
-                                            ),
+                                    Expanded(
+                                      child: Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0.0, 0.0, 0.0, 10.0),
+                                        child: Text(
+                                          'Select the fields that best describe what you are open to in a partner',
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium
+                                              .override(
+                                                fontFamily: 'Open Sans',
+                                              ),
+                                        ),
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
-                              Builder(
-                                builder: (context) {
-                                  final listofOpenTo = columnListsRecord!
-                                      .sexuality
-                                      .map((e) => e)
-                                      .toList();
-                                  return ListView.builder(
-                                    padding: EdgeInsets.zero,
-                                    shrinkWrap: true,
-                                    scrollDirection: Axis.vertical,
-                                    itemCount: listofOpenTo.length,
-                                    itemBuilder: (context, listofOpenToIndex) {
-                                      final listofOpenToItem =
-                                          listofOpenTo[listofOpenToIndex];
-                                      return InkWell(
-                                        splashColor: Colors.transparent,
-                                        focusColor: Colors.transparent,
-                                        hoverColor: Colors.transparent,
-                                        highlightColor: Colors.transparent,
-                                        onTap: () async {
-                                          setState(() {
-                                            _model.openToTextFieldController
-                                                ?.text = listofOpenToItem;
-                                          });
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    8.0, 0.0, 8.0, 0.0),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Expanded(
+                                      child: Builder(
+                                        builder: (context) {
+                                          final listofOpenTo =
+                                              columnListsRecord!.sexuality
+                                                  .toList();
+                                          return GridView.builder(
+                                            padding: EdgeInsets.zero,
+                                            gridDelegate:
+                                                SliverGridDelegateWithFixedCrossAxisCount(
+                                              crossAxisCount: 3,
+                                              crossAxisSpacing: 12.0,
+                                              mainAxisSpacing: 12.0,
+                                              childAspectRatio: 3.0,
+                                            ),
+                                            shrinkWrap: true,
+                                            scrollDirection: Axis.vertical,
+                                            itemCount: listofOpenTo.length,
+                                            itemBuilder:
+                                                (context, listofOpenToIndex) {
+                                              final listofOpenToItem =
+                                                  listofOpenTo[
+                                                      listofOpenToIndex];
+                                              return Container(
+                                                width: 85.0,
+                                                height: 40.0,
+                                                decoration: BoxDecoration(
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .secondaryBackground,
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      blurRadius: 4.0,
+                                                      color: Color(0x33000000),
+                                                      offset: Offset(0.0, 2.0),
+                                                      spreadRadius: 4.0,
+                                                    )
+                                                  ],
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          60.0),
+                                                ),
+                                                alignment: AlignmentDirectional(
+                                                    0.0, 0.0),
+                                                child: InkWell(
+                                                  splashColor:
+                                                      Colors.transparent,
+                                                  focusColor:
+                                                      Colors.transparent,
+                                                  hoverColor:
+                                                      Colors.transparent,
+                                                  highlightColor:
+                                                      Colors.transparent,
+                                                  onTap: () async {
+                                                    setState(() {
+                                                      _model.openToTextFieldController
+                                                              ?.text =
+                                                          listofOpenToItem;
+                                                    });
 
-                                          await currentUserReference!
-                                              .update(createUsersRecordData(
-                                            openTo: listofOpenToItem,
-                                          ));
+                                                    await columnUsersRecord
+                                                        .reference
+                                                        .update(
+                                                            createUsersRecordData(
+                                                      openTo: listofOpenToItem,
+                                                    ));
+                                                  },
+                                                  child: Text(
+                                                    listofOpenToItem,
+                                                    style: FlutterFlowTheme.of(
+                                                            context)
+                                                        .bodyMedium,
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          );
                                         },
-                                        child: Text(
-                                          columnListsRecord!
-                                              .sexuality[listofOpenToIndex],
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium,
-                                        ),
-                                      );
-                                    },
-                                  );
-                                },
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
                                     8.0, 0.0, 8.0, 0.0),
                                 child: TextFormField(
-                                  controller: _model.openToTextFieldController,
+                                  controller:
+                                      _model.openToTextFieldController ??=
+                                          TextEditingController(
+                                    text: columnUsersRecord.openTo,
+                                  ),
                                   autofocus: true,
                                   obscureText: false,
                                   decoration: InputDecoration(
-                                    labelText: 'Label here...',
+                                    labelText: 'Current Selection',
                                     labelStyle: FlutterFlowTheme.of(context)
                                         .labelMedium,
                                     hintStyle: FlutterFlowTheme.of(context)
@@ -1180,6 +1291,8 @@ class _AccountSetup3DetailsWidgetState
                                         height: 63.0,
                                         decoration: BoxDecoration(
                                           color: Color(0xFFE2E2E2),
+                                          borderRadius:
+                                              BorderRadius.circular(10.0),
                                         ),
                                         child: Stack(
                                           children: [
@@ -1260,41 +1373,48 @@ class _AccountSetup3DetailsWidgetState
                       ),
                       Align(
                         alignment: AlignmentDirectional(0.02, 0.78),
-                        child: FFButtonWidget(
-                          onPressed: () async {
-                            await columnUsersRecord.reference
-                                .update(createUsersRecordData(
-                              fullName: _model.textController1.text,
-                              age: int.tryParse(_model.textController4.text),
-                              gender: _model.textController5.text,
-                              suburb: _model.textController6.text,
-                              profileBio: _model.textController7.text,
-                              email: '',
-                            ));
+                        child: Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              0.0, 0.0, 0.0, 20.0),
+                          child: FFButtonWidget(
+                            onPressed: () async {
+                              await columnUsersRecord.reference
+                                  .update(createUsersRecordData(
+                                fullName: _model.textController1.text,
+                                age: int.tryParse(
+                                    _model.ageTextFieldController.text),
+                                gender: _model.textController5.text,
+                                suburb: _model.suburbTextFieldController.text,
+                                profileBio:
+                                    _model.profileTextFieldController.text,
+                                email: _model.textController2.text,
+                                phoneNumber: _model.textController3.text,
+                              ));
 
-                            context.pushNamed('AccountSetup4-Interests');
-                          },
-                          text: 'Next',
-                          options: FFButtonOptions(
-                            width: 128.0,
-                            height: 43.0,
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 0.0, 0.0, 0.0),
-                            iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 0.0, 0.0, 0.0),
-                            color: Color(0xFFE4423F),
-                            textStyle: FlutterFlowTheme.of(context)
-                                .titleSmall
-                                .override(
-                                  fontFamily: 'Readex Pro',
-                                  color: Colors.white,
-                                ),
-                            elevation: 3.0,
-                            borderSide: BorderSide(
-                              color: Colors.transparent,
-                              width: 1.0,
+                              context.pushNamed('AccountSetup4-Interests');
+                            },
+                            text: 'Next',
+                            options: FFButtonOptions(
+                              width: 128.0,
+                              height: 43.0,
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 0.0, 0.0, 0.0),
+                              iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 0.0, 0.0, 0.0),
+                              color: Color(0xFFE4423F),
+                              textStyle: FlutterFlowTheme.of(context)
+                                  .titleSmall
+                                  .override(
+                                    fontFamily: 'Readex Pro',
+                                    color: Colors.white,
+                                  ),
+                              elevation: 3.0,
+                              borderSide: BorderSide(
+                                color: Colors.transparent,
+                                width: 1.0,
+                              ),
+                              borderRadius: BorderRadius.circular(28.0),
                             ),
-                            borderRadius: BorderRadius.circular(28.0),
                           ),
                         ),
                       ),

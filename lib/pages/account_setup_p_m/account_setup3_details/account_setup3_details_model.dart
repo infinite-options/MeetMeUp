@@ -25,18 +25,18 @@ class AccountSetup3DetailsModel extends FlutterFlowModel {
   // State field(s) for TextField widget.
   TextEditingController? textController3;
   String? Function(BuildContext, String?)? textController3Validator;
-  // State field(s) for TextField widget.
-  TextEditingController? textController4;
-  String? Function(BuildContext, String?)? textController4Validator;
+  // State field(s) for AgeTextField widget.
+  TextEditingController? ageTextFieldController;
+  String? Function(BuildContext, String?)? ageTextFieldControllerValidator;
   // State field(s) for TextField widget.
   TextEditingController? textController5;
   String? Function(BuildContext, String?)? textController5Validator;
-  // State field(s) for TextField widget.
-  TextEditingController? textController6;
-  String? Function(BuildContext, String?)? textController6Validator;
-  // State field(s) for TextField widget.
-  TextEditingController? textController7;
-  String? Function(BuildContext, String?)? textController7Validator;
+  // State field(s) for SuburbTextField widget.
+  TextEditingController? suburbTextFieldController;
+  String? Function(BuildContext, String?)? suburbTextFieldControllerValidator;
+  // State field(s) for ProfileTextField widget.
+  TextEditingController? profileTextFieldController;
+  String? Function(BuildContext, String?)? profileTextFieldControllerValidator;
   // State field(s) for TextField widget.
   TextEditingController? textController8;
   String? Function(BuildContext, String?)? textController8Validator;
@@ -57,10 +57,10 @@ class AccountSetup3DetailsModel extends FlutterFlowModel {
     textController1?.dispose();
     textController2?.dispose();
     textController3?.dispose();
-    textController4?.dispose();
+    ageTextFieldController?.dispose();
     textController5?.dispose();
-    textController6?.dispose();
-    textController7?.dispose();
+    suburbTextFieldController?.dispose();
+    profileTextFieldController?.dispose();
     textController8?.dispose();
     sexualityTextFieldController?.dispose();
     openToTextFieldController?.dispose();

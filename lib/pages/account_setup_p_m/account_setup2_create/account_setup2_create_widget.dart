@@ -339,13 +339,21 @@ class _AccountSetup2CreateWidgetState extends State<AccountSetup2CreateWidget> {
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text(
-                        '< Need to add password strength meter >',
-                        style: FlutterFlowTheme.of(context).bodyMedium,
+                      Padding(
+                        padding:
+                            EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
+                        child: Text(
+                          '< Need to add password strength meter >',
+                          style:
+                              FlutterFlowTheme.of(context).bodyMedium.override(
+                                    fontFamily: 'Readex Pro',
+                                    color: Color(0xFFBFE98C),
+                                  ),
+                        ),
                       ),
                       Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(
-                            0.0, 20.0, 0.0, 20.0),
+                            0.0, 10.0, 0.0, 20.0),
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -4,6 +4,7 @@ import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/pages/account_setup_p_m/bottom_sheets/bottom_sheet_height/bottom_sheet_height_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -205,51 +206,90 @@ class _AccountSetup4InterestsWidgetState
                               ],
                             ),
                           ),
-                          Builder(
-                            builder: (context) {
-                              final listofInterests = columnListsRecord!
-                                  .interests
-                                  .map((e) => e)
-                                  .toList();
-                              return ListView.builder(
-                                padding: EdgeInsets.zero,
-                                shrinkWrap: true,
-                                scrollDirection: Axis.vertical,
-                                itemCount: listofInterests.length,
-                                itemBuilder: (context, listofInterestsIndex) {
-                                  final listofInterestsItem =
-                                      listofInterests[listofInterestsIndex];
-                                  return InkWell(
-                                    splashColor: Colors.transparent,
-                                    focusColor: Colors.transparent,
-                                    hoverColor: Colors.transparent,
-                                    highlightColor: Colors.transparent,
-                                    onTap: () async {
-                                      setState(() {
-                                        _model.interestTextFieldController
-                                                ?.text =
-                                            columnListsRecord!.interests[
-                                                listofInterestsIndex];
-                                      });
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                8.0, 0.0, 8.0, 0.0),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Expanded(
+                                  child: Builder(
+                                    builder: (context) {
+                                      final listofInterests =
+                                          columnListsRecord!.interests.toList();
+                                      return GridView.builder(
+                                        padding: EdgeInsets.zero,
+                                        gridDelegate:
+                                            SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 3,
+                                          crossAxisSpacing: 12.0,
+                                          mainAxisSpacing: 12.0,
+                                          childAspectRatio: 3.0,
+                                        ),
+                                        shrinkWrap: true,
+                                        scrollDirection: Axis.vertical,
+                                        itemCount: listofInterests.length,
+                                        itemBuilder:
+                                            (context, listofInterestsIndex) {
+                                          final listofInterestsItem =
+                                              listofInterests[
+                                                  listofInterestsIndex];
+                                          return Container(
+                                            width: 85.0,
+                                            height: 40.0,
+                                            decoration: BoxDecoration(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .secondaryBackground,
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  blurRadius: 4.0,
+                                                  color: Color(0x33000000),
+                                                  offset: Offset(0.0, 2.0),
+                                                  spreadRadius: 4.0,
+                                                )
+                                              ],
+                                              borderRadius:
+                                                  BorderRadius.circular(60.0),
+                                            ),
+                                            alignment:
+                                                AlignmentDirectional(0.0, 0.0),
+                                            child: InkWell(
+                                              splashColor: Colors.transparent,
+                                              focusColor: Colors.transparent,
+                                              hoverColor: Colors.transparent,
+                                              highlightColor:
+                                                  Colors.transparent,
+                                              onTap: () async {
+                                                setState(() {
+                                                  _model.interestTextFieldController
+                                                          ?.text =
+                                                      listofInterestsItem;
+                                                });
 
-                                      await currentUserReference!.update({
-                                        'user_interests':
-                                            FieldValue.arrayUnion([
-                                          _model
-                                              .interestTextFieldController.text
-                                        ]),
-                                      });
+                                                await currentUserReference!
+                                                    .update({
+                                                  'user_interests':
+                                                      FieldValue.arrayUnion([
+                                                    listofInterestsItem
+                                                  ]),
+                                                });
+                                              },
+                                              child: Text(
+                                                listofInterestsItem,
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      );
                                     },
-                                    child: Text(
-                                      columnListsRecord!
-                                          .interests[listofInterestsIndex],
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium,
-                                    ),
-                                  );
-                                },
-                              );
-                            },
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
@@ -410,16 +450,18 @@ class _AccountSetup4InterestsWidgetState
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
                               children: [
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0.0, 0.0, 0.0, 10.0),
-                                  child: Text(
-                                    'These help give a better insight into who you are and will\nallow matches to better understand you as a person.',
-                                    style: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .override(
-                                          fontFamily: 'Open Sans',
-                                        ),
+                                Expanded(
+                                  child: Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0.0, 0.0, 0.0, 10.0),
+                                    child: Text(
+                                      'These help give a better insight into who you are and will allow matches to better understand you as a person.',
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .override(
+                                            fontFamily: 'Open Sans',
+                                          ),
+                                    ),
                                   ),
                                 ),
                               ],
@@ -431,16 +473,18 @@ class _AccountSetup4InterestsWidgetState
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
                               children: [
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0.0, 0.0, 0.0, 10.0),
-                                  child: Text(
-                                    'Select the fields that best describe what you are open to in a partner',
-                                    style: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .override(
-                                          fontFamily: 'Open Sans',
-                                        ),
+                                Expanded(
+                                  child: Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0.0, 0.0, 0.0, 10.0),
+                                    child: Text(
+                                      'Select the fields that best describe what you are open to in a partner',
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .override(
+                                            fontFamily: 'Open Sans',
+                                          ),
+                                    ),
                                   ),
                                 ),
                               ],
@@ -467,14 +511,12 @@ class _AccountSetup4InterestsWidgetState
                                     onTap: () async {
                                       setState(() {
                                         _model.signTextFieldController?.text =
-                                            columnListsRecord!
-                                                .sign[listofSignsIndex];
+                                            listofSignsItem;
                                       });
 
                                       await currentUserReference!
                                           .update(createUsersRecordData(
-                                        sign:
-                                            _model.signTextFieldController.text,
+                                        sign: listofSignsItem,
                                       ));
                                     },
                                     child: Text(
@@ -535,50 +577,799 @@ class _AccountSetup4InterestsWidgetState
                                   .asValidator(context),
                             ),
                           ),
-                          StreamBuilder<List<UsersRecord>>(
-                            stream: queryUsersRecord(
-                              singleRecord: true,
-                            ),
-                            builder: (context, snapshot) {
-                              // Customize what your widget looks like when it's loading.
-                              if (!snapshot.hasData) {
-                                return Center(
-                                  child: SizedBox(
-                                    width: 50.0,
-                                    height: 50.0,
-                                    child: CircularProgressIndicator(
-                                      color:
-                                          FlutterFlowTheme.of(context).primary,
-                                    ),
+                          Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              AuthUserStreamWidget(
+                                builder: (context) => Text(
+                                  valueOrDefault(currentUserDocument?.sign, ''),
+                                  style:
+                                      FlutterFlowTheme.of(context).bodyMedium,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    10.0, 10.0, 10.0, 10.0),
+                                child: Container(
+                                  width: 354.0,
+                                  height: 40.0,
+                                  decoration: BoxDecoration(
+                                    color: FlutterFlowTheme.of(context)
+                                        .secondaryBackground,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        blurRadius: 10.0,
+                                        color: Color(0x33000000),
+                                        offset: Offset(0.0, 2.0),
+                                        spreadRadius: 4.0,
+                                      )
+                                    ],
+                                    borderRadius: BorderRadius.circular(1000.0),
                                   ),
-                                );
-                              }
-                              List<UsersRecord> listViewUsersRecordList =
-                                  snapshot.data!;
-                              // Return an empty Container when the item does not exist.
-                              if (snapshot.data!.isEmpty) {
-                                return Container();
-                              }
-                              final listViewUsersRecord =
-                                  listViewUsersRecordList.isNotEmpty
-                                      ? listViewUsersRecordList.first
-                                      : null;
-                              return ListView(
-                                padding: EdgeInsets.zero,
-                                shrinkWrap: true,
-                                scrollDirection: Axis.vertical,
-                                children: [
-                                  AuthUserStreamWidget(
-                                    builder: (context) => Text(
-                                      valueOrDefault(
-                                          currentUserDocument?.sign, ''),
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium,
-                                    ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            10.0, 0.0, 0.0, 0.0),
+                                        child: Text(
+                                          'Height',
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium,
+                                        ),
+                                      ),
+                                      Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0.0, 0.0, 13.0, 0.0),
+                                            child: InkWell(
+                                              splashColor: Colors.transparent,
+                                              focusColor: Colors.transparent,
+                                              hoverColor: Colors.transparent,
+                                              highlightColor:
+                                                  Colors.transparent,
+                                              onTap: () async {
+                                                await showModalBottomSheet(
+                                                  isScrollControlled: true,
+                                                  backgroundColor:
+                                                      Colors.transparent,
+                                                  enableDrag: false,
+                                                  context: context,
+                                                  builder: (context) {
+                                                    return GestureDetector(
+                                                      onTap: () => FocusScope
+                                                              .of(context)
+                                                          .requestFocus(_model
+                                                              .unfocusNode),
+                                                      child: Padding(
+                                                        padding: MediaQuery.of(
+                                                                context)
+                                                            .viewInsets,
+                                                        child:
+                                                            BottomSheetHeightWidget(
+                                                          heightReturn: '',
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                ).then((value) => setState(() =>
+                                                    _model.heightReturn =
+                                                        value));
+
+                                                setState(() {});
+                                              },
+                                              child: Text(
+                                                valueOrDefault<String>(
+                                                  _model.heightReturn,
+                                                  '5 ft',
+                                                ),
+                                                style: FlutterFlowTheme.of(
+                                                        context)
+                                                    .bodyMedium
+                                                    .override(
+                                                      fontFamily: 'Readex Pro',
+                                                      color: Color(0xFFCECECE),
+                                                    ),
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0.0, 0.0, 10.0, 0.0),
+                                            child: Icon(
+                                              Icons.arrow_forward,
+                                              color: Color(0xFFCECECE),
+                                              size: 24.0,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              );
-                            },
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    10.0, 10.0, 10.0, 10.0),
+                                child: Container(
+                                  width: 354.0,
+                                  height: 40.0,
+                                  decoration: BoxDecoration(
+                                    color: FlutterFlowTheme.of(context)
+                                        .secondaryBackground,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        blurRadius: 10.0,
+                                        color: Color(0x33000000),
+                                        offset: Offset(0.0, 2.0),
+                                        spreadRadius: 4.0,
+                                      )
+                                    ],
+                                    borderRadius: BorderRadius.circular(1000.0),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            10.0, 0.0, 0.0, 0.0),
+                                        child: Text(
+                                          'Education',
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium,
+                                        ),
+                                      ),
+                                      Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0.0, 0.0, 13.0, 0.0),
+                                            child: Text(
+                                              'Enter',
+                                              style: FlutterFlowTheme.of(
+                                                      context)
+                                                  .bodyMedium
+                                                  .override(
+                                                    fontFamily: 'Readex Pro',
+                                                    color: Color(0xFFCECECE),
+                                                  ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0.0, 0.0, 10.0, 0.0),
+                                            child: Icon(
+                                              Icons.arrow_forward,
+                                              color: Color(0xFFCECECE),
+                                              size: 24.0,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    10.0, 10.0, 10.0, 10.0),
+                                child: Container(
+                                  width: 354.0,
+                                  height: 40.0,
+                                  decoration: BoxDecoration(
+                                    color: FlutterFlowTheme.of(context)
+                                        .secondaryBackground,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        blurRadius: 10.0,
+                                        color: Color(0x33000000),
+                                        offset: Offset(0.0, 2.0),
+                                        spreadRadius: 10.0,
+                                      )
+                                    ],
+                                    borderRadius: BorderRadius.circular(1000.0),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            10.0, 0.0, 0.0, 0.0),
+                                        child: Text(
+                                          'Body Composition',
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium,
+                                        ),
+                                      ),
+                                      Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0.0, 0.0, 13.0, 0.0),
+                                            child: Text(
+                                              'Enter',
+                                              style: FlutterFlowTheme.of(
+                                                      context)
+                                                  .bodyMedium
+                                                  .override(
+                                                    fontFamily: 'Readex Pro',
+                                                    color: Color(0xFFCECECE),
+                                                  ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0.0, 0.0, 10.0, 0.0),
+                                            child: Icon(
+                                              Icons.arrow_forward,
+                                              color: Color(0xFFCECECE),
+                                              size: 24.0,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    10.0, 10.0, 10.0, 10.0),
+                                child: Container(
+                                  width: 354.0,
+                                  height: 40.0,
+                                  decoration: BoxDecoration(
+                                    color: FlutterFlowTheme.of(context)
+                                        .secondaryBackground,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        blurRadius: 10.0,
+                                        color: Color(0x33000000),
+                                        offset: Offset(0.0, 2.0),
+                                        spreadRadius: 10.0,
+                                      )
+                                    ],
+                                    borderRadius: BorderRadius.circular(1000.0),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            10.0, 0.0, 0.0, 0.0),
+                                        child: Text(
+                                          'Star Sign',
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium,
+                                        ),
+                                      ),
+                                      Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0.0, 0.0, 13.0, 0.0),
+                                            child: Text(
+                                              'Select',
+                                              style: FlutterFlowTheme.of(
+                                                      context)
+                                                  .bodyMedium
+                                                  .override(
+                                                    fontFamily: 'Readex Pro',
+                                                    color: Color(0xFFCECECE),
+                                                  ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0.0, 0.0, 10.0, 0.0),
+                                            child: Icon(
+                                              Icons.arrow_forward,
+                                              color: Color(0xFFCECECE),
+                                              size: 24.0,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    10.0, 10.0, 10.0, 10.0),
+                                child: Container(
+                                  width: 354.0,
+                                  height: 40.0,
+                                  decoration: BoxDecoration(
+                                    color: FlutterFlowTheme.of(context)
+                                        .secondaryBackground,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        blurRadius: 10.0,
+                                        color: Color(0x33000000),
+                                        offset: Offset(0.0, 2.0),
+                                        spreadRadius: 10.0,
+                                      )
+                                    ],
+                                    borderRadius: BorderRadius.circular(1000.0),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            10.0, 0.0, 0.0, 0.0),
+                                        child: Text(
+                                          'Drinking',
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium,
+                                        ),
+                                      ),
+                                      Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0.0, 0.0, 13.0, 0.0),
+                                            child: Text(
+                                              'Select',
+                                              style: FlutterFlowTheme.of(
+                                                      context)
+                                                  .bodyMedium
+                                                  .override(
+                                                    fontFamily: 'Readex Pro',
+                                                    color: Color(0xFFCECECE),
+                                                  ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0.0, 0.0, 10.0, 0.0),
+                                            child: Icon(
+                                              Icons.arrow_forward,
+                                              color: Color(0xFFCECECE),
+                                              size: 24.0,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    10.0, 10.0, 10.0, 10.0),
+                                child: Container(
+                                  width: 354.0,
+                                  height: 40.0,
+                                  decoration: BoxDecoration(
+                                    color: FlutterFlowTheme.of(context)
+                                        .secondaryBackground,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        blurRadius: 10.0,
+                                        color: Color(0x33000000),
+                                        offset: Offset(0.0, 2.0),
+                                        spreadRadius: 10.0,
+                                      )
+                                    ],
+                                    borderRadius: BorderRadius.circular(1000.0),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            10.0, 0.0, 0.0, 0.0),
+                                        child: Text(
+                                          'Smoking',
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium,
+                                        ),
+                                      ),
+                                      Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0.0, 0.0, 13.0, 0.0),
+                                            child: Text(
+                                              'Select',
+                                              style: FlutterFlowTheme.of(
+                                                      context)
+                                                  .bodyMedium
+                                                  .override(
+                                                    fontFamily: 'Readex Pro',
+                                                    color: Color(0xFFCECECE),
+                                                  ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0.0, 0.0, 10.0, 0.0),
+                                            child: Icon(
+                                              Icons.arrow_forward,
+                                              color: Color(0xFFCECECE),
+                                              size: 24.0,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    10.0, 10.0, 10.0, 10.0),
+                                child: Container(
+                                  width: 354.0,
+                                  height: 40.0,
+                                  decoration: BoxDecoration(
+                                    color: FlutterFlowTheme.of(context)
+                                        .secondaryBackground,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        blurRadius: 10.0,
+                                        color: Color(0x33000000),
+                                        offset: Offset(0.0, 2.0),
+                                        spreadRadius: 10.0,
+                                      )
+                                    ],
+                                    borderRadius: BorderRadius.circular(1000.0),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            10.0, 0.0, 0.0, 0.0),
+                                        child: Text(
+                                          'Kids',
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium,
+                                        ),
+                                      ),
+                                      Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0.0, 0.0, 13.0, 0.0),
+                                            child: Text(
+                                              'Select',
+                                              style: FlutterFlowTheme.of(
+                                                      context)
+                                                  .bodyMedium
+                                                  .override(
+                                                    fontFamily: 'Readex Pro',
+                                                    color: Color(0xFFCECECE),
+                                                  ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0.0, 0.0, 10.0, 0.0),
+                                            child: Icon(
+                                              Icons.arrow_forward,
+                                              color: Color(0xFFCECECE),
+                                              size: 24.0,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    10.0, 10.0, 10.0, 10.0),
+                                child: Container(
+                                  width: 354.0,
+                                  height: 40.0,
+                                  decoration: BoxDecoration(
+                                    color: FlutterFlowTheme.of(context)
+                                        .secondaryBackground,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        blurRadius: 10.0,
+                                        color: Color(0x33000000),
+                                        offset: Offset(0.0, 2.0),
+                                        spreadRadius: 10.0,
+                                      )
+                                    ],
+                                    borderRadius: BorderRadius.circular(1000.0),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            10.0, 0.0, 0.0, 0.0),
+                                        child: Text(
+                                          'Current Job',
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium,
+                                        ),
+                                      ),
+                                      Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0.0, 0.0, 13.0, 0.0),
+                                            child: Text(
+                                              'Select',
+                                              style: FlutterFlowTheme.of(
+                                                      context)
+                                                  .bodyMedium
+                                                  .override(
+                                                    fontFamily: 'Readex Pro',
+                                                    color: Color(0xFFCECECE),
+                                                  ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0.0, 0.0, 10.0, 0.0),
+                                            child: Icon(
+                                              Icons.arrow_forward,
+                                              color: Color(0xFFCECECE),
+                                              size: 24.0,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    10.0, 10.0, 10.0, 10.0),
+                                child: Container(
+                                  width: 354.0,
+                                  height: 40.0,
+                                  decoration: BoxDecoration(
+                                    color: FlutterFlowTheme.of(context)
+                                        .secondaryBackground,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        blurRadius: 10.0,
+                                        color: Color(0x33000000),
+                                        offset: Offset(0.0, 2.0),
+                                        spreadRadius: 10.0,
+                                      )
+                                    ],
+                                    borderRadius: BorderRadius.circular(1000.0),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            10.0, 0.0, 0.0, 0.0),
+                                        child: Text(
+                                          'Religion',
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium,
+                                        ),
+                                      ),
+                                      Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0.0, 0.0, 13.0, 0.0),
+                                            child: Text(
+                                              'Select',
+                                              style: FlutterFlowTheme.of(
+                                                      context)
+                                                  .bodyMedium
+                                                  .override(
+                                                    fontFamily: 'Readex Pro',
+                                                    color: Color(0xFFCECECE),
+                                                  ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0.0, 0.0, 10.0, 0.0),
+                                            child: Icon(
+                                              Icons.arrow_forward,
+                                              color: Color(0xFFCECECE),
+                                              size: 24.0,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    10.0, 10.0, 10.0, 10.0),
+                                child: Container(
+                                  width: 354.0,
+                                  height: 40.0,
+                                  decoration: BoxDecoration(
+                                    color: FlutterFlowTheme.of(context)
+                                        .secondaryBackground,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        blurRadius: 10.0,
+                                        color: Color(0x33000000),
+                                        offset: Offset(0.0, 2.0),
+                                        spreadRadius: 10.0,
+                                      )
+                                    ],
+                                    borderRadius: BorderRadius.circular(1000.0),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            10.0, 0.0, 0.0, 0.0),
+                                        child: Text(
+                                          'Gender ',
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium,
+                                        ),
+                                      ),
+                                      Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0.0, 0.0, 13.0, 0.0),
+                                            child: Text(
+                                              'Select',
+                                              style: FlutterFlowTheme.of(
+                                                      context)
+                                                  .bodyMedium
+                                                  .override(
+                                                    fontFamily: 'Readex Pro',
+                                                    color: Color(0xFFCECECE),
+                                                  ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0.0, 0.0, 10.0, 0.0),
+                                            child: Icon(
+                                              Icons.arrow_forward,
+                                              color: Color(0xFFCECECE),
+                                              size: 24.0,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    10.0, 10.0, 10.0, 10.0),
+                                child: Container(
+                                  width: 354.0,
+                                  height: 40.0,
+                                  decoration: BoxDecoration(
+                                    color: FlutterFlowTheme.of(context)
+                                        .secondaryBackground,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        blurRadius: 10.0,
+                                        color: Color(0x33000000),
+                                        offset: Offset(0.0, 2.0),
+                                        spreadRadius: 10.0,
+                                      )
+                                    ],
+                                    borderRadius: BorderRadius.circular(1000.0),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            10.0, 0.0, 0.0, 0.0),
+                                        child: Text(
+                                          'Nationality',
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium,
+                                        ),
+                                      ),
+                                      Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0.0, 0.0, 13.0, 0.0),
+                                            child: Text(
+                                              'Select',
+                                              style: FlutterFlowTheme.of(
+                                                      context)
+                                                  .bodyMedium
+                                                  .override(
+                                                    fontFamily: 'Readex Pro',
+                                                    color: Color(0xFFCECECE),
+                                                  ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0.0, 0.0, 10.0, 0.0),
+                                            child: Icon(
+                                              Icons.arrow_forward,
+                                              color: Color(0xFFCECECE),
+                                              size: 24.0,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       );
@@ -659,6 +1450,39 @@ class _AccountSetup4InterestsWidgetState
                             ),
                           ),
                         ],
+                      ),
+                    ),
+                  ),
+                  Align(
+                    alignment: AlignmentDirectional(0.02, 0.78),
+                    child: Padding(
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 20.0),
+                      child: FFButtonWidget(
+                        onPressed: () async {
+                          context.pushNamed('ProfilePage4Copy');
+                        },
+                        text: 'Test Page',
+                        options: FFButtonOptions(
+                          width: 128.0,
+                          height: 43.0,
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              0.0, 0.0, 0.0, 0.0),
+                          iconPadding: EdgeInsetsDirectional.fromSTEB(
+                              0.0, 0.0, 0.0, 0.0),
+                          color: Color(0xFFE4423F),
+                          textStyle:
+                              FlutterFlowTheme.of(context).titleSmall.override(
+                                    fontFamily: 'Readex Pro',
+                                    color: Colors.white,
+                                  ),
+                          elevation: 3.0,
+                          borderSide: BorderSide(
+                            color: Colors.transparent,
+                            width: 1.0,
+                          ),
+                          borderRadius: BorderRadius.circular(28.0),
+                        ),
                       ),
                     ),
                   ),
