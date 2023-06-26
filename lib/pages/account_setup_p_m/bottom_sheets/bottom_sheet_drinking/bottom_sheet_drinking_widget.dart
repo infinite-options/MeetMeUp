@@ -4,19 +4,19 @@ import '/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'bottom_sheet_height_model.dart';
-export 'bottom_sheet_height_model.dart';
+import 'bottom_sheet_drinking_model.dart';
+export 'bottom_sheet_drinking_model.dart';
 
-class BottomSheetHeightWidget extends StatefulWidget {
-  const BottomSheetHeightWidget({Key? key}) : super(key: key);
+class BottomSheetDrinkingWidget extends StatefulWidget {
+  const BottomSheetDrinkingWidget({Key? key}) : super(key: key);
 
   @override
-  _BottomSheetHeightWidgetState createState() =>
-      _BottomSheetHeightWidgetState();
+  _BottomSheetDrinkingWidgetState createState() =>
+      _BottomSheetDrinkingWidgetState();
 }
 
-class _BottomSheetHeightWidgetState extends State<BottomSheetHeightWidget> {
-  late BottomSheetHeightModel _model;
+class _BottomSheetDrinkingWidgetState extends State<BottomSheetDrinkingWidget> {
+  late BottomSheetDrinkingModel _model;
 
   @override
   void setState(VoidCallback callback) {
@@ -27,7 +27,7 @@ class _BottomSheetHeightWidgetState extends State<BottomSheetHeightWidget> {
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => BottomSheetHeightModel());
+    _model = createModel(context, () => BottomSheetDrinkingModel());
 
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
@@ -101,7 +101,7 @@ class _BottomSheetHeightWidgetState extends State<BottomSheetHeightWidget> {
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         Text(
-                          'What\'s Your Height?',
+                          'Your Drinking Habits?',
                           style:
                               FlutterFlowTheme.of(context).bodyMedium.override(
                                     fontFamily: 'Open Sans',
@@ -119,7 +119,7 @@ class _BottomSheetHeightWidgetState extends State<BottomSheetHeightWidget> {
                       children: [
                         Expanded(
                           child: Text(
-                            'Some of our users like to match with people that are of similar stature.',
+                            'What are your current drinking habits? Please provide an accurate answer.',
                             style: FlutterFlowTheme.of(context)
                                 .bodyMedium
                                 .override(
@@ -141,16 +141,17 @@ class _BottomSheetHeightWidgetState extends State<BottomSheetHeightWidget> {
                                 10.0, 10.0, 10.0, 10.0),
                             child: Builder(
                               builder: (context) {
-                                final heightListView =
-                                    columnListsRecord!.height.toList();
+                                final drinkingListView =
+                                    columnListsRecord!.drinking.toList();
                                 return ListView.builder(
                                   padding: EdgeInsets.zero,
                                   shrinkWrap: true,
                                   scrollDirection: Axis.vertical,
-                                  itemCount: heightListView.length,
-                                  itemBuilder: (context, heightListViewIndex) {
-                                    final heightListViewItem =
-                                        heightListView[heightListViewIndex];
+                                  itemCount: drinkingListView.length,
+                                  itemBuilder:
+                                      (context, drinkingListViewIndex) {
+                                    final drinkingListViewItem =
+                                        drinkingListView[drinkingListViewIndex];
                                     return InkWell(
                                       splashColor: Colors.transparent,
                                       focusColor: Colors.transparent,
@@ -158,10 +159,10 @@ class _BottomSheetHeightWidgetState extends State<BottomSheetHeightWidget> {
                                       highlightColor: Colors.transparent,
                                       onTap: () async {
                                         Navigator.pop(
-                                            context, heightListViewItem);
+                                            context, drinkingListViewItem);
                                       },
                                       child: Text(
-                                        heightListViewItem,
+                                        drinkingListViewItem,
                                         textAlign: TextAlign.center,
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium,
