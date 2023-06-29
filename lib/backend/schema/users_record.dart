@@ -119,11 +119,6 @@ class UsersRecord extends FirestoreRecord {
   String get education => _education ?? '';
   bool hasEducation() => _education != null;
 
-  // "height" field.
-  int? _height;
-  int get height => _height ?? 0;
-  bool hasHeight() => _height != null;
-
   // "body" field.
   String? _body;
   String get body => _body ?? '';
@@ -138,6 +133,26 @@ class UsersRecord extends FirestoreRecord {
   String? _smoking;
   String get smoking => _smoking ?? '';
   bool hasSmoking() => _smoking != null;
+
+  // "location" field.
+  LatLng? _location;
+  LatLng? get location => _location;
+  bool hasLocation() => _location != null;
+
+  // "photo_album" field.
+  List<String>? _photoAlbum;
+  List<String> get photoAlbum => _photoAlbum ?? const [];
+  bool hasPhotoAlbum() => _photoAlbum != null;
+
+  // "height" field.
+  String? _height;
+  String get height => _height ?? '';
+  bool hasHeight() => _height != null;
+
+  // "kids" field.
+  String? _kids;
+  String get kids => _kids ?? '';
+  bool hasKids() => _kids != null;
 
   void _initializeFields() {
     _email = snapshotData['email'] as String?;
@@ -161,10 +176,13 @@ class UsersRecord extends FirestoreRecord {
     _sexuality = snapshotData['sexuality'] as String?;
     _openTo = snapshotData['openTo'] as String?;
     _education = snapshotData['education'] as String?;
-    _height = castToType<int>(snapshotData['height']);
     _body = snapshotData['body'] as String?;
     _drinking = snapshotData['drinking'] as String?;
     _smoking = snapshotData['smoking'] as String?;
+    _location = snapshotData['location'] as LatLng?;
+    _photoAlbum = getDataList(snapshotData['photo_album']);
+    _height = snapshotData['height'] as String?;
+    _kids = snapshotData['kids'] as String?;
   }
 
   static CollectionReference get collection =>
@@ -221,10 +239,12 @@ Map<String, dynamic> createUsersRecordData({
   String? sexuality,
   String? openTo,
   String? education,
-  int? height,
   String? body,
   String? drinking,
   String? smoking,
+  LatLng? location,
+  String? height,
+  String? kids,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -248,10 +268,12 @@ Map<String, dynamic> createUsersRecordData({
       'sexuality': sexuality,
       'openTo': openTo,
       'education': education,
-      'height': height,
       'body': body,
       'drinking': drinking,
       'smoking': smoking,
+      'location': location,
+      'height': height,
+      'kids': kids,
     }.withoutNulls,
   );
 

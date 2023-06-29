@@ -54,6 +54,16 @@ class ListsRecord extends FirestoreRecord {
   List<String> get height => _height ?? const [];
   bool hasHeight() => _height != null;
 
+  // "number" field.
+  List<String>? _number;
+  List<String> get number => _number ?? const [];
+  bool hasNumber() => _number != null;
+
+  // "gender" field.
+  List<String>? _gender;
+  List<String> get gender => _gender ?? const [];
+  bool hasGender() => _gender != null;
+
   void _initializeFields() {
     _interests = getDataList(snapshotData['interests']);
     _sign = getDataList(snapshotData['sign']);
@@ -63,6 +73,8 @@ class ListsRecord extends FirestoreRecord {
     _sexuality = getDataList(snapshotData['sexuality']);
     _smoking = getDataList(snapshotData['smoking']);
     _height = getDataList(snapshotData['height']);
+    _number = getDataList(snapshotData['number']);
+    _gender = getDataList(snapshotData['gender']);
   }
 
   static CollectionReference get collection =>

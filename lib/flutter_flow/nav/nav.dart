@@ -79,39 +79,29 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       refreshListenable: appStateNotifier,
       errorBuilder: (context, state) => appStateNotifier.loggedIn
           ? AccountSetup3DetailsWidget()
-          : MeetUpHomePageWidget(),
+          : MMUHomePageWidget(),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
           builder: (context, _) => appStateNotifier.loggedIn
               ? AccountSetup3DetailsWidget()
-              : MeetUpHomePageWidget(),
+              : MMUHomePageWidget(),
         ),
         FFRoute(
-          name: 'MeetUpHomePage',
-          path: '/meetUpHomePage',
-          builder: (context, params) => MeetUpHomePageWidget(),
+          name: 'MMU_HomePage',
+          path: '/mMUHomePage',
+          builder: (context, params) => MMUHomePageWidget(),
         ),
         FFRoute(
-          name: 'Background',
-          path: '/background',
-          builder: (context, params) => BackgroundWidget(),
+          name: 'Demo-APITest',
+          path: '/demoAPITest',
+          builder: (context, params) => DemoAPITestWidget(),
         ),
         FFRoute(
-          name: 'APICallTest',
-          path: '/aPICallTest',
-          builder: (context, params) => APICallTestWidget(),
-        ),
-        FFRoute(
-          name: 'APITest',
-          path: '/aPITest',
-          builder: (context, params) => APITestWidget(),
-        ),
-        FFRoute(
-          name: 'APIExample',
-          path: '/aPIExample',
-          builder: (context, params) => APIExampleWidget(),
+          name: 'Demo-APIExample',
+          path: '/demoAPIExample',
+          builder: (context, params) => DemoAPIExampleWidget(),
         ),
         FFRoute(
           name: 'onboarding_slide1',
@@ -399,11 +389,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => OnboardingSlide3Widget(),
         ),
         FFRoute(
-          name: 'AccountSetup31-Profile',
-          path: '/accountSetup31Profile',
-          builder: (context, params) => AccountSetup31ProfileWidget(),
-        ),
-        FFRoute(
           name: 'Accountsetup5-Video',
           path: '/accountsetup5Video',
           builder: (context, params) => Accountsetup5VideoWidget(),
@@ -439,35 +424,40 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => AccountMatchWidget(),
         ),
         FFRoute(
-          name: 'AccountSetup4-BottomSheet',
-          path: '/accountSetup4BottomSheet',
-          builder: (context, params) => AccountSetup4BottomSheetWidget(),
-        ),
-        FFRoute(
-          name: 'ProfilePage4Copy',
-          path: '/profilePage4Copy',
-          builder: (context, params) => ProfilePage4CopyWidget(),
-        ),
-        FFRoute(
-          name: 'ProfilePage4CopyCopy',
-          path: '/profilePage4CopyCopy',
-          builder: (context, params) => ProfilePage4CopyCopyWidget(),
-        ),
-        FFRoute(
-          name: 'AccountSetup4-InterestsBubble',
-          path: '/accountSetup4InterestsBubble',
-          builder: (context, params) => AccountSetup4InterestsBubbleWidget(),
-        ),
-        FFRoute(
-          name: 'AccountSetup4-InterestsBubbleGridView',
-          path: '/accountSetup4InterestsBubbleGridView',
-          builder: (context, params) =>
-              AccountSetup4InterestsBubbleGridViewWidget(),
-        ),
-        FFRoute(
           name: 'AccountSetup4-Slider',
           path: '/accountSetup4Slider',
           builder: (context, params) => AccountSetup4SliderWidget(),
+        ),
+        FFRoute(
+          name: 'Demo-GoogleMaps',
+          path: '/demoGoogleMaps',
+          builder: (context, params) => DemoGoogleMapsWidget(),
+        ),
+        FFRoute(
+          name: 'Demo-Video',
+          path: '/demoVideo',
+          builder: (context, params) => DemoVideoWidget(),
+        ),
+        FFRoute(
+          name: 'FlipCards',
+          path: '/flipCards',
+          asyncParams: {
+            'passToFlipCards': getDocList(['users'], UsersRecord.fromSnapshot),
+          },
+          builder: (context, params) => FlipCardsWidget(
+            passToFlipCards: params.getParam<UsersRecord>(
+                'passToFlipCards', ParamType.Document, true),
+          ),
+        ),
+        FFRoute(
+          name: 'AccountSetup4-InterestsCopy',
+          path: '/accountSetup4InterestsCopy',
+          builder: (context, params) => AccountSetup4InterestsCopyWidget(),
+        ),
+        FFRoute(
+          name: 'AccountSetup3-DetailsCopy',
+          path: '/accountSetup3DetailsCopy',
+          builder: (context, params) => AccountSetup3DetailsCopyWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
       observers: [routeObserver],
@@ -635,7 +625,7 @@ class FFRoute {
 
           if (requireAuth && !appStateNotifier.loggedIn) {
             appStateNotifier.setRedirectLocationIfUnset(state.location);
-            return '/meetUpHomePage';
+            return '/mMUHomePage';
           }
           return null;
         },

@@ -2,7 +2,11 @@
     package="com.mycompany.meetupapppm1"
     xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:label="MeetMeUp-PM"
@@ -55,7 +59,7 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyBRyXvA-8pvPIFZft5yEAbICAXU0C8Wj4w"/>
 
 
     </application>
