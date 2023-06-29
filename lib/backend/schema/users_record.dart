@@ -154,6 +154,21 @@ class UsersRecord extends FirestoreRecord {
   String get kids => _kids ?? '';
   bool hasKids() => _kids != null;
 
+  // "nationality" field.
+  String? _nationality;
+  String get nationality => _nationality ?? '';
+  bool hasNationality() => _nationality != null;
+
+  // "job" field.
+  String? _job;
+  String get job => _job ?? '';
+  bool hasJob() => _job != null;
+
+  // "religion" field.
+  String? _religion;
+  String get religion => _religion ?? '';
+  bool hasReligion() => _religion != null;
+
   void _initializeFields() {
     _email = snapshotData['email'] as String?;
     _displayName = snapshotData['display_name'] as String?;
@@ -183,6 +198,9 @@ class UsersRecord extends FirestoreRecord {
     _photoAlbum = getDataList(snapshotData['photo_album']);
     _height = snapshotData['height'] as String?;
     _kids = snapshotData['kids'] as String?;
+    _nationality = snapshotData['nationality'] as String?;
+    _job = snapshotData['job'] as String?;
+    _religion = snapshotData['religion'] as String?;
   }
 
   static CollectionReference get collection =>
@@ -245,6 +263,9 @@ Map<String, dynamic> createUsersRecordData({
   LatLng? location,
   String? height,
   String? kids,
+  String? nationality,
+  String? job,
+  String? religion,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -274,6 +295,9 @@ Map<String, dynamic> createUsersRecordData({
       'location': location,
       'height': height,
       'kids': kids,
+      'nationality': nationality,
+      'job': job,
+      'religion': religion,
     }.withoutNulls,
   );
 

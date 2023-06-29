@@ -9,7 +9,10 @@ import '/pages/m_m_u2_account_setup/bottom_sheets/bottom_sheet_drinking/bottom_s
 import '/pages/m_m_u2_account_setup/bottom_sheets/bottom_sheet_education/bottom_sheet_education_widget.dart';
 import '/pages/m_m_u2_account_setup/bottom_sheets/bottom_sheet_gender/bottom_sheet_gender_widget.dart';
 import '/pages/m_m_u2_account_setup/bottom_sheets/bottom_sheet_height/bottom_sheet_height_widget.dart';
+import '/pages/m_m_u2_account_setup/bottom_sheets/bottom_sheet_job/bottom_sheet_job_widget.dart';
 import '/pages/m_m_u2_account_setup/bottom_sheets/bottom_sheet_kids/bottom_sheet_kids_widget.dart';
+import '/pages/m_m_u2_account_setup/bottom_sheets/bottom_sheet_nationality/bottom_sheet_nationality_widget.dart';
+import '/pages/m_m_u2_account_setup/bottom_sheets/bottom_sheet_religion/bottom_sheet_religion_widget.dart';
 import '/pages/m_m_u2_account_setup/bottom_sheets/bottom_sheet_sign/bottom_sheet_sign_widget.dart';
 import '/pages/m_m_u2_account_setup/bottom_sheets/bottom_sheet_smoking/bottom_sheet_smoking_widget.dart';
 import '/custom_code/actions/index.dart' as actions;
@@ -37,6 +40,12 @@ class AccountSetup4InterestsModel extends FlutterFlowModel {
   String? drinkingReturn;
   // Stores action output result for [Bottom Sheet - BottomSheetKids] action in Text widget.
   String? kidsReturn;
+  // Stores action output result for [Bottom Sheet - BottomSheetJob] action in Text widget.
+  String? jobReturn;
+  // Stores action output result for [Bottom Sheet - BottomSheetReligion] action in Text widget.
+  String? religionReturn;
+  // Stores action output result for [Bottom Sheet - BottomSheetNationality] action in Text widget.
+  String? nationalityReturn;
   // Stores action output result for [Bottom Sheet - BottomSheetSmoking] action in Text widget.
   String? smokingReturn;
   // Stores action output result for [Bottom Sheet - BottomSheetGender] action in Text widget.
