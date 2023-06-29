@@ -504,52 +504,82 @@ class _AccountSetup4InterestsWidgetState
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     0.0, 0.0, 13.0, 0.0),
-                                            child: InkWell(
-                                              splashColor: Colors.transparent,
-                                              focusColor: Colors.transparent,
-                                              hoverColor: Colors.transparent,
-                                              highlightColor:
-                                                  Colors.transparent,
-                                              onTap: () async {
-                                                await showModalBottomSheet(
-                                                  isScrollControlled: true,
-                                                  backgroundColor:
-                                                      Colors.transparent,
-                                                  enableDrag: false,
-                                                  context: context,
-                                                  builder: (context) {
-                                                    return GestureDetector(
-                                                      onTap: () => FocusScope
-                                                              .of(context)
-                                                          .requestFocus(_model
-                                                              .unfocusNode),
-                                                      child: Padding(
-                                                        padding: MediaQuery.of(
-                                                                context)
-                                                            .viewInsets,
-                                                        child:
-                                                            BottomSheetHeightWidget(),
-                                                      ),
-                                                    );
-                                                  },
-                                                ).then((value) => setState(() =>
-                                                    _model.heightReturn =
-                                                        value));
+                                            child: AuthUserStreamWidget(
+                                              builder: (context) => InkWell(
+                                                splashColor: Colors.transparent,
+                                                focusColor: Colors.transparent,
+                                                hoverColor: Colors.transparent,
+                                                highlightColor:
+                                                    Colors.transparent,
+                                                onTap: () async {
+                                                  await showModalBottomSheet(
+                                                    isScrollControlled: true,
+                                                    backgroundColor:
+                                                        Colors.transparent,
+                                                    enableDrag: false,
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return GestureDetector(
+                                                        onTap: () => FocusScope
+                                                                .of(context)
+                                                            .requestFocus(_model
+                                                                .unfocusNode),
+                                                        child: Padding(
+                                                          padding:
+                                                              MediaQuery.of(
+                                                                      context)
+                                                                  .viewInsets,
+                                                          child:
+                                                              BottomSheetHeightWidget(),
+                                                        ),
+                                                      );
+                                                    },
+                                                  ).then((value) => setState(
+                                                      () =>
+                                                          _model.heightReturn =
+                                                              value));
 
-                                                setState(() {});
-                                              },
-                                              child: Text(
-                                                valueOrDefault<String>(
-                                                  _model.heightReturn,
-                                                  '5 ft',
+                                                  setState(() {});
+                                                },
+                                                child: Text(
+                                                  valueOrDefault<String>(
+                                                    () {
+                                                      if (_model.heightReturn !=
+                                                              null &&
+                                                          _model.heightReturn !=
+                                                              '') {
+                                                        return _model
+                                                            .heightReturn;
+                                                      } else if (valueOrDefault(
+                                                                  currentUserDocument
+                                                                      ?.height,
+                                                                  '') !=
+                                                              null &&
+                                                          valueOrDefault(
+                                                                  currentUserDocument
+                                                                      ?.height,
+                                                                  '') !=
+                                                              '') {
+                                                        return valueOrDefault(
+                                                            currentUserDocument
+                                                                ?.height,
+                                                            '');
+                                                      } else {
+                                                        return 'Not Specified';
+                                                      }
+                                                    }(),
+                                                    'Not Specified',
+                                                  ),
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily:
+                                                            'Readex Pro',
+                                                        color:
+                                                            Color(0xFFCECECE),
+                                                      ),
                                                 ),
-                                                style: FlutterFlowTheme.of(
-                                                        context)
-                                                    .bodyMedium
-                                                    .override(
-                                                      fontFamily: 'Readex Pro',
-                                                      color: Color(0xFFCECECE),
-                                                    ),
                                               ),
                                             ),
                                           ),
@@ -609,52 +639,82 @@ class _AccountSetup4InterestsWidgetState
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     0.0, 0.0, 13.0, 0.0),
-                                            child: InkWell(
-                                              splashColor: Colors.transparent,
-                                              focusColor: Colors.transparent,
-                                              hoverColor: Colors.transparent,
-                                              highlightColor:
-                                                  Colors.transparent,
-                                              onTap: () async {
-                                                await showModalBottomSheet(
-                                                  isScrollControlled: true,
-                                                  backgroundColor:
-                                                      Colors.transparent,
-                                                  enableDrag: false,
-                                                  context: context,
-                                                  builder: (context) {
-                                                    return GestureDetector(
-                                                      onTap: () => FocusScope
-                                                              .of(context)
-                                                          .requestFocus(_model
-                                                              .unfocusNode),
-                                                      child: Padding(
-                                                        padding: MediaQuery.of(
-                                                                context)
-                                                            .viewInsets,
-                                                        child:
-                                                            BottomSheetEducationWidget(),
-                                                      ),
-                                                    );
-                                                  },
-                                                ).then((value) => setState(() =>
-                                                    _model.educationReturn =
-                                                        value));
+                                            child: AuthUserStreamWidget(
+                                              builder: (context) => InkWell(
+                                                splashColor: Colors.transparent,
+                                                focusColor: Colors.transparent,
+                                                hoverColor: Colors.transparent,
+                                                highlightColor:
+                                                    Colors.transparent,
+                                                onTap: () async {
+                                                  await showModalBottomSheet(
+                                                    isScrollControlled: true,
+                                                    backgroundColor:
+                                                        Colors.transparent,
+                                                    enableDrag: false,
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return GestureDetector(
+                                                        onTap: () => FocusScope
+                                                                .of(context)
+                                                            .requestFocus(_model
+                                                                .unfocusNode),
+                                                        child: Padding(
+                                                          padding:
+                                                              MediaQuery.of(
+                                                                      context)
+                                                                  .viewInsets,
+                                                          child:
+                                                              BottomSheetEducationWidget(),
+                                                        ),
+                                                      );
+                                                    },
+                                                  ).then((value) => setState(
+                                                      () => _model
+                                                              .educationReturn =
+                                                          value));
 
-                                                setState(() {});
-                                              },
-                                              child: Text(
-                                                valueOrDefault<String>(
-                                                  _model.educationReturn,
-                                                  '< High School',
+                                                  setState(() {});
+                                                },
+                                                child: Text(
+                                                  valueOrDefault<String>(
+                                                    () {
+                                                      if (_model.educationReturn !=
+                                                              null &&
+                                                          _model.educationReturn !=
+                                                              '') {
+                                                        return _model
+                                                            .educationReturn;
+                                                      } else if (valueOrDefault(
+                                                                  currentUserDocument
+                                                                      ?.education,
+                                                                  '') !=
+                                                              null &&
+                                                          valueOrDefault(
+                                                                  currentUserDocument
+                                                                      ?.education,
+                                                                  '') !=
+                                                              '') {
+                                                        return valueOrDefault(
+                                                            currentUserDocument
+                                                                ?.education,
+                                                            '');
+                                                      } else {
+                                                        return 'Not Specified';
+                                                      }
+                                                    }(),
+                                                    'Not Specified',
+                                                  ),
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily:
+                                                            'Readex Pro',
+                                                        color:
+                                                            Color(0xFFCECECE),
+                                                      ),
                                                 ),
-                                                style: FlutterFlowTheme.of(
-                                                        context)
-                                                    .bodyMedium
-                                                    .override(
-                                                      fontFamily: 'Readex Pro',
-                                                      color: Color(0xFFCECECE),
-                                                    ),
                                               ),
                                             ),
                                           ),
@@ -714,52 +774,82 @@ class _AccountSetup4InterestsWidgetState
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     0.0, 0.0, 13.0, 0.0),
-                                            child: InkWell(
-                                              splashColor: Colors.transparent,
-                                              focusColor: Colors.transparent,
-                                              hoverColor: Colors.transparent,
-                                              highlightColor:
-                                                  Colors.transparent,
-                                              onTap: () async {
-                                                await showModalBottomSheet(
-                                                  isScrollControlled: true,
-                                                  backgroundColor:
-                                                      Colors.transparent,
-                                                  enableDrag: false,
-                                                  context: context,
-                                                  builder: (context) {
-                                                    return GestureDetector(
-                                                      onTap: () => FocusScope
-                                                              .of(context)
-                                                          .requestFocus(_model
-                                                              .unfocusNode),
-                                                      child: Padding(
-                                                        padding: MediaQuery.of(
-                                                                context)
-                                                            .viewInsets,
-                                                        child:
-                                                            BottomSheetBodyTypeWidget(),
-                                                      ),
-                                                    );
-                                                  },
-                                                ).then((value) => setState(() =>
-                                                    _model.bodyTypeReturn =
-                                                        value));
+                                            child: AuthUserStreamWidget(
+                                              builder: (context) => InkWell(
+                                                splashColor: Colors.transparent,
+                                                focusColor: Colors.transparent,
+                                                hoverColor: Colors.transparent,
+                                                highlightColor:
+                                                    Colors.transparent,
+                                                onTap: () async {
+                                                  await showModalBottomSheet(
+                                                    isScrollControlled: true,
+                                                    backgroundColor:
+                                                        Colors.transparent,
+                                                    enableDrag: false,
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return GestureDetector(
+                                                        onTap: () => FocusScope
+                                                                .of(context)
+                                                            .requestFocus(_model
+                                                                .unfocusNode),
+                                                        child: Padding(
+                                                          padding:
+                                                              MediaQuery.of(
+                                                                      context)
+                                                                  .viewInsets,
+                                                          child:
+                                                              BottomSheetBodyTypeWidget(),
+                                                        ),
+                                                      );
+                                                    },
+                                                  ).then((value) => setState(
+                                                      () => _model
+                                                              .bodyTypeReturn =
+                                                          value));
 
-                                                setState(() {});
-                                              },
-                                              child: Text(
-                                                valueOrDefault<String>(
-                                                  _model.bodyTypeReturn,
-                                                  'No Entry',
+                                                  setState(() {});
+                                                },
+                                                child: Text(
+                                                  valueOrDefault<String>(
+                                                    () {
+                                                      if (_model.bodyTypeReturn !=
+                                                              null &&
+                                                          _model.bodyTypeReturn !=
+                                                              '') {
+                                                        return _model
+                                                            .bodyTypeReturn;
+                                                      } else if (valueOrDefault(
+                                                                  currentUserDocument
+                                                                      ?.body,
+                                                                  '') !=
+                                                              null &&
+                                                          valueOrDefault(
+                                                                  currentUserDocument
+                                                                      ?.body,
+                                                                  '') !=
+                                                              '') {
+                                                        return valueOrDefault(
+                                                            currentUserDocument
+                                                                ?.body,
+                                                            '');
+                                                      } else {
+                                                        return 'Not Specified';
+                                                      }
+                                                    }(),
+                                                    'Not Specified',
+                                                  ),
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily:
+                                                            'Readex Pro',
+                                                        color:
+                                                            Color(0xFFCECECE),
+                                                      ),
                                                 ),
-                                                style: FlutterFlowTheme.of(
-                                                        context)
-                                                    .bodyMedium
-                                                    .override(
-                                                      fontFamily: 'Readex Pro',
-                                                      color: Color(0xFFCECECE),
-                                                    ),
                                               ),
                                             ),
                                           ),
@@ -819,51 +909,81 @@ class _AccountSetup4InterestsWidgetState
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     0.0, 0.0, 13.0, 0.0),
-                                            child: InkWell(
-                                              splashColor: Colors.transparent,
-                                              focusColor: Colors.transparent,
-                                              hoverColor: Colors.transparent,
-                                              highlightColor:
-                                                  Colors.transparent,
-                                              onTap: () async {
-                                                await showModalBottomSheet(
-                                                  isScrollControlled: true,
-                                                  backgroundColor:
-                                                      Colors.transparent,
-                                                  enableDrag: false,
-                                                  context: context,
-                                                  builder: (context) {
-                                                    return GestureDetector(
-                                                      onTap: () => FocusScope
-                                                              .of(context)
-                                                          .requestFocus(_model
-                                                              .unfocusNode),
-                                                      child: Padding(
-                                                        padding: MediaQuery.of(
-                                                                context)
-                                                            .viewInsets,
-                                                        child:
-                                                            BottomSheetSignWidget(),
-                                                      ),
-                                                    );
-                                                  },
-                                                ).then((value) => setState(() =>
-                                                    _model.signReturn = value));
+                                            child: AuthUserStreamWidget(
+                                              builder: (context) => InkWell(
+                                                splashColor: Colors.transparent,
+                                                focusColor: Colors.transparent,
+                                                hoverColor: Colors.transparent,
+                                                highlightColor:
+                                                    Colors.transparent,
+                                                onTap: () async {
+                                                  await showModalBottomSheet(
+                                                    isScrollControlled: true,
+                                                    backgroundColor:
+                                                        Colors.transparent,
+                                                    enableDrag: false,
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return GestureDetector(
+                                                        onTap: () => FocusScope
+                                                                .of(context)
+                                                            .requestFocus(_model
+                                                                .unfocusNode),
+                                                        child: Padding(
+                                                          padding:
+                                                              MediaQuery.of(
+                                                                      context)
+                                                                  .viewInsets,
+                                                          child:
+                                                              BottomSheetSignWidget(),
+                                                        ),
+                                                      );
+                                                    },
+                                                  ).then((value) => setState(
+                                                      () => _model.signReturn =
+                                                          value));
 
-                                                setState(() {});
-                                              },
-                                              child: Text(
-                                                valueOrDefault<String>(
-                                                  _model.signReturn,
-                                                  'No Entry',
+                                                  setState(() {});
+                                                },
+                                                child: Text(
+                                                  valueOrDefault<String>(
+                                                    () {
+                                                      if (_model.signReturn !=
+                                                              null &&
+                                                          _model.signReturn !=
+                                                              '') {
+                                                        return _model
+                                                            .signReturn;
+                                                      } else if (valueOrDefault(
+                                                                  currentUserDocument
+                                                                      ?.sign,
+                                                                  '') !=
+                                                              null &&
+                                                          valueOrDefault(
+                                                                  currentUserDocument
+                                                                      ?.sign,
+                                                                  '') !=
+                                                              '') {
+                                                        return valueOrDefault(
+                                                            currentUserDocument
+                                                                ?.sign,
+                                                            '');
+                                                      } else {
+                                                        return 'Not Specified';
+                                                      }
+                                                    }(),
+                                                    'Not Specified',
+                                                  ),
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily:
+                                                            'Readex Pro',
+                                                        color:
+                                                            Color(0xFFCECECE),
+                                                      ),
                                                 ),
-                                                style: FlutterFlowTheme.of(
-                                                        context)
-                                                    .bodyMedium
-                                                    .override(
-                                                      fontFamily: 'Readex Pro',
-                                                      color: Color(0xFFCECECE),
-                                                    ),
                                               ),
                                             ),
                                           ),
@@ -923,52 +1043,82 @@ class _AccountSetup4InterestsWidgetState
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     0.0, 0.0, 13.0, 0.0),
-                                            child: InkWell(
-                                              splashColor: Colors.transparent,
-                                              focusColor: Colors.transparent,
-                                              hoverColor: Colors.transparent,
-                                              highlightColor:
-                                                  Colors.transparent,
-                                              onTap: () async {
-                                                await showModalBottomSheet(
-                                                  isScrollControlled: true,
-                                                  backgroundColor:
-                                                      Colors.transparent,
-                                                  enableDrag: false,
-                                                  context: context,
-                                                  builder: (context) {
-                                                    return GestureDetector(
-                                                      onTap: () => FocusScope
-                                                              .of(context)
-                                                          .requestFocus(_model
-                                                              .unfocusNode),
-                                                      child: Padding(
-                                                        padding: MediaQuery.of(
-                                                                context)
-                                                            .viewInsets,
-                                                        child:
-                                                            BottomSheetDrinkingWidget(),
-                                                      ),
-                                                    );
-                                                  },
-                                                ).then((value) => setState(() =>
-                                                    _model.drinkingReturn =
-                                                        value));
+                                            child: AuthUserStreamWidget(
+                                              builder: (context) => InkWell(
+                                                splashColor: Colors.transparent,
+                                                focusColor: Colors.transparent,
+                                                hoverColor: Colors.transparent,
+                                                highlightColor:
+                                                    Colors.transparent,
+                                                onTap: () async {
+                                                  await showModalBottomSheet(
+                                                    isScrollControlled: true,
+                                                    backgroundColor:
+                                                        Colors.transparent,
+                                                    enableDrag: false,
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return GestureDetector(
+                                                        onTap: () => FocusScope
+                                                                .of(context)
+                                                            .requestFocus(_model
+                                                                .unfocusNode),
+                                                        child: Padding(
+                                                          padding:
+                                                              MediaQuery.of(
+                                                                      context)
+                                                                  .viewInsets,
+                                                          child:
+                                                              BottomSheetDrinkingWidget(),
+                                                        ),
+                                                      );
+                                                    },
+                                                  ).then((value) => setState(
+                                                      () => _model
+                                                              .drinkingReturn =
+                                                          value));
 
-                                                setState(() {});
-                                              },
-                                              child: Text(
-                                                valueOrDefault<String>(
-                                                  _model.drinkingReturn,
-                                                  'No Entry',
+                                                  setState(() {});
+                                                },
+                                                child: Text(
+                                                  valueOrDefault<String>(
+                                                    () {
+                                                      if (_model.drinkingReturn !=
+                                                              null &&
+                                                          _model.drinkingReturn !=
+                                                              '') {
+                                                        return _model
+                                                            .drinkingReturn;
+                                                      } else if (valueOrDefault(
+                                                                  currentUserDocument
+                                                                      ?.drinking,
+                                                                  '') !=
+                                                              null &&
+                                                          valueOrDefault(
+                                                                  currentUserDocument
+                                                                      ?.drinking,
+                                                                  '') !=
+                                                              '') {
+                                                        return valueOrDefault(
+                                                            currentUserDocument
+                                                                ?.drinking,
+                                                            '');
+                                                      } else {
+                                                        return 'Not Specified';
+                                                      }
+                                                    }(),
+                                                    'Not Specified',
+                                                  ),
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily:
+                                                            'Readex Pro',
+                                                        color:
+                                                            Color(0xFFCECECE),
+                                                      ),
                                                 ),
-                                                style: FlutterFlowTheme.of(
-                                                        context)
-                                                    .bodyMedium
-                                                    .override(
-                                                      fontFamily: 'Readex Pro',
-                                                      color: Color(0xFFCECECE),
-                                                    ),
                                               ),
                                             ),
                                           ),
@@ -1028,51 +1178,81 @@ class _AccountSetup4InterestsWidgetState
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     0.0, 0.0, 13.0, 0.0),
-                                            child: InkWell(
-                                              splashColor: Colors.transparent,
-                                              focusColor: Colors.transparent,
-                                              hoverColor: Colors.transparent,
-                                              highlightColor:
-                                                  Colors.transparent,
-                                              onTap: () async {
-                                                await showModalBottomSheet(
-                                                  isScrollControlled: true,
-                                                  backgroundColor:
-                                                      Colors.transparent,
-                                                  enableDrag: false,
-                                                  context: context,
-                                                  builder: (context) {
-                                                    return GestureDetector(
-                                                      onTap: () => FocusScope
-                                                              .of(context)
-                                                          .requestFocus(_model
-                                                              .unfocusNode),
-                                                      child: Padding(
-                                                        padding: MediaQuery.of(
-                                                                context)
-                                                            .viewInsets,
-                                                        child:
-                                                            BottomSheetKidsWidget(),
-                                                      ),
-                                                    );
-                                                  },
-                                                ).then((value) => setState(() =>
-                                                    _model.kidsReturn = value));
+                                            child: AuthUserStreamWidget(
+                                              builder: (context) => InkWell(
+                                                splashColor: Colors.transparent,
+                                                focusColor: Colors.transparent,
+                                                hoverColor: Colors.transparent,
+                                                highlightColor:
+                                                    Colors.transparent,
+                                                onTap: () async {
+                                                  await showModalBottomSheet(
+                                                    isScrollControlled: true,
+                                                    backgroundColor:
+                                                        Colors.transparent,
+                                                    enableDrag: false,
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return GestureDetector(
+                                                        onTap: () => FocusScope
+                                                                .of(context)
+                                                            .requestFocus(_model
+                                                                .unfocusNode),
+                                                        child: Padding(
+                                                          padding:
+                                                              MediaQuery.of(
+                                                                      context)
+                                                                  .viewInsets,
+                                                          child:
+                                                              BottomSheetKidsWidget(),
+                                                        ),
+                                                      );
+                                                    },
+                                                  ).then((value) => setState(
+                                                      () => _model.kidsReturn =
+                                                          value));
 
-                                                setState(() {});
-                                              },
-                                              child: Text(
-                                                valueOrDefault<String>(
-                                                  _model.kidsReturn,
-                                                  'None',
+                                                  setState(() {});
+                                                },
+                                                child: Text(
+                                                  valueOrDefault<String>(
+                                                    () {
+                                                      if (_model.kidsReturn !=
+                                                              null &&
+                                                          _model.kidsReturn !=
+                                                              '') {
+                                                        return _model
+                                                            .kidsReturn;
+                                                      } else if (valueOrDefault(
+                                                                  currentUserDocument
+                                                                      ?.kids,
+                                                                  '') !=
+                                                              null &&
+                                                          valueOrDefault(
+                                                                  currentUserDocument
+                                                                      ?.kids,
+                                                                  '') !=
+                                                              '') {
+                                                        return valueOrDefault(
+                                                            currentUserDocument
+                                                                ?.kids,
+                                                            '');
+                                                      } else {
+                                                        return 'Not Specified';
+                                                      }
+                                                    }(),
+                                                    'Not Specified',
+                                                  ),
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily:
+                                                            'Readex Pro',
+                                                        color:
+                                                            Color(0xFFCECECE),
+                                                      ),
                                                 ),
-                                                style: FlutterFlowTheme.of(
-                                                        context)
-                                                    .bodyMedium
-                                                    .override(
-                                                      fontFamily: 'Readex Pro',
-                                                      color: Color(0xFFCECECE),
-                                                    ),
                                               ),
                                             ),
                                           ),
@@ -1333,52 +1513,82 @@ class _AccountSetup4InterestsWidgetState
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     0.0, 0.0, 13.0, 0.0),
-                                            child: InkWell(
-                                              splashColor: Colors.transparent,
-                                              focusColor: Colors.transparent,
-                                              hoverColor: Colors.transparent,
-                                              highlightColor:
-                                                  Colors.transparent,
-                                              onTap: () async {
-                                                await showModalBottomSheet(
-                                                  isScrollControlled: true,
-                                                  backgroundColor:
-                                                      Colors.transparent,
-                                                  enableDrag: false,
-                                                  context: context,
-                                                  builder: (context) {
-                                                    return GestureDetector(
-                                                      onTap: () => FocusScope
-                                                              .of(context)
-                                                          .requestFocus(_model
-                                                              .unfocusNode),
-                                                      child: Padding(
-                                                        padding: MediaQuery.of(
-                                                                context)
-                                                            .viewInsets,
-                                                        child:
-                                                            BottomSheetSmokingWidget(),
-                                                      ),
-                                                    );
-                                                  },
-                                                ).then((value) => setState(() =>
-                                                    _model.smokingReturn =
-                                                        value));
+                                            child: AuthUserStreamWidget(
+                                              builder: (context) => InkWell(
+                                                splashColor: Colors.transparent,
+                                                focusColor: Colors.transparent,
+                                                hoverColor: Colors.transparent,
+                                                highlightColor:
+                                                    Colors.transparent,
+                                                onTap: () async {
+                                                  await showModalBottomSheet(
+                                                    isScrollControlled: true,
+                                                    backgroundColor:
+                                                        Colors.transparent,
+                                                    enableDrag: false,
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return GestureDetector(
+                                                        onTap: () => FocusScope
+                                                                .of(context)
+                                                            .requestFocus(_model
+                                                                .unfocusNode),
+                                                        child: Padding(
+                                                          padding:
+                                                              MediaQuery.of(
+                                                                      context)
+                                                                  .viewInsets,
+                                                          child:
+                                                              BottomSheetSmokingWidget(),
+                                                        ),
+                                                      );
+                                                    },
+                                                  ).then((value) => setState(
+                                                      () =>
+                                                          _model.smokingReturn =
+                                                              value));
 
-                                                setState(() {});
-                                              },
-                                              child: Text(
-                                                valueOrDefault<String>(
-                                                  _model.smokingReturn,
-                                                  'Not Specified',
+                                                  setState(() {});
+                                                },
+                                                child: Text(
+                                                  valueOrDefault<String>(
+                                                    () {
+                                                      if (_model.smokingReturn !=
+                                                              null &&
+                                                          _model.smokingReturn !=
+                                                              '') {
+                                                        return _model
+                                                            .smokingReturn;
+                                                      } else if (valueOrDefault(
+                                                                  currentUserDocument
+                                                                      ?.smoking,
+                                                                  '') !=
+                                                              null &&
+                                                          valueOrDefault(
+                                                                  currentUserDocument
+                                                                      ?.smoking,
+                                                                  '') !=
+                                                              '') {
+                                                        return valueOrDefault(
+                                                            currentUserDocument
+                                                                ?.smoking,
+                                                            '');
+                                                      } else {
+                                                        return 'Not Specified';
+                                                      }
+                                                    }(),
+                                                    'Not Specified',
+                                                  ),
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily:
+                                                            'Readex Pro',
+                                                        color:
+                                                            Color(0xFFCECECE),
+                                                      ),
                                                 ),
-                                                style: FlutterFlowTheme.of(
-                                                        context)
-                                                    .bodyMedium
-                                                    .override(
-                                                      fontFamily: 'Readex Pro',
-                                                      color: Color(0xFFCECECE),
-                                                    ),
                                               ),
                                             ),
                                           ),
@@ -1438,52 +1648,82 @@ class _AccountSetup4InterestsWidgetState
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     0.0, 0.0, 13.0, 0.0),
-                                            child: InkWell(
-                                              splashColor: Colors.transparent,
-                                              focusColor: Colors.transparent,
-                                              hoverColor: Colors.transparent,
-                                              highlightColor:
-                                                  Colors.transparent,
-                                              onTap: () async {
-                                                await showModalBottomSheet(
-                                                  isScrollControlled: true,
-                                                  backgroundColor:
-                                                      Colors.transparent,
-                                                  enableDrag: false,
-                                                  context: context,
-                                                  builder: (context) {
-                                                    return GestureDetector(
-                                                      onTap: () => FocusScope
-                                                              .of(context)
-                                                          .requestFocus(_model
-                                                              .unfocusNode),
-                                                      child: Padding(
-                                                        padding: MediaQuery.of(
-                                                                context)
-                                                            .viewInsets,
-                                                        child:
-                                                            BottomSheetGenderWidget(),
-                                                      ),
-                                                    );
-                                                  },
-                                                ).then((value) => setState(() =>
-                                                    _model.genderReturn =
-                                                        value));
+                                            child: AuthUserStreamWidget(
+                                              builder: (context) => InkWell(
+                                                splashColor: Colors.transparent,
+                                                focusColor: Colors.transparent,
+                                                hoverColor: Colors.transparent,
+                                                highlightColor:
+                                                    Colors.transparent,
+                                                onTap: () async {
+                                                  await showModalBottomSheet(
+                                                    isScrollControlled: true,
+                                                    backgroundColor:
+                                                        Colors.transparent,
+                                                    enableDrag: false,
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return GestureDetector(
+                                                        onTap: () => FocusScope
+                                                                .of(context)
+                                                            .requestFocus(_model
+                                                                .unfocusNode),
+                                                        child: Padding(
+                                                          padding:
+                                                              MediaQuery.of(
+                                                                      context)
+                                                                  .viewInsets,
+                                                          child:
+                                                              BottomSheetGenderWidget(),
+                                                        ),
+                                                      );
+                                                    },
+                                                  ).then((value) => setState(
+                                                      () =>
+                                                          _model.genderReturn =
+                                                              value));
 
-                                                setState(() {});
-                                              },
-                                              child: Text(
-                                                valueOrDefault<String>(
-                                                  _model.genderReturn,
-                                                  'Not Specified',
+                                                  setState(() {});
+                                                },
+                                                child: Text(
+                                                  valueOrDefault<String>(
+                                                    () {
+                                                      if (_model.genderReturn !=
+                                                              null &&
+                                                          _model.genderReturn !=
+                                                              '') {
+                                                        return _model
+                                                            .genderReturn;
+                                                      } else if (valueOrDefault(
+                                                                  currentUserDocument
+                                                                      ?.gender,
+                                                                  '') !=
+                                                              null &&
+                                                          valueOrDefault(
+                                                                  currentUserDocument
+                                                                      ?.gender,
+                                                                  '') !=
+                                                              '') {
+                                                        return valueOrDefault(
+                                                            currentUserDocument
+                                                                ?.gender,
+                                                            '');
+                                                      } else {
+                                                        return 'Not Specified';
+                                                      }
+                                                    }(),
+                                                    'Not Specified',
+                                                  ),
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily:
+                                                            'Readex Pro',
+                                                        color:
+                                                            Color(0xFFCECECE),
+                                                      ),
                                                 ),
-                                                style: FlutterFlowTheme.of(
-                                                        context)
-                                                    .bodyMedium
-                                                    .override(
-                                                      fontFamily: 'Readex Pro',
-                                                      color: Color(0xFFCECECE),
-                                                    ),
                                               ),
                                             ),
                                           ),
@@ -1697,6 +1937,7 @@ class _AccountSetup4InterestsWidgetState
                             kids: _model.kidsReturn,
                             education: _model.educationReturn,
                             smoking: _model.smokingReturn,
+                            body: _model.bodyTypeReturn,
                           ));
 
                           context.pushNamed('Accountsetup5-Video');
