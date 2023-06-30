@@ -144,3 +144,7 @@ export '/pages/m_m_u2_account_setup/account_setup4_interests_copy/account_setup4
     show AccountSetup4InterestsCopyWidget;
 export '/pages/m_m_u2_account_setup/account_setup3_details_copy/account_setup3_details_copy_widget.dart'
     show AccountSetup3DetailsCopyWidget;
+export '/pages/m_m_u2_account_setup/page4_copy/page4_copy_widget.dart'
+    show Page4CopyWidget;
+export '/pages/m_m_u2_account_setup/accountsetup7_summary_copy/accountsetup7_summary_copy_widget.dart'
+    show Accountsetup7SummaryCopyWidget;

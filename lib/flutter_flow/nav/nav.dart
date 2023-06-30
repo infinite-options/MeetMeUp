@@ -458,6 +458,16 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: 'AccountSetup3-DetailsCopy',
           path: '/accountSetup3DetailsCopy',
           builder: (context, params) => AccountSetup3DetailsCopyWidget(),
+        ),
+        FFRoute(
+          name: 'Page4Copy',
+          path: '/page4Copy',
+          builder: (context, params) => Page4CopyWidget(),
+        ),
+        FFRoute(
+          name: 'Accountsetup7-SummaryCopy',
+          path: '/accountsetup7SummaryCopy',
+          builder: (context, params) => Accountsetup7SummaryCopyWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
       observers: [routeObserver],
