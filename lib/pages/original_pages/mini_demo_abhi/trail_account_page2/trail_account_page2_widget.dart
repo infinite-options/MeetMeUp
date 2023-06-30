@@ -126,7 +126,7 @@ class _TrailAccountPage2WidgetState extends State<TrailAccountPage2Widget> {
                           borderRadius: BorderRadius.circular(36.0),
                           child: Image.asset(
                             'assets/images/charlotte.png',
-                            width: MediaQuery.of(context).size.width * 1.0,
+                            width: MediaQuery.sizeOf(context).width * 1.0,
                             fit: BoxFit.cover,
                           ),
                         ),

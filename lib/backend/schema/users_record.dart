@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart';
+
 import '/backend/schema/util/firestore_util.dart';
 import '/backend/schema/util/schema_util.dart';
 
@@ -169,6 +171,21 @@ class UsersRecord extends FirestoreRecord {
   String get religion => _religion ?? '';
   bool hasReligion() => _religion != null;
 
+  // "photo1_url" field.
+  String? _photo1Url;
+  String get photo1Url => _photo1Url ?? '';
+  bool hasPhoto1Url() => _photo1Url != null;
+
+  // "photo2_url" field.
+  String? _photo2Url;
+  String get photo2Url => _photo2Url ?? '';
+  bool hasPhoto2Url() => _photo2Url != null;
+
+  // "photo3_url" field.
+  String? _photo3Url;
+  String get photo3Url => _photo3Url ?? '';
+  bool hasPhoto3Url() => _photo3Url != null;
+
   void _initializeFields() {
     _email = snapshotData['email'] as String?;
     _displayName = snapshotData['display_name'] as String?;
@@ -201,6 +218,9 @@ class UsersRecord extends FirestoreRecord {
     _nationality = snapshotData['nationality'] as String?;
     _job = snapshotData['job'] as String?;
     _religion = snapshotData['religion'] as String?;
+    _photo1Url = snapshotData['photo1_url'] as String?;
+    _photo2Url = snapshotData['photo2_url'] as String?;
+    _photo3Url = snapshotData['photo3_url'] as String?;
   }
 
   static CollectionReference get collection =>
@@ -266,6 +286,9 @@ Map<String, dynamic> createUsersRecordData({
   String? nationality,
   String? job,
   String? religion,
+  String? photo1Url,
+  String? photo2Url,
+  String? photo3Url,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -298,8 +321,95 @@ Map<String, dynamic> createUsersRecordData({
       'nationality': nationality,
       'job': job,
       'religion': religion,
+      'photo1_url': photo1Url,
+      'photo2_url': photo2Url,
+      'photo3_url': photo3Url,
     }.withoutNulls,
   );
 
   return firestoreData;
+}
+
+class UsersRecordDocumentEquality implements Equality<UsersRecord> {
+  const UsersRecordDocumentEquality();
+
+  @override
+  bool equals(UsersRecord? e1, UsersRecord? e2) {
+    const listEquality = ListEquality();
+    return e1?.email == e2?.email &&
+        e1?.displayName == e2?.displayName &&
+        e1?.photoUrl == e2?.photoUrl &&
+        e1?.uid == e2?.uid &&
+        e1?.createdTime == e2?.createdTime &&
+        e1?.phoneNumber == e2?.phoneNumber &&
+        e1?.videoUrl == e2?.videoUrl &&
+        e1?.age == e2?.age &&
+        e1?.fullName == e2?.fullName &&
+        listEquality.equals(e1?.userInterests, e2?.userInterests) &&
+        e1?.gender == e2?.gender &&
+        e1?.address == e2?.address &&
+        e1?.suburb == e2?.suburb &&
+        e1?.state == e2?.state &&
+        e1?.country == e2?.country &&
+        e1?.zip == e2?.zip &&
+        e1?.profileBio == e2?.profileBio &&
+        e1?.sign == e2?.sign &&
+        e1?.sexuality == e2?.sexuality &&
+        e1?.openTo == e2?.openTo &&
+        e1?.education == e2?.education &&
+        e1?.body == e2?.body &&
+        e1?.drinking == e2?.drinking &&
+        e1?.smoking == e2?.smoking &&
+        e1?.location == e2?.location &&
+        listEquality.equals(e1?.photoAlbum, e2?.photoAlbum) &&
+        e1?.height == e2?.height &&
+        e1?.kids == e2?.kids &&
+        e1?.nationality == e2?.nationality &&
+        e1?.job == e2?.job &&
+        e1?.religion == e2?.religion &&
+        e1?.photo1Url == e2?.photo1Url &&
+        e1?.photo2Url == e2?.photo2Url &&
+        e1?.photo3Url == e2?.photo3Url;
+  }
+
+  @override
+  int hash(UsersRecord? e) => const ListEquality().hash([
+        e?.email,
+        e?.displayName,
+        e?.photoUrl,
+        e?.uid,
+        e?.createdTime,
+        e?.phoneNumber,
+        e?.videoUrl,
+        e?.age,
+        e?.fullName,
+        e?.userInterests,
+        e?.gender,
+        e?.address,
+        e?.suburb,
+        e?.state,
+        e?.country,
+        e?.zip,
+        e?.profileBio,
+        e?.sign,
+        e?.sexuality,
+        e?.openTo,
+        e?.education,
+        e?.body,
+        e?.drinking,
+        e?.smoking,
+        e?.location,
+        e?.photoAlbum,
+        e?.height,
+        e?.kids,
+        e?.nationality,
+        e?.job,
+        e?.religion,
+        e?.photo1Url,
+        e?.photo2Url,
+        e?.photo3Url
+      ]);
+
+  @override
+  bool isValidKey(Object? o) => o is UsersRecord;
 }

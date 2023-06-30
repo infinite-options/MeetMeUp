@@ -7,6 +7,7 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_video_player.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/upload_data.dart';
+import '/pages/m_m_u2_account_setup/bottom_sheets/bottom_sheet_waiting/bottom_sheet_waiting_widget.dart';
 import '/pages/m_m_u2_account_setup/bottom_sheets/bottom_sheet_why_video/bottom_sheet_why_video_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';

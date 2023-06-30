@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart';
+
 import '/backend/schema/util/firestore_util.dart';
 import '/backend/schema/util/schema_util.dart';
 
@@ -116,4 +118,40 @@ Map<String, dynamic> createListsRecordData() {
   );
 
   return firestoreData;
+}
+
+class ListsRecordDocumentEquality implements Equality<ListsRecord> {
+  const ListsRecordDocumentEquality();
+
+  @override
+  bool equals(ListsRecord? e1, ListsRecord? e2) {
+    const listEquality = ListEquality();
+    return listEquality.equals(e1?.interests, e2?.interests) &&
+        listEquality.equals(e1?.sign, e2?.sign) &&
+        listEquality.equals(e1?.body, e2?.body) &&
+        listEquality.equals(e1?.drinking, e2?.drinking) &&
+        listEquality.equals(e1?.education, e2?.education) &&
+        listEquality.equals(e1?.sexuality, e2?.sexuality) &&
+        listEquality.equals(e1?.smoking, e2?.smoking) &&
+        listEquality.equals(e1?.height, e2?.height) &&
+        listEquality.equals(e1?.number, e2?.number) &&
+        listEquality.equals(e1?.gender, e2?.gender);
+  }
+
+  @override
+  int hash(ListsRecord? e) => const ListEquality().hash([
+        e?.interests,
+        e?.sign,
+        e?.body,
+        e?.drinking,
+        e?.education,
+        e?.sexuality,
+        e?.smoking,
+        e?.height,
+        e?.number,
+        e?.gender
+      ]);
+
+  @override
+  bool isValidKey(Object? o) => o is ListsRecord;
 }

@@ -124,7 +124,7 @@ class _AccountSetup4InterestsWidgetState
                     borderRadius: BorderRadius.circular(8.0),
                     child: Image.asset(
                       'assets/images/progress-bar.png',
-                      width: MediaQuery.of(context).size.width * 1.0,
+                      width: MediaQuery.sizeOf(context).width * 1.0,
                       height: 32.0,
                       fit: BoxFit.contain,
                     ),
@@ -528,10 +528,9 @@ class _AccountSetup4InterestsWidgetState
                                                             .requestFocus(_model
                                                                 .unfocusNode),
                                                         child: Padding(
-                                                          padding:
-                                                              MediaQuery.of(
-                                                                      context)
-                                                                  .viewInsets,
+                                                          padding: MediaQuery
+                                                              .viewInsetsOf(
+                                                                  context),
                                                           child:
                                                               BottomSheetHeightWidget(),
                                                         ),
@@ -663,10 +662,9 @@ class _AccountSetup4InterestsWidgetState
                                                             .requestFocus(_model
                                                                 .unfocusNode),
                                                         child: Padding(
-                                                          padding:
-                                                              MediaQuery.of(
-                                                                      context)
-                                                                  .viewInsets,
+                                                          padding: MediaQuery
+                                                              .viewInsetsOf(
+                                                                  context),
                                                           child:
                                                               BottomSheetEducationWidget(),
                                                         ),
@@ -798,10 +796,9 @@ class _AccountSetup4InterestsWidgetState
                                                             .requestFocus(_model
                                                                 .unfocusNode),
                                                         child: Padding(
-                                                          padding:
-                                                              MediaQuery.of(
-                                                                      context)
-                                                                  .viewInsets,
+                                                          padding: MediaQuery
+                                                              .viewInsetsOf(
+                                                                  context),
                                                           child:
                                                               BottomSheetBodyTypeWidget(),
                                                         ),
@@ -933,10 +930,9 @@ class _AccountSetup4InterestsWidgetState
                                                             .requestFocus(_model
                                                                 .unfocusNode),
                                                         child: Padding(
-                                                          padding:
-                                                              MediaQuery.of(
-                                                                      context)
-                                                                  .viewInsets,
+                                                          padding: MediaQuery
+                                                              .viewInsetsOf(
+                                                                  context),
                                                           child:
                                                               BottomSheetSignWidget(),
                                                         ),
@@ -1067,10 +1063,9 @@ class _AccountSetup4InterestsWidgetState
                                                             .requestFocus(_model
                                                                 .unfocusNode),
                                                         child: Padding(
-                                                          padding:
-                                                              MediaQuery.of(
-                                                                      context)
-                                                                  .viewInsets,
+                                                          padding: MediaQuery
+                                                              .viewInsetsOf(
+                                                                  context),
                                                           child:
                                                               BottomSheetDrinkingWidget(),
                                                         ),
@@ -1202,10 +1197,9 @@ class _AccountSetup4InterestsWidgetState
                                                             .requestFocus(_model
                                                                 .unfocusNode),
                                                         child: Padding(
-                                                          padding:
-                                                              MediaQuery.of(
-                                                                      context)
-                                                                  .viewInsets,
+                                                          padding: MediaQuery
+                                                              .viewInsetsOf(
+                                                                  context),
                                                           child:
                                                               BottomSheetKidsWidget(),
                                                         ),
@@ -1336,10 +1330,9 @@ class _AccountSetup4InterestsWidgetState
                                                             .requestFocus(_model
                                                                 .unfocusNode),
                                                         child: Padding(
-                                                          padding:
-                                                              MediaQuery.of(
-                                                                      context)
-                                                                  .viewInsets,
+                                                          padding: MediaQuery
+                                                              .viewInsetsOf(
+                                                                  context),
                                                           child:
                                                               BottomSheetJobWidget(),
                                                         ),
@@ -1469,10 +1462,9 @@ class _AccountSetup4InterestsWidgetState
                                                             .requestFocus(_model
                                                                 .unfocusNode),
                                                         child: Padding(
-                                                          padding:
-                                                              MediaQuery.of(
-                                                                      context)
-                                                                  .viewInsets,
+                                                          padding: MediaQuery
+                                                              .viewInsetsOf(
+                                                                  context),
                                                           child:
                                                               BottomSheetReligionWidget(),
                                                         ),
@@ -1604,10 +1596,9 @@ class _AccountSetup4InterestsWidgetState
                                                             .requestFocus(_model
                                                                 .unfocusNode),
                                                         child: Padding(
-                                                          padding:
-                                                              MediaQuery.of(
-                                                                      context)
-                                                                  .viewInsets,
+                                                          padding: MediaQuery
+                                                              .viewInsetsOf(
+                                                                  context),
                                                           child:
                                                               BottomSheetNationalityWidget(),
                                                         ),
@@ -1738,10 +1729,9 @@ class _AccountSetup4InterestsWidgetState
                                                             .requestFocus(_model
                                                                 .unfocusNode),
                                                         child: Padding(
-                                                          padding:
-                                                              MediaQuery.of(
-                                                                      context)
-                                                                  .viewInsets,
+                                                          padding: MediaQuery
+                                                              .viewInsetsOf(
+                                                                  context),
                                                           child:
                                                               BottomSheetSmokingWidget(),
                                                         ),
@@ -1873,10 +1863,9 @@ class _AccountSetup4InterestsWidgetState
                                                             .requestFocus(_model
                                                                 .unfocusNode),
                                                         child: Padding(
-                                                          padding:
-                                                              MediaQuery.of(
-                                                                      context)
-                                                                  .viewInsets,
+                                                          padding: MediaQuery
+                                                              .viewInsetsOf(
+                                                                  context),
                                                           child:
                                                               BottomSheetGenderWidget(),
                                                         ),
@@ -1954,7 +1943,7 @@ class _AccountSetup4InterestsWidgetState
                     },
                   ),
                   Container(
-                    width: MediaQuery.of(context).size.width * 1.0,
+                    width: MediaQuery.sizeOf(context).width * 1.0,
                     height: 100.0,
                     decoration: BoxDecoration(
                       color: FlutterFlowTheme.of(context).secondaryBackground,
@@ -2132,6 +2121,8 @@ class _AccountSetup4InterestsWidgetState
                           EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 20.0),
                       child: FFButtonWidget(
                         onPressed: () async {
+                          context.pushNamed('Accountsetup5-Video');
+
                           await currentUserReference!
                               .update(createUsersRecordData(
                             height: _model.heightReturn,
@@ -2146,8 +2137,6 @@ class _AccountSetup4InterestsWidgetState
                             job: _model.jobReturn,
                             religion: _model.religionReturn,
                           ));
-
-                          context.pushNamed('Accountsetup5-Video');
                         },
                         text: 'Next',
                         options: FFButtonOptions(

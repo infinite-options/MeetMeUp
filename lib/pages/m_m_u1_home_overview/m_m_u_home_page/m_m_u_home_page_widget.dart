@@ -49,7 +49,7 @@ class _MMUHomePageWidgetState extends State<MMUHomePageWidget> {
               Expanded(
                 child: Container(
                   width: double.infinity,
-                  height: MediaQuery.of(context).size.height * 1.0,
+                  height: MediaQuery.sizeOf(context).height * 1.0,
                   decoration: BoxDecoration(
                     color: Color(0xFFE4423F),
                   ),

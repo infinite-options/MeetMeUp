@@ -7,6 +7,7 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_video_player.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/upload_data.dart';
+import '/pages/m_m_u2_account_setup/bottom_sheets/bottom_sheet_waiting/bottom_sheet_waiting_widget.dart';
 import '/pages/m_m_u2_account_setup/bottom_sheets/bottom_sheet_why_video/bottom_sheet_why_video_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -114,7 +115,7 @@ class _Accountsetup5VideoWidgetState extends State<Accountsetup5VideoWidget> {
                     borderRadius: BorderRadius.circular(8.0),
                     child: Image.asset(
                       'assets/images/progress-bar80-2.png',
-                      width: MediaQuery.of(context).size.width * 1.0,
+                      width: MediaQuery.sizeOf(context).width * 1.0,
                       height: 32.0,
                       fit: BoxFit.contain,
                     ),
@@ -171,11 +172,14 @@ class _Accountsetup5VideoWidgetState extends State<Accountsetup5VideoWidget> {
                             alignment: AlignmentDirectional(-0.04, 0.0),
                             child: AuthUserStreamWidget(
                               builder: (context) => FlutterFlowVideoPlayer(
-                                path: valueOrDefault(
-                                    currentUserDocument?.videoUrl, ''),
+                                path: valueOrDefault<String>(
+                                  valueOrDefault(
+                                      currentUserDocument?.videoUrl, ''),
+                                  'https://assets.mixkit.co/videos/preview/mixkit-forest-stream-in-the-sunlight-529-large.mp4',
+                                ),
                                 videoType: VideoType.network,
                                 height:
-                                    MediaQuery.of(context).size.height * 0.824,
+                                    MediaQuery.sizeOf(context).height * 0.824,
                                 autoPlay: false,
                                 looping: true,
                                 showControls: true,
@@ -206,6 +210,7 @@ class _Accountsetup5VideoWidgetState extends State<Accountsetup5VideoWidget> {
                                       () => _model.isDataUploading1 = true);
                                   var selectedUploadedFiles =
                                       <FFUploadedFile>[];
+
                                   var downloadUrls = <String>[];
                                   try {
                                     selectedUploadedFiles = selectedMedia
@@ -263,7 +268,7 @@ class _Accountsetup5VideoWidgetState extends State<Accountsetup5VideoWidget> {
                     ),
                   ),
                   Container(
-                    width: MediaQuery.of(context).size.width * 1.0,
+                    width: MediaQuery.sizeOf(context).width * 1.0,
                     height: 166.0,
                     decoration: BoxDecoration(
                       color: FlutterFlowTheme.of(context).secondaryBackground,
@@ -303,8 +308,8 @@ class _Accountsetup5VideoWidgetState extends State<Accountsetup5VideoWidget> {
                                                 .requestFocus(
                                                     _model.unfocusNode),
                                             child: Padding(
-                                              padding: MediaQuery.of(context)
-                                                  .viewInsets,
+                                              padding: MediaQuery.viewInsetsOf(
+                                                  context),
                                               child:
                                                   BottomSheetWhyVideoWidget(),
                                             ),
@@ -413,10 +418,33 @@ class _Accountsetup5VideoWidgetState extends State<Accountsetup5VideoWidget> {
                         EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 20.0),
                     child: FFButtonWidget(
                       onPressed: () async {
-                        await currentUserReference!
-                            .update(createUsersRecordData(
-                          videoUrl: _model.uploadedFileUrl1,
-                        ));
+                        if (_model.uploadedFileUrl1 != null &&
+                            _model.uploadedFileUrl1 != '') {
+                          await currentUserReference!
+                              .update(createUsersRecordData(
+                            videoUrl: _model.uploadedFileUrl1,
+                          ));
+                          return;
+                        } else {
+                          await showModalBottomSheet(
+                            isScrollControlled: true,
+                            backgroundColor: Colors.transparent,
+                            enableDrag: false,
+                            context: context,
+                            builder: (context) {
+                              return GestureDetector(
+                                onTap: () => FocusScope.of(context)
+                                    .requestFocus(_model.unfocusNode),
+                                child: Padding(
+                                  padding: MediaQuery.viewInsetsOf(context),
+                                  child: BottomSheetWaitingWidget(),
+                                ),
+                              );
+                            },
+                          ).then((value) => setState(() {}));
+
+                          return;
+                        }
                       },
                       text: 'Upload Video',
                       icon: Icon(
@@ -510,6 +538,7 @@ class _Accountsetup5VideoWidgetState extends State<Accountsetup5VideoWidget> {
                                       () => _model.isDataUploading2 = true);
                                   var selectedUploadedFiles =
                                       <FFUploadedFile>[];
+
                                   var downloadUrls = <String>[];
                                   try {
                                     selectedUploadedFiles = selectedMedia
@@ -554,7 +583,14 @@ class _Accountsetup5VideoWidgetState extends State<Accountsetup5VideoWidget> {
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(8.0),
                                 child: Image.network(
-                                  currentUserPhoto,
+                                  valueOrDefault<String>(
+                                    _model.uploadedFileUrl2 != null &&
+                                            _model.uploadedFileUrl2 != ''
+                                        ? _model.uploadedFileUrl2
+                                        : valueOrDefault(
+                                            currentUserDocument?.photo1Url, ''),
+                                    'https://picsum.photos/seed/723/600',
+                                  ),
                                   width: 140.0,
                                   height: 140.0,
                                   fit: BoxFit.cover,
@@ -566,69 +602,83 @@ class _Accountsetup5VideoWidgetState extends State<Accountsetup5VideoWidget> {
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(
                               10.0, 10.0, 10.0, 10.0),
-                          child: InkWell(
-                            splashColor: Colors.transparent,
-                            focusColor: Colors.transparent,
-                            hoverColor: Colors.transparent,
-                            highlightColor: Colors.transparent,
-                            onTap: () async {
-                              final selectedMedia =
-                                  await selectMediaWithSourceBottomSheet(
-                                context: context,
-                                allowPhoto: true,
-                              );
-                              if (selectedMedia != null &&
-                                  selectedMedia.every((m) => validateFileFormat(
-                                      m.storagePath, context))) {
-                                setState(() => _model.isDataUploading3 = true);
-                                var selectedUploadedFiles = <FFUploadedFile>[];
-                                var downloadUrls = <String>[];
-                                try {
-                                  selectedUploadedFiles = selectedMedia
-                                      .map((m) => FFUploadedFile(
-                                            name: m.storagePath.split('/').last,
-                                            bytes: m.bytes,
-                                            height: m.dimensions?.height,
-                                            width: m.dimensions?.width,
-                                            blurHash: m.blurHash,
-                                          ))
-                                      .toList();
+                          child: AuthUserStreamWidget(
+                            builder: (context) => InkWell(
+                              splashColor: Colors.transparent,
+                              focusColor: Colors.transparent,
+                              hoverColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              onTap: () async {
+                                final selectedMedia =
+                                    await selectMediaWithSourceBottomSheet(
+                                  context: context,
+                                  allowPhoto: true,
+                                );
+                                if (selectedMedia != null &&
+                                    selectedMedia.every((m) =>
+                                        validateFileFormat(
+                                            m.storagePath, context))) {
+                                  setState(
+                                      () => _model.isDataUploading3 = true);
+                                  var selectedUploadedFiles =
+                                      <FFUploadedFile>[];
 
-                                  downloadUrls = (await Future.wait(
-                                    selectedMedia.map(
-                                      (m) async => await uploadData(
-                                          m.storagePath, m.bytes),
-                                    ),
-                                  ))
-                                      .where((u) => u != null)
-                                      .map((u) => u!)
-                                      .toList();
-                                } finally {
-                                  _model.isDataUploading3 = false;
+                                  var downloadUrls = <String>[];
+                                  try {
+                                    selectedUploadedFiles = selectedMedia
+                                        .map((m) => FFUploadedFile(
+                                              name:
+                                                  m.storagePath.split('/').last,
+                                              bytes: m.bytes,
+                                              height: m.dimensions?.height,
+                                              width: m.dimensions?.width,
+                                              blurHash: m.blurHash,
+                                            ))
+                                        .toList();
+
+                                    downloadUrls = (await Future.wait(
+                                      selectedMedia.map(
+                                        (m) async => await uploadData(
+                                            m.storagePath, m.bytes),
+                                      ),
+                                    ))
+                                        .where((u) => u != null)
+                                        .map((u) => u!)
+                                        .toList();
+                                  } finally {
+                                    _model.isDataUploading3 = false;
+                                  }
+                                  if (selectedUploadedFiles.length ==
+                                          selectedMedia.length &&
+                                      downloadUrls.length ==
+                                          selectedMedia.length) {
+                                    setState(() {
+                                      _model.uploadedLocalFile3 =
+                                          selectedUploadedFiles.first;
+                                      _model.uploadedFileUrl3 =
+                                          downloadUrls.first;
+                                    });
+                                  } else {
+                                    setState(() {});
+                                    return;
+                                  }
                                 }
-                                if (selectedUploadedFiles.length ==
-                                        selectedMedia.length &&
-                                    downloadUrls.length ==
-                                        selectedMedia.length) {
-                                  setState(() {
-                                    _model.uploadedLocalFile3 =
-                                        selectedUploadedFiles.first;
-                                    _model.uploadedFileUrl3 =
-                                        downloadUrls.first;
-                                  });
-                                } else {
-                                  setState(() {});
-                                  return;
-                                }
-                              }
-                            },
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(8.0),
-                              child: Image.network(
-                                'https://picsum.photos/seed/275/600',
-                                width: 140.0,
-                                height: 140.0,
-                                fit: BoxFit.cover,
+                              },
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(8.0),
+                                child: Image.network(
+                                  valueOrDefault<String>(
+                                    _model.uploadedFileUrl3 != null &&
+                                            _model.uploadedFileUrl3 != ''
+                                        ? _model.uploadedFileUrl3
+                                        : valueOrDefault(
+                                            currentUserDocument?.photo2Url, ''),
+                                    'https://picsum.photos/seed/723/600',
+                                  ),
+                                  width: 140.0,
+                                  height: 140.0,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
                           ),
@@ -636,69 +686,83 @@ class _Accountsetup5VideoWidgetState extends State<Accountsetup5VideoWidget> {
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(
                               10.0, 10.0, 10.0, 10.0),
-                          child: InkWell(
-                            splashColor: Colors.transparent,
-                            focusColor: Colors.transparent,
-                            hoverColor: Colors.transparent,
-                            highlightColor: Colors.transparent,
-                            onTap: () async {
-                              final selectedMedia =
-                                  await selectMediaWithSourceBottomSheet(
-                                context: context,
-                                allowPhoto: true,
-                              );
-                              if (selectedMedia != null &&
-                                  selectedMedia.every((m) => validateFileFormat(
-                                      m.storagePath, context))) {
-                                setState(() => _model.isDataUploading4 = true);
-                                var selectedUploadedFiles = <FFUploadedFile>[];
-                                var downloadUrls = <String>[];
-                                try {
-                                  selectedUploadedFiles = selectedMedia
-                                      .map((m) => FFUploadedFile(
-                                            name: m.storagePath.split('/').last,
-                                            bytes: m.bytes,
-                                            height: m.dimensions?.height,
-                                            width: m.dimensions?.width,
-                                            blurHash: m.blurHash,
-                                          ))
-                                      .toList();
+                          child: AuthUserStreamWidget(
+                            builder: (context) => InkWell(
+                              splashColor: Colors.transparent,
+                              focusColor: Colors.transparent,
+                              hoverColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              onTap: () async {
+                                final selectedMedia =
+                                    await selectMediaWithSourceBottomSheet(
+                                  context: context,
+                                  allowPhoto: true,
+                                );
+                                if (selectedMedia != null &&
+                                    selectedMedia.every((m) =>
+                                        validateFileFormat(
+                                            m.storagePath, context))) {
+                                  setState(
+                                      () => _model.isDataUploading4 = true);
+                                  var selectedUploadedFiles =
+                                      <FFUploadedFile>[];
 
-                                  downloadUrls = (await Future.wait(
-                                    selectedMedia.map(
-                                      (m) async => await uploadData(
-                                          m.storagePath, m.bytes),
-                                    ),
-                                  ))
-                                      .where((u) => u != null)
-                                      .map((u) => u!)
-                                      .toList();
-                                } finally {
-                                  _model.isDataUploading4 = false;
+                                  var downloadUrls = <String>[];
+                                  try {
+                                    selectedUploadedFiles = selectedMedia
+                                        .map((m) => FFUploadedFile(
+                                              name:
+                                                  m.storagePath.split('/').last,
+                                              bytes: m.bytes,
+                                              height: m.dimensions?.height,
+                                              width: m.dimensions?.width,
+                                              blurHash: m.blurHash,
+                                            ))
+                                        .toList();
+
+                                    downloadUrls = (await Future.wait(
+                                      selectedMedia.map(
+                                        (m) async => await uploadData(
+                                            m.storagePath, m.bytes),
+                                      ),
+                                    ))
+                                        .where((u) => u != null)
+                                        .map((u) => u!)
+                                        .toList();
+                                  } finally {
+                                    _model.isDataUploading4 = false;
+                                  }
+                                  if (selectedUploadedFiles.length ==
+                                          selectedMedia.length &&
+                                      downloadUrls.length ==
+                                          selectedMedia.length) {
+                                    setState(() {
+                                      _model.uploadedLocalFile4 =
+                                          selectedUploadedFiles.first;
+                                      _model.uploadedFileUrl4 =
+                                          downloadUrls.first;
+                                    });
+                                  } else {
+                                    setState(() {});
+                                    return;
+                                  }
                                 }
-                                if (selectedUploadedFiles.length ==
-                                        selectedMedia.length &&
-                                    downloadUrls.length ==
-                                        selectedMedia.length) {
-                                  setState(() {
-                                    _model.uploadedLocalFile4 =
-                                        selectedUploadedFiles.first;
-                                    _model.uploadedFileUrl4 =
-                                        downloadUrls.first;
-                                  });
-                                } else {
-                                  setState(() {});
-                                  return;
-                                }
-                              }
-                            },
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(8.0),
-                              child: Image.network(
-                                'https://picsum.photos/seed/291/600',
-                                width: 140.0,
-                                height: 140.0,
-                                fit: BoxFit.fitWidth,
+                              },
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(8.0),
+                                child: Image.network(
+                                  valueOrDefault<String>(
+                                    _model.uploadedFileUrl4 != null &&
+                                            _model.uploadedFileUrl4 != ''
+                                        ? _model.uploadedFileUrl4
+                                        : valueOrDefault(
+                                            currentUserDocument?.photo3Url, ''),
+                                    'https://picsum.photos/seed/723/600',
+                                  ),
+                                  width: 140.0,
+                                  height: 140.0,
+                                  fit: BoxFit.fitWidth,
+                                ),
                               ),
                             ),
                           ),
@@ -710,12 +774,123 @@ class _Accountsetup5VideoWidgetState extends State<Accountsetup5VideoWidget> {
                     alignment: AlignmentDirectional(0.02, 0.78),
                     child: FFButtonWidget(
                       onPressed: () async {
-                        context.pushNamed('Accountsetup6-Availability');
+                        if (_model.uploadedFileUrl1 != null &&
+                            _model.uploadedFileUrl1 != '') {
+                          await currentUserReference!
+                              .update(createUsersRecordData(
+                            videoUrl: _model.uploadedFileUrl1,
+                          ));
+                        } else {
+                          if (_model.isDataUploading1) {
+                            await showModalBottomSheet(
+                              isScrollControlled: true,
+                              backgroundColor: Colors.transparent,
+                              enableDrag: false,
+                              context: context,
+                              builder: (context) {
+                                return GestureDetector(
+                                  onTap: () => FocusScope.of(context)
+                                      .requestFocus(_model.unfocusNode),
+                                  child: Padding(
+                                    padding: MediaQuery.viewInsetsOf(context),
+                                    child: BottomSheetWaitingWidget(),
+                                  ),
+                                );
+                              },
+                            ).then((value) => setState(() {}));
 
-                        await currentUserReference!
-                            .update(createUsersRecordData(
-                          videoUrl: _model.uploadedFileUrl1,
-                        ));
+                            return;
+                          }
+                        }
+
+                        if (_model.uploadedFileUrl2 != null &&
+                            _model.uploadedFileUrl2 != '') {
+                          await currentUserReference!
+                              .update(createUsersRecordData(
+                            photo1Url: _model.uploadedFileUrl2,
+                          ));
+                        } else {
+                          if (_model.isDataUploading2) {
+                            await showModalBottomSheet(
+                              isScrollControlled: true,
+                              backgroundColor: Colors.transparent,
+                              enableDrag: false,
+                              context: context,
+                              builder: (context) {
+                                return GestureDetector(
+                                  onTap: () => FocusScope.of(context)
+                                      .requestFocus(_model.unfocusNode),
+                                  child: Padding(
+                                    padding: MediaQuery.viewInsetsOf(context),
+                                    child: BottomSheetWaitingWidget(),
+                                  ),
+                                );
+                              },
+                            ).then((value) => setState(() {}));
+
+                            return;
+                          }
+                        }
+
+                        if (_model.uploadedFileUrl3 != null &&
+                            _model.uploadedFileUrl3 != '') {
+                          await currentUserReference!
+                              .update(createUsersRecordData(
+                            photo2Url: _model.uploadedFileUrl3,
+                          ));
+                        } else {
+                          if (_model.isDataUploading3) {
+                            await showModalBottomSheet(
+                              isScrollControlled: true,
+                              backgroundColor: Colors.transparent,
+                              enableDrag: false,
+                              context: context,
+                              builder: (context) {
+                                return GestureDetector(
+                                  onTap: () => FocusScope.of(context)
+                                      .requestFocus(_model.unfocusNode),
+                                  child: Padding(
+                                    padding: MediaQuery.viewInsetsOf(context),
+                                    child: BottomSheetWaitingWidget(),
+                                  ),
+                                );
+                              },
+                            ).then((value) => setState(() {}));
+
+                            return;
+                          }
+                        }
+
+                        if (_model.uploadedFileUrl4 != null &&
+                            _model.uploadedFileUrl4 != '') {
+                          await currentUserReference!
+                              .update(createUsersRecordData(
+                            photo3Url: _model.uploadedFileUrl4,
+                          ));
+                        } else {
+                          if (_model.isDataUploading4) {
+                            await showModalBottomSheet(
+                              isScrollControlled: true,
+                              backgroundColor: Colors.transparent,
+                              enableDrag: false,
+                              context: context,
+                              builder: (context) {
+                                return GestureDetector(
+                                  onTap: () => FocusScope.of(context)
+                                      .requestFocus(_model.unfocusNode),
+                                  child: Padding(
+                                    padding: MediaQuery.viewInsetsOf(context),
+                                    child: BottomSheetWaitingWidget(),
+                                  ),
+                                );
+                              },
+                            ).then((value) => setState(() {}));
+
+                            return;
+                          }
+                        }
+
+                        context.pushNamed('Accountsetup6-Availability');
                       },
                       text: 'Next',
                       options: FFButtonOptions(

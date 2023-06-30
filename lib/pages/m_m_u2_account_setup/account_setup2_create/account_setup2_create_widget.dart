@@ -114,7 +114,7 @@ class _AccountSetup2CreateWidgetState extends State<AccountSetup2CreateWidget> {
                   borderRadius: BorderRadius.circular(8.0),
                   child: Image.asset(
                     'assets/images/progress-bar20.png',
-                    width: MediaQuery.of(context).size.width * 1.0,
+                    width: MediaQuery.sizeOf(context).width * 1.0,
                     height: 32.0,
                     fit: BoxFit.contain,
                   ),
@@ -503,7 +503,7 @@ class _AccountSetup2CreateWidgetState extends State<AccountSetup2CreateWidget> {
                   ),
                 ),
                 Container(
-                  width: MediaQuery.of(context).size.width * 1.0,
+                  width: MediaQuery.sizeOf(context).width * 1.0,
                   height: 100.0,
                   decoration: BoxDecoration(
                     color: FlutterFlowTheme.of(context).secondaryBackground,

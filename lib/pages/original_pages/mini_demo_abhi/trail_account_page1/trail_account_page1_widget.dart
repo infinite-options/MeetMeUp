@@ -61,7 +61,7 @@ class _TrailAccountPage1WidgetState extends State<TrailAccountPage1Widget> {
                 ),
               ),
               Container(
-                width: MediaQuery.of(context).size.width * 1.0,
+                width: MediaQuery.sizeOf(context).width * 1.0,
                 height: double.infinity,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
