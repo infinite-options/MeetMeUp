@@ -468,6 +468,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: 'Accountsetup7-SummaryCopy',
           path: '/accountsetup7SummaryCopy',
           builder: (context, params) => Accountsetup7SummaryCopyWidget(),
+        ),
+        FFRoute(
+          name: 'PreferencesPage',
+          path: '/preferencesPage',
+          builder: (context, params) => PreferencesPageWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
       observers: [routeObserver],

@@ -148,3 +148,5 @@ export '/pages/m_m_u2_account_setup/page4_copy/page4_copy_widget.dart'
     show Page4CopyWidget;
 export '/pages/m_m_u2_account_setup/accountsetup7_summary_copy/accountsetup7_summary_copy_widget.dart'
     show Accountsetup7SummaryCopyWidget;
+export '/pages/m_m_u2_account_setup/preferences_page/preferences_page_widget.dart'
+    show PreferencesPageWidget;

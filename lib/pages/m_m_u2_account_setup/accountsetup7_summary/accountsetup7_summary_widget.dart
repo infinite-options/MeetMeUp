@@ -268,7 +268,7 @@ class _Accountsetup7SummaryWidgetState
                                 style: FlutterFlowTheme.of(context)
                                     .bodyMedium
                                     .override(
-                                      fontFamily: 'Readex Pro',
+                                      fontFamily: 'Open Sans',
                                       fontSize: 30.0,
                                     ),
                               ),
@@ -287,7 +287,7 @@ class _Accountsetup7SummaryWidgetState
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
-                                    fontFamily: 'Readex Pro',
+                                    fontFamily: 'Open Sans',
                                     fontSize: 20.0,
                                   ),
                             ),
@@ -302,7 +302,7 @@ class _Accountsetup7SummaryWidgetState
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
-                                    fontFamily: 'Readex Pro',
+                                    fontFamily: 'Open Sans',
                                     fontSize: 20.0,
                                   ),
                             ),
@@ -317,7 +317,7 @@ class _Accountsetup7SummaryWidgetState
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
-                                    fontFamily: 'Readex Pro',
+                                    fontFamily: 'Open Sans',
                                     fontSize: 20.0,
                                   ),
                             ),
@@ -418,7 +418,11 @@ class _Accountsetup7SummaryWidgetState
                           children: [
                             Text(
                               'A Little About Me ...',
-                              style: FlutterFlowTheme.of(context).bodyMedium,
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .override(
+                                    fontFamily: 'Open Sans',
+                                  ),
                             ),
                           ],
                         ),
@@ -430,9 +434,16 @@ class _Accountsetup7SummaryWidgetState
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
-                              'Lorem ipsum dolor sit amet, consetetur sadipscing \nelitr, Consetetur sadipscing elitr, sed diam nonumy \neirmod ',
-                              style: FlutterFlowTheme.of(context).bodyMedium,
+                            AuthUserStreamWidget(
+                              builder: (context) => Text(
+                                valueOrDefault(
+                                    currentUserDocument?.profileBio, ''),
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                      fontFamily: 'Open Sans',
+                                    ),
+                              ),
                             ),
                           ],
                         ),
@@ -474,15 +485,21 @@ class _Accountsetup7SummaryWidgetState
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     5.0, 0.0, 0.0, 0.0),
-                                            child: Text(
-                                              '170 cm',
-                                              style: FlutterFlowTheme.of(
-                                                      context)
-                                                  .bodyMedium
-                                                  .override(
-                                                    fontFamily: 'Readex Pro',
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
+                                            child: AuthUserStreamWidget(
+                                              builder: (context) => Text(
+                                                valueOrDefault(
+                                                    currentUserDocument?.height,
+                                                    ''),
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          fontFamily:
+                                                              'Open Sans',
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                              ),
                                             ),
                                           ),
                                         ],
@@ -508,15 +525,21 @@ class _Accountsetup7SummaryWidgetState
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     5.0, 0.0, 0.0, 0.0),
-                                            child: Text(
-                                              'Male',
-                                              style: FlutterFlowTheme.of(
-                                                      context)
-                                                  .bodyMedium
-                                                  .override(
-                                                    fontFamily: 'Readex Pro',
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
+                                            child: AuthUserStreamWidget(
+                                              builder: (context) => Text(
+                                                valueOrDefault(
+                                                    currentUserDocument?.gender,
+                                                    ''),
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          fontFamily:
+                                                              'Open Sans',
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                              ),
                                             ),
                                           ),
                                         ],
@@ -542,15 +565,22 @@ class _Accountsetup7SummaryWidgetState
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     5.0, 0.0, 0.0, 0.0),
-                                            child: Text(
-                                              'Atheist',
-                                              style: FlutterFlowTheme.of(
-                                                      context)
-                                                  .bodyMedium
-                                                  .override(
-                                                    fontFamily: 'Readex Pro',
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
+                                            child: AuthUserStreamWidget(
+                                              builder: (context) => Text(
+                                                valueOrDefault(
+                                                    currentUserDocument
+                                                        ?.religion,
+                                                    ''),
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          fontFamily:
+                                                              'Open Sans',
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                              ),
                                             ),
                                           ),
                                         ],
@@ -576,15 +606,21 @@ class _Accountsetup7SummaryWidgetState
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     5.0, 0.0, 0.0, 0.0),
-                                            child: Text(
-                                              'Cancer',
-                                              style: FlutterFlowTheme.of(
-                                                      context)
-                                                  .bodyMedium
-                                                  .override(
-                                                    fontFamily: 'Readex Pro',
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
+                                            child: AuthUserStreamWidget(
+                                              builder: (context) => Text(
+                                                valueOrDefault(
+                                                    currentUserDocument?.sign,
+                                                    ''),
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          fontFamily:
+                                                              'Open Sans',
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                              ),
                                             ),
                                           ),
                                         ],
@@ -611,14 +647,15 @@ class _Accountsetup7SummaryWidgetState
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     5.0, 0.0, 0.0, 0.0),
                                             child: Text(
-                                              'None Currently',
-                                              style: FlutterFlowTheme.of(
-                                                      context)
-                                                  .bodyMedium
-                                                  .override(
-                                                    fontFamily: 'Readex Pro',
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
+                                              currentUserUid,
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily: 'Open Sans',
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
                                             ),
                                           ),
                                         ],
@@ -644,15 +681,22 @@ class _Accountsetup7SummaryWidgetState
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     5.0, 0.0, 0.0, 0.0),
-                                            child: Text(
-                                              'Associates Degree in UI & UX design',
-                                              style: FlutterFlowTheme.of(
-                                                      context)
-                                                  .bodyMedium
-                                                  .override(
-                                                    fontFamily: 'Readex Pro',
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
+                                            child: AuthUserStreamWidget(
+                                              builder: (context) => Text(
+                                                valueOrDefault(
+                                                    currentUserDocument
+                                                        ?.education,
+                                                    ''),
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          fontFamily:
+                                                              'Open Sans',
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                              ),
                                             ),
                                           ),
                                         ],
@@ -678,15 +722,21 @@ class _Accountsetup7SummaryWidgetState
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     5.0, 0.0, 0.0, 0.0),
-                                            child: Text(
-                                              'Plus Size',
-                                              style: FlutterFlowTheme.of(
-                                                      context)
-                                                  .bodyMedium
-                                                  .override(
-                                                    fontFamily: 'Readex Pro',
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
+                                            child: AuthUserStreamWidget(
+                                              builder: (context) => Text(
+                                                valueOrDefault(
+                                                    currentUserDocument?.body,
+                                                    ''),
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          fontFamily:
+                                                              'Open Sans',
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                              ),
                                             ),
                                           ),
                                         ],
@@ -712,15 +762,21 @@ class _Accountsetup7SummaryWidgetState
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     5.0, 0.0, 0.0, 0.0),
-                                            child: Text(
-                                              'UI + UX Designer',
-                                              style: FlutterFlowTheme.of(
-                                                      context)
-                                                  .bodyMedium
-                                                  .override(
-                                                    fontFamily: 'Readex Pro',
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
+                                            child: AuthUserStreamWidget(
+                                              builder: (context) => Text(
+                                                valueOrDefault(
+                                                    currentUserDocument?.job,
+                                                    ''),
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          fontFamily:
+                                                              'Open Sans',
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                              ),
                                             ),
                                           ),
                                         ],
@@ -746,15 +802,22 @@ class _Accountsetup7SummaryWidgetState
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     5.0, 0.0, 0.0, 0.0),
-                                            child: Text(
-                                              'Socially',
-                                              style: FlutterFlowTheme.of(
-                                                      context)
-                                                  .bodyMedium
-                                                  .override(
-                                                    fontFamily: 'Readex Pro',
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
+                                            child: AuthUserStreamWidget(
+                                              builder: (context) => Text(
+                                                valueOrDefault(
+                                                    currentUserDocument
+                                                        ?.drinking,
+                                                    ''),
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          fontFamily:
+                                                              'Open Sans',
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                              ),
                                             ),
                                           ),
                                         ],
@@ -780,15 +843,22 @@ class _Accountsetup7SummaryWidgetState
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     5.0, 0.0, 0.0, 0.0),
-                                            child: Text(
-                                              'I Dont Smoke',
-                                              style: FlutterFlowTheme.of(
-                                                      context)
-                                                  .bodyMedium
-                                                  .override(
-                                                    fontFamily: 'Readex Pro',
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
+                                            child: AuthUserStreamWidget(
+                                              builder: (context) => Text(
+                                                valueOrDefault(
+                                                    currentUserDocument
+                                                        ?.smoking,
+                                                    ''),
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          fontFamily:
+                                                              'Open Sans',
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                              ),
                                             ),
                                           ),
                                         ],
@@ -814,15 +884,22 @@ class _Accountsetup7SummaryWidgetState
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     5.0, 0.0, 0.0, 0.0),
-                                            child: Text(
-                                              'Australian',
-                                              style: FlutterFlowTheme.of(
-                                                      context)
-                                                  .bodyMedium
-                                                  .override(
-                                                    fontFamily: 'Readex Pro',
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
+                                            child: AuthUserStreamWidget(
+                                              builder: (context) => Text(
+                                                valueOrDefault(
+                                                    currentUserDocument
+                                                        ?.nationality,
+                                                    ''),
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          fontFamily:
+                                                              'Open Sans',
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                              ),
                                             ),
                                           ),
                                         ],
@@ -952,7 +1029,7 @@ class _Accountsetup7SummaryWidgetState
                     alignment: AlignmentDirectional(0.02, 0.78),
                     child: FFButtonWidget(
                       onPressed: () async {
-                        context.pushNamed('AccountMatch');
+                        context.pushNamed('PreferencesPage');
                       },
                       text: 'Next',
                       options: FFButtonOptions(

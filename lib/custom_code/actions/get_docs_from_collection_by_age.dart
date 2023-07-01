@@ -8,14 +8,15 @@ import 'package:flutter/material.dart';
 // Begin custom action code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
+//Get Docs From Collection based on Age
+
 // TODO change the name of the collection from CarsRecord to yuor collection, lets say UsersRecord
 // TODO change the name of the collection from CarsRecord to yuor collection, lets say UsersRecord
-Future<List<UsersRecord>> getDocsFromCollection(
-    List<String> authUserInterests, String authUid) async {
+Future<List<UsersRecord>> getDocsFromCollectionByAge(
+    double start, double end, double authUserAge, String authUid) async {
   // null safety
 
   // TODO change the name here
-  // Initialize a list of users who match the authUsers intersts
   List<UsersRecord> docs = [];
 
   // Get a reference to the Firestore database
@@ -28,7 +29,7 @@ Future<List<UsersRecord>> getDocsFromCollection(
   Query query = collectionRef;
 
   // Apply the limit if specified
-  // querySnapshot gets the data in the current moment
+
   final querySnapshot = await query.get();
 
   // Iterate through the documents and create CarsRecord instances
@@ -41,7 +42,7 @@ Future<List<UsersRecord>> getDocsFromCollection(
       continue;
     } else {
       bool hasCommonElement =
-          checkCommonElement(authUserInterests, usersRecord.userInterests);
+          checkCommonElement(start, end, usersRecord.age.toDouble());
 
       if (hasCommonElement) {
         docs.add(usersRecord);
@@ -52,13 +53,14 @@ Future<List<UsersRecord>> getDocsFromCollection(
   return docs;
 }
 
-bool checkCommonElement(List<String> list1, List<String> list2) {
-  for (String element in list1) {
-    if (list2.contains(element)) {
-      return true;
-    }
+bool checkCommonElement(double start, double end, double authUserAge) {
+  if (start < authUserAge && authUserAge < end) {
+    return true;
+  } else {
+    return false;
   }
-  return false;
 }
+// Set your action name, define your arguments and return parameter,
+// and then add the boilerplate code using the button on the right!
 // Set your action name, define your arguments and return parameter,
 // and then add the boilerplate code using the button on the right!

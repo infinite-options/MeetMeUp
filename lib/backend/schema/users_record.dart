@@ -186,6 +186,31 @@ class UsersRecord extends FirestoreRecord {
   String get photo3Url => _photo3Url ?? '';
   bool hasPhoto3Url() => _photo3Url != null;
 
+  // "prefer_distance" field.
+  int? _preferDistance;
+  int get preferDistance => _preferDistance ?? 0;
+  bool hasPreferDistance() => _preferDistance != null;
+
+  // "prefer_age_min" field.
+  int? _preferAgeMin;
+  int get preferAgeMin => _preferAgeMin ?? 0;
+  bool hasPreferAgeMin() => _preferAgeMin != null;
+
+  // "prefer_age_max" field.
+  int? _preferAgeMax;
+  int get preferAgeMax => _preferAgeMax ?? 0;
+  bool hasPreferAgeMax() => _preferAgeMax != null;
+
+  // "prefer_height_min" field.
+  int? _preferHeightMin;
+  int get preferHeightMin => _preferHeightMin ?? 0;
+  bool hasPreferHeightMin() => _preferHeightMin != null;
+
+  // "prefer_kids" field.
+  int? _preferKids;
+  int get preferKids => _preferKids ?? 0;
+  bool hasPreferKids() => _preferKids != null;
+
   void _initializeFields() {
     _email = snapshotData['email'] as String?;
     _displayName = snapshotData['display_name'] as String?;
@@ -221,6 +246,11 @@ class UsersRecord extends FirestoreRecord {
     _photo1Url = snapshotData['photo1_url'] as String?;
     _photo2Url = snapshotData['photo2_url'] as String?;
     _photo3Url = snapshotData['photo3_url'] as String?;
+    _preferDistance = castToType<int>(snapshotData['prefer_distance']);
+    _preferAgeMin = castToType<int>(snapshotData['prefer_age_min']);
+    _preferAgeMax = castToType<int>(snapshotData['prefer_age_max']);
+    _preferHeightMin = castToType<int>(snapshotData['prefer_height_min']);
+    _preferKids = castToType<int>(snapshotData['prefer_kids']);
   }
 
   static CollectionReference get collection =>
@@ -289,6 +319,11 @@ Map<String, dynamic> createUsersRecordData({
   String? photo1Url,
   String? photo2Url,
   String? photo3Url,
+  int? preferDistance,
+  int? preferAgeMin,
+  int? preferAgeMax,
+  int? preferHeightMin,
+  int? preferKids,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -324,6 +359,11 @@ Map<String, dynamic> createUsersRecordData({
       'photo1_url': photo1Url,
       'photo2_url': photo2Url,
       'photo3_url': photo3Url,
+      'prefer_distance': preferDistance,
+      'prefer_age_min': preferAgeMin,
+      'prefer_age_max': preferAgeMax,
+      'prefer_height_min': preferHeightMin,
+      'prefer_kids': preferKids,
     }.withoutNulls,
   );
 
@@ -369,7 +409,12 @@ class UsersRecordDocumentEquality implements Equality<UsersRecord> {
         e1?.religion == e2?.religion &&
         e1?.photo1Url == e2?.photo1Url &&
         e1?.photo2Url == e2?.photo2Url &&
-        e1?.photo3Url == e2?.photo3Url;
+        e1?.photo3Url == e2?.photo3Url &&
+        e1?.preferDistance == e2?.preferDistance &&
+        e1?.preferAgeMin == e2?.preferAgeMin &&
+        e1?.preferAgeMax == e2?.preferAgeMax &&
+        e1?.preferHeightMin == e2?.preferHeightMin &&
+        e1?.preferKids == e2?.preferKids;
   }
 
   @override
@@ -407,7 +452,12 @@ class UsersRecordDocumentEquality implements Equality<UsersRecord> {
         e?.religion,
         e?.photo1Url,
         e?.photo2Url,
-        e?.photo3Url
+        e?.photo3Url,
+        e?.preferDistance,
+        e?.preferAgeMin,
+        e?.preferAgeMax,
+        e?.preferHeightMin,
+        e?.preferKids
       ]);
 
   @override

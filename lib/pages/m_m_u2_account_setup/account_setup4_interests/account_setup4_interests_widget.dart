@@ -1,9 +1,11 @@
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
+import '/flutter_flow/flutter_flow_choice_chips.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/flutter_flow/form_field_controller.dart';
 import '/pages/m_m_u2_account_setup/bottom_sheets/bottom_sheet_body_type/bottom_sheet_body_type_widget.dart';
 import '/pages/m_m_u2_account_setup/bottom_sheets/bottom_sheet_drinking/bottom_sheet_drinking_widget.dart';
 import '/pages/m_m_u2_account_setup/bottom_sheets/bottom_sheet_education/bottom_sheet_education_widget.dart';
@@ -1938,6 +1940,54 @@ class _AccountSetup4InterestsWidgetState
                               ),
                             ],
                           ),
+                          FlutterFlowChoiceChips(
+                            options: columnListsRecord!.interests
+                                .map((label) => ChipData(label))
+                                .toList(),
+                            onChanged: (val) =>
+                                setState(() => _model.choiceChipsValues = val),
+                            selectedChipStyle: ChipStyle(
+                              backgroundColor:
+                                  FlutterFlowTheme.of(context).secondary,
+                              textStyle: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .override(
+                                    fontFamily: 'Readex Pro',
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
+                                  ),
+                              iconColor:
+                                  FlutterFlowTheme.of(context).primaryText,
+                              iconSize: 18.0,
+                              elevation: 4.0,
+                              borderRadius: BorderRadius.circular(16.0),
+                            ),
+                            unselectedChipStyle: ChipStyle(
+                              backgroundColor:
+                                  FlutterFlowTheme.of(context).alternate,
+                              textStyle: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .override(
+                                    fontFamily: 'Readex Pro',
+                                    color: FlutterFlowTheme.of(context)
+                                        .secondaryText,
+                                  ),
+                              iconColor:
+                                  FlutterFlowTheme.of(context).secondaryText,
+                              iconSize: 18.0,
+                              elevation: 0.0,
+                              borderRadius: BorderRadius.circular(16.0),
+                            ),
+                            chipSpacing: 12.0,
+                            rowSpacing: 12.0,
+                            multiselect: true,
+                            initialized: _model.choiceChipsValues != null,
+                            alignment: WrapAlignment.spaceEvenly,
+                            controller: _model.choiceChipsValueController ??=
+                                FormFieldController<List<String>>(
+                              [],
+                            ),
+                          ),
                         ],
                       );
                     },
@@ -2169,9 +2219,9 @@ class _AccountSetup4InterestsWidgetState
                           EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 20.0),
                       child: FFButtonWidget(
                         onPressed: () async {
-                          context.pushNamed('Demo-GoogleMaps');
+                          context.pushNamed('PreferencesPage');
                         },
-                        text: 'Map',
+                        text: 'Match Preferences',
                         options: FFButtonOptions(
                           width: 128.0,
                           height: 43.0,

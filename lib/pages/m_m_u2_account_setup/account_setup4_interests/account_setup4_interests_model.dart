@@ -1,9 +1,11 @@
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
+import '/flutter_flow/flutter_flow_choice_chips.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/flutter_flow/form_field_controller.dart';
 import '/pages/m_m_u2_account_setup/bottom_sheets/bottom_sheet_body_type/bottom_sheet_body_type_widget.dart';
 import '/pages/m_m_u2_account_setup/bottom_sheets/bottom_sheet_drinking/bottom_sheet_drinking_widget.dart';
 import '/pages/m_m_u2_account_setup/bottom_sheets/bottom_sheet_education/bottom_sheet_education_widget.dart';
@@ -50,6 +52,9 @@ class AccountSetup4InterestsModel extends FlutterFlowModel {
   String? smokingReturn;
   // Stores action output result for [Bottom Sheet - BottomSheetGender] action in Text widget.
   String? genderReturn;
+  // State field(s) for ChoiceChips widget.
+  List<String>? choiceChipsValues;
+  FormFieldController<List<String>>? choiceChipsValueController;
   // Stores action output result for [Custom Action - getDocsFromCollection] action in Button widget.
   List<UsersRecord>? userMatches;
 
