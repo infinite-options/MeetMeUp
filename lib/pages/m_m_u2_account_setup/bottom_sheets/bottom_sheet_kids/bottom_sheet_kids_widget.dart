@@ -40,6 +40,8 @@ class _BottomSheetKidsWidgetState extends State<BottomSheetKidsWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return Material(
       color: Colors.transparent,
       elevation: 5.0,

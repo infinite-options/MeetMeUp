@@ -6,6 +6,7 @@ import 'package:page_transition/page_transition.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow_theme.dart';
 import '/backend/backend.dart';
+import '/backend/schema/structs/index.dart';
 
 import '../../auth/base_auth_user_provider.dart';
 
@@ -419,14 +420,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => Accountsetup7SummaryWidget(),
         ),
         FFRoute(
-          name: 'AccountMatch',
-          path: '/accountMatch',
-          builder: (context, params) => AccountMatchWidget(),
-        ),
-        FFRoute(
-          name: 'AccountSetup4-Slider',
-          path: '/accountSetup4Slider',
-          builder: (context, params) => AccountSetup4SliderWidget(),
+          name: 'Matching2-AccountMatch',
+          path: '/matching2AccountMatch',
+          builder: (context, params) => Matching2AccountMatchWidget(),
         ),
         FFRoute(
           name: 'Demo-GoogleMaps',
@@ -439,40 +435,36 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => DemoVideoWidget(),
         ),
         FFRoute(
-          name: 'FlipCards',
-          path: '/flipCards',
+          name: 'Matching2-FlipCards',
+          path: '/matching2FlipCards',
           asyncParams: {
             'passToFlipCards': getDocList(['users'], UsersRecord.fromSnapshot),
           },
-          builder: (context, params) => FlipCardsWidget(
+          builder: (context, params) => Matching2FlipCardsWidget(
             passToFlipCards: params.getParam<UsersRecord>(
                 'passToFlipCards', ParamType.Document, true),
           ),
         ),
         FFRoute(
-          name: 'AccountSetup4-InterestsCopy',
-          path: '/accountSetup4InterestsCopy',
-          builder: (context, params) => AccountSetup4InterestsCopyWidget(),
+          name: 'Matching1-PreferencesPage',
+          path: '/matching1PreferencesPage',
+          builder: (context, params) => Matching1PreferencesPageWidget(),
         ),
         FFRoute(
-          name: 'AccountSetup3-DetailsCopy',
-          path: '/accountSetup3DetailsCopy',
-          builder: (context, params) => AccountSetup3DetailsCopyWidget(),
+          name: 'Matching2-FlipCardsCopy',
+          path: '/matching2FlipCardsCopy',
+          asyncParams: {
+            'passToFlipCards': getDocList(['users'], UsersRecord.fromSnapshot),
+          },
+          builder: (context, params) => Matching2FlipCardsCopyWidget(
+            passToFlipCards: params.getParam<UsersRecord>(
+                'passToFlipCards', ParamType.Document, true),
+          ),
         ),
         FFRoute(
-          name: 'Page4Copy',
-          path: '/page4Copy',
-          builder: (context, params) => Page4CopyWidget(),
-        ),
-        FFRoute(
-          name: 'Accountsetup7-SummaryCopy',
-          path: '/accountsetup7SummaryCopy',
-          builder: (context, params) => Accountsetup7SummaryCopyWidget(),
-        ),
-        FFRoute(
-          name: 'PreferencesPage',
-          path: '/preferencesPage',
-          builder: (context, params) => PreferencesPageWidget(),
+          name: 'Matching3-Availability',
+          path: '/matching3Availability',
+          builder: (context, params) => Matching3AvailabilityWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
       observers: [routeObserver],

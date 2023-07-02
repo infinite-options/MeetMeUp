@@ -39,6 +39,8 @@ class _Settings4CopyWidgetState extends State<Settings4CopyWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(_model.unfocusNode),
       child: Scaffold(

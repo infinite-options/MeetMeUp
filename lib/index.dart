@@ -131,22 +131,16 @@ export '/pages/m_m_u2_account_setup/accountsetup6_availability/accountsetup6_ava
     show Accountsetup6AvailabilityWidget;
 export '/pages/m_m_u2_account_setup/accountsetup7_summary/accountsetup7_summary_widget.dart'
     show Accountsetup7SummaryWidget;
-export '/pages/m_m_u2_account_setup/account_match/account_match_widget.dart'
-    show AccountMatchWidget;
-export '/pages/m_m_u2_account_setup/account_setup4_slider/account_setup4_slider_widget.dart'
-    show AccountSetup4SliderWidget;
+export '/pages/m_m_u3_matching/matching2_account_match/matching2_account_match_widget.dart'
+    show Matching2AccountMatchWidget;
 export '/pages/demos/demo_google_maps/demo_google_maps_widget.dart'
     show DemoGoogleMapsWidget;
 export '/pages/demos/demo_video/demo_video_widget.dart' show DemoVideoWidget;
-export '/pages/m_m_u2_account_setup/flip_cards/flip_cards_widget.dart'
-    show FlipCardsWidget;
-export '/pages/m_m_u2_account_setup/account_setup4_interests_copy/account_setup4_interests_copy_widget.dart'
-    show AccountSetup4InterestsCopyWidget;
-export '/pages/m_m_u2_account_setup/account_setup3_details_copy/account_setup3_details_copy_widget.dart'
-    show AccountSetup3DetailsCopyWidget;
-export '/pages/m_m_u2_account_setup/page4_copy/page4_copy_widget.dart'
-    show Page4CopyWidget;
-export '/pages/m_m_u2_account_setup/accountsetup7_summary_copy/accountsetup7_summary_copy_widget.dart'
-    show Accountsetup7SummaryCopyWidget;
-export '/pages/m_m_u2_account_setup/preferences_page/preferences_page_widget.dart'
-    show PreferencesPageWidget;
+export '/pages/m_m_u3_matching/matching2_flip_cards/matching2_flip_cards_widget.dart'
+    show Matching2FlipCardsWidget;
+export '/pages/m_m_u3_matching/matching1_preferences_page/matching1_preferences_page_widget.dart'
+    show Matching1PreferencesPageWidget;
+export '/pages/m_m_u3_matching/matching2_flip_cards_copy/matching2_flip_cards_copy_widget.dart'
+    show Matching2FlipCardsCopyWidget;
+export '/pages/m_m_u3_matching/matching3_availability/matching3_availability_widget.dart'
+    show Matching3AvailabilityWidget;

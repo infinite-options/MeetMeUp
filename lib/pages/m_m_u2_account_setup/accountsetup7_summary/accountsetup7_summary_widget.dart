@@ -41,6 +41,8 @@ class _Accountsetup7SummaryWidgetState
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(_model.unfocusNode),
       child: Scaffold(
@@ -1029,7 +1031,7 @@ class _Accountsetup7SummaryWidgetState
                     alignment: AlignmentDirectional(0.02, 0.78),
                     child: FFButtonWidget(
                       onPressed: () async {
-                        context.pushNamed('PreferencesPage');
+                        context.pushNamed('Matching1-PreferencesPage');
                       },
                       text: 'Next',
                       options: FFButtonOptions(

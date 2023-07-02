@@ -42,6 +42,8 @@ class _BottomSheetJobWidgetState extends State<BottomSheetJobWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return Material(
       color: Colors.transparent,
       elevation: 5.0,

@@ -7,25 +7,27 @@ import '/custom_code/actions/index.dart' as actions;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'account_match_model.dart';
-export 'account_match_model.dart';
+import 'matching2_account_match_model.dart';
+export 'matching2_account_match_model.dart';
 
-class AccountMatchWidget extends StatefulWidget {
-  const AccountMatchWidget({Key? key}) : super(key: key);
+class Matching2AccountMatchWidget extends StatefulWidget {
+  const Matching2AccountMatchWidget({Key? key}) : super(key: key);
 
   @override
-  _AccountMatchWidgetState createState() => _AccountMatchWidgetState();
+  _Matching2AccountMatchWidgetState createState() =>
+      _Matching2AccountMatchWidgetState();
 }
 
-class _AccountMatchWidgetState extends State<AccountMatchWidget> {
-  late AccountMatchModel _model;
+class _Matching2AccountMatchWidgetState
+    extends State<Matching2AccountMatchWidget> {
+  late Matching2AccountMatchModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => AccountMatchModel());
+    _model = createModel(context, () => Matching2AccountMatchModel());
 
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
@@ -39,6 +41,8 @@ class _AccountMatchWidgetState extends State<AccountMatchWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(_model.unfocusNode),
       child: Scaffold(

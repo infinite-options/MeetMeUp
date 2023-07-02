@@ -42,6 +42,8 @@ class _BottomSheetWaitingWidgetState extends State<BottomSheetWaitingWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return Material(
       color: Colors.transparent,
       elevation: 5.0,

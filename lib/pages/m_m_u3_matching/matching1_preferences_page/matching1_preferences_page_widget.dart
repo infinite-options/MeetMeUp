@@ -1,35 +1,38 @@
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
-import '/flutter_flow/flutter_flow_drop_down.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
-import '/flutter_flow/form_field_controller.dart';
+import '/pages/m_m_u2_account_setup/bottom_sheets/bottom_sheet_error/bottom_sheet_error_widget.dart';
+import '/custom_code/actions/index.dart' as actions;
+import '/custom_code/widgets/index.dart' as custom_widgets;
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'preferences_page_model.dart';
-export 'preferences_page_model.dart';
+import 'matching1_preferences_page_model.dart';
+export 'matching1_preferences_page_model.dart';
 
-class PreferencesPageWidget extends StatefulWidget {
-  const PreferencesPageWidget({Key? key}) : super(key: key);
+class Matching1PreferencesPageWidget extends StatefulWidget {
+  const Matching1PreferencesPageWidget({Key? key}) : super(key: key);
 
   @override
-  _PreferencesPageWidgetState createState() => _PreferencesPageWidgetState();
+  _Matching1PreferencesPageWidgetState createState() =>
+      _Matching1PreferencesPageWidgetState();
 }
 
-class _PreferencesPageWidgetState extends State<PreferencesPageWidget> {
-  late PreferencesPageModel _model;
+class _Matching1PreferencesPageWidgetState
+    extends State<Matching1PreferencesPageWidget> {
+  late Matching1PreferencesPageModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => PreferencesPageModel());
+    _model = createModel(context, () => Matching1PreferencesPageModel());
 
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
@@ -43,6 +46,8 @@ class _PreferencesPageWidgetState extends State<PreferencesPageWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(_model.unfocusNode),
       child: Scaffold(
@@ -181,20 +186,6 @@ class _PreferencesPageWidgetState extends State<PreferencesPageWidget> {
                   ),
                 ),
                 Container(
-                  width: double.infinity,
-                  height: 50.0,
-                  decoration: BoxDecoration(
-                    color: FlutterFlowTheme.of(context).secondaryBackground,
-                    border: Border.all(
-                      color: Color(0xFFB8B8B8),
-                    ),
-                  ),
-                  child: Text(
-                    'Hello World',
-                    style: FlutterFlowTheme.of(context).bodyMedium,
-                  ),
-                ),
-                Container(
                   width: 712.0,
                   height: 96.0,
                   decoration: BoxDecoration(
@@ -219,7 +210,7 @@ class _PreferencesPageWidgetState extends State<PreferencesPageWidget> {
                                 padding: EdgeInsetsDirectional.fromSTEB(
                                     30.0, 0.0, 0.0, 0.0),
                                 child: Text(
-                                  'Maximum distance',
+                                  'Maximum distance (km)',
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(
@@ -247,24 +238,37 @@ class _PreferencesPageWidgetState extends State<PreferencesPageWidget> {
                         mainAxisSize: MainAxisSize.max,
                         children: [
                           Expanded(
-                            child: SliderTheme(
-                              data: SliderThemeData(
-                                showValueIndicator: ShowValueIndicator.always,
-                              ),
-                              child: Slider.adaptive(
-                                activeColor: Color(0xFFE4423F),
-                                inactiveColor:
-                                    FlutterFlowTheme.of(context).alternate,
-                                min: 1.0,
-                                max: 160.0,
-                                value: _model.distanceSliderValue ??= 5.0,
-                                label: _model.distanceSliderValue.toString(),
-                                onChanged: (newValue) {
-                                  newValue =
-                                      double.parse(newValue.toStringAsFixed(0));
-                                  setState(() =>
-                                      _model.distanceSliderValue = newValue);
-                                },
+                            child: AuthUserStreamWidget(
+                              builder: (context) => SliderTheme(
+                                data: SliderThemeData(
+                                  showValueIndicator: ShowValueIndicator.always,
+                                ),
+                                child: Slider(
+                                  activeColor: Color(0xFFE4423F),
+                                  inactiveColor:
+                                      FlutterFlowTheme.of(context).alternate,
+                                  min: 1.0,
+                                  max: 160.0,
+                                  value: _model.distanceSliderValue ??=
+                                      valueOrDefault(
+                                                  currentUserDocument
+                                                      ?.preferDistance,
+                                                  0) !=
+                                              null
+                                          ? valueOrDefault(
+                                                  currentUserDocument
+                                                      ?.preferDistance,
+                                                  0)
+                                              .toDouble()
+                                          : 100.0,
+                                  label: _model.distanceSliderValue.toString(),
+                                  onChanged: (newValue) {
+                                    newValue = double.parse(
+                                        newValue.toStringAsFixed(0));
+                                    setState(() =>
+                                        _model.distanceSliderValue = newValue);
+                                  },
+                                ),
                               ),
                             ),
                           ),
@@ -272,40 +276,6 @@ class _PreferencesPageWidgetState extends State<PreferencesPageWidget> {
                       ),
                     ],
                   ),
-                ),
-                Container(
-                  width: double.infinity,
-                  height: 96.0,
-                  decoration: BoxDecoration(
-                    color: FlutterFlowTheme.of(context).secondaryBackground,
-                    border: Border.all(
-                      color: Color(0xFFB8B8B8),
-                    ),
-                  ),
-                ),
-                FlutterFlowDropDown<String>(
-                  controller: _model.dropDownValueController ??=
-                      FormFieldController<String>(null),
-                  options: ['10', '20', '30'],
-                  onChanged: (val) =>
-                      setState(() => _model.dropDownValue = val),
-                  width: 300.0,
-                  height: 50.0,
-                  textStyle: FlutterFlowTheme.of(context).bodyMedium,
-                  hintText: 'Please select...',
-                  icon: Icon(
-                    Icons.keyboard_arrow_down_rounded,
-                    color: FlutterFlowTheme.of(context).secondaryText,
-                    size: 24.0,
-                  ),
-                  fillColor: FlutterFlowTheme.of(context).secondaryBackground,
-                  elevation: 2.0,
-                  borderColor: FlutterFlowTheme.of(context).alternate,
-                  borderWidth: 2.0,
-                  borderRadius: 8.0,
-                  margin: EdgeInsetsDirectional.fromSTEB(16.0, 4.0, 16.0, 4.0),
-                  hidesUnderline: true,
-                  isSearchable: false,
                 ),
                 Container(
                   width: 712.0,
@@ -380,6 +350,74 @@ class _PreferencesPageWidgetState extends State<PreferencesPageWidget> {
                 ),
                 Container(
                   width: 712.0,
+                  height: 139.0,
+                  decoration: BoxDecoration(
+                    color: FlutterFlowTheme.of(context).secondaryBackground,
+                    border: Border.all(
+                      color: Color(0x00E4423F),
+                    ),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Padding(
+                        padding:
+                            EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Align(
+                              alignment: AlignmentDirectional(0.0, 0.0),
+                              child: Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    30.0, 0.0, 0.0, 0.0),
+                                child: Text(
+                                  'Double Slider',
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .override(
+                                        fontFamily: 'Open Sans',
+                                        fontSize: 18.0,
+                                      ),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 0.0, 20.0, 0.0),
+                              child: Text(
+                                '150',
+                                style: FlutterFlowTheme.of(context).bodyMedium,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 0.0, 0.0, 10.0),
+                              child: Container(
+                                width: MediaQuery.sizeOf(context).width * 1.0,
+                                height: 100.0,
+                                child: custom_widgets.MyRangeSlider(
+                                  width: MediaQuery.sizeOf(context).width * 1.0,
+                                  height: 100.0,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  width: 712.0,
                   height: 96.0,
                   decoration: BoxDecoration(
                     color: FlutterFlowTheme.of(context).secondaryBackground,
@@ -431,24 +469,35 @@ class _PreferencesPageWidgetState extends State<PreferencesPageWidget> {
                         mainAxisSize: MainAxisSize.max,
                         children: [
                           Expanded(
-                            child: SliderTheme(
-                              data: SliderThemeData(
-                                showValueIndicator: ShowValueIndicator.always,
-                              ),
-                              child: Slider(
-                                activeColor: Color(0xFFE4423F),
-                                inactiveColor:
-                                    FlutterFlowTheme.of(context).alternate,
-                                min: 18.0,
-                                max: 100.0,
-                                value: _model.ageSliderMinValue ??= 21.0,
-                                label: _model.ageSliderMinValue.toString(),
-                                onChanged: (newValue) {
-                                  newValue =
-                                      double.parse(newValue.toStringAsFixed(0));
-                                  setState(() =>
-                                      _model.ageSliderMinValue = newValue);
-                                },
+                            child: AuthUserStreamWidget(
+                              builder: (context) => SliderTheme(
+                                data: SliderThemeData(
+                                  showValueIndicator: ShowValueIndicator.always,
+                                ),
+                                child: Slider(
+                                  activeColor: Color(0xFFE4423F),
+                                  inactiveColor:
+                                      FlutterFlowTheme.of(context).alternate,
+                                  min: 18.0,
+                                  max: 100.0,
+                                  value: _model
+                                      .ageSliderMinValue ??= valueOrDefault(
+                                              currentUserDocument?.preferAgeMin,
+                                              0) !=
+                                          null
+                                      ? valueOrDefault(
+                                              currentUserDocument?.preferAgeMin,
+                                              0)
+                                          .toDouble()
+                                      : 21.0,
+                                  label: _model.ageSliderMinValue.toString(),
+                                  onChanged: (newValue) {
+                                    newValue = double.parse(
+                                        newValue.toStringAsFixed(0));
+                                    setState(() =>
+                                        _model.ageSliderMinValue = newValue);
+                                  },
+                                ),
                               ),
                             ),
                           ),
@@ -510,24 +559,35 @@ class _PreferencesPageWidgetState extends State<PreferencesPageWidget> {
                         mainAxisSize: MainAxisSize.max,
                         children: [
                           Expanded(
-                            child: SliderTheme(
-                              data: SliderThemeData(
-                                showValueIndicator: ShowValueIndicator.always,
-                              ),
-                              child: Slider(
-                                activeColor: Color(0xFFE4423F),
-                                inactiveColor:
-                                    FlutterFlowTheme.of(context).alternate,
-                                min: 18.0,
-                                max: 100.0,
-                                value: _model.ageSliderMaxValue ??= 21.0,
-                                label: _model.ageSliderMaxValue.toString(),
-                                onChanged: (newValue) {
-                                  newValue =
-                                      double.parse(newValue.toStringAsFixed(0));
-                                  setState(() =>
-                                      _model.ageSliderMaxValue = newValue);
-                                },
+                            child: AuthUserStreamWidget(
+                              builder: (context) => SliderTheme(
+                                data: SliderThemeData(
+                                  showValueIndicator: ShowValueIndicator.always,
+                                ),
+                                child: Slider(
+                                  activeColor: Color(0xFFE4423F),
+                                  inactiveColor:
+                                      FlutterFlowTheme.of(context).alternate,
+                                  min: 18.0,
+                                  max: 100.0,
+                                  value: _model
+                                      .ageSliderMaxValue ??= valueOrDefault(
+                                              currentUserDocument?.preferAgeMax,
+                                              0) !=
+                                          null
+                                      ? valueOrDefault(
+                                              currentUserDocument?.preferAgeMax,
+                                              0)
+                                          .toDouble()
+                                      : 68.0,
+                                  label: _model.ageSliderMaxValue.toString(),
+                                  onChanged: (newValue) {
+                                    newValue = double.parse(
+                                        newValue.toStringAsFixed(0));
+                                    setState(() =>
+                                        _model.ageSliderMaxValue = newValue);
+                                  },
+                                ),
                               ),
                             ),
                           ),
@@ -571,7 +631,7 @@ class _PreferencesPageWidgetState extends State<PreferencesPageWidget> {
                                 padding: EdgeInsetsDirectional.fromSTEB(
                                     30.0, 0.0, 0.0, 0.0),
                                 child: Text(
-                                  'Height in inches',
+                                  'Minimum Height in inches',
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(
@@ -599,24 +659,37 @@ class _PreferencesPageWidgetState extends State<PreferencesPageWidget> {
                         mainAxisSize: MainAxisSize.max,
                         children: [
                           Expanded(
-                            child: SliderTheme(
-                              data: SliderThemeData(
-                                showValueIndicator: ShowValueIndicator.always,
-                              ),
-                              child: Slider(
-                                activeColor: Color(0xFFE4423F),
-                                inactiveColor:
-                                    FlutterFlowTheme.of(context).alternate,
-                                min: 48.0,
-                                max: 84.0,
-                                value: _model.heightSliderValue ??= 60.0,
-                                label: _model.heightSliderValue.toString(),
-                                onChanged: (newValue) {
-                                  newValue =
-                                      double.parse(newValue.toStringAsFixed(0));
-                                  setState(() =>
-                                      _model.heightSliderValue = newValue);
-                                },
+                            child: AuthUserStreamWidget(
+                              builder: (context) => SliderTheme(
+                                data: SliderThemeData(
+                                  showValueIndicator: ShowValueIndicator.always,
+                                ),
+                                child: Slider(
+                                  activeColor: Color(0xFFE4423F),
+                                  inactiveColor:
+                                      FlutterFlowTheme.of(context).alternate,
+                                  min: 48.0,
+                                  max: 84.0,
+                                  value: _model.heightSliderValue ??=
+                                      valueOrDefault(
+                                                  currentUserDocument
+                                                      ?.preferHeightMin,
+                                                  0) !=
+                                              null
+                                          ? valueOrDefault(
+                                                  currentUserDocument
+                                                      ?.preferHeightMin,
+                                                  0)
+                                              .toDouble()
+                                          : 60.0,
+                                  label: _model.heightSliderValue.toString(),
+                                  onChanged: (newValue) {
+                                    newValue = double.parse(
+                                        newValue.toStringAsFixed(0));
+                                    setState(() =>
+                                        _model.heightSliderValue = newValue);
+                                  },
+                                ),
                               ),
                             ),
                           ),
@@ -678,24 +751,35 @@ class _PreferencesPageWidgetState extends State<PreferencesPageWidget> {
                         mainAxisSize: MainAxisSize.max,
                         children: [
                           Expanded(
-                            child: SliderTheme(
-                              data: SliderThemeData(
-                                showValueIndicator: ShowValueIndicator.always,
-                              ),
-                              child: Slider(
-                                activeColor: Color(0xFFE4423F),
-                                inactiveColor:
-                                    FlutterFlowTheme.of(context).alternate,
-                                min: 0.0,
-                                max: 10.0,
-                                value: _model.kidSliderValue ??= 0.0,
-                                label: _model.kidSliderValue.toString(),
-                                onChanged: (newValue) {
-                                  newValue =
-                                      double.parse(newValue.toStringAsFixed(0));
-                                  setState(
-                                      () => _model.kidSliderValue = newValue);
-                                },
+                            child: AuthUserStreamWidget(
+                              builder: (context) => SliderTheme(
+                                data: SliderThemeData(
+                                  showValueIndicator: ShowValueIndicator.always,
+                                ),
+                                child: Slider(
+                                  activeColor: Color(0xFFE4423F),
+                                  inactiveColor:
+                                      FlutterFlowTheme.of(context).alternate,
+                                  min: 0.0,
+                                  max: 10.0,
+                                  value: _model
+                                      .kidSliderValue ??= valueOrDefault(
+                                              currentUserDocument?.preferKids,
+                                              0) !=
+                                          null
+                                      ? valueOrDefault(
+                                              currentUserDocument?.preferKids,
+                                              0)
+                                          .toDouble()
+                                      : 0.0,
+                                  label: _model.kidSliderValue.toString(),
+                                  onChanged: (newValue) {
+                                    newValue = double.parse(
+                                        newValue.toStringAsFixed(0));
+                                    setState(
+                                        () => _model.kidSliderValue = newValue);
+                                  },
+                                ),
                               ),
                             ),
                           ),
@@ -708,6 +792,30 @@ class _PreferencesPageWidgetState extends State<PreferencesPageWidget> {
                   padding: EdgeInsetsDirectional.fromSTEB(0.0, 67.0, 0.0, 0.0),
                   child: FFButtonWidget(
                     onPressed: () async {
+                      var _shouldSetState = false;
+                      if (_model.ageSliderMaxValue! <=
+                          _model.ageSliderMinValue!) {
+                        await showModalBottomSheet(
+                          isScrollControlled: true,
+                          backgroundColor: Colors.transparent,
+                          enableDrag: false,
+                          context: context,
+                          builder: (context) {
+                            return GestureDetector(
+                              onTap: () => FocusScope.of(context)
+                                  .requestFocus(_model.unfocusNode),
+                              child: Padding(
+                                padding: MediaQuery.viewInsetsOf(context),
+                                child: BottomSheetErrorWidget(),
+                              ),
+                            );
+                          },
+                        ).then((value) => setState(() {}));
+
+                        if (_shouldSetState) setState(() {});
+                        return;
+                      }
+
                       await currentUserReference!.update(createUsersRecordData(
                         preferDistance: valueOrDefault<int>(
                           functions.convertStringToInt(valueOrDefault<String>(
@@ -745,6 +853,30 @@ class _PreferencesPageWidgetState extends State<PreferencesPageWidget> {
                           10,
                         ),
                       ));
+                      _model.matchesByAge =
+                          await actions.getDocsFromCollectionByAge(
+                        _model.ageSliderMinValue!,
+                        _model.ageSliderMaxValue!,
+                        valueOrDefault(currentUserDocument?.age, 0).toDouble(),
+                        currentUserUid,
+                      );
+                      _shouldSetState = true;
+
+                      context.pushNamed(
+                        'Matching2-FlipCardsCopy',
+                        queryParameters: {
+                          'passToFlipCards': serializeParam(
+                            _model.matchesByAge,
+                            ParamType.Document,
+                            true,
+                          ),
+                        }.withoutNulls,
+                        extra: <String, dynamic>{
+                          'passToFlipCards': _model.matchesByAge,
+                        },
+                      );
+
+                      if (_shouldSetState) setState(() {});
                     },
                     text: 'Next',
                     options: FFButtonOptions(

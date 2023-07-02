@@ -66,6 +66,11 @@ class ListsRecord extends FirestoreRecord {
   List<String> get gender => _gender ?? const [];
   bool hasGender() => _gender != null;
 
+  // "days" field.
+  List<String>? _days;
+  List<String> get days => _days ?? const [];
+  bool hasDays() => _days != null;
+
   void _initializeFields() {
     _interests = getDataList(snapshotData['interests']);
     _sign = getDataList(snapshotData['sign']);
@@ -77,6 +82,7 @@ class ListsRecord extends FirestoreRecord {
     _height = getDataList(snapshotData['height']);
     _number = getDataList(snapshotData['number']);
     _gender = getDataList(snapshotData['gender']);
+    _days = getDataList(snapshotData['days']);
   }
 
   static CollectionReference get collection =>
@@ -135,7 +141,8 @@ class ListsRecordDocumentEquality implements Equality<ListsRecord> {
         listEquality.equals(e1?.smoking, e2?.smoking) &&
         listEquality.equals(e1?.height, e2?.height) &&
         listEquality.equals(e1?.number, e2?.number) &&
-        listEquality.equals(e1?.gender, e2?.gender);
+        listEquality.equals(e1?.gender, e2?.gender) &&
+        listEquality.equals(e1?.days, e2?.days);
   }
 
   @override
@@ -149,7 +156,8 @@ class ListsRecordDocumentEquality implements Equality<ListsRecord> {
         e?.smoking,
         e?.height,
         e?.number,
-        e?.gender
+        e?.gender,
+        e?.days
       ]);
 
   @override

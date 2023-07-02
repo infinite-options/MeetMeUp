@@ -7,11 +7,11 @@ import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'flip_cards_model.dart';
-export 'flip_cards_model.dart';
+import 'matching2_flip_cards_model.dart';
+export 'matching2_flip_cards_model.dart';
 
-class FlipCardsWidget extends StatefulWidget {
-  const FlipCardsWidget({
+class Matching2FlipCardsWidget extends StatefulWidget {
+  const Matching2FlipCardsWidget({
     Key? key,
     required this.passToFlipCards,
   }) : super(key: key);
@@ -19,18 +19,19 @@ class FlipCardsWidget extends StatefulWidget {
   final List<UsersRecord>? passToFlipCards;
 
   @override
-  _FlipCardsWidgetState createState() => _FlipCardsWidgetState();
+  _Matching2FlipCardsWidgetState createState() =>
+      _Matching2FlipCardsWidgetState();
 }
 
-class _FlipCardsWidgetState extends State<FlipCardsWidget> {
-  late FlipCardsModel _model;
+class _Matching2FlipCardsWidgetState extends State<Matching2FlipCardsWidget> {
+  late Matching2FlipCardsModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => FlipCardsModel());
+    _model = createModel(context, () => Matching2FlipCardsModel());
 
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
@@ -44,6 +45,8 @@ class _FlipCardsWidgetState extends State<FlipCardsWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(_model.unfocusNode),
       child: Scaffold(

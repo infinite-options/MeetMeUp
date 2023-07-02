@@ -57,6 +57,8 @@ class _AccountSetup4InterestsWidgetState
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(_model.unfocusNode),
       child: Scaffold(
@@ -2083,10 +2085,10 @@ class _AccountSetup4InterestsWidgetState
                       padding:
                           EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 20.0),
                       child: FFButtonWidget(
-                        onPressed: () {
-                          print('Button pressed ...');
+                        onPressed: () async {
+                          context.pushNamed('Matching3-Availability');
                         },
-                        text: 'Test Page',
+                        text: 'Availability',
                         options: FFButtonOptions(
                           width: 128.0,
                           height: 43.0,
@@ -2125,7 +2127,7 @@ class _AccountSetup4InterestsWidgetState
                           );
 
                           context.pushNamed(
-                            'FlipCards',
+                            'Matching2-FlipCards',
                             queryParameters: {
                               'passToFlipCards': serializeParam(
                                 _model.userMatches,
@@ -2140,7 +2142,7 @@ class _AccountSetup4InterestsWidgetState
 
                           setState(() {});
                         },
-                        text: 'ListCard',
+                        text: 'Match Interests',
                         options: FFButtonOptions(
                           width: 128.0,
                           height: 43.0,
@@ -2188,7 +2190,7 @@ class _AccountSetup4InterestsWidgetState
                             religion: _model.religionReturn,
                           ));
                         },
-                        text: 'Next',
+                        text: 'Next Video',
                         options: FFButtonOptions(
                           width: 128.0,
                           height: 43.0,
@@ -2219,7 +2221,7 @@ class _AccountSetup4InterestsWidgetState
                           EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 20.0),
                       child: FFButtonWidget(
                         onPressed: () async {
-                          context.pushNamed('PreferencesPage');
+                          context.pushNamed('Matching1-PreferencesPage');
                         },
                         text: 'Match Preferences',
                         options: FFButtonOptions(
@@ -2249,7 +2251,7 @@ class _AccountSetup4InterestsWidgetState
                     alignment: AlignmentDirectional(0.02, 0.78),
                     child: FFButtonWidget(
                       onPressed: () async {
-                        context.pushNamed('AccountMatch');
+                        context.pushNamed('Matching2-AccountMatch');
                       },
                       text: 'Match',
                       options: FFButtonOptions(

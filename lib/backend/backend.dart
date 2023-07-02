@@ -7,6 +7,8 @@ import 'schema/util/firestore_util.dart';
 
 import 'schema/users_record.dart';
 import 'schema/lists_record.dart';
+import 'schema/avail_record.dart';
+import 'schema/availability_record.dart';
 
 export 'dart:async' show StreamSubscription;
 export 'package:cloud_firestore/cloud_firestore.dart';
@@ -16,6 +18,8 @@ export 'schema/util/schema_util.dart';
 
 export 'schema/users_record.dart';
 export 'schema/lists_record.dart';
+export 'schema/avail_record.dart';
+export 'schema/availability_record.dart';
 
 /// Functions to query UsersRecords (as a Stream and as a Future).
 Future<int> queryUsersRecordCount({
@@ -115,6 +119,114 @@ Future<FFFirestorePage<ListsRecord>> queryListsRecordPage({
     queryCollectionPage(
       ListsRecord.collection,
       ListsRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      nextPageMarker: nextPageMarker,
+      pageSize: pageSize,
+      isStream: isStream,
+    );
+
+/// Functions to query AvailRecords (as a Stream and as a Future).
+Future<int> queryAvailRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      AvailRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
+Stream<List<AvailRecord>> queryAvailRecord({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollection(
+      AvailRecord.collection,
+      AvailRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<List<AvailRecord>> queryAvailRecordOnce({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollectionOnce(
+      AvailRecord.collection,
+      AvailRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<FFFirestorePage<AvailRecord>> queryAvailRecordPage({
+  Query Function(Query)? queryBuilder,
+  DocumentSnapshot? nextPageMarker,
+  required int pageSize,
+  required bool isStream,
+}) =>
+    queryCollectionPage(
+      AvailRecord.collection,
+      AvailRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      nextPageMarker: nextPageMarker,
+      pageSize: pageSize,
+      isStream: isStream,
+    );
+
+/// Functions to query AvailabilityRecords (as a Stream and as a Future).
+Future<int> queryAvailabilityRecordCount({
+  DocumentReference? parent,
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      AvailabilityRecord.collection(parent),
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
+Stream<List<AvailabilityRecord>> queryAvailabilityRecord({
+  DocumentReference? parent,
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollection(
+      AvailabilityRecord.collection(parent),
+      AvailabilityRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<List<AvailabilityRecord>> queryAvailabilityRecordOnce({
+  DocumentReference? parent,
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollectionOnce(
+      AvailabilityRecord.collection(parent),
+      AvailabilityRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<FFFirestorePage<AvailabilityRecord>> queryAvailabilityRecordPage({
+  DocumentReference? parent,
+  Query Function(Query)? queryBuilder,
+  DocumentSnapshot? nextPageMarker,
+  required int pageSize,
+  required bool isStream,
+}) =>
+    queryCollectionPage(
+      AvailabilityRecord.collection(parent),
+      AvailabilityRecord.fromSnapshot,
       queryBuilder: queryBuilder,
       nextPageMarker: nextPageMarker,
       pageSize: pageSize,

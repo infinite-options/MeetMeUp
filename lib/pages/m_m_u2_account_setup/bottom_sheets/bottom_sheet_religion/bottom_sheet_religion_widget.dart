@@ -43,6 +43,8 @@ class _BottomSheetReligionWidgetState extends State<BottomSheetReligionWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return Material(
       color: Colors.transparent,
       elevation: 5.0,
