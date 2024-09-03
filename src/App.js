@@ -1,24 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import LandingPage from './Intro/LandingPage'; 
+import LandingPage2 from './Intro/LandingPage2'; 
+import LandingPage3 from './Intro/LandingPage3'; 
+import LandingPage4 from './Intro/LandingPage4'; 
+import LocationPage from './Profile/LocationPage'; 
+import LocationPage2 from './Profile/LocationPage2'; 
+import AccountDetails from './Account/AccountDetails'; 
+import AccountDetails2 from './Account/AccountDetails2'; 
+import AccountDetails3 from './Account/AccountDetails3';
+import AccountDetails4 from './Account/AccountDetails4';
+import AccountDetails5 from './Account/AccountDetails5';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/landing-page-2" element={<LandingPage2 />} />
+        <Route path="/landing-page-3" element={<LandingPage3 />} />
+        <Route path="/landing-page-4" element={<LandingPage4 />} />
+        <Route path="/location" element={<LocationPage />} />
+        <Route path="/location2" element={<LocationPage2 />} />
+        <Route path="/account" element={<AccountDetails />} />
+        <Route path="/account2" element={<AccountDetails2 />} />
+        <Route path="/account3" element={<AccountDetails3 />} />
+        <Route path="/account4" element={<AccountDetails4 />} />
+        <Route path="/account5" element={<AccountDetails5 />} />
+
+      </Routes>
+    </Router>
   );
 }
 
