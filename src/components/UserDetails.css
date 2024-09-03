@@ -1,0 +1,67 @@
+.simulate-mobile {
+    width: 390px; 
+    height: 744px; 
+    margin: 0 auto; 
+    border: 1px solid #ddd; 
+    overflow: hidden; 
+    background-color: #f9f9f9; 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+  }
+
+  .userDetails {
+    margin-top: 30px;
+    background-color: #E4423F;
+    padding: 10px;
+    border-radius: 5px;
+    position: relative; 
+  }
+  
+  .userImg {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    position: relative; 
+  }
+  
+  .heartIcon {
+    position: absolute; 
+    top: 15px; 
+    right: 15px; 
+    cursor: pointer;
+    font-size: 24px;
+    z-index: 10; 
+  }
+.detailsOnImg{
+    position: absolute;
+    color: white;
+    z-index: 10;
+}
+.tap{
+    display: flex;
+    justify-content: center;
+    color: #14181B;
+    cursor: pointer;
+}
+.userButtons{
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    margin-left: 140px;
+
+}
+.backButton, .preferenceButton, .logoutButton{
+    background-color: #E4423F;
+    margin-bottom: 10px;
+    border: none;
+    color: white;
+    padding: 10px;
+    font-size: 15px;
+    border-radius: 18px;
+    width: 125px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+
+}
