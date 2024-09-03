@@ -50,7 +50,7 @@ export default function AccountSetup4Create() {
                 <div className='pc-title-back-button-text'>
                     Profile Creation
                 </div>
-                <img src={progressBar} alt='progress bar'></img>
+                <img src={progressBar} alt='progress bar'/>
                 <form className='form-container' onSubmit={handleNext} action='/accountSetup5Create'>
                     <div className='pc-header-text'>
                         Your General Interests

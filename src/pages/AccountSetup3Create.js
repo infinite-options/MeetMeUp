@@ -4,6 +4,22 @@ import progressBar from '../assets/progressBar40.png';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Box, Button, TextField } from '@mui/material';
+import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
+
+const GOOGLE_API_KEY = process.env.REACT_APP_GOOGLE_API_KEY;
+
+const mapContainerStyle = {
+    width: '400px',
+    height: '500px',
+    marginTop: '10px',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+};
+
+const center = {
+    lat: -32.015001263602,
+    lng: 115.83650856893345,
+};
 
 export default function AccountSetup3Create() {
     const [formData, setFormData] = useState({
@@ -45,6 +61,18 @@ export default function AccountSetup3Create() {
         console.log(formData);
     };
 
+    const { isLoaded, loadError } = useJsApiLoader({
+        googleMapsApiKey: GOOGLE_API_KEY
+    });
+
+    if (loadError) {
+        return <div>Error loading maps</div>;
+    }
+
+    if (!isLoaded) {
+        return <div>Loading maps</div>;
+    }
+
     return (
         <div className='App'>
             <div className='white-background'>
@@ -52,7 +80,7 @@ export default function AccountSetup3Create() {
                 <div className='pc-title-back-button-text'>
                     Profile Creation
                 </div>
-                <img src={progressBar} alt='progress bar'></img>
+                <img src={progressBar} alt='progress bar'/>
                 <form className='form-container' onSubmit={handleNext} action='/accountSetup4Create'>
                     <div className='pc-header-text'>
                         About You
@@ -75,6 +103,19 @@ export default function AccountSetup3Create() {
                     <div className='pc-sub-header-text'>
                         Your location helps us pin point where you are to provide better matches to you.
                     </div>
+                    <Box
+                        sx={{ '& > :not(style)': { marginTop: 1.5, marginLeft: 3, marginRight: 3, width: 0.88 } }}
+                        autoComplete='off'
+                    >
+                        <TextField onChange={handleChange} name='location' label='Location' type='text' variant='outlined'/>
+                    </Box>
+                    <GoogleMap
+                        mapContainerStyle={mapContainerStyle}
+                        zoom={15}
+                        center={center}
+                    >
+                        <Marker position={center}/>
+                    </GoogleMap>
                     <div className='pc-header-text'>
                         Your Sexuality
                     </div>

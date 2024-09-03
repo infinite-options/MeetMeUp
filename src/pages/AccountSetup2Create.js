@@ -33,7 +33,7 @@ export default function AccountSetup2Create() {
                 <div className='pc-title-back-button-text'>
                     Profile Creation
                 </div>
-                <img src={progressBar} alt='progress bar'></img>
+                <img src={progressBar} alt='progress bar'/>
                 <form className='form-container' onSubmit={handleNext} action='/accountSetup3Create'>
                     <div className='pc-header-text'>
                         Account Details
