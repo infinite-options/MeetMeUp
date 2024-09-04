@@ -8,6 +8,8 @@ import Preferences from './components/matches/Preferences';
 import Match from './components/matches/Match';
 import Profile from './components/matches/Profile';
 import About from './components/profilecreation/About'
+import GridLayout from './components/matches/GridLayout';
+import Member from './components/matches/Member';
 
 function App() {
   const theme = createTheme({
@@ -27,6 +29,8 @@ function App() {
           <Route path="preferences" element={<Preferences />} />
           <Route path="match" element={<Match />} />
           <Route path="profile" element={<Profile />} />
+          <Route path="grid" element={<GridLayout />} />
+          <Route path="member" element={<Member />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
