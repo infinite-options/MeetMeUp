@@ -68,7 +68,7 @@ const LandingPage = () => {
           style={{ 
               fontFamily: 'Lexend', 
               fontSize: '14px', 
-            fontWeight: 'normal' 
+            fontWeight: 'normal',
           }}
         >
         <strong>Arrange</strong> your <strong>meeting</strong> time &amp; <strong>destination </strong> 
@@ -85,7 +85,12 @@ const LandingPage = () => {
             style={{
               borderRadius: '20px',
               backgroundColor:'#E4423F',
-              paddingX: 4,
+              width:'172px',
+              height:'42px',
+              textTransform:'none',
+              fontFamily: 'Lexend', 
+              fontSize: '18px', 
+            fontWeight: 'normal' 
             }}
           >
             Let's Start

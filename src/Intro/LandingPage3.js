@@ -78,7 +78,13 @@ const LandingPage3 = () => {
             style={{
               borderRadius: '20px',
               backgroundColor:'#E4423F',
-              paddingX: 4,
+      
+              width:'172px',
+              height:'42px',
+              textTransform:'none',
+              fontFamily: 'Lexend', 
+              fontSize: '18px', 
+            fontWeight: 'normal' 
             }}
           >
             Let's Match

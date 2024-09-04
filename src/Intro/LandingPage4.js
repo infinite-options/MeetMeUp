@@ -76,6 +76,12 @@ const LandingPage4 = () => {
             style={{
               borderRadius: '20px',
               backgroundColor:'#E4423F',
+              width:'172px',
+              height:'42px',
+              textTransform:'none',
+              fontFamily: 'Lexend', 
+              fontSize: '18px', 
+            fontWeight: 'normal' 
             }}
           >
             Let's Meet Up
@@ -93,6 +99,7 @@ const LandingPage4 = () => {
               fontWeight: 'normal',
               borderRadius: '10px',
               padding: 1,
+              textTransform: 'none',
               
             }}
           >

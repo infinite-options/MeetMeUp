@@ -11,6 +11,8 @@ import AccountDetails2 from './Account/AccountDetails2';
 import AccountDetails3 from './Account/AccountDetails3';
 import AccountDetails4 from './Account/AccountDetails4';
 import AccountDetails5 from './Account/AccountDetails5';
+import Start from './Intro/Start';
+import TrialAccount from './Intro/TrialAccount';
 
 function App() {
   return (
@@ -27,6 +29,8 @@ function App() {
         <Route path="/account3" element={<AccountDetails3 />} />
         <Route path="/account4" element={<AccountDetails4 />} />
         <Route path="/account5" element={<AccountDetails5 />} />
+        <Route path="/start" element={<Start />} />
+        <Route path="/trial" element={<TrialAccount />} />
 
       </Routes>
     </Router>

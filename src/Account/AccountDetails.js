@@ -50,10 +50,11 @@ const Account = () => {
             </Box>
             <Typography variant="h5"
               style ={{
-                fontFamily: 'Segoe UI', // Correct font-family
+                fontFamily: 'Segoe UI', 
                 fontSize: '22px',
                 fontWeight: 400,
-                marginLeft: '180px'
+                marginLeft: 'auto',
+                marginRight: 'auto'
                 
               }}
             >
@@ -106,15 +107,37 @@ const Account = () => {
             <Typography variant="body1">&gt;</Typography>
           </Grid>
 
-          <Grid container alignItems="center" style={{ marginBottom: '24px' }}>
-  <Grid item style={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
-    <Box style={{ display: 'flex', alignItems: 'center', marginRight: 16 }}>
+          <Grid container alignItems="center" 
+            style={{ 
+              marginBottom: '24px' 
+            }}>
+  <Grid item 
+    style={{ 
+      display: 'flex', 
+      alignItems: 'center', 
+      flexGrow: 1 
+    }}>
+    <Box 
+      style={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        marginRight: 16 
+        }}>
       <img 
         src={location} 
         alt="Location Icon" 
-        style={{ width: '28px', height: '28px' }} 
+        style={{ 
+          width: '28px', 
+          height: '28px' 
+        }} 
       />
-      <Typography variant="body1" style={{ marginLeft: '8px' }}>
+      <Typography variant="body1" 
+        style={{ 
+          marginLeft: '8px',
+          fontFamily: 'Segoe UI', 
+          fontSize: '18px',
+          fontWeight: 'normal',
+        }}>
         Location Services
       </Typography>
     </Box>
@@ -131,25 +154,52 @@ const Account = () => {
       </div>
     </Box>
   </Grid>
-  <Typography variant="caption" color="textSecondary" style={{ marginTop: '8px', flexGrow: 1 }}>
+  <Typography variant="caption" color="textSecondary" 
+    style={{ 
+      marginTop: '8px', 
+      flexGrow: 1,
+      fontFamily: 'Segoe UI', 
+      fontSize: '14px',
+      fontWeight: 'normal',
+      color:'#1A1A1A' 
+    }}>
   This will help assist you in meeting up for 
 potential dates and meeting in the correct 
 locations.  </Typography>
 </Grid>
 
-<Grid container alignItems="center" style={{ marginBottom: '24px' }}>
-  <Grid item style={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
-    <Box style={{ display: 'flex', alignItems: 'center', marginRight: 16 }}>
+<Grid container alignItems="center" 
+  style={{ 
+    marginBottom: '24px' 
+  }}>
+  <Grid item 
+    style={{ 
+      display: 'flex', 
+      alignItems: 'center', 
+      flexGrow: 1 
+    }}>
+    <Box 
+      style={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        marginRight: 16 
+      }}>
       <img 
         src={notification} 
         alt="Notification Icon" 
         style={{ width: '28px', height: '28px' }} 
       />
-      <Typography variant="body1" style={{ marginLeft: '8px' }}>
+      <Typography variant="body1" 
+        style={{ 
+          marginLeft: '8px' 
+        }}>
         Notifications
       </Typography>
     </Box>
-    <Box style={{ flexGrow: 1 }}>
+    <Box 
+      style={{ 
+        flexGrow: 1 
+      }}>
       <div className="switch-container">
         <label className="switch">
           <input 
@@ -162,14 +212,20 @@ locations.  </Typography>
       </div>
     </Box>
   </Grid>
-  <Typography variant="caption" color="textSecondary" style={{ marginTop: '8px', flexGrow: 1 }}>
+  <Typography variant="caption" color="textSecondary" 
+    style={{ 
+      marginTop: '8px', 
+      fontFamily: 'Segoe UI', 
+      fontSize: '14px',
+      fontWeight: 'normal',
+      color:'#1A1A1A'
+      
+    }}>
   Notifications will be sent to your device to 
 help you coordinate and plan dates! It will 
 also let you know when you have received a 
 message from a potential date!  </Typography>
 </Grid>
-
-
           <Button
             variant="contained"
             color="error"
@@ -180,7 +236,12 @@ message from a potential date!  </Typography>
               width: '130px',
               height: '45px',
               borderRadius: '30px',
-              marginLeft:'200px'
+              marginLeft:'auto',
+              marginRight: 'auto',
+              fontFamily: 'Segoe UI', 
+              fontSize: '18px',
+              fontWeight: 'normal',
+              textTransform:'none'
             }}
           >
             Log Out

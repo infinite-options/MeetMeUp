@@ -48,7 +48,9 @@ const SettingsPage = () => {
                 fontFamily: 'Segoe UI', 
                 fontSize: '18px',
                 fontWeight: 400, 
-                flexGrow:1
+                marginRight: 'auto',
+                marginLeft: 'auto'
+                
             }}>
             Settings
           </Typography>
@@ -81,6 +83,8 @@ const SettingsPage = () => {
             padding: '1rem',
             borderRadius: '8px',
             marginBottom: '1rem',
+            
+            
           }}
         >
           <Typography variant="body2" style={{ fontFamily: 'Segoe UI', 
@@ -100,7 +104,7 @@ const SettingsPage = () => {
             height: '50px',
             padding: '1rem',
             borderRadius: '8px',
-            marginRight: '50px'
+            
           }}
         >
           <Typography variant="body2" style={{ fontFamily: 'Segoe UI', 

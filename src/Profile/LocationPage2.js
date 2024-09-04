@@ -6,130 +6,116 @@ import { useNavigate } from 'react-router-dom';
 import './Profile.css';
 
 const LocationPage2 = () => {
-    const navigate = useNavigate();
-  
+  const navigate = useNavigate();
+
   const handleYesClick = () => {
     navigate('/account'); 
   };
-    
+
   return (
-    <Container
-      maxWidth="sm"
+    <Box
       style={{
-        textAlign: 'center',
-        paddingTop: 32,
-        paddingBottom: 32,
         backgroundColor: '#E4423F',
-        color: '#FFFFFF',
-        borderRadius: 8,
-        height: '100vh',
+        minHeight: '100vh',
         display: 'flex',
         flexDirection: 'column',
+        padding: 0,
+        margin: 0,
       }}
     >
-      <Box
+      <Container
+        maxWidth="sm"
         style={{
-          display: 'flex',
-          alignItems: 'center', // Align items vertically
-          width: '100%',
-          justifyContent: 'flex-start',
-          marginBottom: 32,
-        }}
-      >
-        <IconButton 
-          style={{ 
-            color: 'white',
-            marginRight: 8,
-          }}
-          onClick={() => window.history.back()}
-        >
-          <ArrowBackIcon />
-        </IconButton>
-
-        <Typography variant="h6"
-          style={{
-            marginLeft: '70px',
-          }}
-        >
-          Profile Creation
-        </Typography>
-      </Box>
-
-      <Box
-        style={{
-          flex: 1, // Ensures the content takes up available space below the header
+          textAlign: 'left',
+          paddingTop: 32,
+          paddingBottom: 32,
+          color: '#FFFFFF',
+          borderRadius: 8,
+          height: 'auto', // Adjust height to content
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
         }}
       >
         <Box
           style={{
             display: 'flex',
-            justifyContent: 'center',
+            alignItems: 'center', 
+            width: '100%',
+            justifyContent: 'flex-start',
             marginBottom: 32,
+          }}
+        >
+          <IconButton 
+            style={{ 
+              color: 'white',
+              marginRight: 8,
+            }}
+            onClick={() => window.history.back()}
+          >
+            <ArrowBackIcon />
+          </IconButton>
+
+          <Typography variant="h6"
+            style={{
+              marginLeft: 8,
+              fontFamily:'Segoe UI',
+              fontSize:'22px',
+              fontWeight:'normal'
+            }}
+          >
+            Profile Creation
+          </Typography>
+        </Box>
+
+        <Box
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start', // Align to the left
+            marginBottom: 16,
           }}
         >
           <img
             src={icon2}
-            alt="Location Icon"
+            alt="Notification Icon"
             style={{ 
               width: '73px', 
               height: '73px',
-              marginRight: '455px'
-             }}
+              marginBottom: 8, // Reduce gap between image and text
+            }}
           />
-        </Box>
 
-       
-        <Box
-          style={{
-            textAlign: 'left', // Align text to the left
-            width: '94%', // Adjust width as needed
-            marginBottom: 16,
-          }}
-        >
           <Typography 
             variant="h5" 
             style={{ 
               fontFamily: 'Segoe UI',
               fontSize: '30px',
               fontWeight: 200,
-              marginRight: '200px'
+              color: '#FFFFFF',
+              marginBottom: 8,
             }}
           >
-            Would you like to <br /> receive notifications <br /> from meet me up?
-            
+            Would you like to <br /> receive notifications <br /> from Meet Me Up?
+          </Typography>
+
+          <Typography 
+            variant="body1" 
+            style={{ 
+              fontFamily: 'Segoe UI',
+              fontSize: '14px',
+              fontWeight: 200,
+              color: '#FFFFFF',
+            }}
+          >
+            Notifications will be sent to your device to <br />
+            help you coordinate and plan dates! It will <br />
+            also let you know when you have received a <br />
+            message from a potential date!
           </Typography>
         </Box>
 
-        <Box
-          style={{
-            textAlign: 'left', // Align text to the left
-            width: '94%', // Adjust width as needed
-            marginBottom: 16,
-          }}
-        >
-          <Typography 
-          variant="body1" 
-          style={{ 
-            fontFamily: 'Segoe UI',
-            fontSize: '14px',
-            fontWeight: 200,
-            marginRight: '200px'
-          }}
-        >
-          Notifications will be sent to your device to <br />
-          help you coordinate and plan dates! It will <br />
-          also let you know when you have received a <br />
-          message from a potential date!
-        </Typography>
-        </Box>
-
-
         <Grid container spacing={2}>
-          <Grid item xs={12}>
+          <Grid item xs={12} style={{ display: 'flex', justifyContent: 'flex-start', marginBottom: '16px' }}>
             <Button
               variant="contained"
               onClick={handleYesClick}
@@ -137,29 +123,25 @@ const LocationPage2 = () => {
                 backgroundColor: '#FFFFFF',
                 width: '130px',
                 height: '45px',
-                marginRight: '370px',
                 color: '#000000',
                 borderRadius: '20px',
                 textTransform: 'none',
                 fontFamily: 'Segoe UI',
                 fontSize: '18px',
                 fontWeight: 400,
-                paddingX: 4,
-               
               }}
             >
               Yes
             </Button>
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={12} style={{ display: 'flex', justifyContent: 'flex-start' }}>
             <Button
               variant="text"
               style={{
-                color: '#000000',
+                color: '#1A1A1A',
                 fontFamily: 'Segoe UI',
                 fontSize: '18px',
                 fontWeight: 400,
-                marginRight: '360px',
                 textTransform: 'none',
               }}
             >
@@ -167,8 +149,8 @@ const LocationPage2 = () => {
             </Button>
           </Grid>
         </Grid>
-      </Box>
-    </Container>
+      </Container>
+    </Box>
   );
 };
 
