@@ -1,16 +1,18 @@
 import '../App.css';
+import HelperTextBox from './helperTextBox';
 import backButton from '../assets/BackButton.png';
 import progressBar from '../assets/progressBar40.png';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Box, Button, TextField } from '@mui/material';
-import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
+import { Button, Grid2, MenuItem, TextField } from '@mui/material';
+import { Autocomplete, GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
 
 const GOOGLE_API_KEY = process.env.REACT_APP_GOOGLE_API_KEY;
+const placesLibrary = ['places'];
 
 const mapContainerStyle = {
-    width: '400px',
-    height: '500px',
+    width: '375px',
+    height: '450px',
     marginTop: '10px',
     marginLeft: 'auto',
     marginRight: 'auto',
@@ -40,6 +42,34 @@ export default function AccountSetup3Create() {
         openToHomosexual: false,
     });
 
+    const genders = [
+        'Male',
+        'Female',
+        'Nonbinary',
+    ]
+
+    const [searchResult, setSearchResult] = useState('');
+    
+    function onLoad(autocomplete) {
+        setSearchResult(autocomplete);
+    }
+
+    function onPlaceChanged() {
+        if (searchResult != null) {
+            const place = searchResult.getPlace();
+            const name = place.name;
+            const status = place.business_status;
+            const formattedAddress = place.formatted_address;
+            console.log('Place:', place);
+            console.log('Name:', name);
+            console.log('Business Status:', status);
+            console.log('Formatted Address:', formattedAddress);
+            formData['location'] = formattedAddress
+        } else {
+            alert('Please enter text');
+        }
+    }
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({
@@ -62,7 +92,8 @@ export default function AccountSetup3Create() {
     };
 
     const { isLoaded, loadError } = useJsApiLoader({
-        googleMapsApiKey: GOOGLE_API_KEY
+        googleMapsApiKey: GOOGLE_API_KEY,
+        libraries: placesLibrary,
     });
 
     if (loadError) {
@@ -88,34 +119,62 @@ export default function AccountSetup3Create() {
                     <div className='pc-sub-header-text'>
                         These details are about you and will be public to potential matches on meet me up.
                     </div>
-                    <Box
-                        sx={{ '& > :not(style)': { marginTop: 1.5, marginLeft: 3, marginRight: 3, width: 0.88 } }}
+                    <Grid2 container
+                        sx={{ '& > :not(style)': { marginTop: 1.5, marginLeft: 3, marginRight: 3, width: 1 } }}
                         autoComplete='off'
                     >
                         <TextField onChange={handleChange} name='name' label='Name' type='text' variant='outlined'/>
-                        <TextField onChange={handleChange} name='age' label='Age' type='number' variant='outlined'/>
-                        <TextField onChange={handleChange} name='gender' label='Gender' type='text' variant='outlined'/>
-                        <TextField onChange={handleChange} name='profileBio' label='Profile Bio' type='text' variant='outlined'/>
-                    </Box>
+                        <Grid2 container>
+                            <Grid2 size={5.5} sx={{marginRight: 1.5}}>
+                                <TextField onChange={handleChange} name='age' label='Age' type='number' variant='outlined'/>
+                            </Grid2>
+                            <Grid2 size={5.5} sx={{marginLeft: 1.5}}>
+                                <TextField onChange={handleChange} name='gender' label='Gender' variant='outlined' select sx={{ width: 1 }} defaultValue = ''>
+                                    {genders.map((gender) => (
+                                        <MenuItem key={gender} value={gender}>
+                                            {gender}
+                                        </MenuItem>
+                                    ))}
+                                </TextField>
+                            </Grid2>
+                        </Grid2>
+                        <TextField onChange={handleChange} name='profileBio' label='Profile Bio' type='text' variant='outlined' multiline rows={4}/>
+                    </Grid2>
                     <div className='pc-header-text'>
                         Location
                     </div>
                     <div className='pc-sub-header-text'>
                         Your location helps us pin point where you are to provide better matches to you.
                     </div>
-                    <Box
-                        sx={{ '& > :not(style)': { marginTop: 1.5, marginLeft: 3, marginRight: 3, width: 0.88 } }}
-                        autoComplete='off'
-                    >
-                        <TextField onChange={handleChange} name='location' label='Location' type='text' variant='outlined'/>
-                    </Box>
+                    <Autocomplete onPlaceChanged={onPlaceChanged} onLoad={onLoad}>
+                        <input
+                            type='text'
+                            placeholder='Location'
+                            style={{
+                                fontSize: '14px',
+                                display: 'flex',
+                                width: '350px',
+                                height: '25px',
+                                marginTop: '10px',
+                                marginLeft: 'auto',
+                                marginRight: 'auto',
+                                padding: '10px',
+                                border: '1px solid transparent',
+                                borderRadius: '5px',
+                                boxShadow: '0 2px 6px rgba(0, 0, 0, 0.5)',
+                                textOverflow: 'ellipses',
+                            }}
+                        />
+                    </Autocomplete>
                     <GoogleMap
                         mapContainerStyle={mapContainerStyle}
                         zoom={15}
                         center={center}
+                        mapId='map_id'
                     >
                         <Marker position={center}/>
                     </GoogleMap>
+                    <HelperTextBox text='Why do we need your location?'/>
                     <div className='pc-header-text'>
                         Your Sexuality
                     </div>
@@ -124,31 +183,31 @@ export default function AccountSetup3Create() {
                     </div>
                     <Button variant='contained' onClick={handleButton} name='sexualityStraight'
                         sx={{ backgroundColor: formData['sexualityStraight'] ? '#E4423F' : '#ffffff', color: '#000000',
-                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', textTransform: 'none' }}
+                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', marginRight: '-10px', textTransform: 'none' }}
                     >
                         Straight
                     </Button>
                     <Button variant='contained' onClick={handleButton} name='sexualityBisexual'
                         sx={{ backgroundColor: formData['sexualityBisexual'] ? '#E4423F' : '#ffffff', color: '#000000',
-                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', textTransform: 'none' }}
+                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', marginRight: '-10px', textTransform: 'none' }}
                     >
                         Bi-Sexual
                     </Button>
                     <Button variant='contained' onClick={handleButton} name='sexualityTransgender'
                         sx={{ backgroundColor: formData['sexualityTransgender'] ? '#E4423F' : '#ffffff', color: '#000000',
-                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', textTransform: 'none' }}
+                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', marginRight: '-10px', textTransform: 'none' }}
                     >
                         Trans-gender
                     </Button>
                     <Button variant='contained' onClick={handleButton} name='sexualityLGBTQ'
                         sx={{ backgroundColor: formData['sexualityLGBTQ'] ? '#E4423F' : '#ffffff', color: '#000000',
-                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', textTransform: 'none' }}
+                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', marginRight: '-10px', textTransform: 'none' }}
                     >
                         LGBTQ
                     </Button>
                     <Button variant='contained' onClick={handleButton} name='sexualityHomosexual'
                         sx={{ backgroundColor: formData['sexualityHomosexual'] ? '#E4423F' : '#ffffff', color: '#000000',
-                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', textTransform: 'none' }}
+                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', marginRight: '-10px', textTransform: 'none' }}
                     >
                         Homosexual
                     </Button>
@@ -160,34 +219,35 @@ export default function AccountSetup3Create() {
                     </div>
                     <Button variant='contained' onClick={handleButton} name='openToStraight'
                         sx={{ backgroundColor: formData['openToStraight'] ? '#E4423F' : '#ffffff', color: '#000000',
-                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', textTransform: 'none' }}
+                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', marginRight: '-10px', textTransform: 'none' }}
                     >
                         Straight
                     </Button>
                     <Button variant='contained' onClick={handleButton} name='openToBisexual'
                         sx={{ backgroundColor: formData['openToBisexual'] ? '#E4423F' : '#ffffff', color: '#000000',
-                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', textTransform: 'none' }}
+                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', marginRight: '-10px', textTransform: 'none' }}
                     >
                         Bi-Sexual
                     </Button>
                     <Button variant='contained' onClick={handleButton} name='openToTransgender'
                         sx={{ backgroundColor: formData['openToTransgender'] ? '#E4423F' : '#ffffff', color: '#000000',
-                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', textTransform: 'none' }}
+                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', marginRight: '-10px', textTransform: 'none' }}
                     >
                         Trans-gender
                     </Button>
                     <Button variant='contained' onClick={handleButton} name='openToLGBTQ'
                         sx={{ backgroundColor: formData['openToLGBTQ'] ? '#E4423F' : '#ffffff', color: '#000000',
-                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', textTransform: 'none' }}
+                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', marginRight: '-10px', textTransform: 'none' }}
                     >
                         LGBTQ
                     </Button>
                     <Button variant='contained' onClick={handleButton} name='openToHomosexual'
                         sx={{ backgroundColor: formData['openToHomosexual'] ? '#E4423F' : '#ffffff', color: '#000000',
-                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', textTransform: 'none' }}
+                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', marginRight: '-10px', textTransform: 'none' }}
                     >
                         Homosexual
                     </Button>
+                    <HelperTextBox text='Why do we need this information?'/>
                     <div className='form-button-container'>
                         <Button
                             variant='contained'

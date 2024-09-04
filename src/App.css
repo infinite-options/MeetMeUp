@@ -126,7 +126,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-top: 20px;
+  padding-top: 15px;
 }
 
 .complimentary-images {
@@ -142,4 +142,29 @@
   position: relative;
   top: -75px;
   left: 65px;
+}
+
+.helper-text-box {
+  background-color: #F2F2F2;
+  color: #1A1A1A;
+  font-family: 'Segoe UI';
+  font-weight: 400;
+  font-size: 14px;
+  border-radius: 20px;
+  margin: 25px;
+  padding: 20px;
+}
+
+.helper-text-box-text {
+  color: #1A1A1A;
+  font-family: 'Segoe UI';
+  margin-top: -26px;
+  margin-left: 35px;
+}
+
+.white-text-video {
+  color: #ffffff;
+  font-family: sans-serif;
+  font-weight: 700;
+  font-size: 15px;
 }

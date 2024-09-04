@@ -1,5 +1,4 @@
 import '../App.css';
-import HelperTextBox from './helperTextBox';
 import backButton from '../assets/BackButton.png';
 import progressBar from '../assets/progressBar20.png';
 import { useState } from 'react';
@@ -62,7 +61,6 @@ export default function AccountSetup2Create() {
                         <TextField onChange={handleChange} name='password' label='Create Password' type='password' variant='outlined'/>
                         <TextField onChange={handleChange} name='passwordConfirm' label='Confirm Password' type='password' variant='outlined'/>
                     </Box>
-                    <HelperTextBox text='How do you need to make a secure password?'/>
                     <div className='form-button-container'>
                         <Button
                             variant='contained'
@@ -79,6 +77,21 @@ export default function AccountSetup2Create() {
                         </Button>
                     </div>
                 </form>
+                <div className='pc-title-text'>
+                    Already completed your profile?
+                </div>
+                <Button
+                    variant='contained'
+                    sx={{
+                        backgroundColor: '#E4423F',
+                        maxWidth: '202px',
+                        borderRadius: '41px',
+                        marginTop: '20px',
+                        boxShadow: 'none',
+                    }}
+                >
+                    Skip to Summary
+                </Button>
             </div>
         </div>
     )

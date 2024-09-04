@@ -1,13 +1,44 @@
 import '../App.css';
+import HelperTextBox from './helperTextBox';
 import backButton from '../assets/BackButton.png';
 import progressBar from '../assets/progressBar80.png';
 import videoCameraIcon from '../assets/videoCameraIcon.png';
 import uploadImageIcon from '../assets/uploadImageIcon.png';
-import removeImageIcon from '../assets/removeImage.png';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
+/* import { useReactMediaRecorder } from 'react-media-recorder';
+import VideoRecorder from 'react-video-recorder-18';
+import { useRecordWebcam } from 'react-record-webcam'; */
+
+/* const options = {
+    filename: 'test-filename',
+    fileType: 'mp4',
+    width: 1920,
+    height: 1080
+};
+
+const RecordView = () => {
+    const {
+        status,
+        startRecording,
+        stopRecording,
+        mediaBlobUrl
+    } = useReactMediaRecorder({
+        video: true,
+        facingMode: { exact: 'environment' }
+    });
+
+    return (
+        <div>
+            <p>{status}</p>
+            <button onClick={startRecording}>Start Recording</button>
+            <button onClick={stopRecording}>Stop Recording</button>
+            <video src={mediaBlobUrl} controls autoPlay loop />
+        </div>
+    );
+}; */
 
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -26,6 +57,15 @@ export default function AccountSetup5Create() {
         video: '',
         image: '',
     });
+
+/*     const recordWebcam = useRecordWebcam(options);
+    const getRecordingFileHooks = async () => {
+    const blob = await recordWebcam.getRecording();
+        console.log({ blob });
+    };
+    const getRecordingFileRenderProp = async (blob) => {
+        console.log({ blob });
+    }; */
 
     const handleVideoUpload = (e) => {
         const vid = e.target.files[0];
@@ -47,7 +87,7 @@ export default function AccountSetup5Create() {
 
         setFormData({
             ...formData,
-            'image': URL.createObjectURL(img) + "," + formData['image']
+            'image': URL.createObjectURL(img) + ',' + formData['image']
         });
     };
 
@@ -77,9 +117,35 @@ export default function AccountSetup5Create() {
                     </div>
                     {formData['video'] ? <div className='general-container'><video width='75%' height='100%' controls src={formData['video']}/></div> : null}
                     <div className='general-container'>
+{/*                         <div style={{ height: '100%' }}>
+                            <h1>One minute</h1>
+                            <VideoRecorder
+                                isOnInitially
+                                isFliped
+                                showReplayControls
+                                // mimeType={text('mimeType')}
+                                countdownTime='3000'
+                                timeLimit='60000'
+                                onRecordingComplete={(videoBlob) => {
+                                // Do something with the video...
+                                console.log('videoBlob', videoBlob);
+                                }}
+                            />
+                        </div> */}
                         <Button component='label' variant='contained' sx={{ backgroundColor: '#E4423F', color: '#000000', maxWidth: '202px',
                             borderRadius: '41px', textTransform: 'none' }}
                         >
+                            <div className='white-text-video'>
+                                Record
+                            </div>
+                            <img src={videoCameraIcon} alt='video icon'/>
+                        </Button>
+                        <Button component='label' variant='contained' sx={{ backgroundColor: '#E4423F', color: '#000000', maxWidth: '202px',
+                            borderRadius: '41px', textTransform: 'none' }}
+                        >
+                            <div className='white-text-video'>
+                                Upload
+                            </div>
                             <img src={videoCameraIcon} alt='video icon'/>
                             <VisuallyHiddenInput
                                 type='file'
@@ -88,6 +154,7 @@ export default function AccountSetup5Create() {
                             />
                         </Button>
                     </div>
+                    <HelperTextBox text='Why do I need to make this video?'/>
                     <div className='pc-header-text'>
                         Complimentary Images
                     </div>
@@ -108,12 +175,9 @@ export default function AccountSetup5Create() {
                     </div>
                     {formData['image'] ?
                         <div className='general-container'>
-                            {formData['image'].split(",").slice(0, (formData['image'].split(",").length)-1).map((img) => (
-                                <div className="complimentary-images" key={img}>
+                            {formData['image'].split(',').slice(0, (formData['image'].split(',').length)-1).map((img) => (
+                                <div className='complimentary-images' key={img}>
                                     <img src={img} alt='hello' style={{maxWidth: '175px', position: 'absolute'}}/>
-                                    <div className="remove-image-icon">
-                                        <img src={removeImageIcon} alt='remove'/>
-                                    </div>
                                 </div>
                             ))}
                         </div>
