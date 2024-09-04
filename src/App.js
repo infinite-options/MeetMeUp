@@ -5,6 +5,7 @@ import AccountSetup2Create from './pages/AccountSetup2Create.js';
 import AccountSetup3Create from './pages/AccountSetup3Create.js';
 import AccountSetup4Create from './pages/AccountSetup4Create.js';
 import AccountSetup5Create from './pages/AccountSetup5Create.js';
+import AccountSummary from './pages/AccountSummary.js';
 import ShowTermsAndConditions from './pages/showTermsAndConditions.js';
 import ShowPrivacyPolicy from './pages/showPrivacyPolicy.js';
 
@@ -15,8 +16,9 @@ function App() {
         <Route path="/" element={<AccountSetup1Login/>}/>
         <Route path="/accountSetup2Create" element={<AccountSetup2Create/>}/>
         <Route path="/accountSetup3Create" element={<AccountSetup3Create/>}/>
-        <Route path="/AccountSetup4Create" element={<AccountSetup4Create/>}/>
-        <Route path="/AccountSetup5Create" element={<AccountSetup5Create/>}/>
+        <Route path="/accountSetup4Create" element={<AccountSetup4Create/>}/>
+        <Route path="/accountSetup5Create" element={<AccountSetup5Create/>}/>
+        <Route path="/accountSummary" element={<AccountSummary/>}/>
         <Route path="/termsandconditions" element={<ShowTermsAndConditions/>}/>
         <Route path="/privacypolicy" element={<ShowPrivacyPolicy/>}/>
       </Routes>

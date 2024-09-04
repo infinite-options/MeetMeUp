@@ -5,7 +5,7 @@ import progressBar from '../assets/progressBar40.png';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Grid2, MenuItem, TextField } from '@mui/material';
-import { Autocomplete, GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
+import { Autocomplete, GoogleMap, useJsApiLoader, MarkerF } from '@react-google-maps/api';
 
 const GOOGLE_API_KEY = process.env.REACT_APP_GOOGLE_API_KEY;
 const placesLibrary = ['places'];
@@ -18,7 +18,7 @@ const mapContainerStyle = {
     marginRight: 'auto',
 };
 
-const center = {
+var center = {
     lat: -32.015001263602,
     lng: 115.83650856893345,
 };
@@ -48,6 +48,7 @@ export default function AccountSetup3Create() {
         'Nonbinary',
     ]
 
+    
     const [searchResult, setSearchResult] = useState('');
     
     function onLoad(autocomplete) {
@@ -55,16 +56,14 @@ export default function AccountSetup3Create() {
     }
 
     function onPlaceChanged() {
-        if (searchResult != null) {
+        if (searchResult != null || searchResult !== "") {
             const place = searchResult.getPlace();
-            const name = place.name;
-            const status = place.business_status;
             const formattedAddress = place.formatted_address;
-            console.log('Place:', place);
-            console.log('Name:', name);
-            console.log('Business Status:', status);
-            console.log('Formatted Address:', formattedAddress);
-            formData['location'] = formattedAddress
+            formData['location'] = formattedAddress;
+            center['lat'] = place.geometry.location.lat();
+            center['lng'] = place.geometry.location.lng();
+            console.log(place);
+            console.log(center);
         } else {
             alert('Please enter text');
         }
@@ -171,8 +170,12 @@ export default function AccountSetup3Create() {
                         zoom={15}
                         center={center}
                         mapId='map_id'
+                        onLoad={map => {
+                            const bounds = new window.google.maps.LatLngBounds(center);
+                            map.fitBounds(bounds);
+                        }}
                     >
-                        <Marker position={center}/>
+                        <MarkerF position={center}/>
                     </GoogleMap>
                     <HelperTextBox text='Why do we need your location?'/>
                     <div className='pc-header-text'>

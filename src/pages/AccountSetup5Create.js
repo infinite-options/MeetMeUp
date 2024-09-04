@@ -104,7 +104,7 @@ export default function AccountSetup5Create() {
                     Profile Creation
                 </div>
                 <img src={progressBar} alt='progress bar'/>
-                <form className='form-container' onSubmit={handleNext} action='/accountSetup5Create'>
+                <form className='form-container' onSubmit={handleNext} action='/accountSummary'>
                     <div className='pc-header-text'>
                         Your Profile Recording
                     </div>
@@ -136,7 +136,7 @@ export default function AccountSetup5Create() {
                             borderRadius: '41px', textTransform: 'none' }}
                         >
                             <div className='white-text-video'>
-                                Record
+                                Record&nbsp;
                             </div>
                             <img src={videoCameraIcon} alt='video icon'/>
                         </Button>
@@ -144,7 +144,7 @@ export default function AccountSetup5Create() {
                             borderRadius: '41px', textTransform: 'none' }}
                         >
                             <div className='white-text-video'>
-                                Upload
+                                Upload&nbsp;
                             </div>
                             <img src={videoCameraIcon} alt='video icon'/>
                             <VisuallyHiddenInput
@@ -182,6 +182,21 @@ export default function AccountSetup5Create() {
                             ))}
                         </div>
                         : null}
+                    <div className='form-button-container'>
+                        <Button
+                            variant='contained'
+                            type='submit'
+                            sx={{
+                                backgroundColor: '#E4423F',
+                                maxWidth: '202px',
+                                borderRadius: '41px',
+                                marginTop: '20px',
+                                boxShadow: 'none',
+                            }}
+                        >
+                            Next
+                        </Button>
+                    </div>
                 </form>
             </div>
         </div>
