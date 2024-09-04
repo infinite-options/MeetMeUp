@@ -23,7 +23,7 @@ const Match = () => {
                     <img src="profileimg.png" style={{width:"100%", height:"90%"}}></img>
                     <Typography sx={{position:"absolute", top:"10%", color:"white", fontSize:'20px'}}>{name}</Typography>
                     <Typography sx={{position:"absolute", top:"14%", color:"white", fontSize:"10px"}}>{age} - {gender} - {where}</Typography>
-                    <Typography sx={{position:"absolute", bottom:"2%", color:"white", fontSize:"10px"}} onClick={()=>setIsFlipped(true)}>Tap to See Profile</Typography>
+                    <Typography sx={{position:"absolute", bottom:"2%", color:"white", fontSize:"18px"}} onClick={()=>setIsFlipped(true)}>Tap to See Profile</Typography>
                     <img src="like.png" style={{position:"absolute", right:"2%", top:"2%"}}></img>
                 </Box>
                 <Grid container size={12} justifyContent="center" >

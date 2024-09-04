@@ -90,25 +90,9 @@ const ViewProfile = ({setIsFlipped}) => {
                 <Info img="smoke.png" info={smoke} />
                 <Info img="flag.png" info={flag} />
                 <hr style={{width:"100%", marginTop:"30px"}} />
-                <Grid container size={12} gap={.5} sx={{marginTop:"40px", mb:"50px"}}>
-                    <Grid size={5}>
-                        <Button sx={{width:"130px",backgroundColor:"black", borderRadius:"25px", height:"45px", color:"white", display:"flex", justifyContent:"center", textTransform:"none",fontSize:"18px", fontWeight:"Regular", textWrap:"none", width:"160px"}}>Update Profile
-                        </Button>
-                    </Grid>
-                    <Grid size={1.5} sx={{backgroundColor:"#CECECE", borderRadius:"25px", marginLeft:"10px", boxShadow:"2px 5px 5px 2px rgba(0,0,0,.1)", }} container justifyContent="center" alignItems="center">
-                        <img src="setting.png"></img>
-                    </Grid>
-                    <Grid size={1.5} sx={{backgroundColor:"#CECECE", borderRadius:"25px", boxShadow:"2px 5px 5px 2px rgba(0,0,0,.1)"}} container justifyContent="center" alignItems="center">
-                        <img src="card.png"></img>
-                    </Grid>
-                    <Grid size={1.5} sx={{backgroundColor:"#CECECE", borderRadius:"25px", boxShadow:"2px 5px 5px 2px rgba(0,0,0,.1)"}} container justifyContent="center" alignItems="center">
-                        <img src="diamond.png"></img>
-                    </Grid>
-                    <Grid size={1.5} sx={{backgroundColor:"#CECECE", borderRadius:"25px", boxShadow:"2px 5px 5px 2px rgba(0,0,0,.1)"}} container justifyContent="center" alignItems="center">
-                        <img src="time.png"></img>
-                    </Grid>
+                <Grid container size={12} gap={.5} sx={{marginTop:"20px", mb:"20px"}}>
                     <Grid size={12} container justifyContent="center">
-                        <Typography sx={{fontSize:"30px", fontFamily:"Lexend", marginTop:"10px"}} onClick={()=>{setIsFlipped(false)}}>Tap To See Video</Typography>
+                        <Typography sx={{fontSize:"18px", fontFamily:"Lexend", marginTop:"10px"}} onClick={()=>{setIsFlipped(false)}}>Tap To See Video</Typography>
                     </Grid>
             </Grid>
             </Container>
