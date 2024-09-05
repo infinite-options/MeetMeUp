@@ -33,10 +33,11 @@ const LandingPage3 = () => {
               //marginTop:'100px',
               fontFamily: 'Lexend', 
               fontSize: '20px', 
-            fontWeight: 'normal' 
+            fontWeight: 'normal',
+            marginTop:'30px'
           }}
         >
-        Get to know your matches <strong>better</strong> with a 
+        Get to know your matches <strong>better</strong> with<br></br> a 
         profile <strong>recording</strong>, updated <strong>yearly</strong>.
  
         
@@ -60,12 +61,13 @@ const LandingPage3 = () => {
       <Typography 
           style={{ 
               fontFamily: 'Lexend', 
-              fontSize: '14px', 
-            fontWeight: 'normal' 
+              fontSize: '20px', 
+            fontWeight: 'normal',
+            maringBottom:'40px'
           }}
         >
-        No <strong>disappointment</strong>, that they 
-        look <strong>nothing</strong> like their profile
+        No <strong>disappointment</strong>, that they <br></br>
+        look <strong>nothing</strong> like their profile.
         
       </Typography>
 
@@ -99,9 +101,10 @@ const LandingPage3 = () => {
             style={{
               fontFamily: 'Lexend', 
               fontSize: '12px', 
-              fontWeight: 'normal',
+              fontWeight: 'bold',
               borderRadius: '10px',
               padding: 1,
+              textTransfrom:'none'
               
             }}
           >

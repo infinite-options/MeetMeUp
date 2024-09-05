@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Typography, Box, Grid, IconButton } from '@mui/material';
-import arrow from '../Assets/Images/arrow.png'; // Importing the arrow image
-import background from '../Assets/Images/background.png'; // Importing the background image
+import arrow from '../Assets/Images/arrow.png'; 
+import background from '../Assets/Images/background.png'; 
 
 const TrialAccount = () => {
   const handleBackClick = () => {
@@ -10,7 +10,7 @@ const TrialAccount = () => {
 
   return (
     <Container style={{ position: 'relative', minHeight: '100vh', paddingTop: '20px' }}>
-      {/* Background Image */}
+
       <img
         src={background}
         alt="Background"
@@ -25,7 +25,7 @@ const TrialAccount = () => {
         }}
       />
 
-      {/* Arrow and Trial Account on the Same Line */}
+      
       <Box 
         style={{ 
           display: 'flex', 
@@ -35,56 +35,76 @@ const TrialAccount = () => {
           marginRight:'100px'
         }}>
         <IconButton onClick={handleBackClick} style={{ color: '#fff' }}>
-          <img src={arrow} alt="Back" style={{ width: '24px', height: '24px' }} />
+          <img src={arrow} alt="Back" style={{ width: '30px', height: '30px' }} />
         </IconButton>
-        <Typography variant="h6" style={{ color: '#fff' }}>
+        <Typography variant="h6" 
+          style={{ 
+            color: '#1A1A1A',
+            fontFamily:'Lexend',
+            fontSize:'22px',
+            fontWeight: 'bold'
+          }}>
           Trial Account
         </Typography>
       </Box>
 
-      {/* Let's Start Section Positioned Toward the Bottom */}
+      
       <Grid
         container
         justifyContent="center"
-        alignItems="flex-end"
-        style={{ minHeight: '80vh', paddingBottom: '20px' }}
+        alignItems="flex-middle"
+        style={{ marginTop:'400px', width:'378px', height:'199px', marginBottom: '20px' }}
       >
         <Box
           style={{
             backgroundColor: 'rgba(255, 255, 255, 0.9)',
             borderRadius: '15px',
             padding: '20px',
-            textAlign: 'center',
+            textAlign: 'left',
             maxWidth: '300px',
             width: '100%',
           }}
         >
-          <Typography variant="h5" style={{ fontWeight: 'bold' }}>
+          <Typography variant="h5" style={{ fontFamily:'Lexend',
+            fontSize:'28px',
+            fontWeight: 'bold',
+            color:'#282828' }}>
             Let's start
           </Typography>
-          <Typography variant="body1" style={{ marginTop: '10px' }}>
+          <Typography variant="body1" style={{ marginTop: '10px',fontFamily:'Lexend',
+            fontSize:'14px',
+            fontWeight: 'normal',
+            color:'#282828' }}>
             by setting up a trial account so you can experience creating a date, if you would like to continue setting up a real date you can complete your full profile account after the trial experience.
           </Typography>
-          <Typography variant="caption" display="block" style={{ marginTop: '10px' }}>
+          <Typography variant="caption" display="block" style={{fontFamily:'Lexend',
+            fontSize:'14px',
+            fontWeight: 'normal',
+            color:'#282828' }}>
             This is a preview date.
           </Typography>
         </Box>
       </Grid>
 
-      {/* Start Button Outside the Container */}
+      
       <Box
         style={{
-          backgroundColor: '#FF4D4D',
-          borderRadius: '20px',
-          margin: '20px auto',
+          backgroundColor: '#E4423F',
+          borderRadius: '28px',
+          margin: 'auto',
+          marginTop:'40px',
           padding: '10px 0',
           cursor: 'pointer',
-          color: '#fff',
-          fontWeight: 'bold',
+          color: '#FFFFFF',
+          fontFamily: 'Lexend',
+          fontSize:'18px',
+          fontWeight: 'normal',
           textAlign: 'center',
-          maxWidth: '300px',
+          width:'188px',
+          height:'30px',
+
           position: 'relative',
-          zIndex: 1, // Ensures the button is above the background
+          zIndex: 1, 
         }}
       >
         Start

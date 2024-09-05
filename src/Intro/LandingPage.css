@@ -9,11 +9,11 @@ html, body {
   }
 
   .custom-image {
-    width: 284px; 
-    height: 400px;
+    width: 384px; 
+    height: 500px;
     border-radius: 20px;
     object-fit: cover;
-    margin-bottom: 25px;
+    margin-bottom: 35px;
     margin-top: 15px;
   }
   

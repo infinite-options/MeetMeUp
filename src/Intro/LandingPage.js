@@ -33,7 +33,8 @@ const LandingPage = () => {
               //marginTop:'100px',
               fontFamily: 'Lexend', 
               fontSize: '20px', 
-              fontWeight: '400px' 
+              fontWeight: '400px',
+              marginTop:'30px' 
           }}
         >
         Hello, online <strong>daters</strong>.
@@ -69,6 +70,7 @@ const LandingPage = () => {
               fontFamily: 'Lexend', 
               fontSize: '14px', 
             fontWeight: 'normal',
+            marginBottom:'40px'
           }}
         >
         <strong>Arrange</strong> your <strong>meeting</strong> time &amp; <strong>destination </strong> 
@@ -105,10 +107,11 @@ const LandingPage = () => {
             style={{
               fontFamily: 'Lexend', 
               fontSize: '12px', 
-              fontWeight: 'normal',
+              fontWeight: 'bold',
               borderRadius: '10px',
               padding: 1,
               textTransform: 'none',
+              
               
             }}
           >

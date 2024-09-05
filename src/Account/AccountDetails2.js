@@ -54,8 +54,8 @@ const Account = () => {
                 fontSize: '22px',
                 fontWeight: 400,
                 marginLeft:'auto',
-                marginRight: 'auto'
-                
+                marginRight: 'auto',
+                color:'#1A1A1A'
               }}
             >
                 Settings</Typography>
@@ -89,7 +89,7 @@ const Account = () => {
                 fontFamily: 'Segoe UI', 
                 fontSize: '18px',
                 fontWeight: 400,
-               
+                color:'#1A1A1A'
                 
               }}
               >Account Details</Typography>
@@ -121,7 +121,7 @@ const Account = () => {
                   fontFamily: 'Segoe UI', 
                   fontSize: '18px',
                   fontWeight: 400,
-                 
+                  color:'#1A1A1A'
                   
                 }}
               >Update Password</Typography>
@@ -149,13 +149,13 @@ const Account = () => {
         src={location} 
         alt="Location Icon" 
         style={{ 
-          width: '28px', 
-          height: '28px' 
+          width: '30px', 
+          height: '30px' 
       }} 
       />
       <Typography variant="body1" 
         style={{ 
-          marginLeft: '8px',
+          marginLeft: '12px',
           fontFamily: 'Segoe UI', 
       fontSize: '18px',
       fontWeight: 'normal',
@@ -200,11 +200,11 @@ locations.  </Typography>
       <img 
         src={notification} 
         alt="Notification Icon" 
-        style={{ width: '28px', height: '28px' }} 
+        style={{ width: '30px', height: '30px' }} 
       />
       <Typography variant="body1" 
         style={{ 
-          marginLeft: '8px',
+          marginLeft: '12px',
           fontFamily: 'Segoe UI', 
       fontSize: '18px',
       fontWeight: 'normal',
@@ -249,9 +249,10 @@ message from a potential date!  </Typography>
               height: '44px',
               textTransform: 'none',
               backgroundColor:'#E4423F',
+              color:'#FFFFFF',
               fontFamily: 'Segoe UI', 
-      fontSize: '18px',
-      fontWeight: 'normal',
+              fontSize: '18px',
+              fontWeight: 'normal',
 
             }}
           >

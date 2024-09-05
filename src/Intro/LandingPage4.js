@@ -14,6 +14,7 @@ const LandingPage4 = () => {
         paddingBottom: 4,
         backgroundColor: '#FFFFFF',
         borderRadius: 2,
+        marginTop:'30px',
 
       
         justifyContent: 'center', 
@@ -23,14 +24,14 @@ const LandingPage4 = () => {
           style={{ 
               //marginTop:'100px',
               fontFamily: 'Lexend', 
+              mariginTop:'30px',
               fontSize: '20px', 
-            fontWeight: 'normal' 
+              fontWeight: 'normal',
+              
           }}
         >
-        Get to know your matches <strong>better</strong> with a 
-        profile <strong>recording</strong>, updated <strong>yearly</strong>.
- 
-        
+        <strong>Time</strong> is so <strong>precious</strong> in <br></br> today’s time and day!
+
       </Typography>
       
       <Box
@@ -50,20 +51,21 @@ const LandingPage4 = () => {
           style={{ 
               fontFamily: 'Lexend', 
               fontSize: '22px', 
-            fontWeight: 'normal' 
+            fontWeight: 'bold' 
           }}
         >
-        <strong>Meet Me</strong> 
+        <strong>Meet me</strong> 
       </Typography>
 
       <Typography 
           style={{ 
               fontFamily: 'Lexend', 
-              fontSize: '14px', 
-            fontWeight: 'normal' 
+              fontSize: '16px', 
+            fontWeight: 'normal',
+            marginBottom:'40px'
           }}
         >
-        Meet the missing piece that <strong>compliments</strong>  you.
+        Meet the missing piece that <br></br><strong>compliments</strong>  you.
         
       </Typography>
 
@@ -96,7 +98,7 @@ const LandingPage4 = () => {
             style={{
               fontFamily: 'Lexend', 
               fontSize: '12px', 
-              fontWeight: 'normal',
+              fontWeight: 'bold',
               borderRadius: '10px',
               padding: 1,
               textTransform: 'none',

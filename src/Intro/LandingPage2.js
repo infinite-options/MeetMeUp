@@ -24,7 +24,7 @@ const LandingPage2 = () => {
         borderRadius: 2,
 
       
-        justifyContent: 'center', // Center content vertically
+        justifyContent: 'center', 
       }}
     >
       <Typography 
@@ -32,10 +32,11 @@ const LandingPage2 = () => {
               //marginTop:'100px',
               fontFamily: 'Lexend', 
               fontSize: '20px', 
-            fontWeight: 'normal' 
+            fontWeight: 'normal',
+            marginTop:'30px'
           }}
         >
-        Browse a <strong>soulmate</strong> or new friend and <strong>fast track</strong> to meeting.
+        Browse a <strong>soulmate</strong> or new friend <br></br> and <strong>fast track</strong> to meeting.
         
       </Typography>
       
@@ -56,22 +57,15 @@ const LandingPage2 = () => {
           style={{ 
               fontFamily: 'Lexend', 
               fontSize: '22px', 
-            fontWeight: 'normal' 
+            fontWeight: 'normal',
+            marginBottom:'40px'
           }}
         >
-        We do <strong>small talk</strong> for you.
+        <strong>Remove</strong> that <strong>awkwardness</strong><br></br> asking for <strong>the first date</strong>.
+       
       </Typography>
 
-      <Typography 
-          style={{ 
-              fontFamily: 'Lexend', 
-              fontSize: '14px', 
-            fontWeight: 'normal' 
-          }}
-        >
-        <strong>Remove</strong> that <strong>awkardness</strong> 
-        asking for the <strong>first date</strong>.
-      </Typography>
+      
 
       <Grid container spacing={2} style={{ marginTop: 4 }}>
         <Grid item xs={12}>
@@ -102,9 +96,10 @@ const LandingPage2 = () => {
             style={{
               fontFamily: 'Lexend', 
               fontSize: '12px', 
-              fontWeight: 'normal',
+              fontWeight: 'bold',
               borderRadius: '10px',
               padding: 1,
+              textTransform:'none'
               
             }}
           >
