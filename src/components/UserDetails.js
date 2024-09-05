@@ -1,31 +1,94 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as regularHeart } from '@fortawesome/free-regular-svg-icons';
 import { useLocation } from 'react-router-dom';
 import './UserDetails.css';
+import MatchPopUp from './MatchPopUp';
 
 const UserDetails = () => {
     const location = useLocation();
-    const { user } = location.state;
+    const { user, source } = location.state || {};
 
-    const [isFilled, setIsFilled] = useState(false);
+    console.log("User:", user);
+    console.log("Source:", source);
 
-    const handleHeartClick = () => {
-        setIsFilled(!isFilled); // Toggle the filled state
+    const [isRightHeartFilled, setIsRightHeartFilled] = useState(source === 'usersWhoYouSelected');
+    const [showPopup, setShowPopup] = useState(false); 
+
+    const popupRef = useRef(null);
+
+    const isLeftHeartVisible = source === 'usersWhoSelectedYou';
+
+    const handleRightHeartClick = () => {
+        const newHeartState = !isRightHeartFilled;
+        setIsRightHeartFilled(newHeartState);
+
+        
+        if (isLeftHeartVisible && newHeartState) {
+            setShowPopup(true);
+        } else {
+            setShowPopup(false); 
+        }
     };
+
+    const handleClosePopup = () => {
+        setShowPopup(false); 
+    };
+
+    
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (popupRef.current && !popupRef.current.contains(event.target)) {
+                handleClosePopup();
+            }
+        };   
+        if (showPopup) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+        return () => {
+            
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [showPopup]);
 
     return (
         <div className='simulate-mobile'>
+          
+            {isLeftHeartVisible && isRightHeartFilled && showPopup && (
+                <div className='popup'>
+                    <div className='popup-content' ref={popupRef}>
+                        <MatchPopUp user={user}/>
+                    </div>
+                </div>
+            )}
+
             <div className='userDetails'>
                 <div className='userImg'>
+                    {isLeftHeartVisible && (
+                        <div
+                            className='heartIcon left-heart'
+                            style={{ cursor: 'default', fontSize: '24px', position: 'absolute', left: '10px', top: '10px' }}
+                        >
+                            <FontAwesomeIcon icon={solidHeart} color='#14181B' />
+                        </div>
+                    )}
+
+                    <div
+                        className='heartIcon right-heart'
+                        onClick={handleRightHeartClick}
+                        style={{ cursor: 'pointer', fontSize: '24px', position: 'absolute', left: '335px', top: '10px' }}
+                    >
+                        <FontAwesomeIcon
+                            icon={isRightHeartFilled ? solidHeart : regularHeart}
+                            color={isRightHeartFilled ? '#14181B' : 'black'}
+                        />
+                    </div>
+
                     <img src={user.src} alt='img' height={440} />
                     <div className='detailsOnImg'>
-                        <p style={{justifyContent:'center'}}>{user.name}</p>
-                        <p style={{marginTop:'-10px', display:'flex',justifyContent:'center'}}>{user.age}-{user.gender}</p>
-                    </div>
-                    <div className='heartIcon' onClick={handleHeartClick} style={{ cursor: 'pointer', fontSize: '24px', marginLeft: '290px' }}>
-                        <FontAwesomeIcon icon={isFilled ? solidHeart : regularHeart} color={isFilled ? '#14181B' : 'black'} />
+                        <p style={{ justifyContent: 'center' }}>{user.name}</p>
+                        <p style={{ marginTop: '-10px', display: 'flex', justifyContent: 'center' }}>{user.age}-{user.gender}</p>
                     </div>
                 </div>
 
@@ -36,11 +99,6 @@ const UserDetails = () => {
                 <button className='preferenceButton'>Preferences</button>
                 <button className='logoutButton'>Logout</button>
             </div>
-
-
-            <p>Name: {user.name}</p>
-            <p>Age: {user.age}</p>
-            <p>Gender: {user.gender}</p>
         </div>
     );
 };
