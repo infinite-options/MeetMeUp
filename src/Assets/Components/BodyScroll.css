@@ -1,0 +1,16 @@
+.picker-container {
+    width: 100%;
+    display: flex;
+  }
+  
+.picker-item {
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    cursor: pointer;
+}
+
+  .selected-item {
+    background-color: lightgray;
+    border-radius: 4px;
+  }

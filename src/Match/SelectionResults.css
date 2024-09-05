@@ -1,0 +1,61 @@
+.simulate-mobile {
+    width: 390px; 
+    height: 744px; 
+    margin: 0 auto; 
+    border: 1px solid #ddd; 
+    overflow: hidden; 
+    background-color: #f9f9f9; 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+  }
+  
+
+
+.selection-results-container {
+    padding: 10px;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .section {
+    margin-bottom: 20px;
+  }
+  
+  .user-card {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+    color: #1D2428;
+  }
+  
+  .user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  
+  .user-info {
+    flex: 1;
+  }
+  
+  .user-name {
+    font-weight: bold;
+    display: block;
+  }
+  
+  .user-age-gender {
+    color: #888;
+    font-size: 14px;
+  }
+  
+  .navigate-button {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: #888;
+  }
+  
+  

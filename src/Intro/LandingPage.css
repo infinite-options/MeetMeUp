@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@400;700&display=swap');
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #FFFFFF;
+    ;
+  }
+
+  .custom-image {
+    width: 384px; 
+    height: 500px;
+    border-radius: 20px;
+    object-fit: cover;
+    margin-bottom: 35px;
+    margin-top: 15px;
+  }
+  
