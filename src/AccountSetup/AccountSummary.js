@@ -3,7 +3,9 @@ import Grid from "@mui/material/Grid2";
 import Type from "../Assets/Components/Type";
 import AccountInfo from "../Assets/Components/AccountInfo"; 
 import { Link } from 'react-router-dom';
-import NextBtn from "../Assets/Components/NextBtn";
+import NextBtn from "../Assets/Components/NextButton";
+import profile from "../Assets/Images/profile.png"
+import setting from "../Assets/Images/setting.png"
 // victors code
 // TODO: add props to pass as an object for the specifics
     // specific object
@@ -29,7 +31,7 @@ const Profile = () => {
     return (
         <Grid container sx={{maxWidth:"414px", margin:"0 auto"}}>
             <Grid size={4} container justifyContent="flex-end" alignItems="center">
-                <img src="profile.png"></img>
+                <img src={profile}></img>
             </Grid>
             <Grid size={4} container justifyContent="center" alignItems="center">
                 <img src="search.png"></img>
@@ -116,7 +118,7 @@ const Profile = () => {
                     <Grid size={1.5} sx={{backgroundColor:"#CECECE", borderRadius:"25px", marginLeft:"10px", boxShadow:"2px 5px 5px 2px rgba(0,0,0,.1)", }} container justifyContent="center" alignItems="center">
                         <Link to={'/settings'}>
                             <IconButton>
-                                <img src="setting.png"></img>
+                                <img src={setting}></img>
                             </IconButton>
                         </Link>
                     </Grid>

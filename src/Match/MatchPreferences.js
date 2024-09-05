@@ -2,7 +2,7 @@ import { Box, Button, Container, Modal, Typography } from "@mui/material";
 import Grid from '@mui/material/Grid2';
 import { Link } from "react-router-dom";
 import Select from "./Select";
-import NextBtn from "../Assets/Components/NextBtn";
+import NextBtn from "../Assets/Components/NextButton";
 import { useState } from "react";
 
 const MatchPreferences = ({prev}) => {

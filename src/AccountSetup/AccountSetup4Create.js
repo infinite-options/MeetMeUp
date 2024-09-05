@@ -9,8 +9,10 @@ import DrawerContext from '../Assets/Components/DrawerContext';
 import React from 'react';
 import DrawerOptions from '../Assets/Components/DrawerOptions';
 import Progress from '../Assets/Components/Progress';
+import NextButton from '../Assets/Components/NextButton';
 export default function AccountSetup4Create() {
     const [option, setOption] = React.useState('');
+    // const 
     const [formData, setFormData] = useState({
         interestsEatingOut: false,
         interestsBikeRides: false,
@@ -65,6 +67,10 @@ export default function AccountSetup4Create() {
           ...prevSpecifics,
           [name]: value,
         }));
+        setFormData((prevSpecifics) => ({
+            ...formData,
+            [name]: value,
+          }));
       };
     const [passData, setPassData] = useState('');
     const [complete, setComplete] = useState(false);
@@ -93,7 +99,7 @@ export default function AccountSetup4Create() {
                 <img src={progressBar} alt='progress bar'/> */}
                 <Progress percent="60%" prev="/accountSetup3Create" />
                 {/* <Progress percent="60%" prev="/accountSetup3Create" /> */}
-                <form className='form-container' onSubmit={handleNext} action='/accountSetup5Create'>
+                <form className='form-container' onSubmit={handleNext}>
                     <div className='pc-header-text'>
                         Your General Interests
                     </div>
@@ -282,19 +288,9 @@ export default function AccountSetup4Create() {
                     </Button>
                     <HelperTextBox text="That's a lot of information..."/>
                     <div className='form-button-container'>
-                        <Button
-                            variant='contained'
-                            type='submit'
-                            sx={{
-                                backgroundColor: '#E4423F',
-                                maxWidth: '202px',
-                                borderRadius: '41px',
-                                marginTop: '20px',
-                                boxShadow: 'none',
-                            }}
-                        >
-                            Next
-                        </Button>
+                        
+                        <NextButton onClick={handleNext} next={'/accountSetup5Create'}></NextButton>
+
                     </div>
                 </form>
                 <DrawerContext.Provider value={{option, setOption, handleSetSpecifics, passData, setPassData, complete, setComplete}}>

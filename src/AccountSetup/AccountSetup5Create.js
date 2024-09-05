@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Progress from '../Assets/Components/Progress';
+import NextButton from '../Assets/Components/NextButton';
 /* import { useReactMediaRecorder } from 'react-media-recorder';
 import VideoRecorder from 'react-video-recorder-18';
 import { useRecordWebcam } from 'react-record-webcam'; */
@@ -107,7 +108,7 @@ export default function AccountSetup5Create() {
                 <img src={progressBar} alt='progress bar'/> */}
                 <Progress percent="80%" prev="/accountSetup4Create" />
 
-                <form className='form-container' onSubmit={handleNext} action='/accountSetup6Availability'>
+                <form className='form-container' onSubmit={handleNext} >
                     <div className='pc-header-text'>
                         Your Profile Recording
                     </div>
@@ -186,19 +187,7 @@ export default function AccountSetup5Create() {
                         </div>
                         : null}
                     <div className='form-button-container'>
-                        <Button
-                            variant='contained'
-                            type='submit'
-                            sx={{
-                                backgroundColor: '#E4423F',
-                                maxWidth: '202px',
-                                borderRadius: '41px',
-                                marginTop: '20px',
-                                boxShadow: 'none',
-                            }}
-                        >
-                            Next
-                        </Button>
+                        <NextButton onClick={handleNext} next={'/accountSetup6Availability'}></NextButton>
                     </div>
                 </form>
             </div>

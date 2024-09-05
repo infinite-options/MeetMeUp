@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Box, Typography, Grid, Button } from '@mui/material';
+import { Container, Box, Typography, Grid, Button, ListItemButton, ListItemIcon, ListItemText, ListItem, IconButton } from '@mui/material';
 import account from "../Assets/Images/account.png";
 import location from "../Assets/Images/location.png";
 import notification from "../Assets/Images/notification.png";
@@ -41,7 +41,6 @@ const Settings = () => {
             >
               <img 
                 src={arrow} 
-                
                 style={{ 
                   width: '28px', 
                   height: '28px' 
@@ -86,26 +85,36 @@ const Settings = () => {
           </Grid>
 
           <Grid container alignItems="center" style={{ marginBottom: '24px' }}>
-            <Grid item style={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
-              <Box style={{ display: 'flex', justifyContent: 'center', marginRight: 16 }}>
-              <img 
-                  src={password} 
-                  style={{ 
-                    width: '28px', 
-                    height: '28px' 
-                  }} />
-              </Box>
-              <Typography variant="body1"
-                style ={{
-                  fontFamily: 'Segoe UI', 
-                  fontSize: '18px',
-                  fontWeight: 400,
-                  color:'#1A1A1A'
-                  
-                }}
-              >Update Password</Typography>
-            </Grid>
-            <Typography variant="body1">&gt;</Typography>
+              <ListItem secondaryAction={
+                <IconButton edge="end" aria-label="delete">
+                  <Typography variant="body1">&gt;</Typography>
+                </IconButton>
+              }>
+                {/* NOTE: i made changes to make it list item
+                 so that you can remove deprecations in grid,
+                 list item also will make it so that it has selection animation*/}
+                <ListItemButton>
+                  <ListItemIcon>
+                    <img 
+                        src={password} 
+                        style={{ 
+                          width: '28px', 
+                          height: '28px' 
+                        }} />
+                  </ListItemIcon>
+                  <ListItemText>
+                    <Typography variant="body1"
+                      style ={{
+                        fontFamily: 'Segoe UI', 
+                        fontSize: '18px',
+                        fontWeight: 400,
+                        color:'#1A1A1A'
+                        
+                      }}
+                    >Update Password</Typography>
+                  </ListItemText>
+                </ListItemButton>
+              </ListItem>
           </Grid>
 
           <Grid container alignItems="center" 

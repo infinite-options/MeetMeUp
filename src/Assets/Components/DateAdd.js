@@ -44,6 +44,8 @@ function DateAdd() {
         alignItems: 'center', 
     }}>
     {fields.map((field, index) => (
+        // NOTE: whoever works on this make into listitem 
+        // with list icons from MUI so it formats nicer
         <Box key={index}
         sx={{
             display: 'flex',

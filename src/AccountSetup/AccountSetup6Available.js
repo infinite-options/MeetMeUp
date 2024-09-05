@@ -1,7 +1,7 @@
 import Grid  from "@mui/material/Grid2";
 import Progress from "../Assets/Components/Progress";
 import { Button, Container, Typography } from "@mui/material";
-import NextBtn from "../Assets/Components/NextBtn";
+import NextButton from "../Assets/Components/NextButton";
 import DateAdd from "../Assets/Components/DateAdd";
 import { useState } from "react";
 // victors code
@@ -85,7 +85,7 @@ const AccountSetup6Available = () => {
                 <Grid container size={12} justifyContent="center" >
                     <DateAdd></DateAdd>
                 </Grid>
-                <NextBtn next={'/location'}/>
+                <NextButton next={'/location'}/>
             </Container>
         </Grid>
     );

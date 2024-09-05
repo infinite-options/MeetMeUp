@@ -45,7 +45,7 @@ function Main() {
         <Route path="/landing-page-4" element={<LandingPage4 />} />
         <Route path="/location" element={<LocationPage />} />
         <Route path="/location2" element={<LocationPage2 />} />
-        <Route path="/account" element={<AccountDetails />} />
+        <Route path="/settings" element={<AccountDetails />} />
         <Route path="/account2" element={<AccountDetails2 />} />
         <Route path="/account3" element={<AccountDetails3 />} />
         <Route path="/account4" element={<AccountDetails4 />} />

@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { Button, Grid2, MenuItem, TextField } from '@mui/material';
 import { Autocomplete, GoogleMap, useJsApiLoader, MarkerF } from '@react-google-maps/api';
 import Progress from '../Assets/Components/Progress';
+import NextButton from '../Assets/Components/NextButton';
 
 const GOOGLE_API_KEY = process.env.REACT_APP_GOOGLE_API_KEY;
 const placesLibrary = ['places'];
@@ -114,7 +115,7 @@ export default function AccountSetup3Create() {
                 <img src={progressBar} alt='progress bar'/> */}
                 <Progress percent="40%" prev="/accountSetup2Create" />
                 
-                <form className='form-container' onSubmit={handleNext} action='/accountSetup4Create'>
+                <form className='form-container' onSubmit={handleNext}>
                     <div className='pc-header-text'>
                         About You
                     </div>
@@ -257,7 +258,7 @@ export default function AccountSetup3Create() {
                     </Button>
                     <HelperTextBox text='Why do we need this information?'/>
                     <div className='form-button-container'>
-                        <Button
+                        {/* <Button
                             variant='contained'
                             type='submit'
                             sx={{
@@ -269,7 +270,10 @@ export default function AccountSetup3Create() {
                             }}
                         >
                             Next
-                        </Button>
+                        </Button> */}
+                        
+                        <NextButton onClick={handleNext} next={'/accountSetup4Create'}></NextButton>
+
                     </div>
                 </form>
             </div>

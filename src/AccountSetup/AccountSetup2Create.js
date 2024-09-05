@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { Box, Button, TextField } from '@mui/material';
 import { useNavigate } from 'react-router-dom'; 
 import Progress from '../Assets/Components/Progress';
+import NextButton from '../Assets/Components/NextButton';
 
 export default function AccountSetup2Create() {
     const navigate = useNavigate(); 
@@ -28,7 +29,7 @@ export default function AccountSetup2Create() {
 
     const handleNext = (e) => {
         console.log(e);
-        console.log(formData);
+        console.log('formData: ', formData);
     };
 
     return (
@@ -41,7 +42,7 @@ export default function AccountSetup2Create() {
                 <img src={progressBar} alt='progress bar'/> */}
                 <Progress percent="20%" prev="/accountSetup1Login" />
 
-                <form className='form-container' onSubmit={handleNext} action='/accountSetup3Create'>
+                <form className='form-container' onSubmit={handleNext}>
                     <div className='pc-header-text'>
                         Account Details
                     </div>
@@ -75,7 +76,7 @@ export default function AccountSetup2Create() {
                     </Box>
                     <HelperTextBox text='How do you need to make a secure password?'/>
                     <div className='form-button-container'>
-                        <Button
+                        {/* <Button
                             variant='contained'
                             type='submit'
                             sx={{
@@ -87,7 +88,8 @@ export default function AccountSetup2Create() {
                             }}
                         >
                             Next
-                        </Button>
+                        </Button> */}
+                        <NextButton onClick={handleNext} next={'/accountSetup3Create'}></NextButton>
                     </div>
                 </form>
             </div>

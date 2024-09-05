@@ -5,6 +5,8 @@ import DrawerContext from './DrawerContext';
 
 function BodyScroll({ options }) {
   const [pickerValue, setPickerValue] = useState(options[0]);
+  // use pickerValue
+  // when complete is selected save passData
   const {passData, setPassData, setComplete,  complete} = useContext(DrawerContext);
   useEffect(() => {
     console.log('useEffect pickerValue: ', pickerValue);
