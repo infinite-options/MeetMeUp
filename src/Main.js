@@ -22,7 +22,7 @@ import AccountSetup4Create from './AccountSetup/AccountSetup4Create';
 import AccountSetup5Create from './AccountSetup/AccountSetup5Create';
 import AccountSummary from './AccountSetup/AccountSummary';
 import AccountSetup6Available from './AccountSetup/AccountSetup6Available';
-import MatchPreferences from './Match/MatchPreferences';
+import Preferences from './Preferences/Preferences';
 import Match from './Match/Match';
 import GridLayout from './Match/GridLayout';
 import SelectionResults from './Match/SelectionResults';
@@ -62,7 +62,7 @@ function Main() {
 
         <Route path="/accountSetup7Summary" element={<AccountSummary/>}/>
         
-        <Route path="/matching1PreferencesPage" element={<MatchPreferences/>}/>
+        <Route path="/matching1PreferencesPage" element={<Preferences/>}/>
         <Route path="/match" element={<Match/>}/>
         <Route path="/grid" element={<GridLayout/>}/>
         <Route path="/selectionResults" element={<SelectionResults/>}/>

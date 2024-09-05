@@ -60,6 +60,7 @@ const SelectionResults = () => {
           )}
         </div>
         
+        {/* NOTE: maybe use a ListItem MUI to avoid large amount of divs*/}
         <div className="section">
           <h4 style={{ color: 'grey' }}>People who selected you</h4>
           {usersWhoSelectedYou.map((user, index) => (

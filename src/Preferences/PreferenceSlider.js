@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Container, Slider, Typography } from "@mui/material";
 import Grid from '@mui/material/Grid2';
 
-const Select = ({ preference, measurement, start, min, max }) => {
+const PreferenceSlider = ({ preference, measurement, start, min, max }) => {
     const [value, setValue] = useState(start);
 
     const handleChange = (event, newValue) => {
@@ -46,4 +46,4 @@ const Select = ({ preference, measurement, start, min, max }) => {
     );
 };
 
-export default Select;
+export default PreferenceSlider;

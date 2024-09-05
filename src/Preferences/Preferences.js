@@ -1,7 +1,7 @@
 import { Box, Button, Container, Modal, Typography } from "@mui/material";
 import Grid from '@mui/material/Grid2';
 import { Link } from "react-router-dom";
-import Select from "./Select";
+import PreferenceSlider from "./PreferenceSlider";
 import NextBtn from "../Assets/Components/NextButton";
 import { useState } from "react";
 
@@ -38,7 +38,7 @@ const MatchPreferences = ({prev}) => {
                     <hr style={{width:"100%"}} />
                 </Grid>
                 <Grid>
-                    <Select preference="Maximum distance" measurement="km." start={80} min={1} max={160} />
+                    <PreferenceSlider preference="Maximum distance" measurement="km." start={80} min={1} max={160} />
                 </Grid>
                 <hr style={{width:"100%"}} />
                 <Grid container sx={{marginTop:"20px", mb:"20px"}}>
@@ -53,9 +53,9 @@ const MatchPreferences = ({prev}) => {
                     </Grid>
                 </Grid>
                 <hr style={{width:"100%"}} />
-                <Select preference="Age range" start={[20,40]} min={18} max={80} />
+                <PreferenceSlider preference="Age range" start={[20,40]} min={18} max={80} />
                 <hr style={{width:"100%"}} />
-                <Select preference="Height in centimetres" start={150} min={75} max={225} />
+                <PreferenceSlider preference="Height in centimetres" start={150} min={75} max={225} />
                 <hr style={{width:"100%"}} />
                 <Grid container size={12} justifyContent="center" >
                     <Link to="/match">
