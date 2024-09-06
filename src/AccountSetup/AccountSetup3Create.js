@@ -26,6 +26,7 @@ var center = {
 };
 
 export default function AccountSetup3Create() {
+    console.log("in accountsetup3create")
     const [formData, setFormData] = useState({
         name: '',
         age: '',
