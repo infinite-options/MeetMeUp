@@ -70,7 +70,7 @@ const LandingPage4 = () => {
       <Typography 
           style={{ 
               fontFamily: 'Lexend', 
-              fontSize: '16px', 
+              fontSize: '18px', 
             fontWeight: 'normal',
             marginBottom:'40px'
           }}

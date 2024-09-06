@@ -74,7 +74,7 @@ const LandingPage = () => {
           }}
         >
         <strong>Arrange</strong> your <strong>meeting</strong> time &amp; <strong>destination </strong> 
-        through the app with only
+        through the <br></br>app with only
         <strong> automated prompting</strong>.
       </Typography>
 

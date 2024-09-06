@@ -6,9 +6,10 @@ import './Start.css';
 const StartPage = () => {
     const navigate = useNavigate(); 
 
-    const handleNavigateStart= () => {
+    const handleNavigateStart = () => {
         navigate('/landing-page-1'); 
-      };
+    };
+
     return (
         <Container
             maxWidth="false"
@@ -22,32 +23,29 @@ const StartPage = () => {
                 backgroundColor: '#E4423F',
                 borderRadius: 2,
                 minHeight: '100vh',
+                paddingTop: '20vh',
             }}
-            // onClick={()=> {
-            //     handleNavigateStart();
-            // }}
         >
             <Button
                 variant="text"
                 onClick={handleNavigateStart}
                 style={{
                     fontFamily: 'Inria Sans',
-                    fontSize: '64px',
+                    fontSize: '4vw', 
                     fontWeight: 'bold',
                     color: '#FFFFFF',
-                    padding: 1,
                     textTransform: 'none',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
                 }}
-                >
+            >
                 <Typography 
                     style={{ 
-                    fontFamily: 'Inria Sans', 
-                    fontSize: '64px', 
-                    fontWeight: 'bold', 
-                    color: '#FFFFFF',
+                        fontFamily: 'Inria Sans', 
+                        fontSize: '4vw', 
+                        fontWeight: 'bold', 
+                        color: '#FFFFFF',
                     }}
                 >
                     meet me up
@@ -55,39 +53,16 @@ const StartPage = () => {
                 
                 <Typography 
                     style={{ 
-                    fontFamily: 'Inria Sans', 
-                    fontSize: '16px',  
-                    color: '#FFFFFF',
-                    marginTop: '2px',
-                    }}
-                    variant='subtitle'
-                >
-                    optimized for mobile screens. click to begin
-                </Typography>
-                </Button>
-            {/* <Typography 
-                style={{ 
-                    fontFamily: 'Inria Sans', 
-                    fontSize: '64px', 
-                    fontWeight: 'bold', 
-                    color: '#FFFFFF',
-                }}
-                >
-                    meet me up
-
-                </Typography>
-                <Typography 
-                    style={{ 
                         fontFamily: 'Inria Sans', 
-                        fontSize: '64px', 
-                        fontWeight: 'bold', 
+                        fontSize: '2.5vw',  
                         color: '#FFFFFF',
+                        marginTop: '8px',
                     }}
                     variant='subtitle'
                 >
                     optimized for mobile screens. click to begin
                 </Typography>
-                */}
+            </Button>
         </Container>
     );
 };

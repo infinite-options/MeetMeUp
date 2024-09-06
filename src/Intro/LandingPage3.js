@@ -104,7 +104,7 @@ const LandingPage3 = () => {
               fontWeight: 'bold',
               borderRadius: '10px',
               padding: 1,
-              textTransfrom:'none'
+              textTransform:'none'
               
             }}
           >

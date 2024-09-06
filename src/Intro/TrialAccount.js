@@ -3,6 +3,7 @@ import { Container, Typography, Box, Grid, IconButton, Button } from '@mui/mater
 import arrow from '../Assets/Images/arrow.png'; 
 import background from '../Assets/Images/background.png'; 
 import { useNavigate } from 'react-router-dom'; 
+import './Start.css';
 
 const TrialAccount = () => {
   const handleBackClick = () => {
@@ -15,7 +16,17 @@ const TrialAccount = () => {
   };
 
   return (
-    <Container style={{ position: 'relative', minHeight: '100vh', paddingTop: '20px' }}>
+    <Container 
+      style={{ 
+        position: 'relative', 
+        minHeight: '100vh', 
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: '0px 20px'  
+      }}
+    >
 
       <img
         src={background}
@@ -24,41 +35,53 @@ const TrialAccount = () => {
           position: 'absolute',
           top: 0,
           left: 0,
-          width: '100%',
-          height: '100%',
+          width: '100vw', 
+          height: '100vh', 
           objectFit: 'cover',
           zIndex: -1,
+          padding:'none',
+          margin:'none'
         }}
       />
 
       <Box 
-        style={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'space-between', 
-          padding: '20px',
-          marginRight:'100px'
-        }}>
-        <IconButton onClick={handleBackClick} style={{ color: '#fff' }}>
+        style={{
+          backgroundColor: '#FFFFFF',  
+          width: '100vw',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '10px 20px',
+          position: 'absolute',
+          top: 0,
+          zIndex: 2, 
+        }}
+      >
+        <IconButton onClick={handleBackClick}>
           <img src={arrow} alt="Back" style={{ width: '30px', height: '30px' }} />
         </IconButton>
-        <Typography variant="h6" 
+        <Typography 
+          variant="h6" 
           style={{ 
-            color: '#1A1A1A',
-            fontFamily:'Lexend',
-            fontSize:'22px',
-            fontWeight: 'bold'
-          }}>
+            color: '#1A1A1A', 
+            fontFamily:'Lexend', 
+            fontSize: '22px',
+            fontWeight: 'bold',
+          }}
+        >
           Trial Account
         </Typography>
+        <div style={{ width: '30px' }} /> 
       </Box>
 
-      
       <Grid
         container
         justifyContent="center"
-        alignItems="flex-middle"
-        style={{ marginTop:'400px', width:'378px', height:'199px', marginBottom: '20px' }}
+        alignItems="center"
+        style={{ 
+          marginTop: '100px', 
+          maxWidth: '378px', 
+        }}
       >
         <Box
           style={{
@@ -66,65 +89,68 @@ const TrialAccount = () => {
             borderRadius: '15px',
             padding: '20px',
             textAlign: 'left',
-            maxWidth: '300px',
             width: '100%',
+            maxWidth: '378px',
+            marginRight: '10px'
           }}
         >
-          <Typography variant="h5" style={{ fontFamily:'Lexend',
-            fontSize:'28px',
-            fontWeight: 'bold',
-            color:'#282828' }}>
+          <Typography 
+            variant="h5" 
+            style={{ 
+              fontFamily:'Lexend',
+              fontSize:'24px',
+              fontWeight: 'bold',
+              color:'#282828',
+            }}
+          >
             Let's start
           </Typography>
-          <Typography variant="body1" style={{ marginTop: '10px',fontFamily:'Lexend',
-            fontSize:'14px',
-            fontWeight: 'normal',
-            color:'#282828' }}>
-            by setting up a trial account so you can experience creating a date, if you would like to continue setting up a real date you can complete your full profile account after the trial experience.
+          <Typography 
+            variant="body1" 
+            style={{ 
+              marginTop: '10px',
+              fontFamily:'Lexend',
+              fontSize:'14px',
+              fontWeight: 'normal',
+              color:'#282828' 
+            }}
+          >
+            by setting up a trial account so you can experience creating a date. If you'd like to continue setting up a real date, you can complete your full profile after the trial experience.
           </Typography>
-          <Typography variant="caption" display="block" style={{fontFamily:'Lexend',
-            fontSize:'14px',
-            fontWeight: 'normal',
-            color:'#282828' }}>
+          <Typography 
+            variant="caption" 
+            display="block" 
+            style={{ 
+
+              fontFamily:'Lexend',
+              fontSize:'14px',
+              fontWeight: 'normal',
+              color:'#282828' 
+            }}
+          >
             This is a preview date.
           </Typography>
         </Box>
       </Grid>
+
       <Button
-            variant="contained"
-            color="error"
-            onClick={() => {
-              handleCreateProfile();
-            }}
-            style={{
-              borderRadius: '20px',
-              backgroundColor:'#E4423F',
-              width:'172px',
-              height:'42px',
-              textTransform:'none',
-              fontFamily: 'Lexend', 
-              fontSize: '18px', 
-              fontWeight: 'normal' 
-              // backgroundColor: '#E4423F',
-              // borderRadius: '28px',
-              // margin: 'auto',
-              // marginTop:'40px',
-              // // padding: '10px 0',
-              // cursor: 'pointer',
-              // color: '#FFFFFF',
-              // fontFamily: 'Lexend',
-              // fontSize:'18px',
-              // fontWeight: 'normal',
-              // textAlign: 'center',
-              // width:'188px',
-              // height:'30px',
-              // textTransform: 'capitalize',
-              // position: 'relative',
-              // zIndex: 1, 
-            }}
-          >
-            Start
-          </Button>
+        variant="contained"
+        color="error"
+        onClick={handleCreateProfile}
+        style={{
+          borderRadius: '20px',
+          backgroundColor:'#E4423F',
+          width: '172px',
+          height: '42px',
+          textTransform: 'none',
+          fontFamily: 'Lexend', 
+          fontSize: '18px', 
+          fontWeight: 'normal',
+          marginTop: '20px',
+        }}
+      >
+        Start
+      </Button>
     </Container>
   );
 };
