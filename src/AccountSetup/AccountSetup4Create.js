@@ -24,17 +24,6 @@ export default function AccountSetup4Create() {
         interestsPainting: false,
         interestsSurfing: false,
         interestsTraveling: false,
-        // height: '',
-        // education: '',
-        // bodyComp: '',
-        // starSign: '',
-        // drinking: '',
-        // smoking: '',
-        // kids: '',
-        // currentJob: '',
-        // religion: '',
-        // genderID: '',
-        // nationality: '',
         height: '',
         education: '',
         body: '',
@@ -67,7 +56,7 @@ export default function AccountSetup4Create() {
           ...prevSpecifics,
           [name]: value,
         }));
-        setFormData((prevSpecifics) => ({
+        setFormData((formData) => ({
             ...formData,
             [name]: value,
           }));
@@ -86,7 +75,21 @@ export default function AccountSetup4Create() {
     const handleNext = (e) => {
         console.log(e);
         console.log(formData);
+        const specificsForm = populateFormData();
+        console.log('formData: ', specificsForm.get('education'), specificsForm.get('body'));
+        console.log('specificsForm: ', specificsForm); // Output the FormData for debugging
     };
+
+    const populateFormData = () => {
+        const specificsForm = new FormData();
+    
+        // Append all formData fields to FormData
+        Object.entries(formData).forEach(([key, value]) => {
+          specificsForm.append(key, value);
+        });
+    
+        return specificsForm;
+      };
     
 
     return (

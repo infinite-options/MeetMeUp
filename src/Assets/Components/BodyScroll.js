@@ -17,10 +17,11 @@ function BodyScroll({ options }) {
       setComplete(false)
     }
     
-  }, [complete, pickerValue]);
+  }, [complete, pickerValue, setPassData, setComplete]);
   console.log('pickerValue: ', pickerValue);
+
   return (
-    <Picker value={pickerValue} onChange={setPickerValue}>
+    <Picker value={pickerValue} onChange={setPickerValue} onValueChange={ value => setPickerValue(value)}>
       <Picker.Column name="single">
         {options.map(option => (
           <Picker.Item
