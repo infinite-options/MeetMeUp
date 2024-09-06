@@ -28,6 +28,8 @@ import GridLayout from './Match/GridLayout';
 import SelectionResults from './Match/SelectionResults';
 import UserDetails from './Match/MatchDetails';
 import MatchBegin from './Match/MatchBegin';
+import ShowTermsAndConditions from './Policies/showTermsAndConditions';
+import ShowPrivacyPolicy from './Policies/showPrivacyPolicy';
 function Main() {
   const theme = createTheme({
     typography: {
@@ -68,6 +70,8 @@ function Main() {
         <Route path="/selectionResults" element={<SelectionResults/>}/>
         <Route path="/user-details/:name" element={<UserDetails />} />
         <Route path="/begin" element={<MatchBegin />} />
+        <Route path="/termsandconditions" element={<ShowTermsAndConditions/>}/>
+        <Route path="/privacypolicy" element={<ShowPrivacyPolicy/>}/>
       </Routes>
     </BrowserRouter>
     </ThemeProvider>
