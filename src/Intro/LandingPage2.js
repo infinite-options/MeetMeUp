@@ -56,9 +56,9 @@ const LandingPage2 = () => {
       <Typography 
           style={{ 
               fontFamily: 'Lexend', 
-              fontSize: '22px', 
+              fontSize: '20px', 
             fontWeight: 'normal',
-            marginBottom:'40px'
+            marginBottom:'50px'
           }}
         >
         <strong>Remove</strong> that <strong>awkwardness</strong><br></br> asking for <strong>the first date</strong>.

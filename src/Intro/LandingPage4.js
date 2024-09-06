@@ -72,7 +72,7 @@ const LandingPage4 = () => {
               fontFamily: 'Lexend', 
               fontSize: '18px', 
             fontWeight: 'normal',
-            marginBottom:'40px'
+            marginBottom:'25px'
           }}
         >
         Meet the missing piece that <br></br><strong>compliments</strong>  you.

@@ -63,7 +63,7 @@ const LandingPage3 = () => {
               fontFamily: 'Lexend', 
               fontSize: '20px', 
             fontWeight: 'normal',
-            maringBottom:'40px'
+            marginBottom:'50px'
           }}
         >
         No <strong>disappointment</strong>, that they <br></br>
