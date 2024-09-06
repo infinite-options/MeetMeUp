@@ -1,25 +1,26 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import './SelectionResults.css'; 
+import './SelectionResults.css';
 import HawkImg from '../Assets/Images/Hawk.jpg'
 import TiffanyImg from '../Assets/Images/Tiffany.jpeg'
 import ButterflyImg from '../Assets/Images/Butterfly.jpg'
 import CherryImg from '../Assets/Images/Cherry.jpg'
 import BobImg from '../Assets/Images/Bob.jpg'
+import ArrowBackIcon from '../Assets/Images/BackButton.png'
 
-const matchedResults =[
-    
+const matchedResults = [
+
 ];
 
 const usersWhoSelectedYou = [
-  { name: 'Hawk Tuah Tey', age: 40, gender: 'female', src: HawkImg, source:'usersWhoSelectedYou' },
-  { name: 'Cherrywood', age: 23, gender: 'female', src: CherryImg, source:'usersWhoSelectedYou'},
+  { name: 'Hawk Tuah Tey', age: 40, gender: 'female', src: HawkImg, source: 'usersWhoSelectedYou' },
+  { name: 'Cherrywood', age: 23, gender: 'female', src: CherryImg, source: 'usersWhoSelectedYou' },
 ];
 
 const usersWhoYouSelected = [
-  { name: 'Tiffany', age: 31, gender: 'female', src: TiffanyImg, source:'usersWhoYouSelected' },
-  { name: 'Bob Hawk', age: 43, gender: 'male', src: BobImg, source:'usersWhoYouSelected' },
-  { name: 'Esmeralda Butterfly', age: 29, gender: 'female', src: ButterflyImg, source:'usersWhoYouSelected' },
+  { name: 'Tiffany', age: 31, gender: 'female', src: TiffanyImg, source: 'usersWhoYouSelected' },
+  { name: 'Bob Hawk', age: 43, gender: 'male', src: BobImg, source: 'usersWhoYouSelected' },
+  { name: 'Esmeralda Butterfly', age: 29, gender: 'female', src: ButterflyImg, source: 'usersWhoYouSelected' },
   //{ name: 'cherrywood', age: 23, gender: 'female', src: CherryImg, source:'usersWhoYouSelected'},
 ];
 
@@ -28,17 +29,28 @@ const SelectionResults = () => {
 
   const handleUserClick = (user, source) => {
     const userName = encodeURIComponent(user.name);
-    navigate(`/user-details/${userName}`, { state: { user, source} });
-  };
+    navigate(`/user-details/${userName}`, { state: { user, source } });
+  }
+
+  const handleEditPreferences = () => {
+    navigate('/matchPreferences');
+  }
+
+  const handleBackClick = () => {
+    window.history.back(); 
+};
 
   return (
     <div className="simulate-mobile">
       <div className="selection-results-container">
+        <button className="back-button" onClick={handleBackClick}>
+          <img src={ArrowBackIcon}/>
+        </button>
         <h2>Selection Results</h2>
-        <div>
-          <h4 style={{ color: 'grey' }}>Matched Results</h4>
+        <div style={{ marginTop:'50px', marginLeft:'0px',}}>
+          <h4 style={{ color: 'grey'}}>Matched Results</h4>
           {matchedResults.length === 0 ? (
-            <p style={{ padding: '20px 0' }}/>
+            <p style={{ padding: '20px 0' }} />
           ) : (
             matchedResults.map((user, index) => (
               <div key={index} className="user-card">
@@ -59,7 +71,7 @@ const SelectionResults = () => {
             ))
           )}
         </div>
-        
+
         {/* NOTE: maybe use a ListItem MUI to avoid large amount of divs*/}
         <div className="section">
           <h4 style={{ color: 'grey' }}>People who selected you</h4>
@@ -81,7 +93,7 @@ const SelectionResults = () => {
             </div>
           ))}
         </div>
-        
+
         <div className="section">
           <h4 style={{ color: 'grey' }}>People who you selected</h4>
           {usersWhoYouSelected.map((user, index) => (
@@ -102,6 +114,9 @@ const SelectionResults = () => {
             </div>
           ))}
         </div>
+      </div>
+      <div>
+        <button className='editButton' onClick={() => { handleEditPreferences() }}>Edit Preferences</button>
       </div>
     </div>
   );

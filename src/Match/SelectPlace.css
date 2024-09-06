@@ -1,0 +1,15 @@
+.simulate-mobile {
+    width: 390px; 
+    height: 744px; 
+    margin: 0 auto; 
+    border: 1px solid #ddd; 
+    overflow: hidden; 
+    background-color: #f9f9f9; 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+  }
+
+.dateIdeaButtons{
+    
+    margin-top: 30px;
+    margin-left: 100px;
+}

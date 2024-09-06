@@ -28,6 +28,11 @@ import GridLayout from './Match/GridLayout';
 import SelectionResults from './Match/SelectionResults';
 import UserDetails from './Match/MatchDetails';
 import MatchBegin from './Match/MatchBegin';
+import SelectPlace from './Match/SelectPlace';
+import SelectLocation from './Match/SelectLocation';
+import DateSummary from './Match/DateSummary';
+
+
 function Main() {
   const theme = createTheme({
     typography: {
@@ -68,6 +73,10 @@ function Main() {
         <Route path="/selectionResults" element={<SelectionResults/>}/>
         <Route path="/user-details/:name" element={<UserDetails />} />
         <Route path="/begin" element={<MatchBegin />} />
+        <Route path="/nextPlace" element={<SelectPlace/>}/>
+        <Route path='/nextLocation' element={<SelectLocation/>}/>
+        <Route path='/nextSummary' element={<DateSummary/>}/>
+        <Route path='/matchPreferences' element={<Preferences/>}/>
       </Routes>
     </BrowserRouter>
     </ThemeProvider>
