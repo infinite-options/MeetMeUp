@@ -1,7 +1,9 @@
-import { Box, Button, IconButton, TextField } from '@mui/material';
+import { Box, Button, FormControl, IconButton, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import Grid from '@mui/material/Grid2'
 import React, { useState } from 'react';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { styled } from '@mui/material/styles';
+import DisplayTime from './DisplayTime';
 
 const CustomButton = styled(Button)({
     backgroundColor: 'black',
@@ -18,21 +20,30 @@ const CustomButton = styled(Button)({
 
 });
 function DateAdd() {
-  const [fields, setFields] = useState(['']); 
+  const [day, setDay] = useState("")
+  const [start, setStart] = useState("")
+  const [end, setEnd] = useState("")
+  const [times, setTimes] = useState([]);
 
-  const handleAddField = () => {
-    setFields([...fields, '']); 
+  const handleRemoveTimes = (index) => {
+    console.log(index)
+    setTimes(times.filter((_, i) => i !== index)); 
   };
 
-  const handleRemoveField = (index) => {
-    setFields(fields.filter((_, i) => i !== index)); 
-  };
 
-  const handleFieldChange = (index, value) => {
-    const updatedFields = [...fields];
-    updatedFields[index] = value;
-    setFields(updatedFields);
-  };
+  const handleAddTime=()=> {
+    setTimes([...times, {day, start, end}]);
+  }
+
+  const handleChange=(event)=> {
+      setDay(event.target.value)
+  }
+  const handleStart=(event)=> {
+      setStart(event.target.value)
+  }
+  const handleEnd=(event)=> {
+      setEnd(event.target.value)
+  }
   const inputProps = {
     step: 300,
   };
@@ -43,48 +54,77 @@ function DateAdd() {
         flexDirection: 'column',
         alignItems: 'center', 
     }}>
-    {fields.map((field, index) => (
-        // NOTE: whoever works on this make into listitem 
-        // with list icons from MUI so it formats nicer
-        <Box key={index}
-        sx={{
-            display: 'flex',
-            alignItems: 'center',
-            marginBottom: 1,
-            padding: 0.2 
-        }}>
-        <TextField
-            label={`Date Field ${index}`}
-            type="date"
-            name="date"
-            // onChange={handleChange}
-            
-            InputLabelProps={{
-                shrink: true,
-            }}
-        />
+      {times.map((time, index) => (
+                    <DisplayTime
+                        index={index}
+                        day={time.day}
+                        start={time.start}
+                        end={time.end}
+                        onClick={handleRemoveTimes}
+                    />
+                    ))}
 
-        <TextField id="time" type="time" inputProps={inputProps} />
-        <TextField id="time" type="time" inputProps={inputProps} />
-
-        <IconButton
-            onClick={() => handleRemoveField(index)}
-            style={{
-                backgroundColor: 'rgba(228, 66, 63, 1)', 
-                color: 'white',
-                borderRadius: '50%', 
-                padding: '8px', 
-            }}
-            >
-            <RemoveIcon></RemoveIcon>
-        </IconButton>
-        </Box>
-    ))}
-        
-      
-      <CustomButton onClick={handleAddField}>
+      <CustomButton onClick={handleAddTime}>
         Add
     </CustomButton>
+        {/* // NOTE: whoever works on this make into listitem 
+        // with list icons from MUI so it formats nicer */}
+        <Grid size={12} container justifyContent="center">
+          <Grid size={1.5}>
+              <hr />
+          </Grid>
+      </Grid>
+        <Grid container size={12} justifyContent="center" gap={1}>
+          <Grid size={4}> 
+              <FormControl fullWidth>
+                  <InputLabel sx={{color:"black"}}>Select Day</InputLabel>
+                  <Select 
+                      label="Select Day"
+                      value={day}
+                      onChange={handleChange}
+                      sx={{fontSize:"14px", height:"50px"}}
+                      >
+                      <MenuItem value={"Sunday"}>Sunday</MenuItem>
+                      <MenuItem value={"Monday"}>Monday</MenuItem>
+                      <MenuItem value={"Tuesday"}>Tuesday</MenuItem>
+                      <MenuItem value={"Wednesday"}>Wednesday</MenuItem>
+                      <MenuItem value={"Thursday"}>Thursday</MenuItem>
+                      <MenuItem value={"Friday"}>Friday</MenuItem>
+                      <MenuItem value={"Saturday"}>Saturday</MenuItem>
+                  </Select>
+              </FormControl>
+          </Grid>
+          <Grid size={3.5}>
+              <TextField
+                  label="Start Time"
+                  variant="outlined"
+                  value={start}
+                  onChange={handleStart}
+                  sx={{
+                    '& .MuiInputBase-root': {
+                      height: '50px', 
+                    },
+                  }}
+              />
+          </Grid>
+          <Grid size={3.5}>
+              <TextField
+                  label="End Time"
+                  variant="outlined"
+                  value={end}
+                  onChange={handleEnd}
+                  sx={{
+                    '& .MuiInputBase-root': {
+                      height: '50px', 
+                    },
+                  }}
+              />
+          </Grid>
+      </Grid>
+
+        
+     
+
       
     </Box>
   );

@@ -7,8 +7,13 @@ const Progress = ({percent, prev}) => {
     let finished 
     let unfinished;
     const calcProgress = () => {
-        finished = parseInt(percent[0])* 1.1;
-        unfinished=10.5-finished;
+        if(percent.length===4) {
+            finished=10.5
+        }
+        else {
+            finished = parseInt(percent[0])* 1.1;
+            unfinished=10.5-finished;
+        }
     }
     calcProgress();
 
