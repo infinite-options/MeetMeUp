@@ -6,6 +6,10 @@
   } */
    /* removing due to kevin and victors code clashing */
   
+  .big-container {
+    text-align: center;
+  }
+
   .red-overlay {
     background-color: #E4423F;
     position: absolute;
