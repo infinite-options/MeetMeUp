@@ -20,15 +20,6 @@ const ViewProfile = ({setIsFlipped}) => {
     const flag="Australian"
     return (
         <Grid container sx={{maxWidth:"414px", margin:"0 auto"}}>
-            <Grid size={4} container justifyContent="flex-end" alignItems="center">
-                <img src="profile.png"></img>
-            </Grid>
-            <Grid size={4} container justifyContent="center" alignItems="center">
-                <img src="search.png"></img>
-            </Grid>
-            <Grid size={4} container justifyContent="flex-start" alignItems="center">
-                <img src="group.png"></img>
-            </Grid>
 
             <Grid size={6}>
                 <Grid size={12}>
@@ -92,7 +83,7 @@ const ViewProfile = ({setIsFlipped}) => {
                 <hr style={{width:"100%", marginTop:"30px"}} />
                 <Grid container size={12} gap={.5} sx={{marginTop:"20px", mb:"20px"}}>
                     <Grid size={12} container justifyContent="center">
-                        <Typography sx={{fontSize:"18px", fontFamily:"Lexend", marginTop:"10px"}} onClick={()=>{setIsFlipped(false)}}>Tap To See Video</Typography>
+                        <Typography sx={{fontSize:"18px", marginTop:"10px"}} onClick={()=>{setIsFlipped(false)}}>Tap To See Video</Typography>
                     </Grid>
             </Grid>
             </Container>
