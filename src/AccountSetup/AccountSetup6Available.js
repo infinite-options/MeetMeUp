@@ -4,6 +4,8 @@ import { Button, Container, Typography } from "@mui/material";
 import NextButton from "../Assets/Components/NextButton";
 import DateAdd from "../Assets/Components/DateAdd";
 import { useState } from "react";
+import Dates from "../Assets/Components/Dates";
+
 // victors code
 const AccountSetup6Available = () => {
     const [formData, setFormData] = useState({
@@ -26,51 +28,34 @@ const AccountSetup6Available = () => {
         console.log(formData);
     };
     return (  
-        <Grid container>
+        <Grid container sx={{maxWidth:"413px", margin:"0 auto"}}>
             <Grid size={12}>
-                <Progress percent="100%" prev="/accountSetup5Create" />
+                <Progress percent="100%" prev="/accountSetup7Summary" />
             </Grid>
             <Container>
                 <form onSubmit={handleNext} action='/accountSetup5Create'>
-                        <div>
-                            Your General Interests
-                        </div>
-                        <div>
-                            These interests help match you to better people on meet me up. Select or add as many interests as you want.
-                        </div>
-                        <Button variant='contained' onClick={handleButtonBoolean} name='lunch'
-                            sx={{ backgroundColor: formData['lunch'] ? '#E4423F' : '#ffffff', color: '#000000',
-                                maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', marginRight: '-10px', textTransform: 'none' }}
-                        >
-                            Lunch
-                        </Button>
-                        <Button variant='contained' onClick={handleButtonBoolean} name='dinner'
-                            sx={{ backgroundColor: formData['dinner'] ? '#E4423F' : '#ffffff', color: '#000000',
-                                maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', marginRight: '-10px', textTransform: 'none' }}
-                        >
-                            Dinner
-                        </Button>
-                        <Button variant='contained' onClick={handleButtonBoolean} name='coffee'
-                            sx={{ backgroundColor: formData['coffee'] ? '#E4423F' : '#ffffff', color: '#000000',
-                                maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', marginRight: '-10px', textTransform: 'none' }}
-                        >
-                            Coffee
-                        </Button>
-                        <Button variant='contained' onClick={handleButtonBoolean} name='movies'
-                            sx={{ backgroundColor: formData['movies'] ? '#E4423F' : '#ffffff', color: '#000000',
-                                maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', marginRight: '-10px', textTransform: 'none' }}
-                        >
-                            Movies
-                        </Button>
-                        <Button variant='contained' onClick={handleButtonBoolean} name='surpiseMe'
-                            sx={{ backgroundColor: formData['surpiseMe'] ? '#E4423F' : '#ffffff', color: '#000000',
-                                maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', marginRight: '-10px', textTransform: 'none' }}
-                        >
-                            Surpise Me
-                        </Button>
+                    <Typography sx={{fontSize:"18px", fontFamily:"Lexend"}}>What Types of Dates Interest You?</Typography>
+                    <Typography sx={{fontSize:"14px", fontFamily:"Lexend"}}>Select any activities you would be open</Typography>
+                    <Grid container spacing={1}>
+                        <Grid >
+                            <Dates date="Lunch" />
+                        </Grid>
+                        <Grid >
+                            <Dates date="Dinner" />
+                        </Grid>
+                        <Grid >
+                            <Dates date="Coffee" />
+                        </Grid>
+                        <Grid >
+                            <Dates date="Movies" />
+                        </Grid>
+                        <Grid >
+                            <Dates date="Surprise Me" />
+                        </Grid>
+                    </Grid>
                 </form>
-                <Typography sx={{fontSize:'18px', marginTop:"10px"}}>When Are You Available?</Typography>
-                <Typography sx={{fontSize:'14px', lineHeight:"15px", mb:"10px"}}>These availability slots are crucial to help you and potential matches make date faster.
+                <Typography sx={{fontSize:'18px', marginTop:"60px", fontFamily:"Lexend"}}>When Are You Available?</Typography>
+                <Typography sx={{fontSize:'14px', lineHeight:"15px", mb:"10px", fontFamily:"Lexend"}}>These availability slots are crucial to help you and potential matches make date faster.
                     <br /><br />These slots will directly correspond to other users slots, and will allow you both to plan a date within time frames that you both are available for.
                     <br /><br />If you leave the below section blank, meet me up will assume you are always available.
                 </Typography>

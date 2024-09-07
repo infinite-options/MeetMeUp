@@ -3,6 +3,8 @@ import Grid from '@mui/material/Grid2';
 import { Link } from "react-router-dom";
 import PreferenceSlider from "./PreferenceSlider";
 import NextBtn from "../Assets/Components/NextButton";
+import arrow from "../Assets/Images/arrow.png"
+import arrow2 from "../Assets/Images/arrow2.png"
 import { useState } from "react";
 
 const MatchPreferences = ({prev}) => {
@@ -18,8 +20,8 @@ const MatchPreferences = ({prev}) => {
         <Grid container sx={{maxWidth:"414px", margin:"0 auto"}}>
             <Grid container alignItems="center" size={12}>
                 <Grid size={3}>
-                    <Link to={prev}>
-                        <img src="./back.png" />
+                    <Link to="/accountSetup7Summary">
+                        <img src={arrow} style={{width:"40px", height:"40px"}} />
                     </Link>
                 </Grid>
                 <Grid size={9}>
@@ -33,7 +35,7 @@ const MatchPreferences = ({prev}) => {
                         <Typography sx={{marginTop:"20px", mb:"10px"}}>Location</Typography>
                     </Grid>
                     <Grid size={1} container justifyContent="flex-end">
-                        <img src="arrow.png"></img>
+                        <img src={arrow2}></img>
                     </Grid>
                     <hr style={{width:"100%"}} />
                 </Grid>
@@ -49,7 +51,7 @@ const MatchPreferences = ({prev}) => {
                         <Typography sx={{fontSize:'18px'}}>Men</Typography>
                     </Grid>
                     <Grid size={1}>
-                        <img src="arrow.png"></img>
+                        <img src={arrow2}></img>
                     </Grid>
                 </Grid>
                 <hr style={{width:"100%"}} />
@@ -65,6 +67,11 @@ const MatchPreferences = ({prev}) => {
                 <Grid container size={12} justifyContent="center" >
                     <Link to="/grid">
                         <Button sx={{width:"130px",backgroundColor:"#E4423F", borderRadius:"25px", height:"45px", color:"white", mb:"20px", textTransform:"none", fontFamily:"Segoe UI", fontSize:"18px", fontWeight:"regular"}}>Grid</Button>
+                    </Link>
+                </Grid>
+                <Grid container size={12} justifyContent="center" >
+                    <Link to="/selectionResults">
+                        <Button sx={{width:"130px",backgroundColor:"#E4423F", borderRadius:"25px", height:"45px", color:"white", mb:"20px", textTransform:"none", fontFamily:"Segoe UI", fontSize:"18px", fontWeight:"regular"}}>My Matches</Button>
                     </Link>
                 </Grid>
                 <Grid container size={12} justifyContent="center" >

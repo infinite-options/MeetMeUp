@@ -1,7 +1,10 @@
-import { Box, Button, IconButton, TextField } from '@mui/material';
+import { Box, Button, FormControl, IconButton, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import Grid from '@mui/material/Grid2'
 import React, { useState } from 'react';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { styled } from '@mui/material/styles';
+import DisplayTime from './DisplayTime';
+import checkIcon from "../Images/addcheck.png"
 
 const CustomButton = styled(Button)({
     backgroundColor: 'black',
@@ -18,21 +21,30 @@ const CustomButton = styled(Button)({
 
 });
 function DateAdd() {
-  const [fields, setFields] = useState(['']); 
+  const [day, setDay] = useState("")
+  const [start, setStart] = useState("")
+  const [end, setEnd] = useState("")
+  const [times, setTimes] = useState([]);
 
-  const handleAddField = () => {
-    setFields([...fields, '']); 
+  const handleRemoveTimes = (index) => {
+    console.log(index)
+    setTimes(times.filter((_, i) => i !== index)); 
   };
 
-  const handleRemoveField = (index) => {
-    setFields(fields.filter((_, i) => i !== index)); 
-  };
 
-  const handleFieldChange = (index, value) => {
-    const updatedFields = [...fields];
-    updatedFields[index] = value;
-    setFields(updatedFields);
-  };
+  const handleAddTime=()=> {
+    setTimes([...times, {day, start, end}]);
+  }
+
+  const handleChange=(event)=> {
+      setDay(event.target.value)
+  }
+  const handleStart=(event)=> {
+      setStart(event.target.value)
+  }
+  const handleEnd=(event)=> {
+      setEnd(event.target.value)
+  }
   const inputProps = {
     step: 300,
   };
@@ -43,48 +55,91 @@ function DateAdd() {
         flexDirection: 'column',
         alignItems: 'center', 
     }}>
-    {fields.map((field, index) => (
-        // NOTE: whoever works on this make into listitem 
-        // with list icons from MUI so it formats nicer
-        <Box key={index}
-        sx={{
-            display: 'flex',
-            alignItems: 'center',
-            marginBottom: 1,
-            padding: 0.2 
-        }}>
-        <TextField
-            label={`Date Field ${index}`}
-            type="date"
-            name="date"
-            // onChange={handleChange}
-            
-            InputLabelProps={{
-                shrink: true,
-            }}
-        />
+      {times.map((time, index) => (
+                    <DisplayTime
+                        index={index}
+                        day={time.day}
+                        start={time.start}
+                        end={time.end}
+                        onClick={handleRemoveTimes}
+                    />
+                    ))}
+        {/* // NOTE: whoever works on this make into listitem 
+        // with list icons from MUI so it formats nicer */}
+        <Grid container size={12} justifyContent="center" gap={.5} sx={{marginTop:"40px"}}>
+          <Grid size={4}> 
+              <FormControl fullWidth>
+                  <InputLabel sx={{color:"black", fontFamily:"Lexend", fontSize:"12px"}}>Select Day</InputLabel>
+                  <Select 
+                      label="Select Day"
+                      value={day}
+                      onChange={handleChange}
+                      sx={{fontSize:"12px", height:"50px", fontFamily:"Lexend"}}
+                      >
+                      <MenuItem sx={{fontSize:"12px" ,fontFamily:"Lexend"}} value={"Sunday"}>Sunday</MenuItem>
+                      <MenuItem sx={{fontSize:"12px" ,fontFamily:"Lexend"}} value={"Monday"}>Monday</MenuItem>
+                      <MenuItem sx={{fontSize:"12px" ,fontFamily:"Lexend"}} value={"Tuesday"}>Tuesday</MenuItem>
+                      <MenuItem sx={{fontSize:"12px" ,fontFamily:"Lexend"}} value={"Wednesday"}>Wednesday</MenuItem>
+                      <MenuItem sx={{fontSize:"12px" ,fontFamily:"Lexend"}} value={"Thursday"}>Thursday</MenuItem>
+                      <MenuItem sx={{fontSize:"12px" ,fontFamily:"Lexend"}} value={"Friday"}>Friday</MenuItem>
+                      <MenuItem sx={{fontSize:"12px" ,fontFamily:"Lexend"}} value={"Saturday"}>Saturday</MenuItem>
+                  </Select>
+              </FormControl>
+          </Grid>
+          <Grid size={3}>
+              <TextField
+                  label="Start Time"
+                  variant="outlined"
+                  value={start}
+                  onChange={handleStart}
+                  sx={{
+                    backgroundColor:"#CECECE",
+                    '& .MuiInputBase-root': {
+                      height: '50px', 
+                    },
+                    '& .MuiInputBase-input': {
+                       fontFamily:"Lexend"
+                    },
+                    '& .MuiFormLabel-root': {
+                       fontFamily:"Lexend",
+                       fontSize:"13px",
+                       color:"black"
+                    },
+                  }}
+              />
+          </Grid>
+          <Grid size={3}>
+              <TextField
+                  label="End Time"
+                  variant="outlined"
+                  value={end}
+                  onChange={handleEnd}
+                  sx={{
+                    backgroundColor:"#CECECE",
+                    '& .MuiInputBase-root': {
+                      height: '50px', 
+                      fontFamily:"Lexend",
+                    },
+                    '& .MuiInputBase-input': {
+                       fontFamily:"Lexend",
+                    },
+                    '& .MuiFormLabel-root': {
+                       fontFamily:"Lexend",
+                       fontSize:"13px",
+                       color:"black"
+                    },
+                  }}
+                  
+              />
+          </Grid>
+          <Grid size={1} container alignItems="center" >
+            <img src={checkIcon} onClick={handleAddTime} />
+          </Grid>
+      </Grid>
 
-        <TextField id="time" type="time" inputProps={inputProps} />
-        <TextField id="time" type="time" inputProps={inputProps} />
-
-        <IconButton
-            onClick={() => handleRemoveField(index)}
-            style={{
-                backgroundColor: 'rgba(228, 66, 63, 1)', 
-                color: 'white',
-                borderRadius: '50%', 
-                padding: '8px', 
-            }}
-            >
-            <RemoveIcon></RemoveIcon>
-        </IconButton>
-        </Box>
-    ))}
         
-      
-      <CustomButton onClick={handleAddField}>
-        Add
-    </CustomButton>
+     
+
       
     </Box>
   );

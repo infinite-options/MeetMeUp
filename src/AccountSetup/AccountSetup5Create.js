@@ -187,7 +187,7 @@ export default function AccountSetup5Create() {
                         </div>
                         : null}
                     <div className='form-button-container'>
-                        <NextButton onClick={handleNext} next={'/accountSetup6Availability'}></NextButton>
+                        <NextButton onClick={handleNext} next={'/accountSetup7Summary'}></NextButton>
                     </div>
                 </form>
             </div>
