@@ -5,7 +5,8 @@ import EditIcon from "../Assets/Images/EditIcon.png";
 export default function DateSummary() {
 
     const location = useLocation();
-    const { user } = location.state || {};
+    const { user, selectedDay, selectedTime, selectedDateIdea } = location.state || {};
+
     
     const EditableItem = ({ label, value }) => {
         return (
@@ -63,11 +64,11 @@ export default function DateSummary() {
                 <h3 style={{ fontWeight: "lighter", fontFamily: 'Lexend', textAlign: 'center' }}>{user.name}</h3>
             </div>
             <div>
-                <p style={{ padding: '25px', fontFamily: 'Lexend', fontSize: '23px', textAlign: 'center', marginTop: '160px' }}>Let's meet up on <span style={{ color: '#E4423F' }}>Saturday 07:30,</span> and go to <span style={{ color: '#E4423F' }}>Dinner</span> at the <span style={{ color: '#E4423F' }}>Vapiano's </span></p>
+                <p style={{ padding: '25px', fontFamily: 'Lexend', fontSize: '23px', textAlign: 'center', marginTop: '160px' }}>Let's meet up on <span style={{ color: '#E4423F' }}>{selectedDay} {selectedTime},</span> and go to <span style={{ color: '#E4423F' }}>{selectedDateIdea}</span> at the <span style={{ color: '#E4423F' }}>Vapiano's </span></p>
             </div>
             <div style={styles.container}>
-                <EditableItem label="Date & Time" value="07:30 Saturday" />
-                <EditableItem label="Date Theme" value="Dinner" />
+                <EditableItem label="Date & Time" value= {`${selectedDay} ${selectedTime}`} />
+                <EditableItem label="Date Theme" value= {selectedDateIdea} />
                 <EditableItem label="Location" value="Vapiano's" />
             </div>
         </div>

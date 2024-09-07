@@ -6,6 +6,7 @@ import { faHeart as regularHeart } from '@fortawesome/free-regular-svg-icons';
 import { useLocation } from 'react-router-dom';
 import './UserDetails.css';
 import MatchPopUp from './MatchPopUp';
+import AccountUserImg from "../Assets/Images/accountUser.jpg"
 
 const MatchDetails = () => {
     const location = useLocation();
@@ -47,6 +48,10 @@ const MatchDetails = () => {
         window.history.back(); 
     };
 
+    const AccountUser = [
+        { name: 'Hawk Tuah Tey', age: 40, gender: 'female', src: AccountUserImg, source:'Account user' }
+    ]
+
     
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -69,7 +74,7 @@ const MatchDetails = () => {
             {isLeftHeartVisible && isRightHeartFilled && showPopup && (
                 <div className='popup'>
                     <div className='popup-content' ref={popupRef}>
-                        <MatchPopUp user={user}/>
+                        <MatchPopUp user={user} AccountUser={AccountUser}/>
                     </div>
                 </div>
             )}

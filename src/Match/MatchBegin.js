@@ -5,14 +5,18 @@ import './Begin.css';
 
 export default function Begin() {
     const location = useLocation();
-    const { user } = location.state || {};
+    const { user, AccountUser = [] } = location.state || {};
     //console.log("Begin:", user);
-    
+
+    console.log("user img", user.src)
+    console.log("Accountuser img", AccountUser[0].src)
+
     const navigate = useNavigate();
     const handleNextButton = (user) => {
-        navigate('/nextPlace', { state: { user } });
+        navigate('/nextPlace', { state: { user, selectedDay, selectedTime, AccountUser } });
 
     }
+
 
     const [selectedDay, setSelectedDay] = useState("");
     const [selectedTime, setSelectedTime] = useState("");
@@ -30,59 +34,87 @@ export default function Begin() {
     return (
         <div className='simulate-mobile'>
             <div className='title' style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: '15px', marginTop: '20px' }}>
-                <img className='userImg' src={user.src} alt='userImg' style={{ width: '50px', height: '50px', borderRadius: '50%', objectFit: 'cover' }} />
-                <h2 className='userName' style={{ fontSize: '15px', marginTop: '35px', fontFamily: 'Lexend' }}>{user.name}</h2>
+                <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                    <img
+                        src={AccountUser[0]?.src}
+                        alt='Account User'
+                        style={{
+                            width: '50px',
+                            height: '50px',
+                            borderRadius: '50%',
+                            objectFit: 'cover',
+                            border: '2px solid white',
+                            position: 'relative',
+                            zIndex: 1
+                        }}
+                    />
+                    <img
+                        src={user.src}
+                        alt='Matched User'
+                        style={{
+                            width: '50px',
+                            height: '50px',
+                            borderRadius: '50%',
+                            objectFit: 'cover',
+                            border: '2px solid white',
+                            position: 'relative',
+                            marginLeft: '-15px', // Overlap the images
+                            zIndex: 0
+                        }}
+                    />
+                </div>
+                <h2 className='userName' style={{ fontSize: '15px', marginTop: '20px', fontFamily: 'Lexend' }}>{user.name}</h2>
             </div>
             <div>
                 <h3 className='titleText' style={{ textAlign: 'center', marginTop: '70px', fontFamily: 'Lexend' }}>Let's meet up on <span style={{ color: '#E4423F' }}>_</span> </h3>
                 <p className='paraText' style={{ textAlign: 'center', marginTop: '30px', fontSize: '13px', fontFamily: 'Lexend' }}><span style={{ fontWeight: 'bold' }}>Pick your dates</span> and see which ones align with your match. <span style={{ fontWeight: 'bold' }}>Show </span> your <span style={{ fontWeight: 'bold' }}>match </span> all your <span style={{ fontWeight: 'bold' }}>date availability</span> by selecting <span style={{ fontWeight: 'bold' }}>multiple date</span> and <span style={{ fontWeight: 'bold' }}>times</span> and <span style={{ fontWeight: 'bold' }}>fast track</span> the scheduling for your <span style={{ fontWeight: 'bold' }}>match</span> and your <span style={{ fontWeight: 'bold' }}>date.</span></p>
             </div>
-            <div style={{ marginTop: '40px', display:'flex', flexDirection:'column', gap:'5px' }}>
+            <div style={{ marginTop: '40px', display: 'flex', flexDirection: 'column', gap: '5px' }}>
                 <div >
-                <p style={{marginLeft:'30px'}}>Date day</p>
-                <select value={selectedDay} onChange={handleDayChange} style={{ width:'280px',padding: '10px', borderRadius: '5px', marginLeft: '30px', marginRight: '30px',fontFamily: 'Lexend' }}>
-                    <option value="">Select Day</option>
-                    <option value="Monday">Monday</option>
-                    <option value="Tuesday">Tuesday</option>
-                    <option value="Wednesday">Wednesday</option>
-                    <option value="Thursday">Thursday</option>
-                    <option value="Friday">Friday</option>
-                    <option value="Saturday">Saturday</option>
-                    <option value="Sunday">Sunday</option>
-                </select>
+                    <p style={{ marginLeft: '30px' }}>Date day</p>
+                    <select value={selectedDay} onChange={handleDayChange} style={{ width: '320px', padding: '10px', borderRadius: '5px', marginLeft: '30px', marginRight: '30px', fontFamily: 'Lexend' }}>
+                        <option value="">Select Day</option>
+                        <option value="Monday">Monday</option>
+                        <option value="Tuesday">Tuesday</option>
+                        <option value="Wednesday">Wednesday</option>
+                        <option value="Thursday">Thursday</option>
+                        <option value="Friday">Friday</option>
+                        <option value="Saturday">Saturday</option>
+                        <option value="Sunday">Sunday</option>
+                    </select>
                 </div>
 
-                <div style={{marginLeft:'0px'}}>
-                <p style={{marginLeft:'30px'}}>Date time</p>
-                <select value={selectedTime} onChange={handleTimeChange} style={{  width:'280px',padding: '10px',  marginLeft: '30px', marginRight: '30px', borderRadius: '5px', fontFamily: 'Lexend' }}>
-                    <option value="">Select Time</option>
-                    <option value="7:00 AM">7:00 AM</option>
-                    <option value="9:00 AM">9:00 AM</option>
-                    <option value="12:00 PM">12:00 PM</option>
-                    <option value="3:00 PM">3:00 PM</option>
-                    <option value="5:00 PM">5:00 PM</option>
-                    <option value="7:30 PM">7:30 PM</option>
-                    <option value="9:00 PM">9:00 PM</option>
-                </select>
+                <div style={{ marginLeft: '0px' }}>
+                    <p style={{ marginLeft: '30px' }}>Date time</p>
+                    <select value={selectedTime} onChange={handleTimeChange} style={{ width: '320px', padding: '10px', marginLeft: '30px', marginRight: '30px', borderRadius: '5px', fontFamily: 'Lexend' }}>
+                        <option value="">Select Time</option>
+                        <option value="7:00 AM">7:00 AM</option>
+                        <option value="9:00 AM">9:00 AM</option>
+                        <option value="12:00 PM">12:00 PM</option>
+                        <option value="3:00 PM">3:00 PM</option>
+                        <option value="5:00 PM">5:00 PM</option>
+                        <option value="7:30 PM">7:30 PM</option>
+                        <option value="9:00 PM">9:00 PM</option>
+                    </select>
                 </div>
             </div>
             <div>
-                <button  
-                style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    backgroundColor:'white',
-                    border: '2px solid #F36A67',
-                    padding: '10px',
-                    borderRadius: '18px',
-                    width: '130px',
-                    cursor: 'pointer',
-                    marginTop: '100px',
-                    marginLeft: '125px',
-                    color: '#E4423F',
-                    fontFamily: 'Lexend',
+                <button
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        backgroundColor: 'white',
+                        border: '2px solid #F36A67',
+                        padding: '10px',
+                        borderRadius: '18px',
+                        width: '130px',
+                        cursor: 'pointer',
+                        marginTop: '100px',
+                        marginLeft: '125px',
+                        color: '#E4423F',
+                        fontFamily: 'Lexend',
 
-                }}>Multiple date</button>
+                    }}>Multiple date</button>
                 <button className='nextButton' onClick={() => handleNextButton(user)}
                     style={{
                         display: 'flex',
