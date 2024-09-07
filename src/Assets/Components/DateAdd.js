@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { styled } from '@mui/material/styles';
 import DisplayTime from './DisplayTime';
+import checkIcon from "../Images/addcheck.png"
 
 const CustomButton = styled(Button)({
     backgroundColor: 'black',
@@ -63,62 +64,76 @@ function DateAdd() {
                         onClick={handleRemoveTimes}
                     />
                     ))}
-
-      <CustomButton onClick={handleAddTime}>
-        Add
-    </CustomButton>
         {/* // NOTE: whoever works on this make into listitem 
         // with list icons from MUI so it formats nicer */}
-        <Grid size={12} container justifyContent="center">
-          <Grid size={1.5}>
-              <hr />
-          </Grid>
-      </Grid>
-        <Grid container size={12} justifyContent="center" gap={1}>
+        <Grid container size={12} justifyContent="center" gap={.5} sx={{marginTop:"40px"}}>
           <Grid size={4}> 
               <FormControl fullWidth>
-                  <InputLabel sx={{color:"black"}}>Select Day</InputLabel>
+                  <InputLabel sx={{color:"black", fontFamily:"Lexend", fontSize:"12px"}}>Select Day</InputLabel>
                   <Select 
                       label="Select Day"
                       value={day}
                       onChange={handleChange}
-                      sx={{fontSize:"14px", height:"50px"}}
+                      sx={{fontSize:"12px", height:"50px", fontFamily:"Lexend"}}
                       >
-                      <MenuItem value={"Sunday"}>Sunday</MenuItem>
-                      <MenuItem value={"Monday"}>Monday</MenuItem>
-                      <MenuItem value={"Tuesday"}>Tuesday</MenuItem>
-                      <MenuItem value={"Wednesday"}>Wednesday</MenuItem>
-                      <MenuItem value={"Thursday"}>Thursday</MenuItem>
-                      <MenuItem value={"Friday"}>Friday</MenuItem>
-                      <MenuItem value={"Saturday"}>Saturday</MenuItem>
+                      <MenuItem sx={{fontSize:"12px" ,fontFamily:"Lexend"}} value={"Sunday"}>Sunday</MenuItem>
+                      <MenuItem sx={{fontSize:"12px" ,fontFamily:"Lexend"}} value={"Monday"}>Monday</MenuItem>
+                      <MenuItem sx={{fontSize:"12px" ,fontFamily:"Lexend"}} value={"Tuesday"}>Tuesday</MenuItem>
+                      <MenuItem sx={{fontSize:"12px" ,fontFamily:"Lexend"}} value={"Wednesday"}>Wednesday</MenuItem>
+                      <MenuItem sx={{fontSize:"12px" ,fontFamily:"Lexend"}} value={"Thursday"}>Thursday</MenuItem>
+                      <MenuItem sx={{fontSize:"12px" ,fontFamily:"Lexend"}} value={"Friday"}>Friday</MenuItem>
+                      <MenuItem sx={{fontSize:"12px" ,fontFamily:"Lexend"}} value={"Saturday"}>Saturday</MenuItem>
                   </Select>
               </FormControl>
           </Grid>
-          <Grid size={3.5}>
+          <Grid size={3}>
               <TextField
                   label="Start Time"
                   variant="outlined"
                   value={start}
                   onChange={handleStart}
                   sx={{
+                    backgroundColor:"#CECECE",
                     '& .MuiInputBase-root': {
                       height: '50px', 
+                    },
+                    '& .MuiInputBase-input': {
+                       fontFamily:"Lexend"
+                    },
+                    '& .MuiFormLabel-root': {
+                       fontFamily:"Lexend",
+                       fontSize:"13px",
+                       color:"black"
                     },
                   }}
               />
           </Grid>
-          <Grid size={3.5}>
+          <Grid size={3}>
               <TextField
                   label="End Time"
                   variant="outlined"
                   value={end}
                   onChange={handleEnd}
                   sx={{
+                    backgroundColor:"#CECECE",
                     '& .MuiInputBase-root': {
                       height: '50px', 
+                      fontFamily:"Lexend",
+                    },
+                    '& .MuiInputBase-input': {
+                       fontFamily:"Lexend",
+                    },
+                    '& .MuiFormLabel-root': {
+                       fontFamily:"Lexend",
+                       fontSize:"13px",
+                       color:"black"
                     },
                   }}
+                  
               />
+          </Grid>
+          <Grid size={1} container alignItems="center" >
+            <img src={checkIcon} onClick={handleAddTime} />
           </Grid>
       </Grid>
 

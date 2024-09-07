@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import ViewProfile from "./ViewProfile";
 import profileImg from "../Assets/Images/profileimg.png"
 import like from "../Assets/Images/like.png"
+import likedImg from "../Assets/Images/filledheart.png"
 
 const Match = () => {
     const name="Bob Hawk"
@@ -14,14 +15,18 @@ const Match = () => {
     const gender="male"
     const where="Mandurah";
     const [isFlipped, setIsFlipped] = useState(false);
+    const [liked, setLiked] = useState(like)
 
+    const onClick = () => {
+        setLiked(prevState=>!prevState)
+    }
     useEffect(()=> {
         window.scroll({top:0, behavior:"smooth"});
     }, [isFlipped])
     return (
         <ReactCardFlip isFlipped={isFlipped} flipDirection="horizontal">
             <Box>
-                <Box sx={{backgroundColor:"#E4423F", paddingTop:"30px", paddingBottom:"50px", borderRadius:"10px", display:"flex",justifyContent:"center", position:"relative", maxWidth:"414px", margin:"0 auto"}}>
+                <Box sx={{backgroundColor:"#E4423F", paddingTop:"30px", paddingBottom:"50px", borderRadius:"10px", display:"flex",justifyContent:"center", position:"relative", maxWidth:"414px", margin:"0 auto", marginTop:"20px"}}>
                     <img src={profileImg} style={{width:"100%", height:"90%"}}></img>
 
                     {/* <img src="profileimg.png" style={{width:"100%", height:"90%"}}></img> */}
@@ -29,7 +34,7 @@ const Match = () => {
                     <Typography sx={{position:"absolute", top:"14%", color:"white", fontSize:"10px"}}>{age} - {gender} - {where}</Typography>
                     <Typography sx={{position:"absolute", bottom:"2%", color:"white", fontSize:"18px"}} onClick={()=>setIsFlipped(true)}>Tap to See Profile</Typography>
                     {/* <img src="like.png" style={{position:"absolute", right:"2%", top:"2%"}}></img> */}
-                    <img src={like} style={{position:"absolute", right:"2%", top:"2%"}}></img>
+                    <img src={liked ? like : likedImg} style={{position:"absolute", right:"2%", top:"1%"}} onClick={onClick}></img>
 
                 </Box>
                 <Grid container size={12} justifyContent="center" >
@@ -44,7 +49,7 @@ const Match = () => {
                 <Button sx={{width:"130px",backgroundColor:"#E4423F", borderRadius:"25px", height:"45px", color:"white", mb:"5px", textTransform:"none", fontFamily:"Segoe UI", fontSize:"18px", fontWeight:"regular"}}>Logout</Button>   
             </Grid>
         </Box>
-        <ViewProfile setIsFlipped={setIsFlipped}/>
+        <ViewProfile setIsFlipped={setIsFlipped} liked={liked} onClick={onClick} />
     </ReactCardFlip>
     );
 }

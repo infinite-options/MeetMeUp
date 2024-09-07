@@ -5,6 +5,7 @@ import NextButton from "../Assets/Components/NextButton";
 import DateAdd from "../Assets/Components/DateAdd";
 import { useState } from "react";
 import Dates from "../Assets/Components/Dates";
+
 // victors code
 const AccountSetup6Available = () => {
     const [formData, setFormData] = useState({
@@ -27,9 +28,9 @@ const AccountSetup6Available = () => {
         console.log(formData);
     };
     return (  
-        <Grid container sx={{maxWidth:"414px", margin:"0 auto"}}>
+        <Grid container sx={{maxWidth:"413px", margin:"0 auto"}}>
             <Grid size={12}>
-                <Progress percent="100%" prev="/accountSetup5Create" />
+                <Progress percent="100%" prev="/accountSetup7Summary" />
             </Grid>
             <Container>
                 <form onSubmit={handleNext} action='/accountSetup5Create'>

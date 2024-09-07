@@ -194,7 +194,7 @@ const Profile = () => {
                     }} container justifyContent="center" alignItems="center">
                         <img src={time} alt="time" />
                     </Grid>
-                    <NextBtn next={'/matching1PreferencesPage'}></NextBtn>
+                    <NextBtn next={'/accountSetup6Availability'}></NextBtn>
                 </Grid>
             </Container>
         </Grid>
