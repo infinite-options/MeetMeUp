@@ -153,6 +153,7 @@ export default function AccountSetup3Create() {
                     </div>
                     <Autocomplete onPlaceChanged={onPlaceChanged} onLoad={onLoad}>
                         <input
+                            className='autocomplete-text'
                             type='text'
                             placeholder='Location'
                             style={{
@@ -164,9 +165,8 @@ export default function AccountSetup3Create() {
                                 marginLeft: 'auto',
                                 marginRight: 'auto',
                                 padding: '10px',
-                                border: '1px solid transparent',
+                                border: '1px solid gray',
                                 borderRadius: '5px',
-                                boxShadow: '0 2px 6px rgba(0, 0, 0, 0.5)',
                                 textOverflow: 'ellipses',
                             }}
                         />
