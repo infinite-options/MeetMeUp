@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
+import { useNavigate } from 'react-router-dom';
 import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as regularHeart } from '@fortawesome/free-regular-svg-icons';
 import { useLocation } from 'react-router-dom';
 import './UserDetails.css';
 import MatchPopUp from './MatchPopUp';
+import AccountUserImg from "../Assets/Images/accountUser.jpg"
 
 const MatchDetails = () => {
     const location = useLocation();
@@ -37,6 +38,20 @@ const MatchDetails = () => {
         setShowPopup(false); 
     };
 
+    const navigate = useNavigate();
+
+    const handleEditPreferences = () => {
+        navigate('/matchPreferences');
+      }
+
+    const handleBackClick = () => {
+        window.history.back(); 
+    };
+
+    const AccountUser = [
+        { name: 'Hawk Tuah Tey', age: 40, gender: 'female', src: AccountUserImg, source:'Account user' }
+    ]
+
     
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -59,7 +74,7 @@ const MatchDetails = () => {
             {isLeftHeartVisible && isRightHeartFilled && showPopup && (
                 <div className='popup'>
                     <div className='popup-content' ref={popupRef}>
-                        <MatchPopUp user={user}/>
+                        <MatchPopUp user={user} AccountUser={AccountUser}/>
                     </div>
                 </div>
             )}
@@ -71,7 +86,7 @@ const MatchDetails = () => {
                             className='heartIcon left-heart'
                             style={{ cursor: 'default', fontSize: '24px', position: 'absolute', left: '10px', top: '10px' }}
                         >
-                            <FontAwesomeIcon icon={solidHeart} color='#14181B' />
+                            <FontAwesomeIcon icon={solidHeart} color='#E4423F' />
                         </div>
                     )}
 
@@ -82,7 +97,7 @@ const MatchDetails = () => {
                     >
                         <FontAwesomeIcon
                             icon={isRightHeartFilled ? solidHeart : regularHeart}
-                            color={isRightHeartFilled ? '#14181B' : 'black'}
+                            color={isRightHeartFilled ? '#E4423F' : '#E4423F'}
                         />
                     </div>
 
@@ -96,8 +111,8 @@ const MatchDetails = () => {
                 <h4 className='tap'>Tap to see profile</h4>
             </div>
             <div className='userButtons'>
-                <button className='backButton'>Back</button>
-                <button className='preferenceButton'>Preferences</button>
+                <button className='backButton' onClick={handleBackClick}>Back</button>
+                <button className='preferenceButton' onClick={() => { handleEditPreferences()}}>Preferences</button>
                 <button className='logoutButton'>Logout</button>
             </div>
         </div>

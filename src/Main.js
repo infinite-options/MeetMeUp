@@ -28,6 +28,11 @@ import GridLayout from './Match/GridLayout';
 import SelectionResults from './Match/SelectionResults';
 import UserDetails from './Match/MatchDetails';
 import MatchBegin from './Match/MatchBegin';
+import SelectPlace from './Match/SelectPlace';
+import SelectLocation from './Match/SelectLocation';
+import DateSummary from './Match/DateSummary';
+
+
 import ShowTermsAndConditions from './Policies/showTermsAndConditions';
 import ShowPrivacyPolicy from './Policies/showPrivacyPolicy';
 function Main() {
@@ -70,6 +75,10 @@ function Main() {
         <Route path="/selectionResults" element={<SelectionResults/>}/>
         <Route path="/user-details/:name" element={<UserDetails />} />
         <Route path="/begin" element={<MatchBegin />} />
+        <Route path="/nextPlace" element={<SelectPlace/>}/>
+        <Route path='/nextLocation' element={<SelectLocation/>}/>
+        <Route path='/nextSummary' element={<DateSummary/>}/>
+        <Route path='/matchPreferences' element={<Preferences/>}/>
         <Route path="/termsandconditions" element={<ShowTermsAndConditions/>}/>
         <Route path="/privacypolicy" element={<ShowPrivacyPolicy/>}/>
       </Routes>
