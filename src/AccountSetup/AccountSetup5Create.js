@@ -6,7 +6,10 @@ import videoCameraIcon from '../Assets/Images/videoCameraIcon.png';
 import uploadImageIcon from '../Assets/Images/uploadImageIcon.png';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Grid2 } from '@mui/material';
+import { Box, Button, Grid2, ImageList, ImageListItem, IconButton } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { styled } from '@mui/material/styles';
 import Progress from '../Assets/Components/Progress';
 import NextButton from '../Assets/Components/NextButton';
@@ -30,6 +33,8 @@ export default function AccountSetup5Create() {
         image: '',
     });
 
+    const [imageFav, setImageFav] = useState({});
+
     const webcamRef = useRef(null);
     const mediaRecorderRef = useRef(null);
     const [capturing, setCapturing] = useState(false);
@@ -45,8 +50,12 @@ export default function AccountSetup5Create() {
     }, [setRecordedChunks]);
 
     const handleStartCaptureClick = useCallback(() => {
-        console.log(webcamRef);
         if(webcamRef.current.stream !== undefined) {
+            if(videoSrc !== null) {
+                URL.revokeObjectURL(videoSrc);
+            }
+            setVideoSrc(null);
+            setRecordedChunks([]);
             setCapturing(true);
             mediaRecorderRef.current = new MediaRecorder(webcamRef.current.stream, {
                 mimeType: "video/webm"
@@ -58,8 +67,11 @@ export default function AccountSetup5Create() {
 
     const handleDownload = useCallback(() => {
         if (recordedChunks.length) {
-            const blob = new Blob(recordedChunks, {type: "video/webm"});
+            const blob = new Blob(recordedChunks, {type: "video/mp4"});
             const url = URL.createObjectURL(blob);
+            console.log("recordedChunks:", recordedChunks);
+            console.log("blob:", blob);
+            console.log("url:", url);
             setVideoSrc(url);
         }
     }, [recordedChunks]);
@@ -83,30 +95,59 @@ export default function AccountSetup5Create() {
 
     const handleViewRecording = () => {
         setViewRecording(!viewRecording);
-    }
-
-    const handleVideoUpload = (e) => {
-        const vid = e.target.files[0];
-        if(!vid) {
-            return;
-        }
-
-        setFormData({
-            ...formData,
-            'video': URL.createObjectURL(vid)
-        });
     };
 
     const handleImageUpload = (e) => {
         const img = e.target.files[0];
+        console.log("img:", img);
         if(!img) {
             return;
         }
 
+        const imgURL = URL.createObjectURL(img)
         setFormData({
             ...formData,
-            'image': URL.createObjectURL(img) + ',' + formData['image']
+            'image': imgURL + ',' + formData['image']
         });
+
+        setImageFav({
+            ...imageFav,
+            [imgURL]: false,
+        });
+    };
+
+    const handleDelete = (e) => {
+        var imageArray = formData['image'].split(',');
+        var imageString = "";
+        for(var i = 0; i < imageArray.length - 1; i++) {
+            if(imageArray[i] !== e) {
+                imageString = imageArray[i] + ',' + imageString;
+            }
+        }
+
+        setFormData({
+            ...formData,
+            'image': imageString
+        });
+
+        delete imageFav[e];
+    };
+
+    const handleFavorite = (e) => {
+        setImageFav({
+            ...imageFav,
+            [e]: !imageFav[e],
+        });
+    };
+
+    const handleVideoDownload = () => {
+        console.log("videoSrc:", videoSrc);
+        const link = document.createElement('a');
+        link.href = videoSrc;
+        link.download = 'video.mp4';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     };
 
     const handleNext = (e) => {
@@ -158,16 +199,28 @@ export default function AccountSetup5Create() {
                         :
                         <div className='general-container'>
                         {viewRecording ?
-                            <Button component='label' variant='contained'
-                                sx={{ backgroundColor: '#E4423F', color: '#000000', maxWidth: '202px',
-                                borderRadius: '41px', textTransform: 'none' }}
-                                onClick={handleViewRecording}
-                            >
-                                <div className='white-text-video'>
-                                    Record Again&nbsp;
-                                </div>
-                                <img src={videoCameraIcon} alt='video icon'/>
-                            </Button>
+                            <Grid2 container spacing={2}>
+                                <Button component='label' variant='contained'
+                                    sx={{ backgroundColor: '#E4423F', color: '#000000', maxWidth: '202px',
+                                    borderRadius: '41px', textTransform: 'none' }}
+                                    onClick={handleViewRecording}
+                                >
+                                    <div className='white-text-video'>
+                                        Record Again&nbsp;
+                                    </div>
+                                    <img src={videoCameraIcon} alt='video icon'/>
+                                </Button>
+                                <Button component='label' variant='contained'
+                                    sx={{ backgroundColor: '#E4423F', color: '#000000', maxWidth: '202px',
+                                    borderRadius: '41px', textTransform: 'none' }}
+                                    onClick={handleVideoDownload}
+                                >
+                                    <div className='white-text-video'>
+                                        Download&nbsp;
+                                    </div>
+                                    <img src={videoCameraIcon} alt='video icon'/>
+                                </Button>
+                            </Grid2>
                             :
                             <div className='general-container'>
                             {videoSrc !== null ?
@@ -233,13 +286,79 @@ export default function AccountSetup5Create() {
                             />
                         </Button>
                     </div>
-                    {formData['image'] ?
+                    {formData['image'].split(',').length > 1 ?
                         <div className='general-container'>
-                            {formData['image'].split(',').slice(0, (formData['image'].split(',').length)-1).map((img) => (
-                                <div className='complimentary-images' key={img}>
-                                    <img src={img} alt='hello' style={{maxWidth: '175px', position: 'absolute'}}/>
-                                </div>
-                            ))}
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    overflowX: 'auto',
+                                    scrollbarWidth: 'none',
+                                    msOverflowStyle: 'none',
+                                    '&::-webkit-scrollbar': {
+                                        display: 'none',
+                                    },
+                                }}
+                            >
+                                <ImageList
+                                    sx={{ display: 'flex', flexWrap: 'nowrap' }} cols={5}>
+                                    {formData['image'].split(',').slice(0, formData['image'].split(',').length - 1).map((img) => (
+                                        <ImageListItem
+                                            key={img}
+                                            sx={{
+                                                width: 'auto',
+                                                flex: '0 0 auto',
+                                                border: '1px solid #ccc',
+                                                margin: '0 2px',
+                                                position: 'relative',
+                                            }}
+                                        >
+                                            <img
+                                                src={img}
+                                                alt={`complimentary-${img}`}
+                                                style={{
+                                                    height: '150px',
+                                                    width: '150px',
+                                                    objectFit: 'cover',
+                                                }}
+                                            />
+                                            <Box sx={{ position: 'absolute', top: 0, right: 0 }}>
+                                                <IconButton
+                                                    onClick={() => handleDelete(img)}
+                                                    sx={{
+                                                        color: 'black',
+                                                        backgroundColor: 'rgba(255, 255, 255, 0.7)',
+                                                        '&:hover': {
+                                                            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                                                        },
+                                                        margin: '5px',
+                                                    }}
+                                                >
+                                                    <DeleteIcon/>
+                                                </IconButton>
+                                            </Box>
+                                            <Box sx={{ position: 'absolute', bottom: 0, left: 0 }}>
+                                                <IconButton
+                                                    onClick={() => handleFavorite(img)}
+                                                    sx={{
+                                                        color: imageFav[img] ? 'red' : 'black',
+                                                        backgroundColor: 'rgba(255, 255, 255, 0.7)',
+                                                        '&:hover': {
+                                                            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                                                        },
+                                                        margin: '5px',
+                                                    }}
+                                                >
+                                                    {imageFav[img] ? (
+                                                        <FavoriteIcon />
+                                                    ) : (
+                                                        <FavoriteBorderIcon />
+                                                    )}
+                                                </IconButton>
+                                            </Box>
+                                        </ImageListItem>
+                                    ))}
+                                </ImageList>
+                            </Box>
                         </div>
                         : null}
                     <div className='form-button-container'>
