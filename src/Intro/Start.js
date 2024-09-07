@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Box, Container, Typography } from '@mui/material';
+import { Button, Container, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom'; 
 import './Start.css';
 
@@ -40,6 +40,7 @@ const StartPage = () => {
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
+                    padding: '20px', // Added padding for better spacing
                 }}
                 >
                 <Typography 
@@ -60,7 +61,6 @@ const StartPage = () => {
                     color: '#FFFFFF',
                     marginTop: '2px',
                     }}
-                    variant='subtitle'
                 >
                     optimized for mobile screens. click to begin
                 </Typography>
