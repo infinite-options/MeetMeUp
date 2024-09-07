@@ -24,7 +24,7 @@ export default function AccountSetup1Login() {
         console.log(e)
     };
     return (
-        <div className='big-container'>
+        <div className='App'>
             <div className='red-overlay'/>
             <img src={backgroundImage} alt='accountSetup1Login'/>
             <div className='rounded-box'>
@@ -37,19 +37,11 @@ export default function AccountSetup1Login() {
                 <Box
                     component='form'
                     onSubmit={handleSubmitLogin}
-                    sx={{ '& > :not(style)': { m: 1, width: 0.9 } }}
+                    sx={{ '& > :not(style)': { m: 2, width: 0.9 } }}
                     autoComplete='off'
                 >
-                    <TextField required onChange={handleChange}
-                        sx={{'& .MuiOutlinedInput-root': {'&.Mui-focused fieldset': {borderColor: '#E4423F'}}}}
-                        InputLabelProps={{style: { color: "#E4423F" }}}
-                        name='email' label='Email' type='email' variant='outlined'
-                    />
-                    <TextField required onChange={handleChange}
-                        sx={{'& .MuiOutlinedInput-root': {'&.Mui-focused fieldset': {borderColor: '#E4423F'}}}}
-                        InputLabelProps={{style: { color: "#E4423F" }}}
-                        name='password' label='Password' type='password' autoComplete='current-password'
-                    />
+                    <TextField required onChange={handleChange} name='email' label='Email' type='email' variant='outlined'/>
+                    <TextField required onChange={handleChange} name='password' label='Password' type='password' autoComplete='current-password'/>
                     <div className='sub-header-text'>Forgot password? <div className='red-text'>Retrieve here</div></div>
                     <Button
                         variant='contained'
@@ -59,7 +51,6 @@ export default function AccountSetup1Login() {
                             maxWidth: '131px',
                             borderRadius: '41px',
                             boxShadow: 'none',
-                            textTransform: 'none',
                         }}
                     >
                         Login
@@ -82,12 +73,11 @@ export default function AccountSetup1Login() {
                         variant='contained'
                         type='submit'
                         sx={{
-                            backgroundColor: '#E4423F',
-                            maxWidth: '202px',
-                            borderRadius: '41px',
-                            marginTop: '20px',
-                            boxShadow: 'none',
-                            textTransform: 'none',
+                        backgroundColor: '#E4423F',
+                        maxWidth: '202px',
+                        borderRadius: '41px',
+                        marginTop: '20px',
+                        boxShadow: 'none',
                         }}
                     >
                         Create Account
@@ -97,18 +87,18 @@ export default function AccountSetup1Login() {
                             required
                             control={<Checkbox/>}
                             label={
-                                <>
-                                    I agree to the <Link to='/termsandconditions'><div className='red-text'>Terms and Conditions</div></Link>
-                                </>
+                                <Link to='/termsandconditions'>
+                                    I agree to the <div className='red-text'>Terms and Conditions</div>
+                                </Link>
                             }
                         />
                         <FormControlLabel
                             required
                             control={<Checkbox/>}
                             label={
-                                <>
-                                    I agree to the <Link to='/privacypolicy'><div className='red-text'>Privacy Policy</div></Link>
-                                </>
+                                <Link to='/privacypolicy'>
+                                    I agree to the <div className='red-text'>Privacy Policy</div>
+                                </Link>
                             }
                         />
                     </FormGroup>

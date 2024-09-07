@@ -53,37 +53,26 @@ export default function AccountSetup2Create() {
                         sx={{ '& > :not(style)': { marginTop: 1.5, marginLeft: 3, marginRight: 3, width: 0.88 } }}
                         autoComplete='off'
                     >
-                        <TextField onChange={handleChange}
-                            sx={{'& .MuiOutlinedInput-root': {'&.Mui-focused fieldset': {borderColor: '#E4423F'}}}}
-                            InputLabelProps={{style: { color: "#E4423F" }}}
-                            name='email' label='Email' type='email' variant='outlined'
-                        />
-                        <TextField onChange={handleChange}
-                            sx={{'& .MuiOutlinedInput-root': {'&.Mui-focused fieldset': {borderColor: '#E4423F'}}}}
-                            InputLabelProps={{style: { color: "#E4423F" }}}
-                            name='phoneNumber' label='Phone Number' type='tel' variant='outlined'
-                        />
+                        <TextField onChange={handleChange} name='email' label='Email' type='email' variant='outlined'/>
+                        <TextField onChange={handleChange} name='phoneNumber' label='Phone Number' type='tel' variant='outlined'/>
                     </Box>
+                    <div className='pc-sub-header-text'>
+                        Already have an account? <span onClick={() => {
+                            navigate('/accountSetup1Login');
+                        }}>Click Here</span>
+                    </div>
                     <div className='pc-header-text'>
                         Security
                     </div>
                     <div className='pc-sub-header-text'>
-                        Make a strong passcode that will be very hard to guess. View our security guidelines <div className='red-text'>here.</div>
+                        Make a strong passcode that will be very hard to guess. View our security guidelines here.
                     </div>
                     <Box
                         sx={{ '& > :not(style)': { marginTop: 1.5, marginLeft: 3, marginRight: 3, width: 0.88 } }}
                         autoComplete='off'
                     >
-                        <TextField onChange={handleChange}
-                            sx={{'& .MuiOutlinedInput-root': {'&.Mui-focused fieldset': {borderColor: '#E4423F'}}}}
-                            InputLabelProps={{style: { color: "#E4423F" }}}
-                            name='password' label='Create Password' type='password' variant='outlined'
-                        />
-                        <TextField onChange={handleChange}
-                            sx={{'& .MuiOutlinedInput-root': {'&.Mui-focused fieldset': {borderColor: '#E4423F'}}}}
-                            InputLabelProps={{style: { color: "#E4423F" }}}
-                            name='passwordConfirm' label='Confirm Password' type='password' variant='outlined'
-                        />
+                        <TextField onChange={handleChange} name='password' label='Create Password' type='password' variant='outlined'/>
+                        <TextField onChange={handleChange} name='passwordConfirm' label='Confirm Password' type='password' variant='outlined'/>
                     </Box>
                     <HelperTextBox text='How do you need to make a secure password?'/>
                     <div className='form-button-container'>

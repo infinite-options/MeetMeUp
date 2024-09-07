@@ -13,7 +13,7 @@ const Progress = ({percent, prev}) => {
     calcProgress();
 
     return (
-        <Grid container sx={{margin: 1}}>
+        <Grid container>
             <Grid container alignItems="center" size={12}>
                 <Grid size={3}>
                     <Link to={prev}>
@@ -21,7 +21,7 @@ const Progress = ({percent, prev}) => {
                     </Link>
                 </Grid>
                 <Grid size={9}>
-                    <Typography sx={{fontSize:'22px', marginLeft: 3}}>Profile Creation</Typography>
+                    <Typography sx={{fontSize:'22px'}}>Profile Creation</Typography>
                 </Grid>
             </Grid>
             <Grid container size={12} alignItems="center" spacing={1}>

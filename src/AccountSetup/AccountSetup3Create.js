@@ -20,6 +20,11 @@ const mapContainerStyle = {
     marginRight: 'auto',
 };
 
+var center = {
+    lat: -32.015001263602,
+    lng: 115.83650856893345,
+};
+
 export default function AccountSetup3Create() {
     const [formData, setFormData] = useState({
         name: '',
@@ -45,7 +50,7 @@ export default function AccountSetup3Create() {
         'Nonbinary',
     ]
 
-    const [center, setCenter] = useState({lat: -32.015001263602, lng: 115.83650856893345});
+    
     const [searchResult, setSearchResult] = useState('');
     
     function onLoad(autocomplete) {
@@ -53,15 +58,19 @@ export default function AccountSetup3Create() {
     }
 
     function onPlaceChanged() {
-        if (searchResult !== '') {
+        if (searchResult != null || searchResult !== "") {
             const place = searchResult.getPlace();
             const formattedAddress = place.formatted_address;
             formData['location'] = formattedAddress;
-            setCenter({lat: place.geometry.location.lat(), lng: place.geometry.location.lng()})
+            center['lat'] = place.geometry.location.lat();
+            center['lng'] = place.geometry.location.lng();
+            console.log(place);
+            console.log(center);
         } else {
-            alert('Enter in a new location');
+            alert('Please enter text');
         }
     }
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({
@@ -117,24 +126,13 @@ export default function AccountSetup3Create() {
                         sx={{ '& > :not(style)': { marginTop: 1.5, marginLeft: 3, marginRight: 3, width: 1 } }}
                         autoComplete='off'
                     >
-                        <TextField onChange={handleChange}
-                            sx={{'& .MuiOutlinedInput-root': {'&.Mui-focused fieldset': {borderColor: '#E4423F'}}}}
-                            InputLabelProps={{style: { color: "#E4423F" }}}
-                            name='name' label='Full Name' type='text' variant='outlined'
-                        />
+                        <TextField onChange={handleChange} name='name' label='Name' type='text' variant='outlined'/>
                         <Grid2 container>
-                            <Grid2 size={5.5} sx={{marginRight: 1.9}}>
-                                <TextField onChange={handleChange}
-                                    sx={{'& .MuiOutlinedInput-root': {'&.Mui-focused fieldset': {borderColor: '#E4423F'}}}}
-                                    InputLabelProps={{style: { color: "#E4423F" }}}
-                                    name='age' label='Age' type='number' variant='outlined'
-                                />
+                            <Grid2 size={5.5} sx={{marginRight: 1.5}}>
+                                <TextField onChange={handleChange} name='age' label='Age' type='number' variant='outlined'/>
                             </Grid2>
-                            <Grid2 size={5.5} sx={{marginLeft: 1.9}}>
-                                <TextField onChange={handleChange}
-                                    sx={{'& .MuiOutlinedInput-root': {'&.Mui-focused fieldset': {borderColor: '#E4423F'}}, width: 1}}
-                                    InputLabelProps={{style: { color: "#E4423F" }}}
-                                    name='gender' label='Gender' variant='outlined' select defaultValue = ''>
+                            <Grid2 size={5.5} sx={{marginLeft: 1.5}}>
+                                <TextField onChange={handleChange} name='gender' label='Gender' variant='outlined' select sx={{ width: 1 }} defaultValue = ''>
                                     {genders.map((gender) => (
                                         <MenuItem key={gender} value={gender}>
                                             {gender}
@@ -143,16 +141,9 @@ export default function AccountSetup3Create() {
                                 </TextField>
                             </Grid2>
                         </Grid2>
-                        <TextField onChange={handleChange}
-                            sx={{'& .MuiOutlinedInput-root': {'&.Mui-focused fieldset': {borderColor: '#E4423F'}}}}
-                            InputLabelProps={{style: { color: "#E4423F" }}}
-                            name='suburb' label='Suburb' type='text' variant='outlined'
-                        />
-                        <TextField onChange={handleChange}
-                            sx={{'& .MuiOutlinedInput-root': {'&.Mui-focused fieldset': {borderColor: '#E4423F'}}}}
-                            InputLabelProps={{style: { color: "#E4423F" }}}
-                            name='profileBio' label='Profile Bio' type='text' variant='outlined' multiline rows={4}
-                        />
+                        <TextField onChange={handleChange} name='suburb' label='Suburb' type='text' variant='outlined'/>
+
+                        <TextField onChange={handleChange} name='profileBio' label='Profile Bio' type='text' variant='outlined' multiline rows={4}/>
                     </Grid2>
                     <div className='pc-header-text'>
                         Location
@@ -162,7 +153,6 @@ export default function AccountSetup3Create() {
                     </div>
                     <Autocomplete onPlaceChanged={onPlaceChanged} onLoad={onLoad}>
                         <input
-                            className='autocomplete-text'
                             type='text'
                             placeholder='Location'
                             style={{
@@ -174,8 +164,9 @@ export default function AccountSetup3Create() {
                                 marginLeft: 'auto',
                                 marginRight: 'auto',
                                 padding: '10px',
-                                border: '1px solid gray',
+                                border: '1px solid transparent',
                                 borderRadius: '5px',
+                                boxShadow: '0 2px 6px rgba(0, 0, 0, 0.5)',
                                 textOverflow: 'ellipses',
                             }}
                         />
@@ -185,6 +176,10 @@ export default function AccountSetup3Create() {
                         zoom={15}
                         center={center}
                         mapId='map_id'
+                        onLoad={map => {
+                            const bounds = new window.google.maps.LatLngBounds(center);
+                            map.fitBounds(bounds);
+                        }}
                     >
                         <MarkerF position={center}/>
                     </GoogleMap>
