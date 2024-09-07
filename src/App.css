@@ -6,6 +6,10 @@
   } */
    /* removing due to kevin and victors code clashing */
   
+  .big-container {
+    text-align: center;
+  }
+
   .red-overlay {
     background-color: #E4423F;
     position: absolute;
@@ -13,14 +17,15 @@
     right: 0;
     margin-left: auto;
     margin-right: auto;
-    width: 414px;
-    height: 896px;
+    width: 100%;
+    height: 100%;
     opacity: 45%;
   }
   
   .rounded-box {
-    width: 414px;
-    height: 690px;
+    width: 415px;
+    height: 100%;
+    top: 0;
     margin-left: auto;
     margin-right: auto;
     margin-top: -226px;
@@ -64,7 +69,7 @@
   
   .white-background {
     background-color: #ffffff;
-    width: 414px;
+    width: 100%;
     height: 100%;
     margin-left: auto;
     margin-right: auto;
@@ -137,13 +142,7 @@
     width: 200px;
     height: 200px;
   }
-  
-  .remove-image-icon {
-    position: relative;
-    top: -75px;
-    left: 65px;
-  }
-  
+
   .helper-text-box {
     background-color: #F2F2F2;
     color: #1A1A1A;
@@ -169,3 +168,6 @@
     font-size: 15px;
   }
   
+  .autocomplete-text::placeholder {
+    color: #E4423F;
+  }
