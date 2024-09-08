@@ -68,21 +68,21 @@ function DrawerOptions() {
   const TitleBox = ({title, subtitle}) => (
     <div>
         <StyledBox
-                    sx={{
-                        position: 'absolute',
-                        top: -drawerBleeding,
-                        borderTopLeftRadius: 8,
-                        borderTopRightRadius: 8,
-                        visibility: 'visible',
-                        right: 0,
-                        left: 0,
-                    }}
-                    >
-                    <Puller /> 
-                    {/* puller is necessary */}
-                    <Typography sx={{ p: 2, color: 'text.primary' }}>{title}</Typography>
-                    </StyledBox>
-                    <Typography sx={{ p: 2, color: 'text.secondary' }}>{subtitle}</Typography>
+            sx={{
+                position: 'absolute',
+                top: -drawerBleeding,
+                borderTopLeftRadius: 8,
+                borderTopRightRadius: 8,
+                visibility: 'visible',
+                right: 0,
+                left: 0,
+            }}
+            >
+            <Puller /> 
+            {/* puller is necessary */}
+            <Typography sx={{ p: 2, color: 'text.primary' }}>{title}</Typography>
+          </StyledBox>
+          <Typography sx={{ p: 2, color: 'text.secondary' }}>{subtitle}</Typography>
     </div>
     )
   const ContentBox = ({content}) => (
@@ -96,9 +96,13 @@ function DrawerOptions() {
         {content}
         <CustomRedButton onClick={() => {
             setComplete(true);
+            // handleSetSpecifics(option, passData);
+
+            // TODO: complete is true and the drawer closes meaning the next time drawer opens then it takes that pickerValue
+            console.log('complete: ', complete);
             console.log('passData: ', passData);
             
-            handleSetSpecifics(option, passData);
+            // handleSetSpecifics(option, passData);
             setOption('');
             // when complete is selected set specifics
         }}>Complete</CustomRedButton>
@@ -114,6 +118,11 @@ function DrawerOptions() {
       setOpen(true);
     } else {
       setOpen(false);
+      // console.log('closing via option');
+      // if (complete) {
+      //   handleSetSpecifics(option, passData);
+      //   setComplete(false);
+      // }
     }
   }, [option]);
 
@@ -135,9 +144,12 @@ function DrawerOptions() {
          anchor="bottom"
          open={open}
          onClose={() => {
+            console.log('onClose option: ', option);
             setComplete(false);
             setOption('');
-            toggleDrawer(false)}}
+            toggleDrawer(false)
+            setPassData(null);
+          }}
          onOpen={() => {
             toggleDrawer(true);
             setComplete(false);

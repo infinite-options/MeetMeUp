@@ -61,7 +61,7 @@ export default function AccountSetup4Create() {
             [name]: value,
           }));
       };
-    const [passData, setPassData] = useState('');
+    const [passData, setPassData] = useState(null);
     const [complete, setComplete] = useState(false);
 
     const handleButtonBoolean = (e) => {

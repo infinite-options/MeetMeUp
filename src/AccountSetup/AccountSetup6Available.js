@@ -28,7 +28,7 @@ const AccountSetup6Available = () => {
         console.log(formData);
     };
     return (  
-        <Grid container >
+        <Grid container sx={{margin: "0 auto" }}>
             <Grid size={12}>
                 <Progress percent="100%" prev="/accountSetup7Summary" />
             </Grid>

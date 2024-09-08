@@ -1,44 +1,72 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState, useRef, useMemo  } from 'react';
 import Picker from 'react-mobile-picker';
 import './BodyScroll.css';
 import DrawerContext from './DrawerContext';
 
 function BodyScroll({ options }) {
-  const [pickerValue, setPickerValue] = useState(options[0]);
-  // use pickerValue
-  // when complete is selected save passData
-  const {passData, setPassData, setComplete,  complete} = useContext(DrawerContext);
+  const {setPassData, setComplete, passData, complete, setOption, option, handleSetSpecifics} = useContext(DrawerContext);
+
+  const [pickerValue, setPickerValue] = useState({
+    single: options[0]
+  })
+  // due to a rerender
+
   useEffect(() => {
     console.log('useEffect pickerValue: ', pickerValue);
-    console.log('complete: ', complete);
-
+    // setPickerValue(pickerValue);
+    const temp =  pickerValue.single;
+    console.log('temp outside: ', temp)
+    // console.log('complete: ', complete);
     if (complete) {
-      setPassData(pickerValue);
+      console.log('temp: ', temp);
+      console.log('entering?', pickerValue.single);
+      
+      // setPassData(pickerValue.single); // no need for passData
+      handleSetSpecifics(option, pickerValue.single);
+
       setComplete(false)
+      // handleSetSpecifics(option, passData);
+      // setOption(''); // CHECKING REPUT
     }
     
-  }, [complete, pickerValue, setPassData, setComplete]);
-  console.log('pickerValue: ', pickerValue);
+  }, [complete, pickerValue, setPassData, setComplete, passData]);
 
+
+  // useEffect(() => {
+  //   console.log('useEffect pickerValue: ', pickerValue);
+  //   const temp =  pickerValue.single;
+  //   console.log('temp outside: ', temp)
+  //   setPassData('blargh');
+  // }, [complete, pickerValue, setPassData, setComplete, passData]);
+  // // console.log('noUSEEFFECT');
+  // // console.log('pickerValue: ', pickerValue);
   return (
-    <Picker value={pickerValue} onChange={setPickerValue} onValueChange={ value => setPickerValue(value)}>
-      <Picker.Column name="single">
-        {options.map(option => (
-          <Picker.Item
-            key={option}
-            value={option}
+    <Picker value={pickerValue} onChange={(e)=> {
+      console.log('e: ', e)
+      setPickerValue(e)
+      // setPassData(e);
+      }}>
+        <Picker.Column name='single'>
+          {options.map(option => (
+            <Picker.Item key={option} value={option}
             style={{
               backgroundColor: pickerValue.single === option ? 'lightgray' : 'transparent',
               borderRadius: '4px',
               padding: '10px',
-            }}
-          >
-            {option}
-          </Picker.Item>
-        ))}
-      </Picker.Column>
+            }}>
+              {option}
+            </Picker.Item>
+          ))}
+        </Picker.Column>
     </Picker>
   );
 }
 
 export default BodyScroll;
+
+// function BodyScroll({ options }) {
+//   const { setComplete, passData, complete, setOption, option, handleSetSpecifics } = useContext(DrawerContext);
+
+// }
+
+// export default BodyScroll;

@@ -13,7 +13,7 @@ const GOOGLE_API_KEY = process.env.REACT_APP_GOOGLE_API_KEY;
 const placesLibrary = ['places'];
 
 const mapContainerStyle = {
-    width: '375px',
+    width: '100%',
     height: '450px',
     marginTop: '10px',
     marginLeft: 'auto',

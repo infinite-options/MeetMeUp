@@ -49,7 +49,7 @@ const Profile = () => {
     const flag = "Australian";
 
     return (
-        <Grid container sx={{ maxWidth: "414px", margin: "0 auto" }}>
+        <Grid container sx={{margin: "0 auto" }}>
             <Grid size={4} container justifyContent="flex-end" alignItems="center">
                 <img src={profile} alt="profile" />
             </Grid>
