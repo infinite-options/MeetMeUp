@@ -21,8 +21,10 @@ import smokeImg from "../Assets/Images/smoke.png";
 import flagImg from "../Assets/Images/flag.png";
 import redlike from "../Assets/Images/redlike.png"
 import redliked from "../Assets/Images/redliked.png"
+import MatchPopUp from "./MatchPopUp";
+import { useRef } from "react";
 
-const ViewProfile = ({ setIsFlipped, liked, onClick, isLiked }) => {
+const ViewProfile = ({ setIsFlipped, liked, onClick, isLiked, showPopup, user, AccountUser }) => {
     const name = "Lachlan Collis";
     const age = "21";
     const gender = "Male";
@@ -37,10 +39,20 @@ const ViewProfile = ({ setIsFlipped, liked, onClick, isLiked }) => {
     const drink = "Socially";
     const smoke = "I Dont Smoke";
     const flag = "Australian";
+    const popupRef = useRef(null);
+    
 
     return (
         <Grid container sx={{ maxWidth: "414px", margin: "0 auto", position:"relative" }}>
+            {showPopup && (
+                <div className='popup'>
+                    <div className='popup-content' ref={popupRef}>
+                        <MatchPopUp user={user} AccountUser={AccountUser}/>
+                            </div>
+                        </div>
+                    )}
             <Grid size={11} container justifyContent="flex-end" sx={{margin:"20px"}}>
+                {isLiked && <img src={redliked} style={{position:"absolute", left:"5%", top:"1%"}}></img>}
                 <img src={liked ? redlike : redliked} style={{position:"absolute", right:"5%", top:"1%"}} onClick={() => {
                     onClick();
                     console.log('profile liked')}}></img>

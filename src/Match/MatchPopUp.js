@@ -20,6 +20,7 @@ export default function MatchPopUp({ user, AccountUser }) {
     const handleContinue = (user) => {
         navigate('/grid');
     }
+    
 
     console.log("matchpopup:", user)
     return (
@@ -54,7 +55,6 @@ export default function MatchPopUp({ user, AccountUser }) {
             <h3 className='matchText' style={{ color: '#E4423F' }}>It's A Match!</h3>
             <p>Let's start by creating a date with <br />{user.name} and you </p>
             <Stack>
-
                 <button className='beginButton' onClick={() => handleBegin(user)}
                     style={{
                         color: 'white',
