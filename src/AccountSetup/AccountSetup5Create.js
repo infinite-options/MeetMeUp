@@ -4,7 +4,7 @@ import backButton from '../Assets/Images/BackButton.png';
 import progressBar from '../Assets/Images/progressBar80.png';
 import videoCameraIcon from '../Assets/Images/videoCameraIcon.png';
 import uploadImageIcon from '../Assets/Images/uploadImageIcon.png';
-import { useState } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Box, Button, Grid2, ImageList, ImageListItem, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -13,37 +13,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { styled } from '@mui/material/styles';
 import Progress from '../Assets/Components/Progress';
 import NextButton from '../Assets/Components/NextButton';
-/* import { useReactMediaRecorder } from 'react-media-recorder';
-import VideoRecorder from 'react-video-recorder-18';
-import { useRecordWebcam } from 'react-record-webcam'; */
-
-/* const options = {
-    filename: 'test-filename',
-    fileType: 'mp4',
-    width: 1920,
-    height: 1080
-};
-
-const RecordView = () => {
-    const {
-        status,
-        startRecording,
-        stopRecording,
-        mediaBlobUrl
-    } = useReactMediaRecorder({
-        video: true,
-        facingMode: { exact: 'environment' }
-    });
-
-    return (
-        <div>
-            <p>{status}</p>
-            <button onClick={startRecording}>Start Recording</button>
-            <button onClick={stopRecording}>Stop Recording</button>
-            <video src={mediaBlobUrl} controls autoPlay loop />
-        </div>
-    );
-}; */
+import Webcam from 'react-webcam';
 
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -208,23 +178,18 @@ export default function AccountSetup5Create() {
                     </div>
                     {formData['video'] ? <div className='general-container'><video width='75%' height='100%' controls src={formData['video']}/></div> : null}
                     <div className='general-container'>
-{/*                         <div style={{ height: '100%' }}>
-                            <h1>One minute</h1>
-                            <VideoRecorder
-                                isOnInitially
-                                isFliped
-                                showReplayControls
-                                // mimeType={text('mimeType')}
-                                countdownTime='3000'
-                                timeLimit='60000'
-                                onRecordingComplete={(videoBlob) => {
-                                // Do something with the video...
-                                console.log('videoBlob', videoBlob);
-                                }}
-                            />
-                        </div> */}
-                        <Button component='label' variant='contained' sx={{ backgroundColor: '#E4423F', color: '#000000', maxWidth: '202px',
+                    {viewRecording ?
+                        <video src={videoSrc} height="400" width="300" controls/>
+                        :
+                        <Webcam ref={webcamRef} height={400} width={300} audio={false}/>
+                    }
+                    </div>
+                    <div className='general-container'>
+                    {capturing ?
+                        (<Button component='label' variant='contained'
+                            sx={{ backgroundColor: '#E4423F', color: '#000000', maxWidth: '202px',
                             borderRadius: '41px', textTransform: 'none' }}
+                            onClick={handleStopCaptureClick}
                         >
                             <div className='white-text-video'>
                                 Stop&nbsp;
@@ -298,13 +263,9 @@ export default function AccountSetup5Create() {
                                 </Button>)
                             }
                             </div>
-                            <img src={videoCameraIcon} alt='video icon'/>
-                            <VisuallyHiddenInput
-                                type='file'
-                                onChange={handleVideoUpload}
-                                accept='.mov,.mp4'
-                            />
-                        </Button>
+                        }
+                        </div>
+                    }
                     </div>
                     <HelperTextBox text='Why do I need to make this video?'/>
                     <div className='pc-header-text'>
@@ -401,7 +362,7 @@ export default function AccountSetup5Create() {
                         </div>
                         : null}
                     <div className='form-button-container'>
-                        <NextButton onClick={handleNext} next={'/accountSetup7Summary'}></NextButton>
+                        <NextButton onClick={handleNext} next={'/accountSetup6Availability'}></NextButton>
                     </div>
                 </form>
             </div>
