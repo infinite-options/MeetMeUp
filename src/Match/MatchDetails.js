@@ -7,52 +7,70 @@ import { useLocation } from 'react-router-dom';
 import './UserDetails.css';
 import MatchPopUp from './MatchPopUp';
 import AccountUserImg from "../Assets/Images/accountUser.jpg"
+import LogoutButton from '../Assets/Components/LogoutButton';
+import { Box, Typography } from "@mui/material";
+import Grid from "@mui/material/Grid2";
+import { Link } from "react-router-dom";
+import { Button } from "@mui/material";
+import ReactCardFlip from "react-card-flip";
+import ViewProfile from "./ViewProfile";
+import profileImg from "../Assets/Images/profileimg.png"
+import like from "../Assets/Images/like.png"
+import likedImg from "../Assets/Images/filledheart.png"
 
 const MatchDetails = () => {
     const location = useLocation();
     const { user, source } = location.state || {};
-
     console.log("User:", user);
     console.log("Source:", source);
-
     const [isRightHeartFilled, setIsRightHeartFilled] = useState(source === 'usersWhoYouSelected');
     const [showPopup, setShowPopup] = useState(false); 
-
+    const [isFlipped, setIsFlipped] = useState(false);
+    const [liked, setLiked] = useState(like)
     const popupRef = useRef(null);
-
     const isLeftHeartVisible = source === 'usersWhoSelectedYou';
 
+    // LEFT WILL ONLY SHOW IF THEY SELECTED YOU
     const handleRightHeartClick = () => {
+        console.log('handling heart click');
         const newHeartState = !isRightHeartFilled;
         setIsRightHeartFilled(newHeartState);
-
-        
         if (isLeftHeartVisible && newHeartState) {
             setShowPopup(true);
         } else {
             setShowPopup(false); 
         }
     };
-
+    const handleSetLiked = () => {
+        setLiked(prevState=>!prevState)
+        // const newHeartState = !isRightHeartFilled;
+        // setIsRightHeartFilled(newHeartState);
+        if (isLeftHeartVisible && liked) {
+            setShowPopup(true);
+        } else {
+            setShowPopup(false); 
+        }
+        handleRightHeartClick();
+    }
     const handleClosePopup = () => {
         setShowPopup(false); 
     };
-
     const navigate = useNavigate();
-
     const handleEditPreferences = () => {
         navigate('/matchPreferences');
       }
-
     const handleBackClick = () => {
         window.history.back(); 
+        // TODO: make the entire program use this!
+    };
+
+    const handleNavigate = () => {
+        navigate(`/grid`);
     };
 
     const AccountUser = [
-        { name: 'Hawk Tuah Tey', age: 40, gender: 'female', src: AccountUserImg, source:'Account user' }
+        { name: 'Hawk Tuah Tey', age: 40, gender: 'female', where: 'Mandurah', src: AccountUserImg, source:'Account user' }
     ]
-
-    
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (popupRef.current && !popupRef.current.contains(event.target)) {
@@ -63,59 +81,96 @@ const MatchDetails = () => {
             document.addEventListener('mousedown', handleClickOutside);
         }
         return () => {
-            
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, [showPopup]);
 
     return (
-        <div className='simulate-mobile'>
-          
+        // <div className='simulate-mobile'>
+        //     {isLeftHeartVisible && isRightHeartFilled && showPopup && (
+        //         <div className='popup'>
+        //             <div className='popup-content' ref={popupRef}>
+        //                 <MatchPopUp user={user} AccountUser={AccountUser}/>
+        //             </div>
+        //         </div>
+        //     )}
+
+        //     <div className='userDetails'>
+        //         <div className='userImg'>
+        //             {isLeftHeartVisible && (
+        //                 <div
+        //                     className='heartIcon left-heart'
+        //                     style={{ cursor: 'default', fontSize: '24px', position: 'absolute', left: '10px', top: '10px' }}
+        //                 >
+        //                     <FontAwesomeIcon icon={solidHeart} color='#E4423F' />
+        //                 </div>
+        //             )}
+
+        //             <div
+        //                 className='heartIcon right-heart'
+        //                 onClick={handleRightHeartClick}
+        //                 style={{ cursor: 'pointer', fontSize: '24px', position: 'absolute', left: '335px', top: '10px' }}
+        //             >
+        //                 <FontAwesomeIcon
+        //                     icon={isRightHeartFilled ? solidHeart : regularHeart}
+        //                     color={isRightHeartFilled ? '#E4423F' : '#E4423F'}
+        //                 />
+        //             </div>
+
+        //             <img src={user.src} alt='img' height={440} />
+        //             <div className='detailsOnImg'>
+        //                 <p style={{ justifyContent: 'center' }}>{user.name}</p>
+        //                 <p style={{ marginTop: '-10px', display: 'flex', justifyContent: 'center' }}>{user.age}-{user.gender}</p>
+        //             </div>
+        //         </div>
+
+        //         <h4 className='tap'>Tap to see profile</h4>
+        //     </div>
+        //     <div className='userButtons'>
+        //         <button className='backButton' onClick={handleBackClick}>Back</button>
+        //         <button className='preferenceButton' onClick={() => { handleEditPreferences()}}>Preferences</button>
+        //         <LogoutButton></LogoutButton>
+        //     </div>
+        // </div>
+
+        <ReactCardFlip isFlipped={isFlipped} flipDirection="horizontal">
+            <Box>
             {isLeftHeartVisible && isRightHeartFilled && showPopup && (
                 <div className='popup'>
                     <div className='popup-content' ref={popupRef}>
                         <MatchPopUp user={user} AccountUser={AccountUser}/>
-                    </div>
-                </div>
-            )}
-
-            <div className='userDetails'>
-                <div className='userImg'>
-                    {isLeftHeartVisible && (
-                        <div
-                            className='heartIcon left-heart'
-                            style={{ cursor: 'default', fontSize: '24px', position: 'absolute', left: '10px', top: '10px' }}
-                        >
-                            <FontAwesomeIcon icon={solidHeart} color='#E4423F' />
+                            </div>
                         </div>
                     )}
+                <Box sx={{backgroundColor:"#E4423F", paddingTop:"30px", paddingBottom:"50px", borderRadius:"10px", display:"flex",justifyContent:"center", position:"relative", minHeight: '600px' , maxWidth:"414px", margin:"0 auto", marginTop:"20px"}}>
+                    <img src={user.src} style={{width:"100%", height:"90%"}} height={440}></img>
 
-                    <div
-                        className='heartIcon right-heart'
-                        onClick={handleRightHeartClick}
-                        style={{ cursor: 'pointer', fontSize: '24px', position: 'absolute', left: '335px', top: '10px' }}
-                    >
-                        <FontAwesomeIcon
-                            icon={isRightHeartFilled ? solidHeart : regularHeart}
-                            color={isRightHeartFilled ? '#E4423F' : '#E4423F'}
-                        />
-                    </div>
+                    {/* <img src="profileimg.png" style={{width:"100%", height:"90%"}}></img> */}
+                    <Typography sx={{position:"absolute", zIndex: '10', top:"10%", color:"white", fontSize:'20px'}}>{user.name}</Typography>
+                    <Typography sx={{position:"absolute", zIndex: '10',top:"14%", color:"white", fontSize:"10px"}}>{user.age} - {user.gender} - {user.where}</Typography>
+                    <Typography sx={{position:"absolute", zIndex: '10', bottom:"2%", color:"white", fontSize:"18px"}} onClick={()=>setIsFlipped(true)}>Tap to See Profile</Typography>
+                    {/* <img src="like.png" style={{position:"absolute", right:"2%", top:"2%"}}></img> */}
+                    <img src={liked ? like : likedImg} style={{position:"absolute", right:"2%", top:"1%"}} 
+                    onClick={handleSetLiked}></img>
+                    {isLeftHeartVisible && (
+                        <img src={likedImg} style={{position:"absolute", left:"2%", top:"1%"}} ></img>
+                    )}
 
-                    <img src={user.src} alt='img' height={440} />
-                    <div className='detailsOnImg'>
-                        <p style={{ justifyContent: 'center' }}>{user.name}</p>
-                        <p style={{ marginTop: '-10px', display: 'flex', justifyContent: 'center' }}>{user.age}-{user.gender}</p>
-                    </div>
-                </div>
-
-                <h4 className='tap'>Tap to see profile</h4>
-            </div>
-            <div className='userButtons'>
-                <button className='backButton' onClick={handleBackClick}>Back</button>
-                <button className='preferenceButton' onClick={() => { handleEditPreferences()}}>Preferences</button>
-                <button className='logoutButton'>Logout</button>
-            </div>
-        </div>
+                </Box>
+                <Grid container size={12} justifyContent="center" >
+                <Link to="/matching1PreferencesPage">
+                    <Button sx={{width:"130px",backgroundColor:"#E4423F", borderRadius:"25px", height:"45px", color:"white", marginTop:"20px", mb:"20px", textTransform:"none", fontFamily:"Segoe UI", fontSize:"18px", fontWeight:"regular"}}>Back</Button>
+                </Link>
+            </Grid>
+            <Grid container size={12} justifyContent="center" >
+                <Button onClick={handleNavigate} sx={{width:"130px",backgroundColor:"#E4423F", borderRadius:"25px", height:"45px", color:"white", mb:"20px", textTransform:"none", fontFamily:"Segoe UI", fontSize:"18px", fontWeight:"regular"}}>Continue</Button>
+            </Grid>
+            <Grid container size={12} justifyContent="center" >
+                <LogoutButton></LogoutButton>
+            </Grid>
+        </Box>
+        <ViewProfile setIsFlipped={setIsFlipped} liked={liked} onClick={handleSetLiked} isLiked={isLeftHeartVisible}/>
+    </ReactCardFlip>
     );
 };
 

@@ -1,4 +1,4 @@
-import { Button, Container, IconButton, Typography } from "@mui/material";
+import { Button, Container, IconButton, Stack, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import Type from "../Assets/Components/Type";
 import AccountInfo from "../Assets/Components/AccountInfo"; 
@@ -28,11 +28,28 @@ import smokeImg from "../Assets/Images/smoke.png";
 import flagImg from "../Assets/Images/flag.png";
 import diamond from "../Assets/Images/diamond.png";
 import time from "../Assets/Images/time.png";
-
+import { useNavigate } from "react-router-dom";
 // victors code
 // TODO: add props to pass as an object for the specifics
 // specific object
 const Profile = () => {
+    const navigate = useNavigate();
+    const handleSettings = () => {
+        navigate(`/settings`);
+    };
+
+    const handleUpdate = () => {
+        navigate(`/accountSetup4Create`);
+    };
+
+    const handlePreferences = () => {
+        navigate(`/matching1PreferencesPage`);
+    };
+
+    const handleSelections = () => {
+        navigate(`/selectionResults`);
+    };
+
     const name = "Lachlan Collis";
     const age = "21";
     const gender = "Male";
@@ -51,13 +68,19 @@ const Profile = () => {
     return (
         <Grid container sx={{margin: "0 auto" }}>
             <Grid size={4} container justifyContent="flex-end" alignItems="center">
-                <img src={profile} alt="profile" />
+                <IconButton>
+                    <img src={profile} alt="profile" />
+                </IconButton>
             </Grid>
             <Grid size={4} container justifyContent="center" alignItems="center">
-                <img src={search} alt="search" />
+                <IconButton onClick={handlePreferences}>
+                    <img src={search} alt="search" />
+                </IconButton>
             </Grid>
             <Grid size={4} container justifyContent="flex-start" alignItems="center">
-                <img src={group} alt="group" />
+                <IconButton onClick={handleSelections}>
+                    <img src={group} alt="group" />
+                </IconButton>
             </Grid>
             <Grid size={12}>
                 <Typography sx={{ fontSize: "30px" }}>About You</Typography>
@@ -144,7 +167,7 @@ const Profile = () => {
                 <AccountInfo img={smokeImg} info={smoke} />
                 <AccountInfo img={flagImg} info={flag} />
                 <hr style={{ width: "100%", marginTop: "30px" }} />
-                <Grid container size={12} gap={.5} sx={{ marginTop: "40px", mb: "50px" }}>
+                {/* <Grid container size={12} gap={.5} sx={{ marginTop: "40px", mb: "50px" }}>
                     <Grid size={5}>
                         <Link to={'/accountSetup4Create'}>
                             <Button
@@ -194,8 +217,57 @@ const Profile = () => {
                     }} container justifyContent="center" alignItems="center">
                         <img src={time} alt="time" />
                     </Grid>
-                    <NextBtn next={'/accountSetup6Availability'}></NextBtn>
-                </Grid>
+                    <NextBtn next={'/matching1PreferencesPage'}></NextBtn>
+                </Grid> */}
+                    <Stack
+                    direction="row"
+                    spacing={2}
+                    >
+                        <Button
+                            sx={{
+                                width: "130px",
+                                backgroundColor: "black",
+                                borderRadius: "25px",
+                                height: "45px",
+                                color: "white",
+                                display: "flex",
+                                justifyContent: "center",
+                                textTransform: "none",
+                                fontSize: "18px",
+                                fontWeight: "Regular",
+                                textWrap: "none",
+                                width: "160px"
+                            }}
+                            onClick={handleUpdate}
+                            >
+                            Update Profile
+                        </Button>
+                        
+                        <IconButton sx={{
+                            backgroundColor: "#CECECE", borderRadius: "25px",
+                            boxShadow: "2px 5px 5px 2px rgba(0,0,0,.1)"}}
+                            onClick={handleSettings}
+                            >
+                            <img src={setting} alt="setting" />
+                        </IconButton>
+                        <IconButton sx={{
+                        backgroundColor: "#CECECE", borderRadius: "25px",
+                        boxShadow: "2px 5px 5px 2px rgba(0,0,0,.1)"}}>
+                            <img src={card} alt="card" />
+                        </IconButton>
+                        <IconButton sx={{
+                        backgroundColor: "#CECECE", borderRadius: "25px",
+                        boxShadow: "2px 5px 5px 2px rgba(0,0,0,.1)"}}>
+                            <img src={diamond} alt="diamond" />
+                        </IconButton>
+                        <IconButton sx={{
+                        backgroundColor: "#CECECE", borderRadius: "25px",
+                        boxShadow: "2px 5px 5px 2px rgba(0,0,0,.1)"}}>
+                            <img src={time} alt="time" />
+                        </IconButton>
+                    </Stack>
+                    
+                    <NextBtn next={'/matching1PreferencesPage'}></NextBtn>
             </Container>
         </Grid>
     );

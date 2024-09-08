@@ -4,17 +4,15 @@ import './BodyScroll.css';
 import DrawerContext from './DrawerContext';
 
 function BodyScroll({ options }) {
-  const {setPassData, setComplete, passData, complete, setOption, option, handleSetSpecifics} = useContext(DrawerContext);
-
   const [pickerValue, setPickerValue] = useState({
     single: options[0]
   })
   // due to a rerender
-
+  const {setPassData, setComplete, passData, complete, setOption, option, handleSetSpecifics} = useContext(DrawerContext);
   useEffect(() => {
     console.log('useEffect pickerValue: ', pickerValue);
-    // setPickerValue(pickerValue);
-    const temp =  pickerValue.single;
+    setPickerValue(pickerValue);
+    const temp = pickerValue.single;
     console.log('temp outside: ', temp)
     // console.log('complete: ', complete);
     if (complete) {
@@ -30,6 +28,7 @@ function BodyScroll({ options }) {
     }
     
   }, [complete, pickerValue, setPassData, setComplete, passData]);
+  console.log('pickerValue: ', pickerValue);
 
 
   // useEffect(() => {

@@ -1,10 +1,18 @@
-import { Box, Button, FormControl, IconButton, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import { Typography, Box, Button, FormControl, IconButton, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import Grid from '@mui/material/Grid2'
 import React, { useState } from 'react';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { styled } from '@mui/material/styles';
 import DisplayTime from './DisplayTime';
 import checkIcon from "../Images/addcheck.png"
+// import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+// import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+// import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+// import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+
+import TimePicker from 'react-time-picker';
+
+// import Grid  from "@mui/material/Grid2";
 
 const CustomButton = styled(Button)({
     backgroundColor: 'black',
@@ -30,8 +38,6 @@ function DateAdd() {
     console.log(index)
     setTimes(times.filter((_, i) => i !== index)); 
   };
-
-
   const handleAddTime=()=> {
     setTimes([...times, {day, start, end}]);
   }
@@ -55,6 +61,12 @@ function DateAdd() {
         flexDirection: 'column',
         alignItems: 'center', 
     }}>
+      <Grid size={4}>
+          <Typography sx={{fontSize:"18px"}}>Day</Typography>
+      </Grid>
+      <Grid size={8} container justifyContent="flex-start">
+          <Typography sx={{fontSize:"18px"}}>Times</Typography>
+      </Grid>
       {times.map((time, index) => (
                     <DisplayTime
                         index={index}

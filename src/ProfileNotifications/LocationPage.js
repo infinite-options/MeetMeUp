@@ -11,7 +11,7 @@ const LocationPage = () => {
     navigate('/location2'); 
   };
   const handleLaterClick = () => {
-    navigate('/matching1PreferencesPage'); 
+    navigate('/location2'); 
   };
 
   return (

@@ -1,8 +1,8 @@
 import { Typography } from "@mui/material";
 import Grid from '@mui/material/Grid2';
 import { Link } from "react-router-dom";
-import BackButton from '../Images/BackButton.png'
-
+// import BackButton from '../Images/BackButton.png'
+import BackArrowButton from "./BackArrowButton";
 const Progress = ({percent, prev}) => {
     let finished 
     let unfinished;
@@ -21,9 +21,7 @@ const Progress = ({percent, prev}) => {
         <Grid container sx={{margin: 1}}>
             <Grid container alignItems="center" size={12}>
                 <Grid size={3}>
-                    <Link to={prev}>
-                        <img src={BackButton} />
-                    </Link>
+                    <BackArrowButton></BackArrowButton>
                 </Grid>
                 <Grid size={9}>
                     <Typography sx={{fontSize:'22px', marginLeft: 3}}>Profile Creation</Typography>

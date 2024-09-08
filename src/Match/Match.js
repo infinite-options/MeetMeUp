@@ -8,8 +8,14 @@ import ViewProfile from "./ViewProfile";
 import profileImg from "../Assets/Images/profileimg.png"
 import like from "../Assets/Images/like.png"
 import likedImg from "../Assets/Images/filledheart.png"
+import { useNavigate } from 'react-router-dom'; 
+import LogoutButton from "../Assets/Components/LogoutButton";
 
 const Match = () => {
+    const navigate = useNavigate(); 
+    const handleNavigate = () => {
+        navigate(`/grid`);
+    };
     const name="Bob Hawk"
     const age="43"
     const gender="male"
@@ -30,9 +36,9 @@ const Match = () => {
                     <img src={profileImg} style={{width:"100%", height:"90%"}}></img>
 
                     {/* <img src="profileimg.png" style={{width:"100%", height:"90%"}}></img> */}
-                    <Typography sx={{position:"absolute", top:"10%", color:"white", fontSize:'20px'}}>{name}</Typography>
-                    <Typography sx={{position:"absolute", top:"14%", color:"white", fontSize:"10px"}}>{age} - {gender} - {where}</Typography>
-                    <Typography sx={{position:"absolute", bottom:"2%", color:"white", fontSize:"18px"}} onClick={()=>setIsFlipped(true)}>Tap to See Profile</Typography>
+                    <Typography sx={{position:"absolute", zIndex: '10', top:"10%", color:"white", fontSize:'20px'}}>{name}</Typography>
+                    <Typography sx={{position:"absolute", zIndex: '10',top:"14%", color:"white", fontSize:"10px"}}>{age} - {gender} - {where}</Typography>
+                    <Typography sx={{position:"absolute", zIndex: '10', bottom:"2%", color:"white", fontSize:"18px"}} onClick={()=>setIsFlipped(true)}>Tap to See Profile</Typography>
                     {/* <img src="like.png" style={{position:"absolute", right:"2%", top:"2%"}}></img> */}
                     <img src={liked ? like : likedImg} style={{position:"absolute", right:"2%", top:"1%"}} onClick={onClick}></img>
 
@@ -43,10 +49,10 @@ const Match = () => {
                 </Link>
             </Grid>
             <Grid container size={12} justifyContent="center" >
-                <Button sx={{width:"130px",backgroundColor:"#E4423F", borderRadius:"25px", height:"45px", color:"white", mb:"20px", textTransform:"none", fontFamily:"Segoe UI", fontSize:"18px", fontWeight:"regular"}}>Continue</Button>
+                <Button onClick={handleNavigate} sx={{width:"130px",backgroundColor:"#E4423F", borderRadius:"25px", height:"45px", color:"white", mb:"20px", textTransform:"none", fontFamily:"Segoe UI", fontSize:"18px", fontWeight:"regular"}}>Continue</Button>
             </Grid>
             <Grid container size={12} justifyContent="center" >
-                <Button sx={{width:"130px",backgroundColor:"#E4423F", borderRadius:"25px", height:"45px", color:"white", mb:"5px", textTransform:"none", fontFamily:"Segoe UI", fontSize:"18px", fontWeight:"regular"}}>Logout</Button>   
+                <LogoutButton></LogoutButton>
             </Grid>
         </Box>
         <ViewProfile setIsFlipped={setIsFlipped} liked={liked} onClick={onClick} />

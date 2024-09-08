@@ -22,7 +22,7 @@ import flagImg from "../Assets/Images/flag.png";
 import redlike from "../Assets/Images/redlike.png"
 import redliked from "../Assets/Images/redliked.png"
 
-const ViewProfile = ({ setIsFlipped, liked, onClick }) => {
+const ViewProfile = ({ setIsFlipped, liked, onClick, isLiked }) => {
     const name = "Lachlan Collis";
     const age = "21";
     const gender = "Male";
@@ -37,11 +37,13 @@ const ViewProfile = ({ setIsFlipped, liked, onClick }) => {
     const drink = "Socially";
     const smoke = "I Dont Smoke";
     const flag = "Australian";
-    
+
     return (
         <Grid container sx={{ maxWidth: "414px", margin: "0 auto", position:"relative" }}>
             <Grid size={11} container justifyContent="flex-end" sx={{margin:"20px"}}>
-                <img src={liked ? redlike : redliked} style={{position:"absolute", right:"5%", top:"1%"}} onClick={onClick}></img>
+                <img src={liked ? redlike : redliked} style={{position:"absolute", right:"5%", top:"1%"}} onClick={() => {
+                    onClick();
+                    console.log('profile liked')}}></img>
             </Grid>
             <Grid size={6}>
                 <Grid size={12}>

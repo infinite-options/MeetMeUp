@@ -7,119 +7,202 @@ import ButterflyImg from '../Assets/Images/Butterfly.jpg'
 import CherryImg from '../Assets/Images/Cherry.jpg'
 import BobImg from '../Assets/Images/Bob.jpg'
 import ArrowBackIcon from '../Assets/Images/BackButton.png'
+import ListItem from '@mui/material/ListItem';
+import Divider from '@mui/material/Divider';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import Avatar from '@mui/material/Avatar';
+import Typography from '@mui/material/Typography';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import { Box, ListItemButton } from '@mui/material';
+import { IconButton } from '@mui/material';
+import List from '@mui/material/List';
+import BackArrowButton from '../Assets/Components/BackArrowButton';
 
 const matchedResults = [
 
 ];
 
 const usersWhoSelectedYou = [
-  { name: 'Hawk Tuah Tey', age: 40, gender: 'female', src: HawkImg, source: 'usersWhoSelectedYou' },
-  { name: 'Cherrywood', age: 23, gender: 'female', src: CherryImg, source: 'usersWhoSelectedYou' },
+  { name: 'Hawk Tuah Tey', age: 40, where: 'Mandurah', gender: 'female', src: HawkImg, source: 'usersWhoSelectedYou' },
+  { name: 'Cherrywood', age: 23, gender: 'female', where: 'Mandurah', src: CherryImg, source: 'usersWhoSelectedYou' },
 ];
 
 const usersWhoYouSelected = [
-  { name: 'Tiffany', age: 31, gender: 'female', src: TiffanyImg, source: 'usersWhoYouSelected' },
-  { name: 'Bob Hawk', age: 43, gender: 'male', src: BobImg, source: 'usersWhoYouSelected' },
-  { name: 'Esmeralda Butterfly', age: 29, gender: 'female', src: ButterflyImg, source: 'usersWhoYouSelected' },
+  { name: 'Tiffany', age: 31, gender: 'female', where: 'Mandurah',  src: TiffanyImg, source: 'usersWhoYouSelected' },
+  { name: 'Bob Hawk', age: 43, gender: 'male', where: 'Mandurah', src: BobImg, source: 'usersWhoYouSelected' },
+  { name: 'Esmeralda Butterfly', age: 29, where: 'Mandurah', gender: 'female', src: ButterflyImg, source: 'usersWhoYouSelected' },
   //{ name: 'cherrywood', age: 23, gender: 'female', src: CherryImg, source:'usersWhoYouSelected'},
 ];
 
+
 const SelectionResults = () => {
   const navigate = useNavigate();
-
-  const handleUserClick = (user, source) => {
-    const userName = encodeURIComponent(user.name);
-    navigate(`/user-details/${userName}`, { state: { user, source } });
-  }
-
   const handleEditPreferences = () => {
     navigate('/matchPreferences');
   }
 
   const handleBackClick = () => {
     window.history.back(); 
-};
+  };
+  const handleUserClick = (user, source) => {
+    const userName = encodeURIComponent(user.name);
+    navigate(`/user-details/${userName}`, { state: { user, source } });
+  }
+  // making a component since used twice - easier to edit
+  const UserBox = ({user, type}) => (
+    <div>
+    <ListItem alignItems="flex-start">
+      <ListItemButton onClick={() => handleUserClick(user, type)}>
+          <ListItemAvatar>
+            <Avatar alt="Remy Sharp" src={user.src? user.src: ''}/>
+          </ListItemAvatar>
+          <ListItemText
+            primary={user.name}
+            secondary={
+              <React.Fragment>
+                <Typography
+                  component="span"
+                  variant="body2"
+                  sx={{ color: 'text.primary', display: 'inline'}}
+                >
+                  {`${user.age} ${user.name}`}
+                </Typography>
+              </React.Fragment>
+            }
+          />
+  
+          {/* onClick={() => handleUserClick(user, 'usersWhoYouSelected')} */}
+        <IconButton sx={{
+          backgroundColor: "#E0E3E6", borderRadius: "25px",
+          }}
+          >
+         <ArrowForwardIcon />
+        </IconButton>
+      </ListItemButton>
+    </ListItem>
+    {/* <Divider component="li" variant="inset" sx={{width: '80%', marginLeft: '10%'}}/> */}
+    </div>
+
+  )
 
   return (
-    <div className="simulate-mobile">
+    <div>
       <div className="selection-results-container">
-        <button className="back-button" onClick={handleBackClick}>
-          <img src={ArrowBackIcon}/>
-        </button>
+        {/* <button className="back-button" onClick={handleBackClick}>
+        <img src={ArrowBackIcon}/>
+          </button> */}
+
+          {/* TODO: FIX BUTTON FORMATTING MAKE ON THE SAME LINE */}
+        <BackArrowButton />
         <h2>Selection Results</h2>
-        <div style={{ marginTop:'50px', marginLeft:'0px',}}>
-          <h4 style={{ color: 'grey'}}>Matched Results</h4>
-          {matchedResults.length === 0 ? (
-            <p style={{ padding: '20px 0' }} />
-          ) : (
-            matchedResults.map((user, index) => (
-              <div key={index} className="user-card">
-                <img src={user.src} alt={user.name} className="user-avatar" />
-                <div className="user-info">
-                  <span className="user-name">{user.name}</span>
-                  <span className="user-age-gender">
-                    {user.age} {user.gender}
-                  </span>
-                </div>
-                <button
-                  className="navigate-button"
-                  onClick={() => handleUserClick(user, 'matchedResults')}
-                >
-                  ➔
-                </button>
-              </div>
-            ))
-          )}
-        </div>
+      <br></br>
+      <h4 style={{ color: 'grey' }}>Matched Results</h4>
+      <List>
+      {matchedResults.map((user, index) => (
+        <UserBox user={user} type={'matchedResults'}></UserBox>
+      ))}
+      </List>
+      <h4 style={{ color: 'grey' }}>People who selected you</h4>
+      <List>
+      {usersWhoSelectedYou.map((user, index) => (
+        <UserBox user={user} type={'usersWhoSelectedYou'}></UserBox>
+      ))}
+      </List>
 
-        
-        <div className="section">
-          <h4 style={{ color: 'grey' }}>People who selected you</h4>
-          {usersWhoSelectedYou.map((user, index) => (
-            <div key={index} className="user-card">
-              <img src={user.src} alt={user.name} className="user-avatar" />
-              <div className="user-info">
-                <span className="user-name">{user.name}</span>
-                <span className="user-age-gender">
-                  {user.age} {user.gender}
-                </span>
-              </div>
-              <button
-                className="navigate-button"
-                onClick={() => handleUserClick(user, 'usersWhoSelectedYou')}
-              >
-                ➔
-              </button>
-            </div>
-          ))}
-        </div>
+      <h4 style={{ color: 'grey' }}>People who you selected</h4>
+      <List>
+      {usersWhoYouSelected.map((user, index) => (
+        <UserBox user={user} type={'usersWhoYouSelected'}></UserBox>
+      ))}
+      </List>
 
-        <div className="section">
-          <h4 style={{ color: 'grey' }}>People who you selected</h4>
-          {usersWhoYouSelected.map((user, index) => (
-            <div key={index} className="user-card">
-              <img src={user.src} alt={user.name} className="user-avatar" />
-              <div className="user-info">
-                <span className="user-name">{user.name}</span>
-                <span className="user-age-gender">
-                  {user.age} {user.gender}
-                </span>
-              </div>
-              <button
-                className="navigate-button"
-                onClick={() => handleUserClick(user, 'usersWhoYouSelected')}
-              >
-                ➔
-              </button>
-            </div>
-          ))}
-        </div>
-      </div>
-      <div>
-        <button className='editButton' onClick={() => { handleEditPreferences() }}>Edit Preferences</button>
-      </div>
     </div>
+    <div>
+      <button className='editButton' onClick={() => { handleEditPreferences() }}>Edit Preferences</button>
+    </div>
+  </div>
   );
 }
 
 export default SelectionResults;
+
+
+   {/* <div>
+       <div className="selection-results-container">
+         <button className="back-button" onClick={handleBackClick}>
+           <img src={ArrowBackIcon}/>
+         </button>
+         <h2>Selection Results</h2>
+         <div style={{ marginTop:'50px', marginLeft:'0px',}}>
+           <h4 style={{ color: 'grey'}}>Matched Results</h4>
+           {matchedResults.length === 0 ? (
+             <p style={{ padding: '20px 0' }} />
+           ) : (
+             matchedResults.map((user, index) => (
+               <div key={index} className="user-card">
+                 <img src={user.src} alt={user.name} className="user-avatar" />
+                 <div className="user-info">
+                   <span className="user-name">{user.name}</span>
+                   <span className="user-age-gender">
+                     {user.age} {user.gender}
+                   </span>
+                 </div>
+                 <button
+                   className="navigate-button"
+                   onClick={() => handleUserClick(user, 'matchedResults')}
+                 >
+                   ➔
+                 </button>
+               </div>
+             ))
+           )}
+         </div>
+
+        
+         <div className="section">
+           <h4 style={{ color: 'grey' }}>People who selected you</h4>
+           {usersWhoSelectedYou.map((user, index) => (
+             <div key={index} className="user-card">
+               <img src={user.src} alt={user.name} className="user-avatar" />
+               <div className="user-info">
+                 <span className="user-name">{user.name}</span>
+                 <span className="user-age-gender">
+                   {user.age} {user.gender}
+                 </span>
+               </div>
+               <button
+                 className="navigate-button"
+                 onClick={() => handleUserClick(user, 'usersWhoSelectedYou')}
+               >
+                 ➔
+               </button>
+             </div>
+           ))}
+         </div>
+
+         <div className="section">
+           <h4 style={{ color: 'grey' }}>People who you selected</h4>
+           {usersWhoYouSelected.map((user, index) => (
+             <div key={index} className="user-card">
+               <img src={user.src} alt={user.name} className="user-avatar" />
+               <div className="user-info">
+                 <span className="user-name">{user.name}</span>
+                 <span className="user-age-gender">
+                   {user.age} {user.gender}
+                 </span>
+               </div>
+               <button
+                 className="navigate-button"
+                 onClick={() => handleUserClick(user, 'usersWhoYouSelected')}
+               >
+                 ➔
+               </button>
+             </div>
+           ))}
+         </div>
+       </div>
+       <div>
+         <button className='editButton' onClick={() => { handleEditPreferences() }}>Edit Preferences</button>
+       </div>
+     </div> */}

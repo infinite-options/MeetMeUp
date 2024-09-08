@@ -32,7 +32,7 @@ export default function Begin() {
     };
 
     return (
-        <div className='simulate-mobile'>
+        <div>
             <div className='title' style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: '15px', marginTop: '20px' }}>
                 <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
                     <img

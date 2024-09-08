@@ -77,19 +77,42 @@ export default function AccountSetup4Create() {
         console.log(formData);
         const specificsForm = populateFormData();
         console.log('formData: ', specificsForm.get('education'), specificsForm.get('body'));
+        const formObj = {
+            interestsEatingOut: specificsForm.get('interestsEatingOut'),
+            interestsBikeRides: specificsForm.get('interestsBikeRides'),
+            interestsDrinking: specificsForm.get('interestsDrinking'),
+            interestsDancing: specificsForm.get('interestsDancing'),
+            interestsCooking: specificsForm.get('interestsCooking'),
+            interestsBaking: specificsForm.get('interestsBaking'),
+            interestsCrafting: specificsForm.get('interestsCrafting'),
+            interestsPainting: specificsForm.get('interestsPainting'),
+            interestsSurfing: specificsForm.get('interestsSurfing'),
+            interestsTraveling: specificsForm.get('interestsTraveling'),
+            height: specificsForm.get('height'),
+            education: specificsForm.get('education'),
+            body: specificsForm.get('body'),
+            star: specificsForm.get('star'),
+            drinking: specificsForm.get('drinking'),
+            smoking: specificsForm.get('smoking'),
+            children: specificsForm.get('children'),
+            position: specificsForm.get('position'),
+            religion: specificsForm.get('religion'),
+            gender: specificsForm.get('gender'),
+            nationality: specificsForm.get('nationality')
+            
+        };
+        console.log('formObj: ', formObj);
         console.log('specificsForm: ', specificsForm); // Output the FormData for debugging
     };
 
     const populateFormData = () => {
-        const specificsForm = new FormData();
-    
-        // Append all formData fields to FormData
+        const specificsForm = new FormData();    
         Object.entries(formData).forEach(([key, value]) => {
-          specificsForm.append(key, value);
+            specificsForm.append(key, value);
         });
-    
+
         return specificsForm;
-      };
+        };
     
 
     return (

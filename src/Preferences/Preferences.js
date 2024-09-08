@@ -6,6 +6,7 @@ import NextBtn from "../Assets/Components/NextButton";
 import arrow from "../Assets/Images/arrow.png"
 import arrow2 from "../Assets/Images/arrow2.png"
 import { useState } from "react";
+import LogoutButton from "../Assets/Components/LogoutButton";
 
 const MatchPreferences = ({prev}) => {
     const [open, setOpen] = useState(false);
@@ -75,7 +76,7 @@ const MatchPreferences = ({prev}) => {
                     </Link>
                 </Grid>
                 <Grid container size={12} justifyContent="center" >
-                    <Button sx={{width:"130px",backgroundColor:"#E4423F", borderRadius:"25px", height:"45px", color:"white", mb:"40px", textTransform:"none", fontFamily:"Segoe UI", fontSize:"18px", fontWeight:"regular"}}>Logout</Button>
+                    <LogoutButton></LogoutButton>
                 </Grid>
             </Container>
         </Grid>

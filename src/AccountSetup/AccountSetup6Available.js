@@ -59,16 +59,16 @@ const AccountSetup6Available = () => {
                     <br /><br />These slots will directly correspond to other users slots, and will allow you both to plan a date within time frames that you both are available for.
                     <br /><br />If you leave the below section blank, meet me up will assume you are always available.
                 </Typography>
-                <Grid container>
-                    <Grid size={4}>
+                    
+                <Grid container size={12} justifyContent="center" alignItems="center" >
+                    {/* <Grid size={4}>
                         <Typography sx={{fontSize:"18px"}}>Day</Typography>
                     </Grid>
                     <Grid size={8} container justifyContent="flex-start">
                         <Typography sx={{fontSize:"18px"}}>Times</Typography>
-                    </Grid>
-                </Grid>
-                <Grid container size={12} justifyContent="center" >
+                    </Grid> */}
                     <DateAdd></DateAdd>
+                    
                 </Grid>
                 <NextButton next={'/location'}/>
             </Container>

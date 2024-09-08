@@ -6,6 +6,7 @@ import notification from "../Assets/Images/notification.png";
 import password from "../Assets/Images/password.png";
 import arrow from "../Assets/Images/arrow.png";
 import './AccountDetails.css';  
+import LogoutButton from '../Assets/Components/LogoutButton';
 
 const Settings = () => {
   const [locationServices, setLocationServices] = useState(false);
@@ -242,28 +243,7 @@ help you coordinate and plan dates! It will
 also let you know when you have received a 
 message from a potential date!  </Typography>
 </Grid>
-          <Button
-            variant="contained"
-            color="error"
-            
-            onClick={handleLogout}
-            style={{ 
-              marginTop: '16px',
-              width: '130px',
-              height: '45px',
-              borderRadius: '30px',
-              marginLeft:'auto',
-              marginRight: 'auto',
-              fontFamily: 'Segoe UI', 
-              fontSize: '18px',
-              fontWeight: 'normal',
-              textTransform:'none',
-              color:'#FFFFFF',
-              backgroundColor: '#E4423F'
-            }}
-          >
-            Log Out
-          </Button>
+          <LogoutButton></LogoutButton>
         </Box>
       </Container>
     </Box>

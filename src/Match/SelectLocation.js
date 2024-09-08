@@ -1,7 +1,8 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import './SelectLocation.css';
-import GoogleMaps from './GoogleMaps';
+import { Autocomplete, GoogleMap, useJsApiLoader, MarkerF } from '@react-google-maps/api';
+import { useState } from 'react';
 
 export default function SelectLocation() {
 
@@ -9,6 +10,7 @@ export default function SelectLocation() {
     const { user, selectedDay, selectedTime, selectedDateIdea, AccountUser = [] } = location.state || {};
     //console.log("Select Location", user);
     //console.log("Selected Date Idea:", selectedDateIdea)
+    const [center, setCenter] = useState({lat: -32.015001263602, lng: 115.83650856893345});
 
     const activities = [{ name: 'Coffee' }, { name: 'Lunch' }, { name: 'Surprise me' }];
 
@@ -18,9 +20,36 @@ export default function SelectLocation() {
 
     }
 
+    const GOOGLE_API_KEY = process.env.REACT_APP_GOOGLE_API_KEY;
+    const placesLibrary = ['places'];
+
+    const mapContainerStyle = {
+        width: '80%',
+        height: '400px',
+        marginTop: '10px',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        // border: 'solid',
+        // borderWidth: '2px',
+        borderRadius: '10px',
+
+    };
+
+    const { isLoaded, loadError } = useJsApiLoader({
+        googleMapsApiKey: GOOGLE_API_KEY,
+        libraries: placesLibrary,
+    });
+
+    if (loadError) {
+        return <div>Error loading maps</div>;
+    }
+
+    if (!isLoaded) {
+        return <div>Loading maps</div>;
+    }
 
     return (
-        <div className="simulate-mobile">
+        <div>
             <div className='title' style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: '15px', marginTop: '10px' }}>
                 <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
                     <img
@@ -81,8 +110,16 @@ export default function SelectLocation() {
                 <p style={{ fontFamily: 'Lexend', fontSize: '11px' }}>Here's a map you can use to find out what might be convenient</p>
             </div>
             <div>
-                <div style={{ width: '20px' }}>
-                    <GoogleMaps />
+                <div>
+                    {/* <GoogleMaps /> */}
+                    <GoogleMap
+                        mapContainerStyle={mapContainerStyle}
+                        zoom={15}
+                        center={center}
+                        mapId='map_id'
+                    >
+                        <MarkerF position={center}/>
+                    </GoogleMap>
                 </div>
                 <button className='saveButton'
                     style={{
