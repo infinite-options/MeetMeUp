@@ -20,6 +20,7 @@ export default function MatchPopUp({ user, AccountUser }) {
     const handleContinue = (user) => {
         navigate('/grid');
     }
+    
 
     console.log("matchpopup:", user)
     return (

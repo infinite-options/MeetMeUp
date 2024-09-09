@@ -43,9 +43,11 @@ const MatchDetails = () => {
     };
     const handleSetLiked = () => {
         setLiked(prevState=>!prevState)
+
         // const newHeartState = !isRightHeartFilled;
         // setIsRightHeartFilled(newHeartState);
         if (isLeftHeartVisible && liked) {
+            console.log()
             setShowPopup(true);
         } else {
             setShowPopup(false); 
@@ -122,7 +124,7 @@ const MatchDetails = () => {
                 <LogoutButton></LogoutButton>
             </Grid>
         </Box>
-        <ViewProfile setIsFlipped={setIsFlipped} liked={liked} onClick={handleSetLiked} isLiked={isLeftHeartVisible}/>
+        <ViewProfile setIsFlipped={setIsFlipped} liked={liked} onClick={handleSetLiked} showPopup={showPopup} isLiked={isLeftHeartVisible} user={user} AccountUser={AccountUser} setShowPopup={setShowPopup} />
     </ReactCardFlip>
     );
 };
