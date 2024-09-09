@@ -14,10 +14,12 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import { Box, ListItemButton } from '@mui/material';
+import { Box, Button,  ListItemButton } from '@mui/material';
 import { IconButton } from '@mui/material';
 import List from '@mui/material/List';
 import BackArrowButton from '../Assets/Components/BackArrowButton';
+import Grid from "@mui/material/Grid2";
+import TopTitle from '../Assets/Components/TopTitle';
 
 const matchedResults = [
 
@@ -81,7 +83,7 @@ const SelectionResults = () => {
         </IconButton>
       </ListItemButton>
     </ListItem>
-    {/* <Divider component="li" variant="inset" sx={{width: '80%', marginLeft: '10%'}}/> */}
+    {/* <Divider component="li" variant="inset" sx={{width: '90%'}}/> */}
     </div>
 
   )
@@ -92,10 +94,10 @@ const SelectionResults = () => {
         {/* <button className="back-button" onClick={handleBackClick}>
         <img src={ArrowBackIcon}/>
           </button> */}
-
+        <TopTitle title={'Selection Results'}></TopTitle>
           {/* TODO: FIX BUTTON FORMATTING MAKE ON THE SAME LINE */}
-        <BackArrowButton />
-        <h2>Selection Results</h2>
+        {/* <BackArrowButton />
+        <h2>Selection Results</h2> */}
       <br></br>
       <h4 style={{ color: 'grey' }}>Matched Results</h4>
       <List>
@@ -118,9 +120,12 @@ const SelectionResults = () => {
       </List>
 
     </div>
-    <div>
+    {/* <div>
       <button className='editButton' onClick={() => { handleEditPreferences() }}>Edit Preferences</button>
-    </div>
+    </div> */}
+    <Grid container size={12} justifyContent="center" >
+        <Button onClick={handleEditPreferences} sx={{width:"auto", minWidth: "130px", backgroundColor:"#E4423F", borderRadius:"25px", height:"45px", color:"white", mb:"5px", textTransform:"none", fontFamily:"Segoe UI", fontSize:"18px", fontWeight:"regular"}}>Edit Preferences</Button>
+    </Grid>
   </div>
   );
 }

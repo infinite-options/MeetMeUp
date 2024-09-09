@@ -61,12 +61,12 @@ function DateAdd() {
         flexDirection: 'column',
         alignItems: 'center', 
     }}>
-      <Grid size={4}>
+      {/* <Grid size={4}>
           <Typography sx={{fontSize:"18px"}}>Day</Typography>
       </Grid>
       <Grid size={8} container justifyContent="flex-start">
           <Typography sx={{fontSize:"18px"}}>Times</Typography>
-      </Grid>
+      </Grid> */}
       {times.map((time, index) => (
                     <DisplayTime
                         index={index}
@@ -76,8 +76,6 @@ function DateAdd() {
                         onClick={handleRemoveTimes}
                     />
                     ))}
-        {/* // NOTE: whoever works on this make into listitem 
-        // with list icons from MUI so it formats nicer */}
         <Grid container size={12} justifyContent="center" gap={.5} sx={{marginTop:"40px"}}>
           <Grid size={4}> 
               <FormControl fullWidth>

@@ -1,7 +1,7 @@
 import { Button, Stack } from '@mui/material';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import Grid from "@mui/material/Grid2";
 
 
 
@@ -54,8 +54,16 @@ export default function MatchPopUp({ user, AccountUser }) {
             <h3 className='matchText' style={{ color: '#E4423F' }}>It's A Match!</h3>
             <p>Let's start by creating a date with <br />{user.name} and you </p>
             <Stack>
-
-                <button className='beginButton' onClick={() => handleBegin(user)}
+                <Grid container size={12} justifyContent="center" >
+                    <Button onClick={() => handleBegin(user)}
+                    sx={{width:"130px",backgroundColor:"#E4423F", borderRadius:"25px", height:"45px", color:"white", mb:"20px", textTransform:"none", fontFamily:"Segoe UI", fontSize:"18px", fontWeight:"regular"}}>Begin!</Button>
+                </Grid>
+                <Grid container size={12} justifyContent="center" >
+                    <Button style={{ textTransform: 'capitalize', color: '#E4423F' }}
+                        onClick={handleContinue}
+                    >Keep matching</Button>
+                </Grid>
+                {/* <Button onClick={() => handleBegin(user)}
                     style={{
                         color: 'white',
                         backgroundColor: '#E4423F',
@@ -65,11 +73,9 @@ export default function MatchPopUp({ user, AccountUser }) {
                         width: '100px',
                         fontSize: '15px',
                         cursor: 'pointer'
-                    }}>Begin!</button>
+                    }}>Begin!</Button> */}
                     {/* TODO: FIX FORMATTING */}
-                <Button style={{ textTransform: 'capitalize', color: '#E4423F' }}
-                    onClick={handleContinue}
-                >Keep matching</Button>
+                
             </Stack>
 
         </div>

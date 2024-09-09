@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@mui/material';
 import DrawerContext from '../Assets/Components/DrawerContext';
+import AccountContext from './AccountContext';
 import React from 'react';
 import DrawerOptions from '../Assets/Components/DrawerOptions';
 import Progress from '../Assets/Components/Progress';
@@ -13,6 +14,8 @@ import NextButton from '../Assets/Components/NextButton';
 export default function AccountSetup4Create() {
     const [option, setOption] = React.useState('');
     // const 
+    const {details, setDetails} = React.useContext(AccountContext);
+
     const [formData, setFormData] = useState({
         interestsEatingOut: false,
         interestsBikeRides: false,
@@ -36,6 +39,8 @@ export default function AccountSetup4Create() {
         gender: '',
         nationality: '',
     });
+
+    
 
     // based on option set specific to passData
     const [specifics, setSpecifics] = useState({
@@ -99,10 +104,9 @@ export default function AccountSetup4Create() {
             religion: specificsForm.get('religion'),
             gender: specificsForm.get('gender'),
             nationality: specificsForm.get('nationality')
-            
         };
+        setDetails(formObj);
         console.log('formObj: ', formObj);
-        console.log('specificsForm: ', specificsForm); // Output the FormData for debugging
     };
 
     const populateFormData = () => {

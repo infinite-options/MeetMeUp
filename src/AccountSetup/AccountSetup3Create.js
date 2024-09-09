@@ -161,6 +161,12 @@ export default function AccountSetup3Create() {
                         Your location helps us pin point where you are to provide better matches to you.
                     </div>
                     <Autocomplete onPlaceChanged={onPlaceChanged} onLoad={onLoad}>
+                        {/* <TextField onChange={handleChange}
+                            sx={{'& .MuiOutlinedInput-root': {'&.Mui-focused fieldset': {borderColor: '#E4423F'}}}}
+                            InputLabelProps={{style: { color: "#E4423F" }}}
+                            name='profileBio' label='Profile Bio' type='text' variant='outlined' multiline rows={4}
+                        /> */}
+                        {/* NOTE: why is this input and not textField? does this affect the googlemap? */}
                         <input
                             className='autocomplete-text'
                             type='text'

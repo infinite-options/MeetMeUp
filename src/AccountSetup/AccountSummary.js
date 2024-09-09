@@ -29,15 +29,42 @@ import flagImg from "../Assets/Images/flag.png";
 import diamond from "../Assets/Images/diamond.png";
 import time from "../Assets/Images/time.png";
 import { useNavigate } from "react-router-dom";
+import AccountContext from "./AccountContext";
+import React from "react";
+import { useContext } from "react";
 // victors code
-// TODO: add props to pass as an object for the specifics
+// TODO: add context to pass as an object for the specifics
 // specific object
 const Profile = () => {
     const navigate = useNavigate();
     const handleSettings = () => {
         navigate(`/settings`);
     };
+    const {details} = React.useContext(AccountContext);
 
+    const separateInterests = (obj) => {
+        const interests = {};
+        const specifics = {};
+        
+        for (const key in obj) {
+          if (key.startsWith('interests') && obj[key] === "true") {
+            interests[key] = obj[key];
+          } else {
+            specifics[key] = obj[key];
+          }
+        }
+        
+        return { interests, specifics };
+      };
+      const { interests, specifics } = separateInterests(details);
+      
+      console.log('Interests:', interests);
+      console.log('Specifics:', specifics);
+    const interestArray = Object.keys(interests).map(key => ({
+        key: key.replace('interests', '')
+    }));
+    console.log('interestArray: ', interestArray);
+    console.log('passedDetails: ', details);
     const handleUpdate = () => {
         navigate(`/accountSetup4Create`);
     };
@@ -50,20 +77,36 @@ const Profile = () => {
         navigate(`/selectionResults`);
     };
 
-    const name = "Lachlan Collis";
-    const age = "21";
-    const gender = "Male";
-    const where = "Brisbane";
-    const height = "170cm Tall";
-    const religion = "Atheist";
-    const sign = "Cancer";
-    const status = "None Currently";
-    const education = "Associates Degree in UI & UX design";
-    const heart = "Plus Size";
-    const job = "UI + UX Designer";
-    const drink = "Socially";
-    const smoke = "I Dont Smoke";
-    const flag = "Australian";
+    // const name = "Lachlan Collis";
+    // const age = "21";
+    // const gender = "Male";
+    // const where = "Brisbane";
+    // const height = "170cm Tall";
+    // const religion = "Atheist";
+    // const sign = "Cancer";
+    // const status = "None Currently";
+    // const education = "Associates Degree in UI & UX design";
+    // const heart = "Plus Size";
+    // const job = "UI + UX Designer";
+    // const drink = "Socially";
+    // const smoke = "I Dont Smoke";
+    // const flag = "Australian";
+    // default values
+    const name = specifics.name;
+    const age = specifics.age;
+    const gender = specifics.gender;
+    const where = specifics.where;
+    const height = specifics.height;
+    const religion = specifics.religion;
+    const sign = specifics.star;
+    const status = specifics.status;
+    const education = specifics.education;
+    const heart = specifics.body;
+    const job = specifics.job;
+    const drink = specifics.drinking;
+    const smoke = specifics.smoking;
+    const flag = specifics.nationality;
+    
 
     return (
         <Grid container sx={{margin: "0 auto" }}>
@@ -129,18 +172,11 @@ const Profile = () => {
                     <Typography sx={{ fontSize: '18px' }}>Interests</Typography>
                 </Grid>
                 <Grid container size={12}>
-                    <Grid size={4}>
-                        <Type type="Cooking" />
+                {interestArray.map((interest, index) => (
+                    <Grid item xs={4} key={index}>
+                        <Type type={interest.key} />
                     </Grid>
-                    <Grid size={4}>
-                        <Type type="Eating Out" />
-                    </Grid>
-                    <Grid size={4}>
-                        <Type type="Bike Rides" />
-                    </Grid>
-                    <Grid size={4}>
-                        <Type type="Travelling" />
-                    </Grid>
+                ))}
                 </Grid>
                 <Grid size={12}>
                     <Typography sx={{ fontSize: "18px" }}>A Little About Me ...</Typography>

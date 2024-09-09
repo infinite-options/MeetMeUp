@@ -86,53 +86,6 @@ const MatchDetails = () => {
     }, [showPopup]);
 
     return (
-        // <div className='simulate-mobile'>
-        //     {isLeftHeartVisible && isRightHeartFilled && showPopup && (
-        //         <div className='popup'>
-        //             <div className='popup-content' ref={popupRef}>
-        //                 <MatchPopUp user={user} AccountUser={AccountUser}/>
-        //             </div>
-        //         </div>
-        //     )}
-
-        //     <div className='userDetails'>
-        //         <div className='userImg'>
-        //             {isLeftHeartVisible && (
-        //                 <div
-        //                     className='heartIcon left-heart'
-        //                     style={{ cursor: 'default', fontSize: '24px', position: 'absolute', left: '10px', top: '10px' }}
-        //                 >
-        //                     <FontAwesomeIcon icon={solidHeart} color='#E4423F' />
-        //                 </div>
-        //             )}
-
-        //             <div
-        //                 className='heartIcon right-heart'
-        //                 onClick={handleRightHeartClick}
-        //                 style={{ cursor: 'pointer', fontSize: '24px', position: 'absolute', left: '335px', top: '10px' }}
-        //             >
-        //                 <FontAwesomeIcon
-        //                     icon={isRightHeartFilled ? solidHeart : regularHeart}
-        //                     color={isRightHeartFilled ? '#E4423F' : '#E4423F'}
-        //                 />
-        //             </div>
-
-        //             <img src={user.src} alt='img' height={440} />
-        //             <div className='detailsOnImg'>
-        //                 <p style={{ justifyContent: 'center' }}>{user.name}</p>
-        //                 <p style={{ marginTop: '-10px', display: 'flex', justifyContent: 'center' }}>{user.age}-{user.gender}</p>
-        //             </div>
-        //         </div>
-
-        //         <h4 className='tap'>Tap to see profile</h4>
-        //     </div>
-        //     <div className='userButtons'>
-        //         <button className='backButton' onClick={handleBackClick}>Back</button>
-        //         <button className='preferenceButton' onClick={() => { handleEditPreferences()}}>Preferences</button>
-        //         <LogoutButton></LogoutButton>
-        //     </div>
-        // </div>
-
         <ReactCardFlip isFlipped={isFlipped} flipDirection="horizontal">
             <Box>
             {isLeftHeartVisible && isRightHeartFilled && showPopup && (

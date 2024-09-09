@@ -16,18 +16,19 @@ const BackArrowButton = ({onClick}) => {
     return (
         <Grid container size={12} justifyContent="center" >
             <IconButton 
-            sx={{
-                backgroundColor: "#EDEDED", color: "#333333", borderRadius: "25px", border: 'solid', borderWidth: '1px', borderColor: '#CECECE',
-                // '&:hover': {
-                // backgroundColor: "#D3D3D3", 
-                // },
-                '&:active': {
-                backgroundColor: "#BEBEBE", 
-                }
-            }} 
-            onClick={() => {
-                handleNavigate();
-                }}>
+                sx={{
+                    backgroundColor: "#EDEDED", color: "#333333", borderRadius: "25px", border: 'solid', borderWidth: '1px', borderColor: '#CECECE',
+                    marginRight: '16px',
+                    // '&:hover': {
+                    // backgroundColor: "#D3D3D3", 
+                    // },
+                    '&:active': {
+                    backgroundColor: "#BEBEBE", 
+                    }
+                }} 
+                onClick={() => {
+                    handleNavigate();
+            }}>
                 <ArrowBackIcon/>
             </IconButton>
         </Grid>

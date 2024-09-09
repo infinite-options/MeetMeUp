@@ -3,12 +3,17 @@ import backgroundImage from '../Assets/Images/accountSetup1Login.jpg'
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Box, Button, Checkbox, FormGroup, FormControlLabel, TextField } from '@mui/material';
+import { useNavigate } from 'react-router-dom'; 
 
 export default function AccountSetup1Login() {
     const [formDataLogin, setFormDataLogin] = useState({
         email: '',
         password: '',
     });
+    const navigate = useNavigate();
+    const handleLogin= () => {
+        navigate(`/accountSetup7Summary`);
+    };
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormDataLogin({
@@ -19,6 +24,7 @@ export default function AccountSetup1Login() {
     const handleSubmitLogin = (e) => {
         console.log(e)
         console.log(formDataLogin);
+        handleLogin();
     };
     const handleSubmitCreate = (e) => {
         console.log(e)

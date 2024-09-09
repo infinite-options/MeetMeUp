@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import { Typography, Box } from "@mui/material";
 import Grid from '@mui/material/Grid2';
 import { Link } from "react-router-dom";
 // import BackButton from '../Images/BackButton.png'
@@ -18,16 +18,26 @@ const Progress = ({percent, prev}) => {
     calcProgress();
 
     return (
-        <Grid container sx={{margin: 1}}>
-            <Grid container alignItems="center" size={12}>
-                <Grid size={3}>
-                    <BackArrowButton></BackArrowButton>
-                </Grid>
-                <Grid size={9}>
-                    <Typography sx={{fontSize:'22px', marginLeft: 3}}>Profile Creation</Typography>
-                </Grid>
+        <Grid container>
+            <Box sx={{ position: 'relative', width: '100%' }}>
+            <Grid container alignItems="center">
+            <Grid item xs={3} container alignItems="center" justifyContent="flex-start">
+                <BackArrowButton />
             </Grid>
-            <Grid container size={12} alignItems="center" spacing={1}>
+            </Grid>
+            <Box sx={{
+            position: 'absolute',
+            width: '100%',
+            display: 'flex',
+            top: '10px',
+            justifyContent: 'center'
+            }}>
+            <Typography sx={{ fontSize: '22px' }}>
+                Profile Creation
+            </Typography>
+            </Box>
+            </Box>
+            <Grid container size={12} alignItems="center" spacing={1} >
                 <Grid size={finished} >
                     <hr style={{border: '2px solid #E4423F', borderRadius:"2px"}} />
                 </Grid>

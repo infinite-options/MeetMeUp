@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import './Begin.css';
+import { Container } from '@mui/material';
 
 export default function Begin() {
     const location = useLocation();
@@ -70,6 +71,8 @@ export default function Begin() {
                 <p className='paraText' style={{ textAlign: 'center', marginTop: '30px', fontSize: '13px', fontFamily: 'Lexend' }}><span style={{ fontWeight: 'bold' }}>Pick your dates</span> and see which ones align with your match. <span style={{ fontWeight: 'bold' }}>Show </span> your <span style={{ fontWeight: 'bold' }}>match </span> all your <span style={{ fontWeight: 'bold' }}>date availability</span> by selecting <span style={{ fontWeight: 'bold' }}>multiple date</span> and <span style={{ fontWeight: 'bold' }}>times</span> and <span style={{ fontWeight: 'bold' }}>fast track</span> the scheduling for your <span style={{ fontWeight: 'bold' }}>match</span> and your <span style={{ fontWeight: 'bold' }}>date.</span></p>
             </div>
             <div style={{ marginTop: '40px', display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                <Container>
+
                 <div >
                     <p style={{ marginLeft: '30px' }}>Date day</p>
                     <select value={selectedDay} onChange={handleDayChange} style={{ width: '320px', padding: '10px', borderRadius: '5px', marginLeft: '30px', marginRight: '30px', fontFamily: 'Lexend' }}>
@@ -97,6 +100,8 @@ export default function Begin() {
                         <option value="9:00 PM">9:00 PM</option>
                     </select>
                 </div>
+                </Container>
+
             </div>
             <div>
                 <button

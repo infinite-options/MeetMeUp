@@ -14,7 +14,7 @@ import BodyScroll from './BodyScroll';
 import { TextField } from '@mui/material';
 import DrawerContext from './DrawerContext';
 import { useState, useEffect } from 'react';
-
+import AccountContext from '../../AccountSetup/AccountContext';
 const drawerBleeding = 56;
 const CustomRedButton = styled(Button)({
     backgroundColor: 'rgba(228, 66, 63, 1)',
@@ -64,6 +64,7 @@ function DrawerOptions() {
   const [open, setOpen] = React.useState(false);
   const {option, setOption} = React.useContext(DrawerContext);
   const {specifics, handleSetSpecifics} = React.useContext(DrawerContext);
+  const {details, setDetails} = React.useContext(AccountContext);
   const {passData, complete, setComplete, setPassData} = React.useContext(DrawerContext);
   const TitleBox = ({title, subtitle}) => (
     <div>
@@ -103,7 +104,7 @@ function DrawerOptions() {
             console.log('passData: ', passData);
             
             // handleSetSpecifics(option, passData);
-            setOption('');
+            // setOption('');
             // when complete is selected set specifics
         }}>Complete</CustomRedButton>
     </Box>

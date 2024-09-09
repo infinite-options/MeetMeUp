@@ -9,6 +9,7 @@ function BodyScroll({ options }) {
   })
   // due to a rerender
   const {setPassData, setComplete, passData, complete, setOption, option, handleSetSpecifics} = useContext(DrawerContext);
+  // NOTE: no need for another useEffect possibly
   useEffect(() => {
     console.log('useEffect pickerValue: ', pickerValue);
     setPickerValue(pickerValue);
@@ -27,7 +28,9 @@ function BodyScroll({ options }) {
       // setOption(''); // CHECKING REPUT
     }
     
-  }, [complete, pickerValue, setPassData, setComplete, passData]);
+  // }, [complete, pickerValue, setPassData, setComplete, passData]);
+}, []);
+
   console.log('pickerValue: ', pickerValue);
 
 

@@ -31,18 +31,21 @@ import MatchBegin from './Match/MatchBegin';
 import SelectPlace from './Match/SelectPlace';
 import SelectLocation from './Match/SelectLocation';
 import DateSummary from './Match/DateSummary';
-
+import { useState } from 'react';
 
 import ShowTermsAndConditions from './Policies/showTermsAndConditions';
 import ShowPrivacyPolicy from './Policies/showPrivacyPolicy';
+import AccountContext from './AccountSetup/AccountContext';
 function Main() {
   const theme = createTheme({
     typography: {
       fontFamily: 'Segoe UI',
     }
   });
+  const [details, setDetails] = useState('');
   return (
     <ThemeProvider theme={theme}>
+    <AccountContext.Provider value={{details, setDetails}}>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Start></Start>} />
@@ -83,6 +86,8 @@ function Main() {
         <Route path="/privacypolicy" element={<ShowPrivacyPolicy/>}/>
       </Routes>
     </BrowserRouter>
+    </AccountContext.Provider>
+
     </ThemeProvider>
   );
 }

@@ -4,7 +4,7 @@ import backButton from '../Assets/Images/BackButton.png';
 import progressBar from '../Assets/Images/progressBar20.png';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Box, Button, TextField } from '@mui/material';
+import { Box, Grid2, Button, TextField } from '@mui/material';
 import { useNavigate } from 'react-router-dom'; 
 import Progress from '../Assets/Components/Progress';
 import NextButton from '../Assets/Components/NextButton';
@@ -49,13 +49,20 @@ export default function AccountSetup2Create() {
                     <div className='pc-sub-header-text'>
                         We need some basic details to help verify your identity and account.
                     </div>
-                    <Box
+                    {/* <Box
                         sx={{ '& > :not(style)': { marginTop: 1.5, marginLeft: 3, marginRight: 3, width: 0.88 } }}
                         autoComplete='off'
                     >
                         <TextField onChange={handleChange} name='email' label='Email' type='email' variant='outlined'/>
                         <TextField onChange={handleChange} name='phoneNumber' label='Phone Number' type='tel' variant='outlined'/>
-                    </Box>
+                    </Box> */}
+                    <Grid2 container
+                        sx={{ '& > :not(style)': { marginTop: 1.5, marginLeft: 3, marginRight: 3, width: 1 } }}
+                        autoComplete='off'
+                    >
+                        <TextField onChange={handleChange} name='email' label='Email' type='email' variant='outlined'/>
+                        <TextField onChange={handleChange} name='phoneNumber' label='Phone Number' type='tel' variant='outlined'/>
+                    </Grid2>
                     <div className='pc-sub-header-text'>
                         Already have an account? <span onClick={() => {
                             navigate('/accountSetup1Login');
@@ -67,13 +74,13 @@ export default function AccountSetup2Create() {
                     <div className='pc-sub-header-text'>
                         Make a strong passcode that will be very hard to guess. View our security guidelines here.
                     </div>
-                    <Box
-                        sx={{ '& > :not(style)': { marginTop: 1.5, marginLeft: 3, marginRight: 3, width: 0.88 } }}
+                    <Grid2 container
+                        sx={{ '& > :not(style)': { marginTop: 1.5, marginLeft: 3, marginRight: 3, width: 1 } }}
                         autoComplete='off'
                     >
                         <TextField onChange={handleChange} name='password' label='Create Password' type='password' variant='outlined'/>
                         <TextField onChange={handleChange} name='passwordConfirm' label='Confirm Password' type='password' variant='outlined'/>
-                    </Box>
+                    </Grid2>
                     <HelperTextBox text='How do you need to make a secure password?'/>
                     <div className='form-button-container'>
                         {/* <Button

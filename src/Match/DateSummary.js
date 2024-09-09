@@ -59,7 +59,7 @@ export default function DateSummary() {
 
 
     return (
-        <div className="simulate-mobile">
+        <div>
             <div>
                 <h3 style={{ fontWeight: "lighter", fontFamily: 'Lexend', textAlign: 'center' }}>{user.name}</h3>
             </div>

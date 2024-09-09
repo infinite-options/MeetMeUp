@@ -61,12 +61,13 @@ const AccountSetup6Available = () => {
                 </Typography>
                     
                 <Grid container size={12} justifyContent="center" alignItems="center" >
-                    {/* <Grid size={4}>
+                    {/* TODO: fix formatting to be directly on top of the select day */}
+                    <Grid size={4}>
                         <Typography sx={{fontSize:"18px"}}>Day</Typography>
                     </Grid>
                     <Grid size={8} container justifyContent="flex-start">
                         <Typography sx={{fontSize:"18px"}}>Times</Typography>
-                    </Grid> */}
+                    </Grid>
                     <DateAdd></DateAdd>
                     
                 </Grid>
