@@ -25,5 +25,11 @@
     "web": {
       "favicon": "./assets/favicon.png"
     }
-  }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-font"
+    ]
 }
