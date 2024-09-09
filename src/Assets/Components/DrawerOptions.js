@@ -104,7 +104,7 @@ function DrawerOptions() {
             console.log('passData: ', passData);
             
             // handleSetSpecifics(option, passData);
-            // setOption('');
+            setOption('');
             // when complete is selected set specifics
         }}>Complete</CustomRedButton>
     </Box>

@@ -10,27 +10,50 @@ function BodyScroll({ options }) {
   // due to a rerender
   const {setPassData, setComplete, passData, complete, setOption, option, handleSetSpecifics} = useContext(DrawerContext);
   // NOTE: no need for another useEffect possibly
-  useEffect(() => {
-    console.log('useEffect pickerValue: ', pickerValue);
-    setPickerValue(pickerValue);
-    const temp = pickerValue.single;
-    console.log('temp outside: ', temp)
-    // console.log('complete: ', complete);
-    if (complete) {
-      console.log('temp: ', temp);
-      console.log('entering?', pickerValue.single);
+//   useEffect(() => {
+//     console.log('useEffect pickerValue: ', pickerValue);
+//     setPickerValue(pickerValue);
+//     const temp = pickerValue.single;
+//     console.log('temp outside: ', temp)
+//     // console.log('complete: ', complete);
+//     if (complete) {
+//       console.log('temp: ', temp);
+//       console.log('entering?', pickerValue.single);
       
-      // setPassData(pickerValue.single); // no need for passData
-      handleSetSpecifics(option, pickerValue.single);
+//       // setPassData(pickerValue.single); // no need for passData
+//       handleSetSpecifics(option, pickerValue.single);
 
-      setComplete(false)
-      // handleSetSpecifics(option, passData);
-      // setOption(''); // CHECKING REPUT
-    }
+//       setComplete(false)
+//       // handleSetSpecifics(option, passData);
+//       // setOption(''); // CHECKING REPUT
+//     }
     
-  // }, [complete, pickerValue, setPassData, setComplete, passData]);
-}, []);
+//   // }, [complete, pickerValue, setPassData, setComplete, passData]);
+// }, []);
 
+  // if (complete) {
+    //       console.log('temp: ', temp);
+    //       console.log('entering?', pickerValue.single);
+          
+    //       // setPassData(pickerValue.single); // no need for passData
+          // handleSetSpecifics(option, pickerValue.single);
+  //         setComplete(false)
+  // }
+
+  // its complete that causes the rerender
+  if (option) {
+    console.log(pickerValue.single)
+    // handleSetSpecifics(option, pickerValue.single)
+  }
+
+  const handlePickerChange = (value) => {
+    setPickerValue(value); 
+    handleSetSpecifics(option, value.single); 
+  };
+  // if (complete) {
+  //   handleSetSpecifics(option, pickerValue.single);
+  //   setComplete(false);
+  // }
   console.log('pickerValue: ', pickerValue);
 
 
@@ -43,11 +66,7 @@ function BodyScroll({ options }) {
   // // console.log('noUSEEFFECT');
   // // console.log('pickerValue: ', pickerValue);
   return (
-    <Picker value={pickerValue} onChange={(e)=> {
-      console.log('e: ', e)
-      setPickerValue(e)
-      // setPassData(e);
-      }}>
+    <Picker value={pickerValue} onChange={handlePickerChange}>
         <Picker.Column name='single'>
           {options.map(option => (
             <Picker.Item key={option} value={option}
