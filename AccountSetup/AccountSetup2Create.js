@@ -100,19 +100,23 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         padding: 20,
         backgroundColor: '#fff',
+        marginTop: 30,
+      //  fontFamily: 'sans-serif',
     },
     headerContainer: {
         marginVertical: 10,
     },
     headerText: {
-        fontSize: 24,
-        fontWeight: 'bold',
+        fontSize: 16,
         marginVertical: 10,
+        fontFamily: 'sans-serif',
+        
     },
     subHeaderText: {
-        fontSize: 16,
+        fontSize: 14,
         color: '#555',
         marginVertical: 5,
+        fontFamily: 'sans-serif',
     },
     formContainer: {
         marginVertical: 10,

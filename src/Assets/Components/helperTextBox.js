@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
-import questionMark from '../Images/questionMarkBox.png';// Make sure the image path is correct
+import questionMark from '../Images/questionMarkBox.png';
 
 export default function HelperTextBox({ text }) {
     return (
@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         padding: 10,
-        backgroundColor: '#f0f0f0', // Example background color
+        backgroundColor: '#f0f0f0', 
         borderRadius: 8,
         marginBottom: 10,
 
@@ -32,7 +32,8 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     text: {
-        fontSize: 16,
-        color: '#333', // Example text color
+        fontSize: 14,
+        color: '#333', 
+        fontFamily: 'sans-serif',
     },
 });

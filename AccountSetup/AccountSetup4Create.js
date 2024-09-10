@@ -3,8 +3,9 @@ import { View, Text, TouchableOpacity, Button, StyleSheet, Image, ScrollView } f
 import { useNavigation } from '@react-navigation/native';
 import NextButton from '../src/Assets/Components/NextButton';
 import HelperTextBox from '../src/Assets/Components/helperTextBox'; 
+import Progress from '../src/Assets/Components/Progress';
 
-// Assume that you have equivalent images and helper functions in your React Native project
+
 import backButton from '../src/Assets/Images/BackButton.png';
 import progressBar from '../src/Assets/Images/progressBar60.png';
 
@@ -74,7 +75,7 @@ export default function AccountSetup4Create() {
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
-            <Image source={progressBar} style={styles.progressBar} />
+            <Progress percent="60%" prev="AccountSetup3Create" />
             <Text style={styles.headerText}>Your General Interests</Text>
             <Text style={styles.subHeaderText}>
                 These interests help match you to better people on meet me up. Select or add as many interests as you want.
@@ -122,9 +123,10 @@ export default function AccountSetup4Create() {
 
 const styles = StyleSheet.create({
     container: {
-        flexGrow: 1, // Allows content to grow and enable scrolling
+        flexGrow: 1, 
         backgroundColor: '#ffffff',
         padding: 20,
+        marginTop: 30,
     },
     progressBar: {
         width: '100%',
@@ -133,13 +135,15 @@ const styles = StyleSheet.create({
     },
     headerText: {
         fontSize: 16,
-        fontWeight: 'bold',
+    //    fontWeight: 'bold',
         marginVertical: 10,
+        fontFamily: 'sans-serif',
     },
     subHeaderText: {
         fontSize: 16,
         color: '#888',
         marginBottom: 20,
+        fontFamily: 'sans-serif',
     },
     button: {
         padding: 15,
@@ -172,6 +176,7 @@ const styles = StyleSheet.create({
     nextButtonText: {
         color: '#ffffff',
         fontSize: 16,
+        fontFamily: 'sans-serif',
     },
 
     optionContainer: {
@@ -195,6 +200,7 @@ const styles = StyleSheet.create({
     optionText: {
         color: '#000000',
         fontSize: 12,
+        fontFamily: 'sans-serif',
     },
 
     specificContainer: {
@@ -235,6 +241,6 @@ const styles = StyleSheet.create({
         height: 60,
     },
     buttonContainer: {
-        marginTop: 20, // Ensure there is enough space above the button
+        marginTop: 20, 
     },
 });

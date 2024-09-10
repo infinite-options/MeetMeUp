@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Alert } from 'react-native';
-import MapView, { Marker } from 'react-native-maps'; // For Google Maps
+//import MapView, { Marker } from 'react-native-maps'; 
 import { useNavigation } from '@react-navigation/native';
 import Progress from '../src/Assets/Components/Progress';
 import NextButton from '../src/Assets/Components/NextButton';
@@ -15,7 +15,7 @@ const initialRegion = {
 };
 
 export default function AccountSetup3Create() {
-    const navigation = useNavigation(); // For navigation
+    const navigation = useNavigation(); 
 
     const genders = [
         { label: 'Male', value: 'Male' },
@@ -133,12 +133,15 @@ export default function AccountSetup3Create() {
                     value={formData.location}
                     onChangeText={(value) => handleChange('location', value)}
                 />
+{/*               
                 <MapView
                     style={styles.map}
                     initialRegion={initialRegion}
                 >
                     <Marker coordinate={initialRegion} />
-                </MapView>
+                </MapView> 
+
+ */} 
                 <HelperTextBox text='Why do we need your location?'/>
 
                 <View style={styles.optionContainer}>
@@ -196,18 +199,22 @@ const styles = StyleSheet.create({
     scrollContainer: {
         flexGrow: 1,
         backgroundColor: '#fff',
+        marginTop: 15,
     },
     container: {
         padding: 20,
+        marginTop: 20,
     },
     header: {
-        fontSize: 18,
-        fontWeight: 'bold',
+        fontSize: 16,
+    //    fontWeight: 'bold',
         marginBottom: 10,
+        fontFamily: 'sans-serif',
     },
     subHeader: {
-        fontSize: 16,
+        fontSize: 14,
         marginBottom: 20,
+        fontFamily: 'sans-serif',
     },
     input: {
         borderWidth: 1,
@@ -244,6 +251,8 @@ const styles = StyleSheet.create({
         borderWidth: 0.5,
         borderRadius: 8,
         paddingHorizontal: 8,
+        fontSize: 12,
+        fontFamily: 'sans-serif',
     },
     optionContainer: {
         flexDirection: 'row',
@@ -266,6 +275,7 @@ const styles = StyleSheet.create({
     optionText: {
         color: '#000000',
         fontSize: 12,
+        fontFamily: 'sans-serif',
     },
     buttonContainer: {
         padding: 10,

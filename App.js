@@ -24,19 +24,23 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
+      {/*
       <Stack.Navigator initialRouteName='AccountSetup2Create'>
         <Stack.Screen name='AccountSetup2Create' component={AccountSetup2Create} />
         <Stack.Screen name='AccountSetup3Create' component={AccountSetup3Create} />
         <Stack.Screen name='AccountSetup4Create' component={AccountSetup4Create} />
-        {/* Add other screens here */}
       </Stack.Navigator>
-      <Stack.Navigator initialRouteName='LandingPage' screenOptions={{ headerShown: false }}>
+  */}
+      <Stack.Navigator initialRouteName='Start' screenOptions={{ headerShown: false }}>
         <Stack.Screen name='Start' component={Start} />
         <Stack.Screen name='LandingPage' component={LandingPage} />
         <Stack.Screen name='LandingPage2' component={LandingPage2} />
         <Stack.Screen name='LandingPage3' component={LandingPage3} />
         <Stack.Screen name='LandingPage4' component={LandingPage4} />
         <Stack.Screen name='TrialAccount' component={TrialAccount} />
+        <Stack.Screen name='AccountSetup2Create' component={AccountSetup2Create} />
+        <Stack.Screen name='AccountSetup3Create' component={AccountSetup3Create} />
+        <Stack.Screen name='AccountSetup4Create' component={AccountSetup4Create} />
         <Stack.Screen name='Location' component={Location} />
         <Stack.Screen name='Location2' component={Location2} />
         <Stack.Screen name='AccountDetails' component={AccountDetails} />

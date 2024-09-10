@@ -6,7 +6,8 @@ const LandingPage = () => {
   const navigation = useNavigation(); 
 
   const handleStartClick = () => {
-    navigation.navigate('LandingPage2'); 
+   // navigation.navigate('LandingPage2'); 
+   navigation.navigate('TrialAccount'); 
   };
 
   const handleSkipClick = () => {

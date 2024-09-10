@@ -48,8 +48,8 @@ const styles = StyleSheet.create({
         marginRight: 10,
     },
     title: {
-        fontSize: 22,
-        fontWeight: 'bold',
+        fontSize: 20,
+        fontFamily: 'sans-serif',
     },
     progressContainer: {
         flexDirection: 'row',
