@@ -25,11 +25,10 @@ const LocationPage = () => {
         <Text style={styles.headerText}>Profile Creation</Text>
       </View>
 
-      {/* Content */}
       <View style={styles.contentContainer}>
         <View style={styles.iconContainer}>
           <Image
-            source={require('../assets/icon.png')}
+            source={require('../assets/icon1.png')}
             style={styles.icon}
           />
         </View>
@@ -47,7 +46,6 @@ const LocationPage = () => {
         </View>
       </View>
 
-      {/* Buttons */}
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.yesButton} onPress={handleYesClick}>
           <Text style={styles.buttonText}>Yes</Text>
@@ -105,6 +103,10 @@ const styles = StyleSheet.create({
   textContainer: {
     width: '100%',
     marginBottom: 16,
+    color: '#FFFFFF',
+    fontFamily: 'Segoe UI',
+    fontSize: 30,
+    fontWeight: 'normal',
   },
   mainTitle: {
     fontFamily: 'Segoe UI',
@@ -114,14 +116,15 @@ const styles = StyleSheet.create({
   },
   bodyText: {
     fontFamily: 'Segoe UI',
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: '200',
     color: '#FFFFFF',
   },
   buttonContainer: {
     width: '100%',
-    paddingHorizontal: 20,
-    paddingBottom: 20,
+    alignItems: 'left', 
+    marginBottom: 700,
+    marginLeft: 20
   },
   yesButton: {
     backgroundColor: '#FFFFFF',
@@ -130,12 +133,13 @@ const styles = StyleSheet.create({
     height: 45,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 16,
+    marginVertical: 0, 
   },
   laterButton: {
     justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 16,
+    alignItems: 'left',
+    marginTop: 10,
+    marginLeft: 20
   },
   buttonText: {
     fontFamily: 'Segoe UI',

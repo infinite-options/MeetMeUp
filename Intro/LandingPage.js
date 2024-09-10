@@ -55,23 +55,25 @@ const styles = StyleSheet.create({
   headerText: {
     fontFamily: 'Lexend-Regular',
     fontSize: 20,
-    fontWeight: '400',
     textAlign: 'center',
-    marginTop: 30,
+    color: '#1A1A1A',
+    
   },
   subHeaderText: {
     fontFamily: 'Lexend-Regular',
     fontSize: 22,
     fontWeight: 'normal',
     textAlign: 'center',
-    marginTop: 10,
+    color: '#1A1A1A',
+    marginBottom:10
   },
   descriptionText: {
     fontFamily: 'Lexend-Regular',
     fontSize: 14,
     fontWeight: 'normal',
     textAlign: 'center',
-    marginBottom: 40,
+    color:'#000000',
+    marginBottom: 30
   },
   bold: {
     fontWeight: '700',
@@ -102,7 +104,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   skipButtonText: {
-    fontFamily: 'Lexend-Bold',
+    fontFamily: 'Lexend-Regular',
     fontSize: 12,
     color: '#000000',
     textTransform: 'none',

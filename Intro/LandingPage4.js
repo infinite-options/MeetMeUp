@@ -6,8 +6,7 @@ const LandingPage = () => {
   const navigation = useNavigation(); 
 
   const handleStartClick = () => {
-   // navigation.navigate('LandingPage2'); 
-   navigation.navigate('TrialAccount'); 
+    navigation.navigate('Location'); 
   };
 
   const handleSkipClick = () => {
@@ -63,14 +62,14 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: 'normal',
     textAlign: 'center',
-    marginTop: 10,
+    marginBottom: 10,
   },
   descriptionText: {
     fontFamily: 'Lexend-Regular',
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: 'normal',
     textAlign: 'center',
-    marginBottom: 40,
+    marginBottom: 25,
   },
   bold: {
     fontWeight: '700',

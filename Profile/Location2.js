@@ -1,21 +1,20 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { useNavigation } from '@react-navigation/native'; // React Navigation for navigation
+import { useNavigation } from '@react-navigation/native'; 
 
 const LocationPage2 = () => {
   const navigation = useNavigation();
 
   const handleYesClick = () => {
-    navigation.navigate('AccountSetup7Summary'); // Replace with your target screen name
+    navigation.navigate('AccountDetails'); 
   };
 
   const handleLaterClick = () => {
-    navigation.navigate('AccountSetup7Summary'); // Replace with your target screen name
+    navigation.navigate('AccountDetails'); 
   };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {/* Top Bar */}
       <View style={styles.topBar}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image
@@ -26,7 +25,6 @@ const LocationPage2 = () => {
         <Text style={styles.headerText}>Profile Creation</Text>
       </View>
 
-      {/* Content */}
       <View style={styles.contentContainer}>
         <Image
           source={require('../assets/icon2.png')}
@@ -43,7 +41,6 @@ const LocationPage2 = () => {
         </Text>
       </View>
 
-      {/* Buttons */}
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.yesButton} onPress={handleYesClick}>
           <Text style={styles.buttonText}>Yes</Text>
@@ -109,8 +106,9 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     width: '100%',
-    paddingHorizontal: 20,
-    paddingBottom: 20,
+    alignItems: 'left', 
+    marginBottom: 700,
+    marginLeft: 20
   },
   yesButton: {
     backgroundColor: '#FFFFFF',
@@ -123,8 +121,9 @@ const styles = StyleSheet.create({
   },
   laterButton: {
     justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 16,
+    alignItems: 'left',
+    marginTop: 10,
+    marginLeft: 20
   },
   buttonText: {
     fontFamily: 'Segoe UI',

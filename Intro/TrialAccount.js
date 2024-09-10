@@ -1,27 +1,26 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native'; // React Native equivalent of useNavigate
+import { useNavigation } from '@react-navigation/native';
 
 const TrialAccount = () => {
   const navigation = useNavigation();
 
   const handleBackClick = () => {
-    navigation.goBack(); // React Native's goBack instead of window.history.back()
+    navigation.goBack(); 
   };
 
   const handleCreateProfile = () => {
-    navigation.navigate('AccountSetup2Create'); // Navigate to the next screen
+    navigation.navigate('AccountSetup2Create'); 
   };
 
   return (
     <View style={styles.container}>
-      {/* Background Image */}
+
       <Image
         source={require('../assets/background.png')}
         style={styles.backgroundImage}
       />
 
-      {/* Top Bar */}
       <View style={styles.topBar}>
         <TouchableOpacity onPress={handleBackClick}>
           <Image
@@ -107,7 +106,8 @@ const styles = StyleSheet.create({
   },
   bodyText: {
     fontFamily: 'Lexend',
-    fontSize: 14,
+    fontSize: 16,
+    fontWeight: 500,
     marginTop: 10,
     color: '#282828',
   },

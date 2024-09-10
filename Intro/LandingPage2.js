@@ -23,7 +23,7 @@ const LandingPage = () => {
       <Image source={require('../assets/image2.png')} style={styles.customImage} />
 
       <Text style={styles.descriptionText}>
-        <Text style={styles.bold}>Remove</Text> that <Text style={styles.bold}>awkwardness</Text> asking for <Text style={styles.bold}>the first date</Text>.
+        <Text style={styles.bold}>Remove</Text> that <Text style={styles.bold}>awkwardness{'\n'}</Text> asking for <Text style={styles.bold}>the first date</Text>.
       </Text>
 
       <TouchableOpacity style={styles.startButton} onPress={handleStartClick}>
@@ -51,21 +51,23 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '400',
     textAlign: 'center',
-    marginTop: '30px'
+    color: '#1A1A1A',
   },
   subHeaderText: {
     fontFamily: 'Lexend-Regular',
     fontSize: 22,
     fontWeight: 'normal',
     textAlign: 'center',
-    marginTop: 10,
+    color: '#1A1A1A',
+
   },
   descriptionText: {
     fontFamily: 'Lexend-Regular',
-    fontSize: 14,
+    fontSize: 18,
     fontWeight: 'normal',
     textAlign: 'center',
-    marginBottom: 40,
+    color:'#000000',
+    marginBottom: 40
   },
   bold: {
     fontWeight: '700',
@@ -76,6 +78,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     resizeMode: 'cover',
     marginVertical: 15,
+
   },
   startButton: {
     backgroundColor: '#E4423F',

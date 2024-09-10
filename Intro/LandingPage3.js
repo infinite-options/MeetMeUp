@@ -51,20 +51,22 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '400',
     textAlign: 'center',
-    marginTop: '30px'
+    color: '#1A1A1A',
   },
   subHeaderText: {
     fontFamily: 'Lexend-Regular',
     fontSize: 22,
     fontWeight: 'normal',
     textAlign: 'center',
-    marginTop: 10,
+    color: '#1A1A1A',
+
   },
   descriptionText: {
     fontFamily: 'Lexend-Regular',
-    fontSize: 14,
+    fontSize: 20,
     fontWeight: 'normal',
     textAlign: 'center',
+    color: '#1A1A1A',
     marginBottom: 40,
   },
   bold: {
