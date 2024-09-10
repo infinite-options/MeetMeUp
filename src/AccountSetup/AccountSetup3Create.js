@@ -4,7 +4,7 @@ import backButton from '../Assets/Images/BackButton.png';
 import progressBar from '../Assets/Images/progressBar40.png';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Grid2, MenuItem, TextField } from '@mui/material';
+import { Box, Button, Container, Grid2, MenuItem, TextField } from '@mui/material';
 import { Autocomplete, GoogleMap, useJsApiLoader, MarkerF } from '@react-google-maps/api';
 import Progress from '../Assets/Components/Progress';
 import NextButton from '../Assets/Components/NextButton';
@@ -104,9 +104,11 @@ export default function AccountSetup3Create() {
                     Profile Creation
                 </div>
                 <img src={progressBar} alt='progress bar'/> */}
+                
                 <Progress percent="40%" prev="/accountSetup2Create" />
                 
                 <form className='form-container' onSubmit={handleNext}>
+                <Box sx={{marginLeft:'10%', marginRight:'10%'}}>
                     <div className='pc-header-text'>
                         About You
                     </div>
@@ -122,15 +124,15 @@ export default function AccountSetup3Create() {
                             InputLabelProps={{style: { color: "#E4423F" }}}
                             name='name' label='Full Name' type='text' variant='outlined'
                         />
-                        <Grid2 container>
-                            <Grid2 size={5.5} sx={{marginRight: 1.9}}>
+                        <Grid2 container >
+                            <Grid2 size={6}>
                                 <TextField onChange={handleChange}
-                                    sx={{'& .MuiOutlinedInput-root': {'&.Mui-focused fieldset': {borderColor: '#E4423F'}}}}
+                                    sx={{width:"98%",'& .MuiOutlinedInput-root': {'&.Mui-focused fieldset': {borderColor: '#E4423F'}}}}
                                     InputLabelProps={{style: { color: "#E4423F" }}}
                                     name='age' label='Age' type='number' variant='outlined'
                                 />
                             </Grid2>
-                            <Grid2 size={5.5} sx={{marginLeft: 1.9}}>
+                            <Grid2 size={6} >
                                 <TextField onChange={handleChange}
                                     sx={{'& .MuiOutlinedInput-root': {'&.Mui-focused fieldset': {borderColor: '#E4423F'}}, width: 1}}
                                     InputLabelProps={{style: { color: "#E4423F" }}}
@@ -186,14 +188,14 @@ export default function AccountSetup3Create() {
                             }}
                         />
                     </Autocomplete>
-                    <GoogleMap
-                        mapContainerStyle={mapContainerStyle}
-                        zoom={15}
-                        center={center}
-                        mapId='map_id'
-                    >
-                        <MarkerF position={center}/>
-                    </GoogleMap>
+                        <GoogleMap
+                            mapContainerStyle={mapContainerStyle}
+                            zoom={15}
+                            center={center}
+                            mapId='map_id'
+                        >
+                            <MarkerF position={center}/>
+                        </GoogleMap>
                     <HelperTextBox text='Why do we need your location?'/>
                     <div className='pc-header-text'>
                         Your Sexuality
@@ -284,9 +286,11 @@ export default function AccountSetup3Create() {
                         </Button> */}
                         
                         <NextButton onClick={handleNext} next={'/accountSetup4Create'}></NextButton>
-
+                    
                     </div>
+                    </Box>
                 </form>
+                
             </div>
         </div>
     )

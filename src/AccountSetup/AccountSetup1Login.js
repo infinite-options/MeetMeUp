@@ -2,7 +2,8 @@ import '../App.css';
 import backgroundImage from '../Assets/Images/accountSetup1Login.jpg'
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Box, Button, Checkbox, FormGroup, FormControlLabel, TextField } from '@mui/material';
+import { Box, Button, Checkbox, FormGroup, FormControlLabel, TextField, Container, Typography } from '@mui/material';
+import Grid from '@mui/material/Grid2'
 import { useNavigate } from 'react-router-dom'; 
 
 export default function AccountSetup1Login() {
@@ -30,16 +31,22 @@ export default function AccountSetup1Login() {
         console.log(e)
     };
     return (
+
         <div className='App'>
-            <div className='red-overlay'/>
-            <img src={backgroundImage} alt='accountSetup1Login'/>
+            <div className='red-overlay' />
+            <Grid container size={12} sx={{textAlign:"center"}}>
+                <Grid size={12} container justifyContent="center">
+                     <img src={backgroundImage}alt='accountSetup1Login'/>
+                </Grid>
             <div className='rounded-box'>
-                <div className='title-text'>
-                    meet me up
-                </div>
-                <div className='header-text'>
-                    Let’s get you out there
-                </div>
+                    <div className='title-text' style={{fontFamily:"Inria Sans"}}>
+                        meet me up
+                    </div>
+                    <div className='header-text' style={{fontFamily:"Lexend"}}>
+                        Let’s get you out there
+                    </div>
+ 
+
                 <Box
                     component='form'
                     onSubmit={handleSubmitLogin}
@@ -48,7 +55,6 @@ export default function AccountSetup1Login() {
                 >
                     <TextField required onChange={handleChange} name='email' label='Email' type='email' variant='outlined'/>
                     <TextField required onChange={handleChange} name='password' label='Password' type='password' autoComplete='current-password'/>
-                    <div className='sub-header-text'>Forgot password? <div className='red-text'>Retrieve here</div></div>
                     <Button
                         variant='contained'
                         type='submit'
@@ -57,16 +63,23 @@ export default function AccountSetup1Login() {
                             maxWidth: '131px',
                             borderRadius: '41px',
                             boxShadow: 'none',
+                            textTransform:"none",
+                            fontSize:"18px",
+                            fontFamily:"Lexend",
                         }}
                     >
                         Login
                     </Button>
+                    <div className='sub-header-text'>Forgot password? <div className='red-text'>Retrieve here</div></div>
+                    <Grid container justifyContent="center" size={12}>
+                        <hr style={{width:"90%", borderStyle:"solid", borderColor:"#CECECE"}} />
+                    </Grid>
                 </Box>
-                <div className='header-text'>
+                <div className='header-text' style={{fontFamily:"Lexend", fontWeight:"semibold"}}>
                     Not with us yet?
                 </div>
-                <div className='sub-header-text'>
-                    Create a free account to try out Meet Me Up
+                <div className='sub-header-text' style={{marginLeft:"5%", marginRight:"5%", fontFamily:"DM Sans", fontSize:"14px"}}>
+                    Diam pulvinar pharetra nulla dolor nullam. Neque aliquam est amet scelerisque. Massa aenean.
                 </div>
                 <Box
                     component='form'
@@ -84,32 +97,17 @@ export default function AccountSetup1Login() {
                         borderRadius: '41px',
                         marginTop: '20px',
                         boxShadow: 'none',
+                        textTransform:"none",
+                        fontSize:"18px",
+                        fontFamily:"Lexend"
                         }}
                     >
                         Create Account
                     </Button>
-                    <FormGroup>
-                        <FormControlLabel
-                            required
-                            control={<Checkbox/>}
-                            label={
-                                <Link to='/termsandconditions'>
-                                    I agree to the <div className='red-text'>Terms and Conditions</div>
-                                </Link>
-                            }
-                        />
-                        <FormControlLabel
-                            required
-                            control={<Checkbox/>}
-                            label={
-                                <Link to='/privacypolicy'>
-                                    I agree to the <div className='red-text'>Privacy Policy</div>
-                                </Link>
-                            }
-                        />
-                    </FormGroup>
                 </Box>
+                
             </div>
+            </Grid>
         </div>
     );
 }

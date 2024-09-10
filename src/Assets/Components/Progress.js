@@ -18,7 +18,7 @@ const Progress = ({percent, prev}) => {
     calcProgress();
 
     return (
-        <Grid container>
+        <Grid container sx={{marginLeft:"10%", marginRight:"10%"}}>
             <Box sx={{ position: 'relative', width: '100%' }}>
             <Grid container alignItems="center">
             <Grid item xs={3} container alignItems="center" justifyContent="flex-start">
@@ -37,11 +37,11 @@ const Progress = ({percent, prev}) => {
             </Typography>
             </Box>
             </Box>
-            <Grid container size={12} alignItems="center" spacing={1} >
+            <Grid container size={12} spacing={1} alignItems="center" justifyContent="center">
                 <Grid size={finished} >
                     <hr style={{border: '2px solid #E4423F', borderRadius:"2px"}} />
                 </Grid>
-                <Grid size={1}>
+                <Grid size={{xs:1, md:.5}} sx={{textAlign:"center"}}>
                     <Typography sx={{ color:"#E4423F", fontSize:'18px'}}>
                         {percent}
                     </Typography>

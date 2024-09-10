@@ -4,7 +4,7 @@ import backButton from '../Assets/Images/BackButton.png';
 import progressBar from '../Assets/Images/progressBar20.png';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Box, Grid2, Button, TextField } from '@mui/material';
+import { Box, Grid2, Button, TextField, FormGroup, FormControlLabel, Checkbox, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom'; 
 import Progress from '../Assets/Components/Progress';
 import NextButton from '../Assets/Components/NextButton';
@@ -99,6 +99,28 @@ export default function AccountSetup2Create() {
                         <NextButton onClick={handleNext} next={'/accountSetup3Create'}></NextButton>
                     </div>
                 </form>
+                <Grid2 container justifyContent="center">
+                <FormGroup>
+                        <FormControlLabel
+                            required
+                            control={<Checkbox/>}
+                            label={
+                                <span>
+                                   I agree to the <Link to='/termsandconditions'><div className='red-text'>Terms and Conditions</div></Link>
+                                   </span>
+                            }
+                        />
+                        <FormControlLabel
+                            required
+                            control={<Checkbox/>}
+                            label={
+                                <span>
+                                    I agree to the<Link to='/privacypolicy'> <div className='red-text'>Privacy Policy</div></Link>
+                                </span>
+                            }
+                        />
+                    </FormGroup>
+                    </Grid2>
             </div>
         </div>
     )
