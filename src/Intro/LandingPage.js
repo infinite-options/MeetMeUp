@@ -1,5 +1,7 @@
 import React from 'react';
 import { Box, Container, Typography, Button, Grid } from '@mui/material';
+// import Grid from '@mui/material/Grid2';
+
 import image1 from "../Assets/Images/image1.png";
 import { useNavigate } from 'react-router-dom'; 
 import './LandingPage.css';
@@ -77,8 +79,12 @@ const LandingPage = () => {
         through the <br></br>app with only
         <strong> automated prompting</strong>.
       </Typography>
-
-      <Grid container spacing={2} style={{ marginTop: 4 }}>
+      
+      <Container style={{position: 'absolute', top: '90%', 
+        left: '50%', 
+        transform: 'translate(-50%, -50%)', 
+        textAlign: 'center'}}>
+        <Grid container spacing={2} style={{ marginTop: 4 }}>
         <Grid item xs={12}>
           <Button
             variant="contained"
@@ -110,8 +116,7 @@ const LandingPage = () => {
               fontWeight: 'bold',
               borderRadius: '10px',
               padding: 1,
-              textTransform: 'none',
-              
+              textTransform:'none'
               
             }}
           >
@@ -119,6 +124,8 @@ const LandingPage = () => {
           </Button>
         </Grid>
       </Grid>
+      </Container>
+
     </Container>
   );
 };

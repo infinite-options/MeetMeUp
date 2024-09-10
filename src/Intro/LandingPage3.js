@@ -70,6 +70,10 @@ const LandingPage3 = () => {
         look <strong>nothing</strong> like their profile.
         
       </Typography>
+      <Container style={{position: 'absolute', top: '90%', 
+        left: '50%', 
+        transform: 'translate(-50%, -50%)', 
+        textAlign: 'center'}}>
 
       <Grid container spacing={2} style={{ marginTop: 4 }}>
         <Grid item xs={12}>
@@ -112,6 +116,8 @@ const LandingPage3 = () => {
           </Button>
         </Grid>
       </Grid>
+      </Container>
+
     </Container>
   );
 };

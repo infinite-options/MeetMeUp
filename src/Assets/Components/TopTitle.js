@@ -6,7 +6,7 @@ const TopTitle = ({title}) => {
     return (
         <Box sx={{ position: 'relative', width: '100%' }}>
             <Grid container alignItems="center">
-                <Grid item xs={3} container alignItems="center" justifyContent="flex-start">
+                <Grid item xs={3} container alignItems="center" zIndex='10' justifyContent="flex-start">
                     <BackArrowButton />
                 </Grid>
             </Grid>

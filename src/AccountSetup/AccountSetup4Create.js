@@ -4,7 +4,7 @@ import backButton from '../Assets/Images/BackButton.png';
 import progressBar from '../Assets/Images/progressBar60.png';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Button } from '@mui/material';
+import { Button, Container } from '@mui/material';
 import DrawerContext from '../Assets/Components/DrawerContext';
 import AccountContext from './AccountContext';
 import React from 'react';
@@ -15,7 +15,9 @@ export default function AccountSetup4Create() {
     const [option, setOption] = React.useState('');
     // const 
     const {details, setDetails} = React.useContext(AccountContext);
-
+    const [pickerValue, setPickerValue] = useState({
+        single: ''
+      })
     const [formData, setFormData] = useState({
         interestsEatingOut: false,
         interestsBikeRides: false,
@@ -121,15 +123,16 @@ export default function AccountSetup4Create() {
 
     return (
         <div className='App'>
-            <div className='white-background'>
+            <Container>
                 {/* <Link to='/accountSetup3Create'><img src={backButton} alt='back button' className='back-button'/></Link>
                 <div className='pc-title-back-button-text'>
                     Profile Creation
                 </div>
                 <img src={progressBar} alt='progress bar'/> */}
-                <Progress percent="60%" prev="/accountSetup3Create" />
                 {/* <Progress percent="60%" prev="/accountSetup3Create" /> */}
                 <form className='form-container' onSubmit={handleNext}>
+                    <Progress percent="60%" prev="/accountSetup3Create" />
+
                     <div className='pc-header-text'>
                         Your General Interests
                     </div>
@@ -323,10 +326,10 @@ export default function AccountSetup4Create() {
 
                     </div>
                 </form>
-                <DrawerContext.Provider value={{option, setOption, handleSetSpecifics, passData, setPassData, complete, setComplete}}>
+                <DrawerContext.Provider value={{option, setOption, handleSetSpecifics, passData, setPassData, complete, setComplete, pickerValue, setPickerValue}}>
                     <DrawerOptions></DrawerOptions>
                 </DrawerContext.Provider>
-            </div>
+            </Container>
         </div>
     )
 }

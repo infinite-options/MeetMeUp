@@ -78,7 +78,10 @@ const LandingPage4 = () => {
         Meet the missing piece that <br></br><strong>compliments</strong>  you.
         
       </Typography>
-
+      <Container style={{position: 'absolute', top: '90%', 
+        left: '50%', 
+        transform: 'translate(-50%, -50%)', 
+        textAlign: 'center'}}>
       <Grid container spacing={2} style={{ marginTop: 4 }}>
         <Grid item xs={12}>
           <Button
@@ -122,6 +125,7 @@ const LandingPage4 = () => {
           </Button>
         </Grid>
       </Grid>
+      </Container>
     </Container>
   );
 };

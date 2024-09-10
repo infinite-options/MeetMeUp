@@ -14,7 +14,20 @@ const TrialAccount = () => {
   const handleCreateProfile = () => {
     navigate('/accountSetup2Create'); 
   };
-
+  const backgroundStyle = {
+    backgroundImage: `url(${background})`,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100vw', 
+    height: '100vh', 
+    objectFit: 'cover',
+    zIndex: -1,
+    padding:'none',
+    margin:'none',
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
+  }
   return (
     <Container 
       style={{ 
@@ -24,11 +37,16 @@ const TrialAccount = () => {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        padding: '0px 20px'  
+        padding: '0px 20px',
+        backgroundImage: `url(${background})`,
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
       }}
     >
+      {/* <Container sx={backgroundStyle}> */}
 
-      <img
+
+      {/* <img
         src={background}
         alt="Background"
         style={{
@@ -42,7 +60,7 @@ const TrialAccount = () => {
           padding:'none',
           margin:'none'
         }}
-      />
+      /> */}
 
       <Box 
         style={{
@@ -151,6 +169,8 @@ const TrialAccount = () => {
       >
         Start
       </Button>
+      {/* </Container> */}
+
     </Container>
   );
 };

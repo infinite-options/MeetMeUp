@@ -21,7 +21,7 @@ const NextButton = ({next, onClick}) => {
             borderRadius:"25px", height:"45px", 
             color:"white", marginTop:"40px", 
             mb:"40px", textTransform:"none", 
-            fontFamily:"Segoe UI", 
+            fontFamily:"Lexend", 
             fontSize:"18px", fontWeight:"regular"}} 
             onClick={() => {
                 handleNavigate();
