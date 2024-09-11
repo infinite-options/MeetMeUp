@@ -34,7 +34,7 @@
   
   .title-text {
     color: #E4423F;
-    font-family: sans-serif;
+    font-family: 'Lexend';
     font-weight: 700;
     font-size: 36px;
     display: inline-block;
@@ -43,7 +43,7 @@
   
   .header-text {
     color: #000000;
-    font-family: sans-serif;
+    font-family: 'Lexend';
     font-weight: 600;
     font-size: 22px;
     display: inline-block;
@@ -52,7 +52,7 @@
   
   .sub-header-text {
     color: #000000;
-    font-family: sans-serif;
+    font-family: 'Lexend';
     font-weight: 400;
     font-size: 14px;
     display: inline-block;
@@ -70,7 +70,6 @@
     height: 100%;
     margin-left: auto;
     margin-right: auto;
-    margin-bottom: 40px;
     justify-content: center;
   }
   
@@ -81,7 +80,7 @@
   
   .pc-title-back-button-text {
     color: #000000;
-    font-family: sans-serif;
+    font-family: 'Lexend';
     font-weight: 400;
     font-size: 22px;
     display: inline-block;
@@ -91,7 +90,7 @@
   
   .pc-title-text {
     color: #000000;
-    font-family: sans-serif;
+    font-family: 'Lexend';
     font-weight: 400;
     font-size: 22px;
     display: inline-block;
@@ -108,7 +107,7 @@
   
   .pc-header-text {
     color: #000000;
-    font-family: sans-serif;
+    font-family: 'Lexend';
     font-weight: 400;
     font-size: 18px;
     margin-top: 30px;
@@ -117,7 +116,7 @@
   
   .pc-sub-header-text {
     color: #000000;
-    font-family: sans-serif;
+    font-family: 'Lexend';
     font-weight: 400;
     font-size: 14px;
     margin-left: 30px;
@@ -160,7 +159,7 @@
   
   .white-text-video {
     color: #ffffff;
-    font-family: sans-serif;
+    font-family: 'Lexend';
     font-weight: 700;
     font-size: 15px;
   }

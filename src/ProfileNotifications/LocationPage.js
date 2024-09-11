@@ -2,15 +2,61 @@ import React from 'react';
 import { Box, Container, Typography, Button, Grid, IconButton } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import icon from "../Assets/Images/icon.png";
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
 
 const LocationPage = () => {
   const navigate = useNavigate();
+  const url = "https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo";
 
-  const handleYesClick = () => {
+  const handleYesClick = async () => {
+    let fd = new FormData();
+    fd.append("user_uid", "100-000002");
+    fd.append("user_email_id", "johndoe@gmail.com");
+    fd.append("user_location_service", true);
+  
+    try {
+      const response = await fetch(url, {
+        method: 'PUT',
+        body: fd,
+      });
+
+      if(response.ok) {
+        const result = await response.json();
+        console.log(result);
+      }
+      else {
+        console.error('Response Err:', response.statusText);
+      }
+    } catch (err) {
+      console.log("Try Catch Err:", err);
+    }
+
     navigate('/location2'); 
   };
-  const handleLaterClick = () => {
+
+  const handleLaterClick = async () => {
+    let fd = new FormData();
+    fd.append("user_uid", "100-000002");
+    fd.append("user_email_id", "johndoe@gmail.com");
+    fd.append("user_location_service", false);
+
+    try {
+      const response = await fetch(url, {
+        method: 'PUT',
+        body: fd,
+      });
+
+      if(response.ok) {
+        const result = await response.json();
+        console.log(result);
+      }
+      else {
+        console.error('Response Err:', response.statusText);
+      }
+    } catch (err) {
+      console.log("Try Catch Err:", err);
+    }
+
     navigate('/location2'); 
   };
 

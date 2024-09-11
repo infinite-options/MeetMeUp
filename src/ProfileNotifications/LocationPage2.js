@@ -7,14 +7,59 @@ import './Profile.css';
 
 const LocationPage2 = () => {
   const navigate = useNavigate();
+  const url = "https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo";
 
-  const handleYesClick = () => {
+  const handleYesClick = async () => {
+    let fd = new FormData();
+    fd.append("user_uid", "100-000002");
+    fd.append("user_email_id", "johndoe@gmail.com");
+    fd.append("user_notification_preference", true);
+  
+    try {
+      const response = await fetch(url, {
+        method: 'PUT',
+        body: fd,
+      });
+
+      if(response.ok) {
+        const result = await response.json();
+        console.log(result);
+      }
+      else {
+        console.error('Response Err:', response.statusText);
+      }
+    } catch (err) {
+      console.log("Try Catch Err:", err);
+    }
+
     navigate('/accountSetup7Summary'); 
   };
-  const handleLaterClick = () => {
+
+  const handleLaterClick = async () => {
+    let fd = new FormData();
+    fd.append("user_uid", "100-000002");
+    fd.append("user_email_id", "johndoe@gmail.com");
+    fd.append("user_notification_preference", false);
+  
+    try {
+      const response = await fetch(url, {
+        method: 'PUT',
+        body: fd,
+      });
+
+      if(response.ok) {
+        const result = await response.json();
+        console.log(result);
+      }
+      else {
+        console.error('Response Err:', response.statusText);
+      }
+    } catch (err) {
+      console.log("Try Catch Err:", err);
+    }
+
     navigate('/accountSetup7Summary'); 
   };
-
 
   return (
     <Box

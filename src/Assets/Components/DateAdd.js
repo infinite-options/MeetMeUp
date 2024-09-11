@@ -76,7 +76,7 @@ function DateAdd() {
                         onClick={handleRemoveTimes}
                     />
                     ))}
-        <Grid container size={12} justifyContent="center" gap={.5} sx={{marginTop:"40px"}}>
+        <Grid container size={12} justifyContent="center" gap={.5} sx={{ marginTop: 5 }}>
           <Grid size={4}> 
               <FormControl fullWidth>
                   <InputLabel sx={{color:"black", fontFamily:"Lexend", fontSize:"12px"}}>Select Day</InputLabel>
