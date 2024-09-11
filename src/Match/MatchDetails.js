@@ -124,7 +124,8 @@ const MatchDetails = () => {
                 <LogoutButton></LogoutButton>
             </Grid>
         </Box>
-        <ViewProfile setIsFlipped={setIsFlipped} liked={liked} onClick={handleSetLiked} showPopup={showPopup} isLiked={isLeftHeartVisible} user={user} AccountUser={AccountUser} setShowPopup={setShowPopup} />
+        <div></div>
+        {/* <ViewProfile setIsFlipped={setIsFlipped} liked={liked} onClick={handleSetLiked} showPopup={showPopup} isLiked={isLeftHeartVisible} user={user} AccountUser={AccountUser} setShowPopup={setShowPopup} /> */}
     </ReactCardFlip>
     );
 };

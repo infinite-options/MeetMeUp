@@ -10,16 +10,29 @@ import like from "../Assets/Images/like.png"
 import likedImg from "../Assets/Images/filledheart.png"
 import { useNavigate } from 'react-router-dom'; 
 import LogoutButton from "../Assets/Components/LogoutButton";
+import axios from "axios";
 
 const Match = () => {
     const navigate = useNavigate(); 
     const handleNavigate = () => {
         navigate(`/grid`);
     };
-    const name="Bob Hawk"
-    const age="43"
-    const gender="male"
-    const where="Mandurah";
+    const [userData, setUserData] = useState({})
+    const userId='100-000001';
+    useEffect(() => {
+        axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/${userId}`)
+            .then(res => {
+                setUserData(res.data.result[0]);
+                console.log(res.data.result[0]);
+            })
+            .catch(error => {
+                console.log('Error fetching data', error);
+            });
+    }, []);
+    const name=userData.user_first_name + " " + userData.user_last_name;
+    const age=userData.user_age;
+    const gender=userData.user_gender;
+    const where=userData.user_suburb
     const [isFlipped, setIsFlipped] = useState(false);
     const [liked, setLiked] = useState(like)
 
@@ -55,7 +68,7 @@ const Match = () => {
                 <LogoutButton></LogoutButton>
             </Grid>
         </Box>
-        <ViewProfile setIsFlipped={setIsFlipped} liked={liked} onClick={onClick} />
+        <ViewProfile setIsFlipped={setIsFlipped} liked={liked} onClick={onClick} userData={userData} />
     </ReactCardFlip>
     );
 }

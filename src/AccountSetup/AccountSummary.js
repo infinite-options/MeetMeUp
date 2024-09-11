@@ -4,7 +4,7 @@ import Type from "../Assets/Components/Type";
 import AccountInfo from "../Assets/Components/AccountInfo"; 
 import { Link } from 'react-router-dom';
 import NextBtn from "../Assets/Components/NextButton";
-
+import axios from 'axios';
 // Import images
 import profile from "../Assets/Images/profile.png";
 import setting from "../Assets/Images/setting.png";
@@ -30,12 +30,25 @@ import diamond from "../Assets/Images/diamond.png";
 import time from "../Assets/Images/time.png";
 import { useNavigate } from "react-router-dom";
 import AccountContext from "./AccountContext";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useContext } from "react";
 // victors code
 // TODO: add context to pass as an object for the specifics
 // specific object
+
 const Profile = () => {
+    const [userData, setUserData] = useState({})
+    const userId='100-000001';
+    useEffect(() => {
+        axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/${userId}`)
+            .then(res => {
+                setUserData(res.data.result[0]);
+                console.log(res.data.result[0]);
+            })
+            .catch(error => {
+                console.log('Error fetching data', error);
+            });
+    }, []);
     const navigate = useNavigate();
     const handleSettings = () => {
         navigate(`/settings`);
@@ -92,24 +105,28 @@ const Profile = () => {
     // const smoke = "I Dont Smoke";
     // const flag = "Australian";
     // default values
-    const name = specifics.name;
-    const age = specifics.age;
-    const gender = specifics.gender;
-    const where = specifics.where;
-    const height = specifics.height;
-    const religion = specifics.religion;
-    const sign = specifics.star;
-    const status = specifics.status;
-    const education = specifics.education;
-    const heart = specifics.body;
-    const job = specifics.job;
-    const drink = specifics.drinking;
-    const smoke = specifics.smoking;
-    const flag = specifics.nationality;
+    const name = userData.user_first_name + " " + userData.user_last_name
+    const age = userData.user_age;
+    const gender = userData.user_gender
+    const where = userData.user_suburb
+    const height = userData.user_height
+    const religion = userData.user_religion;
+    const sign = userData.user_star_sign;
+    const status = userData.user_open_to;
+    const education = userData.user_education;
+    const heart = userData.user_body_composition;
+    const job = userData.user_job;
+    const drink = userData.user_drinking;
+    const smoke = userData.user_smoking;
+    const flag = userData.user_nationality;
     
 
     return (
-        <Grid container sx={{margin: "0 auto" }}>
+        <Grid 
+            container
+            size={12}
+            justifyContent="center"
+            >
             <Grid size={4} container justifyContent="flex-end" alignItems="center">
                 <IconButton>
                     <img src={profile} alt="profile" />
@@ -126,19 +143,21 @@ const Profile = () => {
                 </IconButton>
             </Grid>
             <Grid size={12}>
-                <Typography sx={{ fontSize: "30px" }}>About You</Typography>
+                <Typography sx={{ fontSize: "30px", textAlign: {xs:"left", sm:"center"} }}>About You</Typography>
             </Grid>
-            <Grid size={6}>
-                <Grid size={12}>
-                    <img src={img1} alt="img1" />
+            <Grid container size={{xs:12, sm:8, md:5, lg:4, xl:3}}> 
+                <Grid size={6}>
+                    <Grid size={12}>
+                        <img src={img1} alt="img1" />
+                    </Grid>
+                    <Grid size={12} container>
+                        <img src={img3} alt="img3" />
+                    </Grid>
                 </Grid>
-                <Grid size={12}>
-                    <img src={img3} alt="img3" />
-                </Grid>
-            </Grid>
-            <Grid size={6}>
-                <Grid size={12}>
-                    <img src={img2} alt="img2" />
+                <Grid size={6}>
+                    <Grid size={12}>
+                        <img src={img2} alt="img2" />
+                    </Grid>
                 </Grid>
             </Grid>
             <Grid container size={12} justifyContent="center">
@@ -167,7 +186,7 @@ const Profile = () => {
             <Grid size={12} container justifyContent="center" sx={{ mb: "20px" }}>
                 <Typography sx={{ fontSize: "20px" }}>{age}-{gender}-{where}</Typography>
             </Grid>
-            <Container>
+            <Container sx={{ justifyContent:"center", marginLeft:"15%", marginRight:"15%"}}>
                 <Grid size={12}>
                     <Typography sx={{ fontSize: '18px' }}>Interests</Typography>
                 </Grid>
@@ -202,6 +221,7 @@ const Profile = () => {
                 <AccountInfo img={drinkImg} info={drink} />
                 <AccountInfo img={smokeImg} info={smoke} />
                 <AccountInfo img={flagImg} info={flag} />
+                
                 <hr style={{ width: "100%", marginTop: "30px" }} />
                 {/* <Grid container size={12} gap={.5} sx={{ marginTop: "40px", mb: "50px" }}>
                     <Grid size={5}>
@@ -302,7 +322,7 @@ const Profile = () => {
                             <img src={time} alt="time" />
                         </IconButton>
                     </Stack>
-                    
+
                     <NextBtn next={'/matching1PreferencesPage'}></NextBtn>
             </Container>
         </Grid>
