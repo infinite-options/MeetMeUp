@@ -19,6 +19,7 @@ import { IconButton } from '@mui/material';
 import List from '@mui/material/List';
 import BackArrowButton from '../Assets/Components/BackArrowButton';
 import Grid from "@mui/material/Grid2";
+import {Container} from "@mui/material";
 import TopTitle from '../Assets/Components/TopTitle';
 
 const matchedResults = [
@@ -89,6 +90,7 @@ const SelectionResults = () => {
   )
 
   return (
+    <Container>
     <div>
       <div className="selection-results-container">
         {/* <button className="back-button" onClick={handleBackClick}>
@@ -127,6 +129,7 @@ const SelectionResults = () => {
         <Button onClick={handleEditPreferences} sx={{width:"auto", minWidth: "130px", backgroundColor:"#E4423F", borderRadius:"25px", height:"45px", color:"white", mb:"5px", textTransform:"none", fontFamily:"Segoe UI", fontSize:"18px", fontWeight:"regular"}}>Edit Preferences</Button>
     </Grid>
   </div>
+  </Container>
   );
 }
 

@@ -24,7 +24,7 @@ const MatchDetails = () => {
     console.log("User:", user);
     console.log("Source:", source);
     const [isRightHeartFilled, setIsRightHeartFilled] = useState(source === 'usersWhoYouSelected');
-    const [showPopup, setShowPopup] = useState(false); 
+    const [showPopup, setShowPopup] = useState(false);
     const [isFlipped, setIsFlipped] = useState(false);
     const [liked, setLiked] = useState(like)
     const popupRef = useRef(null);
@@ -38,11 +38,11 @@ const MatchDetails = () => {
         if (isLeftHeartVisible && newHeartState) {
             setShowPopup(true);
         } else {
-            setShowPopup(false); 
+            setShowPopup(false);
         }
     };
     const handleSetLiked = () => {
-        setLiked(prevState=>!prevState)
+        setLiked(prevState => !prevState)
 
         // const newHeartState = !isRightHeartFilled;
         // setIsRightHeartFilled(newHeartState);
@@ -50,19 +50,19 @@ const MatchDetails = () => {
             console.log()
             setShowPopup(true);
         } else {
-            setShowPopup(false); 
+            setShowPopup(false);
         }
         handleRightHeartClick();
     }
     const handleClosePopup = () => {
-        setShowPopup(false); 
+        setShowPopup(false);
     };
     const navigate = useNavigate();
     const handleEditPreferences = () => {
         navigate('/matchPreferences');
-      }
+    }
     const handleBackClick = () => {
-        window.history.back(); 
+        window.history.back();
         // TODO: make the entire program use this!
     };
 
@@ -71,14 +71,14 @@ const MatchDetails = () => {
     };
 
     const AccountUser = [
-        { name: 'Hawk Tuah Tey', age: 40, gender: 'female', where: 'Mandurah', src: AccountUserImg, source:'Account user' }
+        { name: 'Hawk Tuah Tey', age: 40, gender: 'female', where: 'Mandurah', src: AccountUserImg, source: 'Account user' }
     ]
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (popupRef.current && !popupRef.current.contains(event.target)) {
                 handleClosePopup();
             }
-        };   
+        };
         if (showPopup) {
             document.addEventListener('mousedown', handleClickOutside);
         }
@@ -90,42 +90,42 @@ const MatchDetails = () => {
     return (
         <ReactCardFlip isFlipped={isFlipped} flipDirection="horizontal">
             <Box>
-            {isLeftHeartVisible && isRightHeartFilled && showPopup && (
-                <div className='popup'>
-                    <div className='popup-content' ref={popupRef}>
-                        <MatchPopUp user={user} AccountUser={AccountUser}/>
-                            </div>
+                {isLeftHeartVisible && isRightHeartFilled && showPopup && (
+                    <div className='popup'>
+                        <div className='popup-content' ref={popupRef}>
+                            <MatchPopUp user={user} AccountUser={AccountUser} />
                         </div>
-                    )}
-                <Box sx={{backgroundColor:"#E4423F", paddingTop:"30px", paddingBottom:"50px", borderRadius:"10px", display:"flex",justifyContent:"center", position:"relative", minHeight: '600px' , maxWidth:"414px", margin:"0 auto", marginTop:"20px"}}>
-                    <img src={user.src} style={{width:"100%", height:"90%"}} height={440}></img>
+                    </div>
+                )}
+                <Box sx={{ backgroundColor: "#E4423F", paddingTop: "30px", paddingBottom: "50px", borderRadius: "10px", display: "flex", justifyContent: "center", position: "relative", minHeight: '600px', maxWidth: "414px", margin: "0 auto", marginTop: "20px" }}>
+                    <img src={user.src} style={{ width: "100%", height: "90%" }} height={440}></img>
 
                     {/* <img src="profileimg.png" style={{width:"100%", height:"90%"}}></img> */}
-                    <Typography sx={{position:"absolute", zIndex: '10', top:"10%", color:"white", fontSize:'20px'}}>{user.name}</Typography>
-                    <Typography sx={{position:"absolute", zIndex: '10',top:"14%", color:"white", fontSize:"10px"}}>{user.age} - {user.gender} - {user.where}</Typography>
-                    <Typography sx={{position:"absolute", zIndex: '10', bottom:"2%", color:"white", fontSize:"18px"}} onClick={()=>setIsFlipped(true)}>Tap to See Profile</Typography>
+                    <Typography sx={{ position: "absolute", zIndex: '10', top: "10%", color: "white", fontSize: '20px' }}>{user.name}</Typography>
+                    <Typography sx={{ position: "absolute", zIndex: '10', top: "14%", color: "white", fontSize: "10px" }}>{user.age} - {user.gender} - {user.where}</Typography>
+                    <Typography sx={{ position: "absolute", zIndex: '10', bottom: "2%", color: "white", fontSize: "18px" }} onClick={() => setIsFlipped(true)}>Tap to See Profile</Typography>
                     {/* <img src="like.png" style={{position:"absolute", right:"2%", top:"2%"}}></img> */}
-                    <img src={liked ? like : likedImg} style={{position:"absolute", right:"2%", top:"1%"}} 
-                    onClick={handleSetLiked}></img>
+                    <img src={liked ? like : likedImg} style={{ position: "absolute", right: "2%", top: "1%" }}
+                        onClick={handleSetLiked}></img>
                     {isLeftHeartVisible && (
-                        <img src={likedImg} style={{position:"absolute", left:"2%", top:"1%"}} ></img>
+                        <img src={likedImg} style={{ position: "absolute", left: "2%", top: "1%" }} ></img>
                     )}
 
                 </Box>
                 <Grid container size={12} justifyContent="center" >
-                <Link to="/matching1PreferencesPage">
-                    <Button sx={{width:"130px",backgroundColor:"#E4423F", borderRadius:"25px", height:"45px", color:"white", marginTop:"20px", mb:"20px", textTransform:"none", fontFamily:"Segoe UI", fontSize:"18px", fontWeight:"regular"}}>Back</Button>
-                </Link>
-            </Grid>
-            <Grid container size={12} justifyContent="center" >
-                <Button onClick={handleNavigate} sx={{width:"130px",backgroundColor:"#E4423F", borderRadius:"25px", height:"45px", color:"white", mb:"20px", textTransform:"none", fontFamily:"Segoe UI", fontSize:"18px", fontWeight:"regular"}}>Continue</Button>
-            </Grid>
-            <Grid container size={12} justifyContent="center" >
-                <LogoutButton></LogoutButton>
-            </Grid>
-        </Box>
-        <ViewProfile setIsFlipped={setIsFlipped} liked={liked} onClick={handleSetLiked} showPopup={showPopup} isLiked={isLeftHeartVisible} user={user} AccountUser={AccountUser} setShowPopup={setShowPopup} />
-    </ReactCardFlip>
+                    <Link to="/matching1PreferencesPage">
+                        <Button sx={{ width: "130px", backgroundColor: "#E4423F", borderRadius: "25px", height: "45px", color: "white", marginTop: "20px", mb: "20px", textTransform: "none", fontFamily: "Segoe UI", fontSize: "18px", fontWeight: "regular" }}>Back</Button>
+                    </Link>
+                </Grid>
+                <Grid container size={12} justifyContent="center" >
+                    <Button onClick={handleNavigate} sx={{ width: "130px", backgroundColor: "#E4423F", borderRadius: "25px", height: "45px", color: "white", mb: "20px", textTransform: "none", fontFamily: "Segoe UI", fontSize: "18px", fontWeight: "regular" }}>Continue</Button>
+                </Grid>
+                <Grid container size={12} justifyContent="center" >
+                    <LogoutButton></LogoutButton>
+                </Grid>
+            </Box>
+            <ViewProfile setIsFlipped={setIsFlipped} liked={liked} onClick={handleSetLiked} showPopup={showPopup} isLiked={isLeftHeartVisible} user={user} AccountUser={AccountUser} setShowPopup={setShowPopup} />
+        </ReactCardFlip>
     );
 };
 

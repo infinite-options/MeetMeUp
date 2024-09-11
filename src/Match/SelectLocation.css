@@ -1,9 +1,19 @@
 .simulate-mobile {
-    width: 390px; 
-    height: 744px; 
-    margin: 0 auto; 
-    border: 1px solid #ddd; 
-    overflow: hidden; 
-    background-color: #f9f9f9; 
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
-  }
+  width: 390px;
+  height: 744px;
+  margin: 0 auto;
+  border: 1px solid #ddd;
+  overflow: hidden;
+  background-color: #f9f9f9;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.location-back-button{
+  margin-left: -60px;
+  border: 2px solid #f9f9f9;
+  border-radius: 50%;
+  background-color: white ;
+  cursor: pointer;
+  margin-right: 15px;
+}
+
+
