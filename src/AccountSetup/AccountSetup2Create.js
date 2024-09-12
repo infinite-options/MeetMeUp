@@ -56,6 +56,7 @@ export default function AccountSetup2Create() {
         const form = e.currentTarget;
         console.log(e);
         console.log('formData: ', formData);
+        const userID = '100-000008';
         if (form) {
             const data = new FormData(form);
             const formObj = {
@@ -63,18 +64,18 @@ export default function AccountSetup2Create() {
                 user_phone_number: data.get('user_phone_number'),
                 user_password_hash: data.get('password'),
             }
-            data.append('user_uid', '100-000008');
+            // data.append('user_uid', '100-000008');
+            
+            data.delete('passwordConfirm');
             data.forEach((value, key) => {
                 console.log(`${key}: ${value}`);
             });
             localStorage.setItem('user_email_id', data.get('user_email_id'));
             console.log('localStorage email 2: ', localStorage.getItem('user_email_id'));
-
-
             console.log('formObj: ', formObj);
             axios
             .post(
-                `https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/`,
+                `https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo`,
                 data
             )
             .then((response) => {
@@ -85,7 +86,6 @@ export default function AccountSetup2Create() {
                 console.error("Error occurred:", error); // This will log the 404 error
             });
             handleNavigate();
-            
         }
     };
 

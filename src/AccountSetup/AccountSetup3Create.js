@@ -102,6 +102,7 @@ export default function AccountSetup3Create() {
                 user_gender: data.get('gender'),
             }
             data.append('user_uid', '100-000008');
+            const user_uid = '100-000008';
             data.append('user_email_id', localStorage.getItem('user_email_id'));
             console.log('localStorage email: ', data.get('user_email_id'));
             data.forEach((value, key) => {
@@ -110,8 +111,13 @@ export default function AccountSetup3Create() {
             console.log('formObj: ', formObj);
             axios
             .put(
-                `https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/`,
-                data
+                `https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/${user_uid}`,
+                data,
+                {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
             )
             .then((response) => {
                 console.log("RESPONSE: ", response.data);
@@ -121,7 +127,6 @@ export default function AccountSetup3Create() {
                 console.error("Error occurred:", error); // This will log the 404 error
               });
             handleNavigate();
-
         }
     };
 
