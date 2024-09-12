@@ -91,13 +91,10 @@ const SelectionResults = () => {
   return (
     <div>
       <div className="selection-results-container">
-        {/* <button className="back-button" onClick={handleBackClick}>
-        <img src={ArrowBackIcon}/>
-          </button> */}
+
         <TopTitle title={'Selection Results'}></TopTitle>
           {/* TODO: FIX BUTTON FORMATTING MAKE ON THE SAME LINE */}
-        {/* <BackArrowButton />
-        <h2>Selection Results</h2> */}
+
       <br></br>
       <Typography sx={{marginLeft:{xs:"0%", sm:"15%"}, marginRight:{xs:"0%", sm:"15%"},  fontSize:"18px", color:"grey", fontWeight:"bold"}}>Matched Results</Typography>
       <List>
