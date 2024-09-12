@@ -14,7 +14,7 @@ const GOOGLE_API_KEY = process.env.REACT_APP_GOOGLE_API_KEY;
 const placesLibrary = ['places'];
 
 const mapContainerStyle = {
-    width: '95%',
+    width: '100%',
     height: '450px',
     marginTop: '10px',
     marginLeft: 'auto',
@@ -95,8 +95,9 @@ export default function AccountSetup3Create() {
     const handleNext = async () => {
         const url = "https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo";
         let fd = new FormData();
-        fd.append("user_uid", "100-000008");
-        fd.append("user_email_id", "pmarathay@yahoo.com");
+        console.log('user_uid local: ', localStorage.getItem('user_uid'));
+        fd.append("user_uid", localStorage.getItem('user_uid'));
+        fd.append("user_email_id", localStorage.getItem('user_email_id'));
         fd.append("user_first_name", formData['name'].split(" ")[0]);
         fd.append("user_last_name", formData['name'].split(" ")[1]);
         fd.append("user_age", formData['age']);
@@ -137,17 +138,17 @@ export default function AccountSetup3Create() {
 
     return (
         <div className='App'>
-            <div className='white-background'>
                 {/* <Link to='/accountSetup2Create'><img src={backButton} alt='back button' className='back-button'/></Link>
                 <div className='pc-title-back-button-text'>
                     Profile Creation
                 </div>
                 <img src={progressBar} alt='progress bar'/> */}
                 
-                <Progress percent="40%" prev="/accountSetup2Create" />
                 
                 <form className='form-container' onSubmit={handleNext}>
                 <Box sx={{marginLeft:'15%', marginRight:'15%'}}>
+                <Progress percent="40%" prev="/accountSetup2Create" />
+
                     <div className='pc-header-text'>
                         About You
                     </div>
@@ -155,7 +156,7 @@ export default function AccountSetup3Create() {
                         These details are about you and will be public to potential matches on meet me up.
                     </div>
                     <Grid2 container
-                        sx={{ '& > :not(style)': { marginTop: 1.5, marginLeft: 3, marginRight: 3, width: 1 } }}>
+                        sx={{ '& > :not(style)': { marginTop: 1.5, width: 1 } }}>
                         <TextField onChange={handleChange}
                             sx={{'& .MuiOutlinedInput-root': {'&.Mui-focused fieldset': {borderColor: '#E4423F'}}}}
                             InputLabelProps={{style: { color: "#E4423F" }}}
@@ -213,7 +214,7 @@ export default function AccountSetup3Create() {
                             style={{
                                 fontSize: '14px',
                                 display: 'flex',
-                                width: '95%',
+                                width: '100%',
                                 height: '25px',
                                 marginTop: '10px',
                                 marginLeft: 'auto',
@@ -240,7 +241,7 @@ export default function AccountSetup3Create() {
                     <div className='pc-sub-header-text'>
                         Select the fields that best describe your sexuality
                     </div>
-                    <Grid2 container spacing={1} sx={{marginTop: 3, marginLeft: 3}}>
+                    <Grid2 container spacing={1} sx={{marginTop: 3}}>
                         {sexuality.map((index) => 
                             <Grid2>
                                 <Dates id={index} handleButton={handleButton} array={formData['sexuality']} type={'sexuality'}/>
@@ -253,7 +254,7 @@ export default function AccountSetup3Create() {
                     <div className='pc-sub-header-text'>
                         Select the fields that best describe what you are open to in a partner
                     </div>
-                    <Grid2 container spacing={1} sx={{marginTop: 3, marginLeft: 3}}>
+                    <Grid2 container spacing={1} sx={{marginTop: 3}}>
                         {openTo.map((index) => 
                             <Grid2>
                                 <Dates id={index} handleButton={handleButton} array={formData['openTo']} type={'openTo'}/>
@@ -282,7 +283,6 @@ export default function AccountSetup3Create() {
                     </Box>
                 </form>
                 
-            </div>
         </div>
     )
 }

@@ -4,14 +4,15 @@ import Grid from "@mui/material/Grid2"
 
 import { useNavigate } from 'react-router-dom'; 
 
-const NextButton = ({next, onClick}) => {
+const NextButton = ({next, onClick, notallowed}) => {
     const navigate = useNavigate();
-    const handleNavigate = () => {
+    const handleNavigate = async () => {
         if (onClick) {
-            onClick();
-
+            await onClick();
         }
-        navigate(`${next}`);
+        if (!notallowed) {
+            navigate(`${next}`);
+        }
     };
 
     return (

@@ -4,13 +4,14 @@ import backButton from '../Assets/Images/BackButton.png';
 import progressBar from '../Assets/Images/progressBar60.png';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Container } from '@mui/material';
+import { Button, Container, Grid2 } from '@mui/material';
 import DrawerContext from '../Assets/Components/DrawerContext';
 import AccountContext from './AccountContext';
 import React from 'react';
 import DrawerOptions from '../Assets/Components/DrawerOptions';
 import Progress from '../Assets/Components/Progress';
 import NextButton from '../Assets/Components/NextButton';
+import Dates from '../Assets/Components/Dates';
 export default function AccountSetup4Create() {
     const [option, setOption] = React.useState('');
     // const 
@@ -40,9 +41,8 @@ export default function AccountSetup4Create() {
         religion: '',
         gender: '',
         nationality: '',
+        generalInterests: [],
     });
-
-    
 
     // based on option set specific to passData
     const [specifics, setSpecifics] = useState({
@@ -81,9 +81,9 @@ export default function AccountSetup4Create() {
 
     const handleNext = (e) => {
         console.log(e);
-        console.log(formData);
+        console.log('formData: ', formData);
         const specificsForm = populateFormData();
-        console.log('formData: ', specificsForm.get('education'), specificsForm.get('body'));
+        console.log('specificsForm: ', specificsForm);
         const formObj = {
             interestsEatingOut: specificsForm.get('interestsEatingOut'),
             interestsBikeRides: specificsForm.get('interestsBikeRides'),
@@ -105,7 +105,8 @@ export default function AccountSetup4Create() {
             position: specificsForm.get('position'),
             religion: specificsForm.get('religion'),
             gender: specificsForm.get('gender'),
-            nationality: specificsForm.get('nationality')
+            nationality: specificsForm.get('nationality'),
+            generalInterests: specificsForm.get('generalInterests')
         };
         setDetails(formObj);
         console.log('formObj: ', formObj);
@@ -119,7 +120,30 @@ export default function AccountSetup4Create() {
 
         return specificsForm;
         };
-    
+    const handleButton = (id, type) => {
+        if(formData[type].includes(id)) {
+            const index = formData[type].indexOf(id);
+            formData[type].splice(index, 1);
+        }
+        else {
+            formData[type].push(id);
+        }
+
+        console.log(formData[type]);
+    };
+
+    const generalInterests= [
+        'Eating Out',
+        'Bike Rides',
+        'Drinking',
+        'Dancing',
+        'Cooking',
+        'Baking',
+        'Crafting',
+        'Painting',
+        'Surfing',
+        'Traveling'
+    ]
 
     return (
         <div className='App'>
@@ -139,9 +163,17 @@ export default function AccountSetup4Create() {
                     <div className='pc-sub-header-text'>
                         These interests help match you to better people on meet me up. Select or add as many interests as you want.
                     </div>
+
+                    <Grid2 container spacing={1} sx={{marginTop: 3}}>
+                        {generalInterests.map((index) => 
+                            <Grid2>
+                                <Dates id={index} handleButton={handleButton} array={formData['generalInterests']} type={'generalInterests'}/>
+                            </Grid2>
+                        )}
+                    </Grid2>
                     <Button variant='contained' onClick={handleButtonBoolean} name='interestsEatingOut'
                         sx={{ backgroundColor: formData['interestsEatingOut'] ? '#E4423F' : '#ffffff', color: '#000000',
-                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', marginRight: '-10px', textTransform: 'none' }}
+                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginRight: '-10px', textTransform: 'none' }}
                     >
                         Eating Out
                     </Button>
@@ -207,7 +239,7 @@ export default function AccountSetup4Create() {
                     </div>
                     <Button variant='contained' name='height' style={{justifyContent: 'space-between'}}
                         sx={{ backgroundColor: '#ffffff', color: '#000000',
-                            width: '90%', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', textTransform: 'none' }}
+                            width: '100%', borderRadius: '41px', marginTop: '20px', textTransform: 'none' }}
                         onClick={()=>{
                             setOption('height');
                         }}
@@ -217,7 +249,7 @@ export default function AccountSetup4Create() {
                     </Button>
                     <Button variant='contained' name='education' style={{justifyContent: 'space-between'}}
                         sx={{ backgroundColor: '#ffffff', color: '#000000',
-                            width: '90%', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', textTransform: 'none' }}
+                            width: '100%', borderRadius: '41px', marginTop: '20px', textTransform: 'none' }}
                         onClick={()=>{
                             setOption('education');
                         }}
@@ -228,7 +260,7 @@ export default function AccountSetup4Create() {
                     </Button>
                     <Button variant='contained' name='bodyComp' style={{justifyContent: 'space-between'}}
                         sx={{ backgroundColor: '#ffffff', color: '#000000',
-                            width: '90%', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', textTransform: 'none' }}
+                            width: '100%', borderRadius: '41px', marginTop: '20px', textTransform: 'none' }}
                         onClick={()=>{
                             setOption('body');
                         }}
@@ -238,7 +270,7 @@ export default function AccountSetup4Create() {
                     </Button>
                     <Button variant='contained' name='starSign' style={{justifyContent: 'space-between'}}
                         sx={{ backgroundColor: '#ffffff', color: '#000000',
-                            width: '90%', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', textTransform: 'none' }}
+                            width: '100%', borderRadius: '41px', marginTop: '20px', textTransform: 'none' }}
                         onClick={()=>{
                             setOption('star');
                         }}
@@ -249,7 +281,7 @@ export default function AccountSetup4Create() {
                     </Button>
                     <Button variant='contained' name='drinking' style={{justifyContent: 'space-between'}}
                         sx={{ backgroundColor: '#ffffff', color: '#000000',
-                            width: '90%', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', textTransform: 'none' }}
+                            width: '100%', borderRadius: '41px', marginTop: '20px', textTransform: 'none' }}
                         onClick={()=>{
                             setOption('drinking');
                         }}
@@ -260,7 +292,7 @@ export default function AccountSetup4Create() {
                     </Button>
                     <Button variant='contained' name='smoking' style={{justifyContent: 'space-between'}}
                         sx={{ backgroundColor: '#ffffff', color: '#000000',
-                            width: '90%', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', textTransform: 'none' }}
+                            width: '100%', borderRadius: '41px', marginTop: '20px', textTransform: 'none' }}
                         onClick={()=>{
                             setOption('smoking');
                         }}
@@ -271,7 +303,7 @@ export default function AccountSetup4Create() {
                     </Button>
                     <Button variant='contained' name='kids' style={{justifyContent: 'space-between'}}
                         sx={{ backgroundColor: '#ffffff', color: '#000000',
-                            width: '90%', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', textTransform: 'none' }}
+                            width: '100%', borderRadius: '41px', marginTop: '20px', textTransform: 'none' }}
                         onClick={()=>{
                             setOption('children');
                         }}
@@ -281,7 +313,7 @@ export default function AccountSetup4Create() {
                     </Button>
                     <Button variant='contained' name='currentJob' style={{justifyContent: 'space-between'}}
                         sx={{ backgroundColor: '#ffffff', color: '#000000',
-                            width: '90%', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', textTransform: 'none' }}
+                            width: '100%', borderRadius: '41px', marginTop: '20px', textTransform: 'none' }}
                         onClick={()=>{
                             setOption('position');
                         }}
@@ -291,7 +323,7 @@ export default function AccountSetup4Create() {
                     </Button>
                     <Button variant='contained' name='religion' style={{justifyContent: 'space-between'}}
                         sx={{ backgroundColor: '#ffffff', color: '#000000',
-                            width: '90%', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', textTransform: 'none' }}
+                            width: '100%', borderRadius: '41px', marginTop: '20px', textTransform: 'none' }}
                         onClick={()=>{
                             setOption('religion');
                         }}
@@ -301,7 +333,7 @@ export default function AccountSetup4Create() {
                     </Button>
                     <Button variant='contained' name='genderID' style={{justifyContent: 'space-between'}}
                         sx={{ backgroundColor: '#ffffff', color: '#000000',
-                            width: '90%', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', textTransform: 'none' }}
+                            width: '100%', borderRadius: '41px', marginTop: '20px',  textTransform: 'none' }}
                         onClick={()=>{
                             setOption('gender');
                         }}
@@ -311,7 +343,7 @@ export default function AccountSetup4Create() {
                     </Button>
                     <Button variant='contained' name='nationality' style={{justifyContent: 'space-between'}}
                         sx={{ backgroundColor: '#ffffff', color: '#000000',
-                            width: '90%', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', textTransform: 'none' }}
+                            width: '100%', borderRadius: '41px', marginTop: '20px',  textTransform: 'none' }}
                         onClick={()=>{
                             setOption('nationality');
                         }}
