@@ -8,6 +8,7 @@ import { Box, Button, Container, Grid2, MenuItem, TextField } from '@mui/materia
 import { Autocomplete, GoogleMap, useJsApiLoader, MarkerF } from '@react-google-maps/api';
 import Progress from '../Assets/Components/Progress';
 import NextButton from '../Assets/Components/NextButton';
+import Dates from "../Assets/Components/Dates";
 
 const GOOGLE_API_KEY = process.env.REACT_APP_GOOGLE_API_KEY;
 const placesLibrary = ['places'];
@@ -26,19 +27,10 @@ export default function AccountSetup3Create() {
         age: '',
         gender: '',
         profileBio: '',
+        suburb: '',
         location: '',
         sexuality: [],
         openTo: [],
-        sexualityStraight: false,
-        sexualityBisexual: false,
-        sexualityTransgender: false,
-        sexualityLGBTQ: false,
-        sexualityHomosexual: false,
-        openToStraight: false,
-        openToBisexual: false,
-        openToTransgender: false,
-        openToLGBTQ: false,
-        openToHomosexual: false,
     });
 
     const genders = [
@@ -88,17 +80,46 @@ export default function AccountSetup3Create() {
         });
     };
 
-    const handleButton = (e) => {
-        const { name } = e.target;
-        setFormData({
-            ...formData,
-            [name]: !formData[name]
-        });
+    const handleButton = (id, type) => {
+        if(formData[type].includes(id)) {
+            const index = formData[type].indexOf(id);
+            formData[type].splice(index, 1);
+        }
+        else {
+            formData[type].push(id);
+        }
+
+        console.log(formData[type]);
     };
 
-    const handleNext = (e) => {
-        console.log(e);
-        console.log(formData);
+    const handleNext = async () => {
+        const url = "https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo";
+        let fd = new FormData();
+        fd.append("user_uid", "100-000008");
+        fd.append("user_email_id", "pmarathay@yahoo.com");
+        fd.append("user_first_name", formData['name'].split(" ")[0]);
+        fd.append("user_last_name", formData['name'].split(" ")[1]);
+        fd.append("user_age", formData['age']);
+        fd.append("user_gender", formData['gender']);
+        fd.append("user_suburb", formData['suburb']);
+        fd.append("user_profile_bio", formData['profileBio']);
+    
+        try {
+            const response = await fetch(url, {
+                method: 'PUT',
+                body: fd,
+            });
+
+            if(response.ok) {
+                const result = await response.json();
+                console.log(result);
+            }
+            else {
+                console.error('Response Err:', response.statusText);
+            }
+        } catch (err) {
+            console.log("Try Catch Err:", err);
+        }
     };
 
     const { isLoaded, loadError } = useJsApiLoader({
@@ -126,7 +147,7 @@ export default function AccountSetup3Create() {
                 <Progress percent="40%" prev="/accountSetup2Create" />
                 
                 <form className='form-container' onSubmit={handleNext}>
-                <Box sx={{marginLeft:'10%', marginRight:'10%'}}>
+                <Box sx={{marginLeft:'15%', marginRight:'15%'}}>
                     <div className='pc-header-text'>
                         About You
                     </div>
@@ -134,9 +155,7 @@ export default function AccountSetup3Create() {
                         These details are about you and will be public to potential matches on meet me up.
                     </div>
                     <Grid2 container
-                        sx={{ '& > :not(style)': { marginTop: 1.5, marginLeft: 3, marginRight: 3, width: 1 } }}
-                        autoComplete='off'
-                    >
+                        sx={{ '& > :not(style)': { marginTop: 1.5, marginLeft: 3, marginRight: 3, width: 1 } }}>
                         <TextField onChange={handleChange}
                             sx={{'& .MuiOutlinedInput-root': {'&.Mui-focused fieldset': {borderColor: '#E4423F'}}}}
                             InputLabelProps={{style: { color: "#E4423F" }}}
@@ -221,72 +240,26 @@ export default function AccountSetup3Create() {
                     <div className='pc-sub-header-text'>
                         Select the fields that best describe your sexuality
                     </div>
-                    <Button variant='contained' onClick={handleButton} name='sexualityStraight'
-                        sx={{ backgroundColor: formData['sexualityStraight'] ? '#E4423F' : '#ffffff', color: '#000000',
-                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', marginRight: '-10px', textTransform: 'none' }}
-                    >
-                        Straight
-                    </Button>
-                    <Button variant='contained' onClick={handleButton} name='sexualityBisexual'
-                        sx={{ backgroundColor: formData['sexualityBisexual'] ? '#E4423F' : '#ffffff', color: '#000000',
-                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', marginRight: '-10px', textTransform: 'none' }}
-                    >
-                        Bi-Sexual
-                    </Button>
-                    <Button variant='contained' onClick={handleButton} name='sexualityTransgender'
-                        sx={{ backgroundColor: formData['sexualityTransgender'] ? '#E4423F' : '#ffffff', color: '#000000',
-                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', marginRight: '-10px', textTransform: 'none' }}
-                    >
-                        Trans-gender
-                    </Button>
-                    <Button variant='contained' onClick={handleButton} name='sexualityLGBTQ'
-                        sx={{ backgroundColor: formData['sexualityLGBTQ'] ? '#E4423F' : '#ffffff', color: '#000000',
-                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', marginRight: '-10px', textTransform: 'none' }}
-                    >
-                        LGBTQ
-                    </Button>
-                    <Button variant='contained' onClick={handleButton} name='sexualityHomosexual'
-                        sx={{ backgroundColor: formData['sexualityHomosexual'] ? '#E4423F' : '#ffffff', color: '#000000',
-                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', marginRight: '-10px', textTransform: 'none' }}
-                    >
-                        Homosexual
-                    </Button>
+                    <Grid2 container spacing={1} sx={{marginTop: 3, marginLeft: 3}}>
+                        {sexuality.map((index) => 
+                            <Grid2>
+                                <Dates id={index} handleButton={handleButton} array={formData['sexuality']} type={'sexuality'}/>
+                            </Grid2>
+                        )}
+                    </Grid2>
                     <div className='pc-header-text'>
                         Open To...
                     </div>
                     <div className='pc-sub-header-text'>
                         Select the fields that best describe what you are open to in a partner
                     </div>
-                    <Button variant='contained' onClick={handleButton} name='openToStraight'
-                        sx={{ backgroundColor: formData['openToStraight'] ? '#E4423F' : '#ffffff', color: '#000000',
-                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', marginRight: '-10px', textTransform: 'none' }}
-                    >
-                        Straight
-                    </Button>
-                    <Button variant='contained' onClick={handleButton} name='openToBisexual'
-                        sx={{ backgroundColor: formData['openToBisexual'] ? '#E4423F' : '#ffffff', color: '#000000',
-                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', marginRight: '-10px', textTransform: 'none' }}
-                    >
-                        Bi-Sexual
-                    </Button>
-                    <Button variant='contained' onClick={handleButton} name='openToTransgender'
-                        sx={{ backgroundColor: formData['openToTransgender'] ? '#E4423F' : '#ffffff', color: '#000000',
-                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', marginRight: '-10px', textTransform: 'none' }}
-                    >
-                        Trans-gender
-                    </Button>
-                    <Button variant='contained' onClick={handleButton} name='openToLGBTQ'
-                        sx={{ backgroundColor: formData['openToLGBTQ'] ? '#E4423F' : '#ffffff', color: '#000000',
-                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', marginRight: '-10px', textTransform: 'none' }}
-                    >
-                        LGBTQ
-                    </Button>
-                    <Button variant='contained' onClick={handleButton} name='openToHomosexual'
-                        sx={{ backgroundColor: formData['openToHomosexual'] ? '#E4423F' : '#ffffff', color: '#000000',
-                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', marginRight: '-10px', textTransform: 'none' }}
-                    >
-                        Homosexual
-                    </Button>
+                    <Grid2 container spacing={1} sx={{marginTop: 3, marginLeft: 3}}>
+                        {openTo.map((index) => 
+                            <Grid2>
+                                <Dates id={index} handleButton={handleButton} array={formData['openTo']} type={'openTo'}/>
+                            </Grid2>
+                        )}
+                    </Grid2>
                     <HelperTextBox text='Why do we need this information?'/>
                     <div className='form-button-container'>
                         {/* <Button

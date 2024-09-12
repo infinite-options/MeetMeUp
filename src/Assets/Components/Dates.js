@@ -1,19 +1,20 @@
 import { Button } from "@mui/material";
 import { useState } from "react";
 
-const Dates = ({date, id, handleButtonBoolean, formData}) => {
+const Dates = ({ id, handleButton, array, type}) => {
     const [selected, setSelected] = useState(false);
     const onClick = () => {
-        handleButtonBoolean(id, !selected)
-        setSelected(prevSelected=> !prevSelected)
+        handleButton(id, type);
+        setSelected(prevSelected => !prevSelected);
     }
+
     return (
-        <>
-        <Button variant='contained' sx={{textTransform:"none", color: selected ? "white":"black", backgroundColor: selected ? "#E4423F": "#ffffff",
+        <Button variant='contained' sx={{textTransform:"none",
+            color: array.includes(id) ? "white":"black",
+            backgroundColor: array.includes(id) ? "#E4423F": "#ffffff",
             borderRadius: '41px', fontSize:"14px"}} onClick={onClick}>
-            {date}
+            {id}
         </Button>
-        </>
     );
 }
  

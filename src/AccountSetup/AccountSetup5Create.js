@@ -63,7 +63,7 @@ export default function AccountSetup5Create() {
             setRecordedChunks([]);
             setCapturing(true);
             mediaRecorderRef.current = new MediaRecorder(webcamRef.current.stream, {
-                mimeType: "video/webm"
+                mimeType: "video/mp4"
             });
             mediaRecorderRef.current.addEventListener("dataavailable", handleDataAvailable);
             mediaRecorderRef.current.start();
@@ -74,9 +74,6 @@ export default function AccountSetup5Create() {
         if (recordedChunks.length) {
             const blob = new Blob(recordedChunks, {type: "video/mp4"});
             const url = URL.createObjectURL(blob);
-            console.log("recordedChunks:", recordedChunks);
-            console.log("blob:", blob);
-            console.log("url:", url);
             setVideoSrc(url);
         }
     }, [recordedChunks]);
@@ -110,7 +107,6 @@ export default function AccountSetup5Create() {
         }
 
         const imgURL = URL.createObjectURL(img);
-        console.log("imgURL:", imgURL);
         if(formData['image'].split(',').length > 3) {
             alert('Only 3 images allowed!');
         }
@@ -157,11 +153,8 @@ export default function AccountSetup5Create() {
     };
 
     const handleVideoDownload = () => {
-        console.log("videoSrc:", videoSrc);
         const link = document.createElement('a');
-        console.log("link1:", link);
         link.href = videoSrc;
-        console.log("link2:", link);
         link.download = 'video.mp4';
         document.body.appendChild(link);
         link.click();
@@ -175,8 +168,8 @@ export default function AccountSetup5Create() {
         fd.append("user_uid", "100-000008");
         fd.append("user_email_id", "pmarathay@yahoo.com");
 
-        let vidBlob = await fetch(videoSrc).then(r => r.blob()); 
-        fd.append("user_video", vidBlob, "video_filename");
+        let vidBlob = await fetch(videoSrc).then(r => r.blob());
+        fd.append("user_video", vidBlob, "video_filename.mp4");
 
         var imageArray = formData['image'].split(',');
         for(var i = 0; i < imageArray.length - 1; i++) {
@@ -191,9 +184,7 @@ export default function AccountSetup5Create() {
                 fd.append("img_2", imgBlob, "img_2_filename");
             }
         }
-    
-        console.log("fd:", fd);
-        console.log("url:", url);
+
         try {
             const response = await fetch(url, {
                 method: 'PUT',
