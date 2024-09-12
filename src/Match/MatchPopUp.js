@@ -1,84 +1,80 @@
-import { Button, Stack } from '@mui/material';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import Grid from "@mui/material/Grid2";
-
-
-
-
+import { Button, Stack, Typography, Avatar, Box, Grid } from '@mui/material';
 
 export default function MatchPopUp({ user, AccountUser }) {
     const navigate = useNavigate();
-
-    //console.log("account user img:", AccountUser[0].src)
-    //console.log("user img:", user)
 
     const handleBegin = (user) => {
         navigate('/begin', { state: { user, AccountUser } });
     }
 
-    const handleContinue = (user) => {
+    const handleContinue = () => {
         navigate('/grid');
     }
-    
 
-    console.log("matchpopup:", user)
     return (
-        <div>
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '-10px' }}>
-                <img
+        <Box>
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <Avatar
                     src={AccountUser[0].src}
-                    alt='Account User '
-                    style={{
-                        width: '50px',
-                        height: '50px',
-                        borderRadius: '50%',
-                        objectFit: 'cover',
+                    alt='Account User'
+                    sx={{
+                        width: 50,
+                        height: 50,
                         border: '2px solid white',
                         zIndex: 1
                     }}
                 />
-                <img
+                <Avatar
                     src={user.src}
                     alt='Matched User'
-                    style={{
-                        width: '50px',
-                        height: '50px',
-                        borderRadius: '50%',
-                        objectFit: 'cover',
+                    sx={{
+                        width: 50,
+                        height: 50,
                         border: '2px solid white',
-                        marginLeft: '-15px', 
+                        marginLeft: '-15px',
                         zIndex: 0
                     }}
                 />
-            </div>
-            <h3 className='matchText' style={{ color: '#E4423F' }}>It's A Match!</h3>
-            <p>Let's start by creating a date with <br />{user.name} and you </p>
-            <Stack>
-                <Grid container size={12} justifyContent="center" >
-                    <Button onClick={() => handleBegin(user)}
-                    sx={{width:"130px",backgroundColor:"#E4423F", borderRadius:"25px", height:"45px", color:"white", mb:"20px", textTransform:"none", fontFamily:"Segoe UI", fontSize:"18px", fontWeight:"regular"}}>Begin!</Button>
+            </Box>
+            <Typography variant="h5" sx={{ color: '#E4423F', mt: 2 }}>
+                It's A Match!
+            </Typography>
+            <Typography variant="body1" sx={{ mt: 1, mb: 2 }}>
+                Let's start by creating a date with <br />{user.name} and you
+            </Typography>
+            <Stack spacing={2} alignItems="center">
+                <Grid container justifyContent="center">
+                    <Button 
+                        onClick={() => handleBegin(user)}
+                        variant="contained"
+                        sx={{
+                            width: 130,
+                            backgroundColor: "#E4423F",
+                            borderRadius: 25,
+                            height: 45,
+                            textTransform: "none",
+                            fontFamily: "Segoe UI",
+                            fontSize: 18,
+                            fontWeight: "regular"
+                        }}
+                    >
+                        Begin!
+                    </Button>
                 </Grid>
-                <Grid container size={12} justifyContent="center" >
-                    <Button style={{ textTransform: 'capitalize', color: '#E4423F' }}
+                <Grid container justifyContent="center">
+                    <Button 
                         onClick={handleContinue}
-                    >Keep matching</Button>
+                        sx={{ 
+                            textTransform: 'capitalize', 
+                            color: '#E4423F' 
+                        }}
+                    >
+                        Keep matching
+                    </Button>
                 </Grid>
-                {/* <Button onClick={() => handleBegin(user)}
-                    style={{
-                        color: 'white',
-                        backgroundColor: '#E4423F',
-                        border: 'none',
-                        padding: '10px',
-                        borderRadius: '18px',
-                        width: '100px',
-                        fontSize: '15px',
-                        cursor: 'pointer'
-                    }}>Begin!</Button> */}
-                    {/* TODO: FIX FORMATTING */}
-                
             </Stack>
-
-        </div>
+        </Box>
     )
 }

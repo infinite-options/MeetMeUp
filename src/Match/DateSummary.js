@@ -1,76 +1,170 @@
-import React from "react";
-import { useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Box, Typography, IconButton, Avatar, Paper, Grid, Slider, Button } from '@mui/material';
 import EditIcon from "../Assets/Images/EditIcon.png";
+import './DateSummary.css';
+import TopTitle from '../Assets/Components/TopTitle';
+import SendArrowIcon from '../Assets/Images/SendArrow.png';
 
 export default function DateSummary() {
-
     const location = useLocation();
-    const { user, selectedDay, selectedTime, selectedDateIdea } = location.state || {};
+    const { user, selectedDay, selectedTime, selectedDateIdea, AccountUser = [], formattedAddress } = location.state || {};
+    const navigate = useNavigate();
 
-    
-    const EditableItem = ({ label, value }) => {
-        return (
-            <div style={styles.itemContainer}>
-                <span style={styles.label}>{label}</span>
-                <div style={styles.valueContainer}>
-                    <span style={styles.value}>{value}</span>
-                    <span style={styles.icon}><img src={EditIcon}/></span>
-                </div>
-            </div>
-        );
-    };
+    const handleSelectionResults=()=>{
+        navigate('/selectionResults', {state:{user}})
+    }
 
-    const styles = {
-        container: {
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '10px',
-            width: '290px',
-            marginLeft:'50px',
-        },
-        itemContainer: {
+    const EditableItem = ({ label, value }) => (
+        <Paper elevation={3} sx={{
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
             backgroundColor: '#f8f8f8',
             borderRadius: '20px',
-            padding: '10px 15px',
+            padding: { xs: '8px 12px', md: '10px 15px' },
             boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-        },
-        label: {
-            fontFamily:'Lexend',
-            fontSize: '14px',
-        },
-        valueContainer: {
-            display: 'flex',
-            alignItems: 'center',
-            gap: '5px',
-        },
-        value: {
-            fontFamily:'Lexend',
-            fontSize: '14px',
-            color: '#555',
-        },
-        icon: {
-            cursor: 'pointer',
-            fontSize: '14px',
-        },
+        }}>
+            <Typography variant="body1" sx={{ fontFamily: 'Lexend', fontSize: { xs: '12px', md: '14px' } }}>
+                {label}
+            </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <Typography variant="body1" sx={{ fontFamily: 'Lexend', fontSize: { xs: '12px', md: '14px' }, color: '#555' }}>
+                    {value}
+                </Typography>
+                <IconButton size="small">
+                    <img src={EditIcon} alt="Edit" style={{ width: '14px', height: '14px' }} />
+                </IconButton>
+            </Box>
+        </Paper>
+    );
+
+    const [sliderValue, setSliderValue] = useState(0);
+    const handleSliderChange = (event, newValue) => {
+        setSliderValue(newValue);
     };
 
+    const handleSend = () => {
+        console.log("Date invitation sent!");
+        setSliderValue(0);
+    };
+
+    useEffect(() => {
+        if (sliderValue > 80) {
+            handleSend();
+        }
+    }, [sliderValue]);
 
     return (
-        <div>
-            <div>
-                <h3 style={{ fontWeight: "lighter", fontFamily: 'Lexend', textAlign: 'center' }}>{user.name}</h3>
-            </div>
-            <div>
-                <p style={{ padding: '25px', fontFamily: 'Lexend', fontSize: '23px', textAlign: 'center', marginTop: '160px' }}>Let's meet up on <span style={{ color: '#E4423F' }}>{selectedDay} {selectedTime},</span> and go to <span style={{ color: '#E4423F' }}>{selectedDateIdea}</span> at the <span style={{ color: '#E4423F' }}>Vapiano's </span></p>
-            </div>
-            <div style={styles.container}>
-                <EditableItem label="Date & Time" value= {`${selectedDay} ${selectedTime}`} />
-                <EditableItem label="Date Theme" value= {selectedDateIdea} />
-                <EditableItem label="Location" value="Vapiano's" />
-            </div>
-        </div>
-    )
+        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", padding: { xs: 2, md: 4 } }}>
+            <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: { xs: '10px', md: '20px' }, mt: 2, width: '100%' }}>
+                <Box sx={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                    <Box sx={{ mr: 2 }}><TopTitle /></Box>
+                    <Avatar
+                        src={AccountUser[0]?.src}
+                        alt='Account User'
+                        sx={{
+                            width: { xs: 40, md: 50 },
+                            height: { xs: 40, md: 50 },
+                            border: '2px solid white',
+                            zIndex: 1,
+                        }}
+                    />
+                    <Avatar
+                        src={user.src}
+                        alt='Matched User'
+                        sx={{
+                            width: { xs: 40, md: 50 },
+                            height: { xs: 40, md: 50 },
+                            border: '2px solid white',
+                            marginLeft: '-15px',
+                            zIndex: 0,
+                        }}
+                    />
+                </Box>
+                <Typography variant="h6" sx={{ mt: 2, fontFamily: 'Lexend', fontSize: { xs: '16px', md: '20px' } }}>{user.name}</Typography>
+            </Box>
+            <Typography variant="body1" sx={{ padding: '25px', fontFamily: 'Lexend', fontSize: { xs: '18px', md: '23px' }, textAlign: 'center', mt: { xs: 4, md: '160px' }, mx: { xs: '5%', sm: '10%' } }}>
+                Let's meet up on <span style={{ color: '#E4423F' }}>{selectedDay} {selectedTime},</span> and go to <span style={{ color: '#E4423F' }}>{selectedDateIdea}</span> at the <span style={{ color: '#E4423F' }}>{formattedAddress}</span>
+            </Typography>
+
+            <Grid container direction="column" spacing={2} sx={{ width: { xs: '90%', sm: '390px' }, mx: { xs: 0, sm: '15%' } }}>
+                <Grid item>
+                    <EditableItem label="Date & Time" value={`${selectedDay} ${selectedTime}`} />
+                </Grid>
+                <Grid item>
+                    <EditableItem label="Date Theme" value={selectedDateIdea} />
+                </Grid>
+                <Grid item>
+                    <EditableItem label="Location" value={formattedAddress} />
+                </Grid>
+            </Grid>
+
+            <Box sx={{ mx: { xs: 0, sm: '15%' }, width: '100%', maxWidth: { xs: '250px', md: '290px' }, mt: { xs: 5, md: '70px' }, position: 'relative', height: '60px', border: '2px solid #ccc', borderRadius: '18px' }}>
+                <Slider
+                    value={sliderValue}
+                    onChange={handleSliderChange}
+                    aria-labelledby="slide-to-send"
+                    sx={{
+                        mt: '15px',
+                        ml: { xs: '20px', md: '30px' },
+                        '& .MuiSlider-thumb': {
+                            width: { xs: 40, md: 50 },
+                            height: { xs: 40, md: 50 },
+                            backgroundColor: '#E4423F',
+                            borderRadius: '18px',
+                            '&:hover, &.Mui-focusVisible': {
+                                boxShadow: '0px 0px 0px 8px rgba(228, 66, 63, 0.16)',
+                            },
+                            '&:before': {
+                                boxShadow: 'none',
+                            },
+                        },
+                        '& .MuiSlider-track': {
+                            backgroundColor: 'white',
+                            border: 'none',
+                        },
+                        '& .MuiSlider-rail': {
+                            backgroundColor: '#f8f8f8',
+                            boxShadow: 'inset 0px 2px 4px rgba(0, 0, 0, 0.1)',
+                        },
+                    }}
+                />
+                <Typography
+                    id="slide-to-send"
+                    sx={{
+                        position: 'absolute',
+                        left: '50%',
+                        top: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        color: sliderValue > 80 ? 'white' : '#555',
+                        fontFamily: 'Lexend',
+                        fontSize: { xs: '12px', md: '14px' },
+                        pointerEvents: 'none',
+                    }}
+                >
+                    Slide to send
+                </Typography>
+            </Box>
+            <Box>
+            <Button
+                    variant="contained"
+                    onClick={() => handleSelectionResults(user)}
+                    sx={{
+                        backgroundColor: '#E4423F',
+                        borderRadius: '18px',
+                        width: '160px',
+                        fontFamily: 'Lexend, sans-serif',
+                        mt: 4,
+                        textTransform: 'none',
+                        '&:hover': {
+                            backgroundColor: '#d13c39',
+                        },
+                    }}
+                >
+                    Selection Results
+                </Button>
+            </Box>
+        </Box>
+    );
 }

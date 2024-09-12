@@ -3,36 +3,33 @@ import { useLocation, useNavigate } from "react-router-dom";
 import './SelectLocation.css';
 import { Autocomplete, GoogleMap, useJsApiLoader, MarkerF } from '@react-google-maps/api';
 import { useState } from 'react';
+import { Box, Button, TextField, Typography, Avatar } from '@mui/material';
+import TopTitle from '../Assets/Components/TopTitle';
 
 export default function SelectLocation() {
-
     const location = useLocation();
     const { user, selectedDay, selectedTime, selectedDateIdea, AccountUser = [] } = location.state || {};
-    //console.log("Select Location", user);
-    //console.log("Selected Date Idea:", selectedDateIdea)
-    const [center, setCenter] = useState({lat: -32.015001263602, lng: 115.83650856893345});
 
     const activities = [{ name: 'Coffee' }, { name: 'Lunch' }, { name: 'Surprise me' }];
-
+    const [formattedAddress, setFormattedAddress] = useState('');
     const navigate = useNavigate();
+    const [center, setCenter] = useState({ lat: -32.015001263602, lng: 115.83650856893345 });
+    const [searchResult, setSearchResult] = useState('');
+    
     const handleNextButton = (user) => {
-        navigate('/nextSummary', { state: { user, selectedDay, selectedTime, selectedDateIdea } });
-
+        navigate('/nextSummary', { state: { user, selectedDay, selectedTime, selectedDateIdea, AccountUser, formattedAddress } });
     }
+    
+
 
     const GOOGLE_API_KEY = process.env.REACT_APP_GOOGLE_API_KEY;
     const placesLibrary = ['places'];
 
     const mapContainerStyle = {
-        width: '80%',
-        height: '400px',
-        marginTop: '10px',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        // border: 'solid',
-        // borderWidth: '2px',
+        width: '100%',
+        height: '250px',
+        border: '2px solid #000',
         borderRadius: '10px',
-
     };
 
     const { isLoaded, loadError } = useJsApiLoader({
@@ -48,113 +45,163 @@ export default function SelectLocation() {
         return <div>Loading maps</div>;
     }
 
+    function onLoad(autocomplete) {
+        setSearchResult(autocomplete);
+    }
+
+    function onPlaceChanged() {
+        if (searchResult !== '') {
+            const place = searchResult.getPlace();
+            const formattedAddress = place.formatted_address;
+            console.log("formatted address:", formattedAddress);
+            setCenter({ lat: place.geometry.location.lat(), lng: place.geometry.location.lng() });
+            setFormattedAddress(formattedAddress);
+        } else {
+            alert('Enter in a new location');
+        }
+    }
+
     return (
-        <div>
-            <div className='title' style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: '15px', marginTop: '10px' }}>
-                <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                    <img
+        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", padding: { xs: '10px', sm: '20px' } }}>
+            
+            <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: '10px', mt: 2, width: '100%' }}>
+                <Box sx={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                    <Box sx={{ mr:2}}><TopTitle /></Box>
+                    <Avatar
                         src={AccountUser[0]?.src}
                         alt='Account User'
-                        style={{
-                            width: '50px',
-                            height: '50px',
-                            borderRadius: '50%',
-                            objectFit: 'cover',
+                        sx={{
+                            width: { xs: 40, sm: 50 },
+                            height: { xs: 40, sm: 50 },
                             border: '2px solid white',
-                            position: 'relative',
                             zIndex: 1
                         }}
                     />
-                    <img
+                    <Avatar
                         src={user.src}
                         alt='Matched User'
-                        style={{
-                            width: '50px',
-                            height: '50px',
-                            borderRadius: '50%',
-                            objectFit: 'cover',
+                        sx={{
+                            width: { xs: 40, sm: 50 },
+                            height: { xs: 40, sm: 50 },
                             border: '2px solid white',
-                            position: 'relative',
-                            marginLeft: '-15px', // Overlap the images
+                            marginLeft: '-15px',
                             zIndex: 0
                         }}
                     />
-                </div>
-                <h2 className='userName' style={{ fontSize: '15px', marginTop: '35px', fontFamily: 'Lexend' }}>{user.name}</h2>
-            </div>
-            <div style={{ marginTop: '20px', textAlign: 'center' }}>
-                <p>This is when <span style={{ fontWeight: 'bold' }}>{user.name}</span> is available</p>
-                <p>And these are the <span style={{ fontWeight: 'bold' }}>activities</span> they enjoy:</p>
-                <div>
+                </Box>
+                <Typography variant="h6" sx={{ mt: 2, fontFamily: 'Lexend', fontSize: { xs: 14, sm: 16 } }}>{user.name}</Typography>
+            </Box>
+
+            
+            <Box sx={{ mt: 3, textAlign: 'center', mx: { xs: 1, sm: 5 } }}>
+                <Typography variant="body1" sx={{ fontFamily: 'Lexend' }}>
+                    This is when <Box component="span" sx={{ fontWeight: 'bold' }}>{user.name}</Box> is available and these are the <Box component="span" sx={{ fontWeight: 'bold' }}>activities</Box> they enjoy:
+                </Typography>
+                <Box sx={{ mt: 1 }}>
                     {activities.map((activity, index) => (
-                        <button
+                        <Button
                             key={index}
-                            style={{
+                            variant="outlined"
+                            sx={{
                                 backgroundColor: 'white',
                                 border: '2px solid #808080',
                                 padding: '5px 10px',
                                 borderRadius: '20px',
                                 fontFamily: 'Lexend',
-                                fontSize: '13px',
+                                fontSize: { xs: 12, sm: 14 },
                                 cursor: 'pointer',
-                                marginRight: '10px',
+                                marginRight: '5px',
+                                mt: 1,
+                                color: '#E4423F',
+                                textTransform: 'none',
+                                '&:hover': {
+                                    backgroundColor: 'white',
+                                    border: '2px solid #808080',
+                                },
                             }}
                         >
                             {activity.name}
-                        </button>
+                        </Button>
                     ))}
-                </div>
-            </div>
-            <div style={{ marginLeft: '30px' }}>
-                <h2 style={{ fontWeight: 'bold', fontFamily: 'Lexend' }}>Location</h2>
-                <p style={{ fontFamily: 'Lexend', fontSize: '11px' }}>Here's a map you can use to find out what might be convenient</p>
-            </div>
-            <div>
-                <div>
-                    {/* <GoogleMaps /> */}
+                </Box>
+            </Box>
+
+            
+            <Typography
+                variant="h5"
+                sx={{
+                    fontWeight: 'bold',
+                    fontFamily: 'Lexend',
+                    mt: 2,
+                    textAlign: 'center',
+                    fontSize: { xs: 16, sm: 18 },
+                    mx: { xs: 2, sm: '15%' }
+                }}
+            >
+                Location
+            </Typography>
+            <Typography sx={{ textAlign: 'center', mt: 1, fontSize: { xs: 12, sm: 13 }, fontFamily: 'Lexend', mx: { xs: 2, sm: '15%' } }}>
+                Here's a map you can use to find out what might be convenient.
+            </Typography>
+
+            <Box
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    width: '100%',
+                    maxWidth: '400px',
+                    margin: '0 auto',
+                    padding: { xs: '10px', sm: '20px' },
+                }}
+            >
+                
+                <Box sx={{ width: '100%', maxWidth: '350px', mb: 2, mx: { xs: 1, sm: '15%' } }}>
+                    <Autocomplete onPlaceChanged={onPlaceChanged} onLoad={onLoad}>
+                        <TextField
+                            placeholder="Location"
+                            fullWidth
+                            sx={{
+                                '& .MuiInputBase-input': {
+                                    fontSize: { xs: 12, sm: 14 },
+                                    padding: '10px',
+                                }
+                            }}
+                        />
+                    </Autocomplete>
+                </Box>
+
+                
+                <Box sx={{ width: '100%', maxWidth: '350px', mb: 2, mx: { xs: 1, sm: '15%' } }}>
                     <GoogleMap
                         mapContainerStyle={mapContainerStyle}
                         zoom={15}
                         center={center}
                         mapId='map_id'
                     >
-                        <MarkerF position={center}/>
+                        <MarkerF position={center} />
                     </GoogleMap>
-                </div>
-                <button className='saveButton'
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        backgroundColor: '#E4423F',
-                        border: 'none',
-                        padding: '10px',
-                        borderRadius: '10px',
-                        width: '100px',
-                        cursor: 'pointer',
-                        marginTop: '56px',
-                        marginLeft: '70px',
-                        color: 'white',
-                        fontFamily: 'Lexend',
+                </Box>
 
-                    }}>Save</button>
-
-                <button className='nextButton' onClick={() => handleNextButton(user)}
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'center',
+                
+                <Button
+                    variant="contained"
+                    onClick={() => handleNextButton(user)}
+                    sx={{
                         backgroundColor: '#E4423F',
-                        border: 'none',
-                        padding: '10px',
                         borderRadius: '18px',
                         width: '100px',
-                        cursor: 'pointer',
-                        marginTop: '-38px',
-                        marginLeft: '210px',
-                        color: 'white',
-                        fontFamily: 'Lexend',
-
-                    }}>Next</button>
-            </div>
-        </div>
-    )
+                        fontFamily: 'Lexend, sans-serif',
+                        mt: 4,
+                        textTransform: 'none',
+                        '&:hover': {
+                            backgroundColor: '#d13c39',
+                        },
+                    }}
+                >
+                    Next
+                </Button>
+            </Box>
+        </Box>
+    );
 }
