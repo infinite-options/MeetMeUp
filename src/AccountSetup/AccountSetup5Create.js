@@ -102,7 +102,7 @@ export default function AccountSetup5Create() {
         setViewRecording(!viewRecording);
     };
 
-    const handleImageUpload = (e) => {
+    const handleImageUpload = async (e) => {
         const img = e.target.files[0];
         console.log("img:", img);
         if(!img) {
@@ -110,6 +110,7 @@ export default function AccountSetup5Create() {
         }
 
         const imgURL = URL.createObjectURL(img);
+        console.log("imgURL:", imgURL);
         if(formData['image'].split(',').length > 3) {
             alert('Only 3 images allowed!');
         }
@@ -167,9 +168,48 @@ export default function AccountSetup5Create() {
         document.body.removeChild(link);
     };
 
-    const handleNext = (e) => {
-        console.log(e);
-        console.log(formData);
+    const handleNext = async (e) => {
+        // const url = "http://127.0.0.1:4000/userinfo";
+        const url = "https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo";
+        let fd = new FormData();
+        fd.append("user_uid", "100-000008");
+        fd.append("user_email_id", "pmarathay@yahoo.com");
+
+        let vidBlob = await fetch(videoSrc).then(r => r.blob()); 
+        fd.append("user_video", vidBlob, "video_filename");
+
+        var imageArray = formData['image'].split(',');
+        for(var i = 0; i < imageArray.length - 1; i++) {
+            let imgBlob = await fetch(imageArray[i]).then(r => r.blob());
+            if(i === 0) {
+                fd.append("img_0", imgBlob, "img_0_filename");
+            }
+            else if(i === 1) {
+                fd.append("img_1", imgBlob, "img_1_filename");
+            }
+            else if(i === 2) {
+                fd.append("img_2", imgBlob, "img_2_filename");
+            }
+        }
+    
+        console.log("fd:", fd);
+        console.log("url:", url);
+        try {
+            const response = await fetch(url, {
+                method: 'PUT',
+                body: fd,
+            });
+
+            if(response.ok) {
+                const result = await response.json();
+                console.log(result);
+            }
+            else {
+                console.error('Response Err:', response.statusText);
+            }
+        } catch (err) {
+            console.log("Try Catch Err:", err);
+        }
     };
 
     return (

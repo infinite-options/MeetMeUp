@@ -13,7 +13,7 @@ const GOOGLE_API_KEY = process.env.REACT_APP_GOOGLE_API_KEY;
 const placesLibrary = ['places'];
 
 const mapContainerStyle = {
-    width: '100%',
+    width: '95%',
     height: '450px',
     marginTop: '10px',
     marginLeft: 'auto',
@@ -27,6 +27,8 @@ export default function AccountSetup3Create() {
         gender: '',
         profileBio: '',
         location: '',
+        sexuality: [],
+        openTo: [],
         sexualityStraight: false,
         sexualityBisexual: false,
         sexualityTransgender: false,
@@ -43,6 +45,22 @@ export default function AccountSetup3Create() {
         'Male',
         'Female',
         'Nonbinary',
+    ]
+
+    const sexuality = [
+        'Straight',
+        'Bixseuxal',
+        'Transgender',
+        'LGBTQ',
+        'Homosexual',
+    ]
+
+    const openTo = [
+        'Straight',
+        'Bixseuxal',
+        'Transgender',
+        'LGBTQ',
+        'Homosexual',
     ]
 
     const [center, setCenter] = useState({lat: -32.015001263602, lng: 115.83650856893345});
@@ -176,7 +194,7 @@ export default function AccountSetup3Create() {
                             style={{
                                 fontSize: '14px',
                                 display: 'flex',
-                                width: '350px',
+                                width: '95%',
                                 height: '25px',
                                 marginTop: '10px',
                                 marginLeft: 'auto',

@@ -14,13 +14,30 @@ const AccountSetup6Available = () => {
         coffee: false,
         movies: false,
         supriseMe: false,
+        dates: [],
     });
+
+    const dates = [
+        'Lunch',
+        'Dinner',
+        'Coffee',
+        'Movies',
+        'Surprise Me',
+    ]
 
     const handleButtonBoolean = (date, selected) => {
         setFormData({
             ...formData,
             [date]: selected
         });
+
+        if(date in formData['dates']) {
+            formData['dates'].push(date);
+        }
+        else {
+            const index = formData['dates'].indexOf(date);
+            formData['dates'].splice(index, 1);
+        }
     };
 
     const handleNext = (e) => {
@@ -40,19 +57,19 @@ const AccountSetup6Available = () => {
                         <Typography sx={{fontSize:"14px", fontFamily:"Lexend"}}>Select any activities you would be open</Typography>
                         <Grid container spacing={1}>
                             <Grid >
-                                <Dates date="Lunch" id="lunch" handleButtonBoolean={handleButtonBoolean}/>
+                                <Dates date="Lunch" id="lunch" handleButtonBoolean={handleButtonBoolean} formData={formData}/>
                             </Grid>
                             <Grid >
-                                <Dates date="Dinner" id="dinner" handleButtonBoolean={handleButtonBoolean}/>
+                                <Dates date="Dinner" id="dinner" handleButtonBoolean={handleButtonBoolean} formData={formData}/>
                             </Grid>
                             <Grid >
-                                <Dates date="Coffee" id="coffee" handleButtonBoolean={handleButtonBoolean}/>
+                                <Dates date="Coffee" id="coffee" handleButtonBoolean={handleButtonBoolean} formData={formData}/>
                             </Grid>
                             <Grid >
-                                <Dates date="Movies" id="movies" handleButtonBoolean={handleButtonBoolean}/>
+                                <Dates date="Movies" id="movies" handleButtonBoolean={handleButtonBoolean} formData={formData}/>
                             </Grid>
                             <Grid >
-                                <Dates date="Surprise Me" id="supriseMe" handleButtonBoolean={handleButtonBoolean}/>
+                                <Dates date="Surprise Me" id="supriseMe" handleButtonBoolean={handleButtonBoolean} formData={formData}/>
                             </Grid>
                         </Grid>
                     </form>

@@ -1,7 +1,7 @@
 import { Button } from "@mui/material";
 import { useState } from "react";
 
-const Dates = ({date, id, handleButtonBoolean}) => {
+const Dates = ({date, id, handleButtonBoolean, formData}) => {
     const [selected, setSelected] = useState(false);
     const onClick = () => {
         handleButtonBoolean(id, !selected)
