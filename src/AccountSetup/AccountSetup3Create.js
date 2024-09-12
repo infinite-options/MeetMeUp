@@ -4,11 +4,13 @@ import backButton from '../Assets/Images/BackButton.png';
 import progressBar from '../Assets/Images/progressBar40.png';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Box, Button, Container, Grid2, MenuItem, TextField } from '@mui/material';
+import { Box, Button, Container, Grid2, MenuItem, TextField, Typography } from '@mui/material';
 import { Autocomplete, GoogleMap, useJsApiLoader, MarkerF } from '@react-google-maps/api';
 import Progress from '../Assets/Components/Progress';
 import NextButton from '../Assets/Components/NextButton';
-
+import { useNavigate } from 'react-router-dom'; 
+import Grid from "@mui/material/Grid2";
+import axios from 'axios';
 const GOOGLE_API_KEY = process.env.REACT_APP_GOOGLE_API_KEY;
 const placesLibrary = ['places'];
 
@@ -82,6 +84,46 @@ export default function AccountSetup3Create() {
         console.log(e);
         console.log(formData);
     };
+    const navigate = useNavigate(); 
+
+    const handleNavigate = () => {
+        navigate(`/accountSetup4Create`);
+    };
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const form = e.currentTarget;
+        console.log(e);
+        console.log('formData: ', formData);
+        if (form) {
+            const data = new FormData(form);
+            const formObj = {
+                name: data.get('name'),
+                user_age: data.get('age'),
+                user_gender: data.get('gender'),
+            }
+            data.append('user_uid', '100-000008');
+            data.append('user_email_id', localStorage.getItem('user_email_id'));
+            console.log('localStorage email: ', data.get('user_email_id'));
+            data.forEach((value, key) => {
+                console.log(`${key}: ${value}`);
+            });
+            console.log('formObj: ', formObj);
+            axios
+            .put(
+                `https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/`,
+                data
+            )
+            .then((response) => {
+                console.log("RESPONSE: ", response.data);
+                window.location.reload();
+            })
+            .catch((error) => {
+                console.error("Error occurred:", error); // This will log the 404 error
+              });
+            handleNavigate();
+
+        }
+    };
 
     const { isLoaded, loadError } = useJsApiLoader({
         googleMapsApiKey: GOOGLE_API_KEY,
@@ -95,20 +137,15 @@ export default function AccountSetup3Create() {
     if (!isLoaded) {
         return <div>Loading maps</div>;
     }
-
+    
+    const fieldStyle = {'& .MuiOutlinedInput-root': {'&.Mui-focused fieldset': {borderColor: '#E4423F'}}, width: 1};
     return (
         <div className='App'>
-            <div className='white-background'>
-                {/* <Link to='/accountSetup2Create'><img src={backButton} alt='back button' className='back-button'/></Link>
-                <div className='pc-title-back-button-text'>
-                    Profile Creation
-                </div>
-                <img src={progressBar} alt='progress bar'/> */}
-                
+            <Box sx={{marginLeft:'15%', marginRight:'15%'}}>       
                 <Progress percent="40%" prev="/accountSetup2Create" />
-                
-                <form className='form-container' onSubmit={handleNext}>
-                <Box sx={{marginLeft:'10%', marginRight:'10%'}}>
+
+                <Box component="form" onSubmit={handleSubmit}>
+                    {/* TODO: FIX FORMATTING */}
                     <div className='pc-header-text'>
                         About You
                     </div>
@@ -116,25 +153,25 @@ export default function AccountSetup3Create() {
                         These details are about you and will be public to potential matches on meet me up.
                     </div>
                     <Grid2 container
-                        sx={{ '& > :not(style)': { marginTop: 1.5, marginLeft: 3, marginRight: 3, width: 1 } }}
+                        sx={{ '& > :not(style)': { marginTop: 1.5, width: 1 } }}
                         autoComplete='off'
                     >
                         <TextField onChange={handleChange}
-                            sx={{'& .MuiOutlinedInput-root': {'&.Mui-focused fieldset': {borderColor: '#E4423F'}}}}
+                            sx={fieldStyle}
                             InputLabelProps={{style: { color: "#E4423F" }}}
                             name='name' label='Full Name' type='text' variant='outlined'
                         />
-                        <Grid2 container >
+                        <Grid2 container spacing={1}>
                             <Grid2 size={6}>
                                 <TextField onChange={handleChange}
-                                    sx={{width:"98%",'& .MuiOutlinedInput-root': {'&.Mui-focused fieldset': {borderColor: '#E4423F'}}}}
+                                    sx={fieldStyle}
                                     InputLabelProps={{style: { color: "#E4423F" }}}
                                     name='age' label='Age' type='number' variant='outlined'
                                 />
                             </Grid2>
                             <Grid2 size={6} >
                                 <TextField onChange={handleChange}
-                                    sx={{'& .MuiOutlinedInput-root': {'&.Mui-focused fieldset': {borderColor: '#E4423F'}}, width: 1}}
+                                    sx={fieldStyle}
                                     InputLabelProps={{style: { color: "#E4423F" }}}
                                     name='gender' label='Gender' variant='outlined' select defaultValue = ''>
                                     {genders.map((gender) => (
@@ -146,12 +183,12 @@ export default function AccountSetup3Create() {
                             </Grid2>
                         </Grid2>
                         <TextField onChange={handleChange}
-                            sx={{'& .MuiOutlinedInput-root': {'&.Mui-focused fieldset': {borderColor: '#E4423F'}}}}
+                            sx={fieldStyle}
                             InputLabelProps={{style: { color: "#E4423F" }}}
                             name='suburb' label='Suburb' type='text' variant='outlined'
                         />
                         <TextField onChange={handleChange}
-                            sx={{'& .MuiOutlinedInput-root': {'&.Mui-focused fieldset': {borderColor: '#E4423F'}}}}
+                            sx={fieldStyle}
                             InputLabelProps={{style: { color: "#E4423F" }}}
                             name='profileBio' label='Profile Bio' type='text' variant='outlined' multiline rows={4}
                         />
@@ -205,7 +242,7 @@ export default function AccountSetup3Create() {
                     </div>
                     <Button variant='contained' onClick={handleButton} name='sexualityStraight'
                         sx={{ backgroundColor: formData['sexualityStraight'] ? '#E4423F' : '#ffffff', color: '#000000',
-                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', marginRight: '-10px', textTransform: 'none' }}
+                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginRight: '-10px', textTransform: 'none' }}
                     >
                         Straight
                     </Button>
@@ -241,7 +278,7 @@ export default function AccountSetup3Create() {
                     </div>
                     <Button variant='contained' onClick={handleButton} name='openToStraight'
                         sx={{ backgroundColor: formData['openToStraight'] ? '#E4423F' : '#ffffff', color: '#000000',
-                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', marginRight: '-10px', textTransform: 'none' }}
+                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginRight: '-10px', textTransform: 'none' }}
                     >
                         Straight
                     </Button>
@@ -285,13 +322,23 @@ export default function AccountSetup3Create() {
                             Next
                         </Button> */}
                         
-                        <NextButton onClick={handleNext} next={'/accountSetup4Create'}></NextButton>
-                    
+                        <Grid container size={12} justifyContent="center">
+                        <Button
+                        variant='contained'
+                        type='submit'
+                        sx={{width:"130px", backgroundColor:"#E4423F", 
+                            borderRadius:"25px", height:"45px", 
+                            color:"white", marginTop:"40px", 
+                            mb:"40px", textTransform:"none", 
+                            fontFamily:"Lexend", 
+                            fontSize:"18px", fontWeight:"regular"}}
+                        >Next</Button> 
+                        </Grid>
+
                     </div>
-                    </Box>
-                </form>
-                
-            </div>
+                </Box>
+            </Box>
+  
         </div>
     )
 }

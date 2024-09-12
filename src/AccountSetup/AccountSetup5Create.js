@@ -157,7 +157,8 @@ export default function AccountSetup5Create() {
 
     return (
         <div className='App'>
-            <div className='white-background'>
+            <Box sx={{marginLeft:'15%', marginRight:'15%'}}>
+
                 {/* <Link to='/accountSetup4Create'><img src={backButton} alt='back button' className='back-button'/></Link>
                 <div className='pc-title-back-button-text'>
                     Profile Creation
@@ -365,7 +366,7 @@ export default function AccountSetup5Create() {
                         <NextButton onClick={handleNext} next={'/accountSetup6Availability'}></NextButton>
                     </div>
                 </form>
-            </div>
+            </Box>
         </div>
     )
 }

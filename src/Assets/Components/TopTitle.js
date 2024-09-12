@@ -4,7 +4,7 @@ import Grid from '@mui/material/Grid2';
 
 const TopTitle = ({title}) => {
     return (
-        <Box sx={{ position: 'relative', width: '100%' }}>
+        <Box sx={{ position: 'relative', width: '100%', marginTop: '15px' }}>
             <Grid container alignItems="center">
                 <Grid item xs={3} container alignItems="center" zIndex='10' justifyContent="flex-start">
                     <BackArrowButton />

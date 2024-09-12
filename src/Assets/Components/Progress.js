@@ -3,6 +3,7 @@ import Grid from '@mui/material/Grid2';
 import { Link } from "react-router-dom";
 // import BackButton from '../Images/BackButton.png'
 import BackArrowButton from "./BackArrowButton";
+import TopTitle from "./TopTitle";
 const Progress = ({percent, prev}) => {
     let finished 
     let unfinished;
@@ -18,25 +19,8 @@ const Progress = ({percent, prev}) => {
     calcProgress();
 
     return (
-        <Grid container sx={{marginLeft:"10%", marginRight:"10%"}}>
-            <Box sx={{ position: 'relative', width: '100%' }}>
-            <Grid container alignItems="center">
-            <Grid item xs={3} container alignItems="center" justifyContent="flex-start">
-                <BackArrowButton />
-            </Grid>
-            </Grid>
-            <Box sx={{
-            position: 'absolute',
-            width: '100%',
-            display: 'flex',
-            top: '10px',
-            justifyContent: 'center'
-            }}>
-            <Typography sx={{ fontSize: '22px' }}>
-                Profile Creation
-            </Typography>
-            </Box>
-            </Box>
+        <Grid container>
+            <TopTitle title={'Profile Creation'}></TopTitle>
             <Grid container size={12} spacing={1} alignItems="center" justifyContent="center">
                 <Grid size={finished} >
                     <hr style={{border: '2px solid #E4423F', borderRadius:"2px"}} />

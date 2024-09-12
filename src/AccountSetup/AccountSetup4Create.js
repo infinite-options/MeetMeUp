@@ -4,13 +4,14 @@ import backButton from '../Assets/Images/BackButton.png';
 import progressBar from '../Assets/Images/progressBar60.png';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Container } from '@mui/material';
+import { Button, Container, Box } from '@mui/material';
 import DrawerContext from '../Assets/Components/DrawerContext';
 import AccountContext from './AccountContext';
 import React from 'react';
 import DrawerOptions from '../Assets/Components/DrawerOptions';
 import Progress from '../Assets/Components/Progress';
 import NextButton from '../Assets/Components/NextButton';
+import axios from 'axios';
 export default function AccountSetup4Create() {
     const [option, setOption] = React.useState('');
     // const 
@@ -42,7 +43,10 @@ export default function AccountSetup4Create() {
         nationality: '',
     });
 
-    
+    const specificsStyle = { backgroundColor: '#ffffff', color: '#000000',
+        width: 1, borderRadius: '41px', marginTop: '20px', textTransform: 'none' };
+    // const specificsStyle = { backgroundColor: '#ffffff', color: '#000000',
+    //     width: '90%', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', textTransform: 'none' };
 
     // based on option set specific to passData
     const [specifics, setSpecifics] = useState({
@@ -108,7 +112,29 @@ export default function AccountSetup4Create() {
             nationality: specificsForm.get('nationality')
         };
         setDetails(formObj);
+        localStorage.setItem('specificsObject', formObj);
         console.log('formObj: ', formObj);
+
+        const data = specificsForm;
+        data.append('user_uid', '100-000008');
+        data.append('user_email_id', localStorage.getItem('user_email_id'));
+        console.log('localStorage email: ', data.get('user_email_id'));
+        data.forEach((value, key) => {
+            console.log(`${key}: ${value}`);
+        });
+        console.log('formObj: ', formObj);
+        axios
+        .put(
+            `https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/`,
+            data
+        )
+        .then((response) => {
+            console.log("RESPONSE: ", response.data);
+            window.location.reload();
+        })
+        .catch((error) => {
+            console.error("Error occurred:", error); // This will log the 404 error
+          });
     };
 
     const populateFormData = () => {
@@ -116,20 +142,13 @@ export default function AccountSetup4Create() {
         Object.entries(formData).forEach(([key, value]) => {
             specificsForm.append(key, value);
         });
-
         return specificsForm;
         };
     
 
     return (
         <div className='App'>
-            <Container>
-                {/* <Link to='/accountSetup3Create'><img src={backButton} alt='back button' className='back-button'/></Link>
-                <div className='pc-title-back-button-text'>
-                    Profile Creation
-                </div>
-                <img src={progressBar} alt='progress bar'/> */}
-                {/* <Progress percent="60%" prev="/accountSetup3Create" /> */}
+            <Box sx={{marginLeft:'15%', marginRight:'15%'}}>
                 <form className='form-container' onSubmit={handleNext}>
                     <Progress percent="60%" prev="/accountSetup3Create" />
 
@@ -141,7 +160,7 @@ export default function AccountSetup4Create() {
                     </div>
                     <Button variant='contained' onClick={handleButtonBoolean} name='interestsEatingOut'
                         sx={{ backgroundColor: formData['interestsEatingOut'] ? '#E4423F' : '#ffffff', color: '#000000',
-                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', marginRight: '-10px', textTransform: 'none' }}
+                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginRight: '-10px', textTransform: 'none' }}
                     >
                         Eating Out
                     </Button>
@@ -206,8 +225,7 @@ export default function AccountSetup4Create() {
                         These help give a better insight into who you are and will allow matches to better understand you as a person.
                     </div>
                     <Button variant='contained' name='height' style={{justifyContent: 'space-between'}}
-                        sx={{ backgroundColor: '#ffffff', color: '#000000',
-                            width: '90%', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', textTransform: 'none' }}
+                        sx={specificsStyle}
                         onClick={()=>{
                             setOption('height');
                         }}
@@ -216,8 +234,7 @@ export default function AccountSetup4Create() {
                         {specifics.height?<span>{specifics.height}</span>:<span>Not Entered</span>}
                     </Button>
                     <Button variant='contained' name='education' style={{justifyContent: 'space-between'}}
-                        sx={{ backgroundColor: '#ffffff', color: '#000000',
-                            width: '90%', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', textTransform: 'none' }}
+                        sx={specificsStyle}
                         onClick={()=>{
                             setOption('education');
                         }}
@@ -227,8 +244,7 @@ export default function AccountSetup4Create() {
                         
                     </Button>
                     <Button variant='contained' name='bodyComp' style={{justifyContent: 'space-between'}}
-                        sx={{ backgroundColor: '#ffffff', color: '#000000',
-                            width: '90%', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', textTransform: 'none' }}
+                        sx={specificsStyle}
                         onClick={()=>{
                             setOption('body');
                         }}
@@ -237,8 +253,7 @@ export default function AccountSetup4Create() {
                         {specifics.body?<span>{specifics.body}</span>:<span>Not Entered</span>}
                     </Button>
                     <Button variant='contained' name='starSign' style={{justifyContent: 'space-between'}}
-                        sx={{ backgroundColor: '#ffffff', color: '#000000',
-                            width: '90%', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', textTransform: 'none' }}
+                        sx={specificsStyle}
                         onClick={()=>{
                             setOption('star');
                         }}
@@ -248,8 +263,7 @@ export default function AccountSetup4Create() {
 
                     </Button>
                     <Button variant='contained' name='drinking' style={{justifyContent: 'space-between'}}
-                        sx={{ backgroundColor: '#ffffff', color: '#000000',
-                            width: '90%', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', textTransform: 'none' }}
+                        sx={specificsStyle}
                         onClick={()=>{
                             setOption('drinking');
                         }}
@@ -259,8 +273,7 @@ export default function AccountSetup4Create() {
                         
                     </Button>
                     <Button variant='contained' name='smoking' style={{justifyContent: 'space-between'}}
-                        sx={{ backgroundColor: '#ffffff', color: '#000000',
-                            width: '90%', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', textTransform: 'none' }}
+                        sx={specificsStyle}
                         onClick={()=>{
                             setOption('smoking');
                         }}
@@ -270,8 +283,7 @@ export default function AccountSetup4Create() {
                         
                     </Button>
                     <Button variant='contained' name='kids' style={{justifyContent: 'space-between'}}
-                        sx={{ backgroundColor: '#ffffff', color: '#000000',
-                            width: '90%', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', textTransform: 'none' }}
+                        sx={specificsStyle}
                         onClick={()=>{
                             setOption('children');
                         }}
@@ -280,8 +292,7 @@ export default function AccountSetup4Create() {
                         {specifics.children?<span>{specifics.children}</span>:<span>Not Entered</span>}
                     </Button>
                     <Button variant='contained' name='currentJob' style={{justifyContent: 'space-between'}}
-                        sx={{ backgroundColor: '#ffffff', color: '#000000',
-                            width: '90%', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', textTransform: 'none' }}
+                        sx={specificsStyle}
                         onClick={()=>{
                             setOption('position');
                         }}
@@ -290,8 +301,7 @@ export default function AccountSetup4Create() {
                         {specifics.position?<span>{specifics.position}</span>:<span>Not Entered</span>}
                     </Button>
                     <Button variant='contained' name='religion' style={{justifyContent: 'space-between'}}
-                        sx={{ backgroundColor: '#ffffff', color: '#000000',
-                            width: '90%', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', textTransform: 'none' }}
+                        sx={specificsStyle}
                         onClick={()=>{
                             setOption('religion');
                         }}
@@ -300,8 +310,7 @@ export default function AccountSetup4Create() {
                         {specifics.religion?<span>{specifics.religion}</span>:<span>Not Entered</span>}
                     </Button>
                     <Button variant='contained' name='genderID' style={{justifyContent: 'space-between'}}
-                        sx={{ backgroundColor: '#ffffff', color: '#000000',
-                            width: '90%', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', textTransform: 'none' }}
+                        sx={specificsStyle}
                         onClick={()=>{
                             setOption('gender');
                         }}
@@ -310,8 +319,7 @@ export default function AccountSetup4Create() {
                         {specifics.gender?<span>{specifics.gender}</span>:<span>Not Entered</span>}
                     </Button>
                     <Button variant='contained' name='nationality' style={{justifyContent: 'space-between'}}
-                        sx={{ backgroundColor: '#ffffff', color: '#000000',
-                            width: '90%', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', textTransform: 'none' }}
+                        sx={specificsStyle}
                         onClick={()=>{
                             setOption('nationality');
                         }}
@@ -329,7 +337,7 @@ export default function AccountSetup4Create() {
                 <DrawerContext.Provider value={{option, setOption, handleSetSpecifics, passData, setPassData, complete, setComplete, pickerValue, setPickerValue}}>
                     <DrawerOptions></DrawerOptions>
                 </DrawerContext.Provider>
-            </Container>
+            </Box>
         </div>
     )
 }

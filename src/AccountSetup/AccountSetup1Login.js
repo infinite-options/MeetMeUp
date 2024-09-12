@@ -31,7 +31,6 @@ export default function AccountSetup1Login() {
         console.log(e)
     };
     return (
-
         <div className='App'>
             <div className='red-overlay' />
             <Grid container size={12} sx={{textAlign:"center"}}>
