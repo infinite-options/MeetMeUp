@@ -38,7 +38,7 @@ import { useContext } from "react";
 
 const Profile = () => {
   const [userData, setUserData] = useState({});
-  const userId = "100-000001";
+  const userId = "100-000008";
   useEffect(() => {
     axios
       .get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/${userId}`)

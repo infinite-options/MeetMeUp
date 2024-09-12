@@ -9,18 +9,27 @@ import Dates from "../Assets/Components/Dates";
 // victors code
 const AccountSetup6Available = () => {
     const [formData, setFormData] = useState({
-        lunch: false,
-        dinner: false,
-        coffee: false,
-        movies: false,
-        supriseMe: false,
+        dates: [],
     });
 
-    const handleButtonBoolean = (date, selected) => {
-        setFormData({
-            ...formData,
-            [date]: selected
-        });
+    const dates = [
+        'Lunch',
+        'Dinner',
+        'Coffee',
+        'Movies',
+        'Surprise Me',
+    ]
+
+    const handleButton = (id, type) => {
+        if(formData[type].includes(id)) {
+            const index = formData[type].indexOf(id);
+            formData[type].splice(index, 1);
+        }
+        else {
+            formData[type].push(id);
+        }
+
+        console.log(formData[type]);
     };
 
     const handleNext = (e) => {
@@ -39,21 +48,11 @@ const AccountSetup6Available = () => {
                         <Typography sx={{fontSize:"18px", fontFamily:"Lexend"}}>What Types of Dates Interest You?</Typography>
                         <Typography sx={{fontSize:"14px", fontFamily:"Lexend"}}>Select any activities you would be open</Typography>
                         <Grid container spacing={1}>
-                            <Grid >
-                                <Dates date="Lunch" id="lunch" handleButtonBoolean={handleButtonBoolean}/>
-                            </Grid>
-                            <Grid >
-                                <Dates date="Dinner" id="dinner" handleButtonBoolean={handleButtonBoolean}/>
-                            </Grid>
-                            <Grid >
-                                <Dates date="Coffee" id="coffee" handleButtonBoolean={handleButtonBoolean}/>
-                            </Grid>
-                            <Grid >
-                                <Dates date="Movies" id="movies" handleButtonBoolean={handleButtonBoolean}/>
-                            </Grid>
-                            <Grid >
-                                <Dates date="Surprise Me" id="supriseMe" handleButtonBoolean={handleButtonBoolean}/>
-                            </Grid>
+                            {dates.map((date) => 
+                                <Grid>
+                                    <Dates id={date} handleButton={handleButton} array={formData['dates']} type={'dates'}/>
+                                </Grid>
+                            )}
                         </Grid>
                     </form>
                     <Typography sx={{fontSize:'18px', marginTop:"60px", fontFamily:"Lexend"}}>When Are You Available?</Typography>
