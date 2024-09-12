@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
 import './SelectPlace.css';
+import { Box } from "@mui/material";
 
 export default function SelectPlace() {
     const location = useLocation();
@@ -93,6 +94,7 @@ export default function SelectPlace() {
                 <h3 className='titleText' style={{ textAlign: 'center', marginTop: '70px', fontFamily: 'Lexend' }}>Let's meet up on<br /> <span style={{ color: '#E4423F' }}>{selectedDay} {selectedTime}</span>, and go to <span style={{ color: '#E4423F' }}> _</span></h3>
                 <p className='paraText' style={{ textAlign: 'center', marginTop: '20px', fontSize: '13px', fontFamily: 'Lexend', fontWeight: 'lighter' }}>Select a pre-filled date idea or suggest your own</p>
             </div>
+            <Box>
             <div className="dateIdeaButtons" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '15px 10px', marginTop: '25px', marginLeft: '50px' }}>
                 {renderDateIdeaButtons()}
             </div>
@@ -118,6 +120,7 @@ export default function SelectPlace() {
                     Next
                 </button>
             </div>
+            </Box>
         </div>
     );
 }

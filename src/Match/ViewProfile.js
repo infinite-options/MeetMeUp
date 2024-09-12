@@ -24,21 +24,21 @@ import redliked from "../Assets/Images/redliked.png"
 import MatchPopUp from "./MatchPopUp";
 import { useRef } from "react";
 
-const ViewProfile = ({ setIsFlipped, liked, onClick, isLiked, showPopup, user, AccountUser }) => {
-    const name = "Lachlan Collis";
-    const age = "21";
-    const gender = "Male";
-    const where = "Brisbane";
-    const height = "170cm Tall";
-    const religion = "Atheist";
-    const sign = "Cancer";
-    const status = "None Currently";
-    const education = "Associates Degree in UI & UX design";
-    const heart = "Plus Size";
-    const job = "UI + UX Designer";
-    const drink = "Socially";
-    const smoke = "I Dont Smoke";
-    const flag = "Australian";
+const ViewProfile = ({ setIsFlipped, liked, onClick, isLiked, showPopup, user, AccountUser, userData }) => {
+    const name = userData.user_first_name + " " + userData.user_last_name
+    const age = userData.user_age;
+    const gender = userData.user_gender
+    const where = userData.user_suburb
+    const height = userData.user_height
+    const religion = userData.user_religion;
+    const sign = userData.user_star_sign;
+    const status = userData.user_open_to
+    const education = userData.user_education;
+    const heart = userData.user_body_composition;
+    const job = userData.user_job;
+    const drink = userData.user_drinking;
+    const smoke = userData.user_smoking;
+    const flag = userData.user_nationality;
     const popupRef = useRef(null);
     
 

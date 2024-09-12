@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import './Begin.css';
-import { Container } from '@mui/material';
+import { Box, Container, Grid2, Typography } from '@mui/material';
 
 export default function Begin() {
     const location = useLocation();
@@ -33,7 +33,7 @@ export default function Begin() {
     };
 
     return (
-        <div>
+        <Box sx={{display:"flex", flexDirection:"column", alignItems:"center"}}>
             <div className='title' style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: '15px', marginTop: '20px' }}>
                 <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
                     <img
@@ -68,14 +68,14 @@ export default function Begin() {
             </div>
             <div>
                 <h3 className='titleText' style={{ textAlign: 'center', marginTop: '70px', fontFamily: 'Lexend' }}>Let's meet up on <span style={{ color: '#E4423F' }}>_</span> </h3>
-                <p className='paraText' style={{ textAlign: 'center', marginTop: '30px', fontSize: '13px', fontFamily: 'Lexend' }}><span style={{ fontWeight: 'bold' }}>Pick your dates</span> and see which ones align with your match. <span style={{ fontWeight: 'bold' }}>Show </span> your <span style={{ fontWeight: 'bold' }}>match </span> all your <span style={{ fontWeight: 'bold' }}>date availability</span> by selecting <span style={{ fontWeight: 'bold' }}>multiple date</span> and <span style={{ fontWeight: 'bold' }}>times</span> and <span style={{ fontWeight: 'bold' }}>fast track</span> the scheduling for your <span style={{ fontWeight: 'bold' }}>match</span> and your <span style={{ fontWeight: 'bold' }}>date.</span></p>
+                <Typography className='paraText' sx={{ textAlign: 'center', marginTop: '30px', fontSize: '13px', fontFamily: 'Lexend', marginLeft:{xs:"0", sm:"15%"}, marginRight:{xs:"0", sm:"15%"}}}><span style={{ fontWeight: 'bold' }}>Pick your dates</span> and see which ones align with your match. <span style={{ fontWeight: 'bold' }}>Show </span> your <span style={{ fontWeight: 'bold' }}>match </span> all your <span style={{ fontWeight: 'bold' }}>date availability</span> by selecting <span style={{ fontWeight: 'bold' }}>multiple date</span> and <span style={{ fontWeight: 'bold' }}>times</span> and <span style={{ fontWeight: 'bold' }}>fast track</span> the scheduling for your <span style={{ fontWeight: 'bold' }}>match</span> and your <span style={{ fontWeight: 'bold' }}>date.</span></Typography>
             </div>
             <div style={{ marginTop: '40px', display: 'flex', flexDirection: 'column', gap: '5px' }}>
                 <Container>
 
                 <div >
-                    <p style={{ marginLeft: '30px' }}>Date day</p>
-                    <select value={selectedDay} onChange={handleDayChange} style={{ width: '320px', padding: '10px', borderRadius: '5px', marginLeft: '30px', marginRight: '30px', fontFamily: 'Lexend' }}>
+                    <p>Date day</p>
+                    <select value={selectedDay} onChange={handleDayChange} style={{ width: '320px', padding: '10px', borderRadius: '5px', marginRight: '30px', fontFamily: 'Lexend' }}>
                         <option value="">Select Day</option>
                         <option value="Monday">Monday</option>
                         <option value="Tuesday">Tuesday</option>
@@ -88,8 +88,8 @@ export default function Begin() {
                 </div>
 
                 <div style={{ marginLeft: '0px' }}>
-                    <p style={{ marginLeft: '30px' }}>Date time</p>
-                    <select value={selectedTime} onChange={handleTimeChange} style={{ width: '320px', padding: '10px', marginLeft: '30px', marginRight: '30px', borderRadius: '5px', fontFamily: 'Lexend' }}>
+                    <p>Date time</p>
+                    <select value={selectedTime} onChange={handleTimeChange} style={{ width: '320px', padding: '10px', marginRight: '30px', borderRadius: '5px', fontFamily: 'Lexend' }}>
                         <option value="">Select Time</option>
                         <option value="7:00 AM">7:00 AM</option>
                         <option value="9:00 AM">9:00 AM</option>
@@ -103,7 +103,7 @@ export default function Begin() {
                 </Container>
 
             </div>
-            <div>
+            <Grid2 container sx={{flexDirection:"column", alignItems:"center"}}>
                 <button
                     style={{
                         display: 'flex',
@@ -115,9 +115,9 @@ export default function Begin() {
                         width: '130px',
                         cursor: 'pointer',
                         marginTop: '100px',
-                        marginLeft: '125px',
                         color: '#E4423F',
                         fontFamily: 'Lexend',
+                        borderStyle:"solid"
 
                     }}>Multiple date</button>
                 <button className='nextButton' onClick={() => handleNextButton(user)}
@@ -131,12 +131,11 @@ export default function Begin() {
                         width: '100px',
                         cursor: 'pointer',
                         marginTop: '20px',
-                        marginLeft: '140px',
                         color: 'white',
                         fontFamily: 'Lexend',
 
                     }}>Next</button>
-            </div>
-        </div>
+            </Grid2>
+        </Box>
     );
 }

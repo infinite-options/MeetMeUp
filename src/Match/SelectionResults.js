@@ -53,7 +53,7 @@ const SelectionResults = () => {
   }
   // making a component since used twice - easier to edit
   const UserBox = ({user, type}) => (
-    <div>
+    <Box sx={{ marginLeft:{xs:"0%", sm:"15%"}, marginRight:{xs:"0%", sm:"15%"}}}>
     <ListItem alignItems="flex-start">
       <ListItemButton onClick={() => handleUserClick(user, type)}>
           <ListItemAvatar>
@@ -84,7 +84,7 @@ const SelectionResults = () => {
       </ListItemButton>
     </ListItem>
     {/* <Divider component="li" variant="inset" sx={{width: '90%'}}/> */}
-    </div>
+    </Box>
 
   )
 
@@ -99,20 +99,20 @@ const SelectionResults = () => {
         {/* <BackArrowButton />
         <h2>Selection Results</h2> */}
       <br></br>
-      <h4 style={{ color: 'grey' }}>Matched Results</h4>
+      <Typography sx={{marginLeft:{xs:"0%", sm:"15%"}, marginRight:{xs:"0%", sm:"15%"},  fontSize:"18px", color:"grey", fontWeight:"bold"}}>Matched Results</Typography>
       <List>
       {matchedResults.map((user, index) => (
         <UserBox user={user} type={'matchedResults'}></UserBox>
       ))}
       </List>
-      <h4 style={{ color: 'grey' }}>People who selected you</h4>
+      <Typography sx={{marginLeft:{xs:"0%", sm:"15%"}, marginRight:{xs:"0%", sm:"15%"},  fontSize:"18px", color:"grey", fontWeight:"bold"}}>People who selected you</Typography>
       <List>
       {usersWhoSelectedYou.map((user, index) => (
         <UserBox user={user} type={'usersWhoSelectedYou'}></UserBox>
       ))}
       </List>
 
-      <h4 style={{ color: 'grey' }}>People who you selected</h4>
+      <Typography sx={{marginLeft:{xs:"0%", sm:"15%"}, marginRight:{xs:"0%", sm:"15%"},  fontSize:"18px", color:"grey", fontWeight:"bold"}}>People who you selected</Typography>
       <List>
       {usersWhoYouSelected.map((user, index) => (
         <UserBox user={user} type={'usersWhoYouSelected'}></UserBox>
