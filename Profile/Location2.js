@@ -6,11 +6,11 @@ const LocationPage2 = () => {
   const navigation = useNavigation();
 
   const handleYesClick = () => {
-    navigation.navigate('AccountSetup7Summary'); // Replace with your target screen name
+    navigation.navigate('Start'); // Replace with your target screen name
   };
 
   const handleLaterClick = () => {
-    navigation.navigate('AccountSetup7Summary'); // Replace with your target screen name
+    navigation.navigate('Start'); // Replace with your target screen name
   };
 
   return (

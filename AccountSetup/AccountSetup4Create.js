@@ -10,6 +10,7 @@ import backButton from '../src/Assets/Images/BackButton.png';
 import progressBar from '../src/Assets/Images/progressBar60.png';
 
 export default function AccountSetup4Create() {
+    const navigation = useNavigation(); 
     const [option, setOption] = useState('');
     const [formData, setFormData] = useState({
         interestsEatingOut: false,
@@ -68,10 +69,12 @@ export default function AccountSetup4Create() {
     };
 
     const handleNext = () => {
-        console.log(formData);
+    
+        navigation.navigate('Location'); 
+
     };
 
-    const navigation = useNavigation();
+    
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
@@ -115,7 +118,7 @@ export default function AccountSetup4Create() {
       
 
             <View style={styles.buttonContainer}>
-                <NextButton next="AccountSetup4Create" onPress={handleNext} />
+                <NextButton next="Location" onPress={handleNext} />
             </View>
         </ScrollView>
     );

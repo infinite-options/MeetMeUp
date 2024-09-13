@@ -1,35 +1,53 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native'; 
+import { postUserData } from "../Api.js";
+
+
+
 const LocationPage = () => {
-  const navigation = useNavigation();
+const [loading, setLoading] = useState(false);
+const navigation = useNavigation();
 
-  const handleYesClick = () => {
-    navigation.navigate('Location2'); 
-  };
+const handleUpdate = async (choice) => {
 
-  const handleLaterClick = () => {
-    navigation.navigate('Location2'); 
-  };
+  const formData = new FormData();
+  formData.append('user_uid', '100-000001');
+  formData.append('user_email_id', 'bobhawk@gmail.com');
+  formData.append('user_location_service', choice);
 
-  return (
+  await postUserData(formData);
+
+}
+
+
+const handleYesClick = () => {
+  handleUpdate('True');
+  navigation.navigate('Location2'); 
+};
+
+const handleLaterClick = () => {
+  handleUpdate('False');
+  navigation.navigate('Location2'); 
+};
+
+return (
     <ScrollView contentContainerStyle={styles.container}>
 
       <View style={styles.topBar}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image
-            source={require('../assets/arrow.png')}
+            source={require('../src/Assets/Images/arrow.png')}
             style={styles.arrowIcon}
           />
         </TouchableOpacity>
         <Text style={styles.headerText}>Profile Creation</Text>
       </View>
 
-      {/* Content */}
       <View style={styles.contentContainer}>
         <View style={styles.iconContainer}>
           <Image
-            source={require('../assets/icon.png')}
+            source={require('../src/Assets/Images/icon.png')}
             style={styles.icon}
           />
         </View>
@@ -47,7 +65,6 @@ const LocationPage = () => {
         </View>
       </View>
 
-      {/* Buttons */}
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.yesButton} onPress={handleYesClick}>
           <Text style={styles.buttonText}>Yes</Text>
@@ -105,6 +122,10 @@ const styles = StyleSheet.create({
   textContainer: {
     width: '100%',
     marginBottom: 16,
+    color: '#FFFFFF',
+    fontFamily: 'Segoe UI',
+    fontSize: 30,
+    fontWeight: 'normal',
   },
   mainTitle: {
     fontFamily: 'Segoe UI',
@@ -114,14 +135,15 @@ const styles = StyleSheet.create({
   },
   bodyText: {
     fontFamily: 'Segoe UI',
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: '200',
     color: '#FFFFFF',
   },
   buttonContainer: {
     width: '100%',
-    paddingHorizontal: 20,
-    paddingBottom: 20,
+    alignItems: 'left', 
+    marginBottom: 700,
+    marginLeft: 20
   },
   yesButton: {
     backgroundColor: '#FFFFFF',
@@ -130,12 +152,13 @@ const styles = StyleSheet.create({
     height: 45,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 16,
+    marginVertical: 0, 
   },
   laterButton: {
     justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 16,
+    alignItems: 'left',
+    marginTop: 10,
+    marginLeft: 20
   },
   buttonText: {
     fontFamily: 'Segoe UI',
