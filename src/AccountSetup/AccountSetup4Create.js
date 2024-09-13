@@ -4,7 +4,7 @@ import backButton from '../Assets/Images/BackButton.png';
 import progressBar from '../Assets/Images/progressBar60.png';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Container, Grid2 } from '@mui/material';
+import { Button, Container, Grid2, Box } from '@mui/material';
 import DrawerContext from '../Assets/Components/DrawerContext';
 import AccountContext from './AccountContext';
 import React from 'react';
@@ -147,7 +147,7 @@ export default function AccountSetup4Create() {
 
     return (
         <div className='App'>
-            <Container>
+            <Box sx={{marginLeft:'15%', marginRight:'15%'}}>
                 {/* <Link to='/accountSetup3Create'><img src={backButton} alt='back button' className='back-button'/></Link>
                 <div className='pc-title-back-button-text'>
                     Profile Creation
@@ -331,7 +331,7 @@ export default function AccountSetup4Create() {
                         <span>Religion</span>
                         {specifics.religion?<span>{specifics.religion}</span>:<span>Not Entered</span>}
                     </Button>
-                    <Button variant='contained' name='genderID' style={{justifyContent: 'space-between'}}
+                    {/* <Button variant='contained' name='genderID' style={{justifyContent: 'space-between'}}
                         sx={{ backgroundColor: '#ffffff', color: '#000000',
                             width: '100%', borderRadius: '41px', marginTop: '20px',  textTransform: 'none' }}
                         onClick={()=>{
@@ -340,7 +340,7 @@ export default function AccountSetup4Create() {
                     >
                         <span>Gender Identification</span>
                         {specifics.gender?<span>{specifics.gender}</span>:<span>Not Entered</span>}
-                    </Button>
+                    </Button> */}
                     <Button variant='contained' name='nationality' style={{justifyContent: 'space-between'}}
                         sx={{ backgroundColor: '#ffffff', color: '#000000',
                             width: '100%', borderRadius: '41px', marginTop: '20px',  textTransform: 'none' }}
@@ -358,10 +358,10 @@ export default function AccountSetup4Create() {
 
                     </div>
                 </form>
-                <DrawerContext.Provider value={{option, setOption, handleSetSpecifics, passData, setPassData, complete, setComplete, pickerValue, setPickerValue}}>
+                <DrawerContext.Provider value={{specifics, option, setOption, handleSetSpecifics, passData, setPassData, complete, setComplete, pickerValue, setPickerValue}}>
                     <DrawerOptions></DrawerOptions>
                 </DrawerContext.Provider>
-            </Container>
+            </Box>
         </div>
     )
 }

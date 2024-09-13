@@ -63,54 +63,10 @@ export default function AccountSetup2Create() {
     const handleNavigate = () => {
         navigate(`/accountSetup3Create`);
     };
-    // const handleSubmit = (e) => {
-    //     e.preventDefault();
-    //     const form = e.currentTarget;
-    //     console.log(e);
-    //     console.log('formData: ', formData);
-    //     const userID = '100-000008';
-    //     if (form) {
-    //         const data = new FormData(form);
-    //         data.delete('passwordConfirm');
-    //         data.forEach((value, key) => {
-    //             console.log(`${key}: ${value}`);
-    //         });
-    //         localStorage.setItem('user_email_id', data.get('user_email_id'));
-    //         console.log('localStorage email 2: ', localStorage.getItem('user_email_id'));
-    //         axios
-    //         .post(
-    //             `https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo`,
-    //             data
-    //         )
-    //         .then((response) => {
-    //             console.log("RESPONSE: ", response.data);
-    //             window.location.reload();
-    //             localStorage.setItem('user_uid', response.data.user_uid);
-    //             console.log('localStorage userUID: ', localStorage.getItem('user_uid'));
-    //             setSubmit(true);
-    //         })
-    //         .catch((error) => {
-    //             console.error("Error occurred:", error); // This will log the 404 error
-    //             window.alert('User Already Exists')
-    //         });
-    //         if (submit) {
-    //             handleNavigate();
-    //         }
-    //         // handleNavigate();
-    //     }
-    // };
-
     return (
         <div className='App'>
             <Box sx={{marginLeft:'15%', marginRight:'15%'}}>
-
-                {/* <Link to='/'><img src={backButton} alt='back button' className='back-button'/></Link>
-                <div className='pc-title-back-button-text'>
-                    Profile Creation
-                </div>
-                <img src={progressBar} alt='progress bar'/> */}
                 <Progress percent="20%" prev="/accountSetup1Login" />
-
                 <Box component="form" ref={formRef}>
                     <div className='pc-header-text'>
                         Account Details

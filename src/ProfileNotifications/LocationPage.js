@@ -73,7 +73,7 @@ const LocationPage = () => {
       <Container
         maxWidth="sm"
         style={{
-          textAlign: 'left', // Align text to the left
+          textAlign: 'left',
           paddingTop: 32,
           paddingBottom: 32,
           backgroundColor: '#E4423F',
@@ -122,13 +122,13 @@ const LocationPage = () => {
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
-            alignItems: 'flex-start', // Align items to the left
+            alignItems: 'flex-start',
           }}
         >
           <Box
             style={{
               display: 'flex',
-              justifyContent: 'flex-start', // Align image to the left
+              justifyContent: 'flex-start',
               marginBottom: 16,
               width: '100%',
             }}

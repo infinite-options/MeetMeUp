@@ -9,8 +9,12 @@ import checkIcon from "../Images/addcheck.png"
 // import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 // import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 // import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-
-import TimePicker from 'react-time-picker';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+// import TimePicker from 'react-time-picker';
+import dayjs from 'dayjs';
 
 // import Grid  from "@mui/material/Grid2";
 
@@ -28,19 +32,31 @@ const CustomButton = styled(Button)({
     textTransform: 'capitalize',
 
 });
-function DateAdd() {
+function DateAdd({ onAddTime, onRemoveTime, times }) {
   const [day, setDay] = useState("")
   const [start, setStart] = useState("")
   const [end, setEnd] = useState("")
-  const [times, setTimes] = useState([]);
+  // const [times, setTimes] = useState([]);
+  
+  // const handleRemoveTimes = (index) => {
+  //   console.log(index)
+  //   setTimes(times.filter((_, i) => i !== index)); 
+  // };
+  // const handleAddTime=()=> {
+  //   setTimes([...times, {day, start, end}]);
+  // }
 
-  const handleRemoveTimes = (index) => {
-    console.log(index)
-    setTimes(times.filter((_, i) => i !== index)); 
+  const handleAddTime = () => {
+    onAddTime(day, start, end);
+    setDay("");
+    setStart("");
+    setEnd("");
   };
-  const handleAddTime=()=> {
-    setTimes([...times, {day, start, end}]);
-  }
+
+  const handleTimeEndChange = (e) => {
+    setEnd(e.target.value);
+  };
+
 
   const handleChange=(event)=> {
       setDay(event.target.value)
@@ -55,28 +71,19 @@ function DateAdd() {
     step: 300,
   };
   return (
-    <Box
-    sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center', 
-    }}>
-      {/* <Grid size={4}>
-          <Typography sx={{fontSize:"18px"}}>Day</Typography>
-      </Grid>
-      <Grid size={8} container justifyContent="flex-start">
-          <Typography sx={{fontSize:"18px"}}>Times</Typography>
-      </Grid> */}
+    <div>
       {times.map((time, index) => (
-                    <DisplayTime
-                        index={index}
-                        day={time.day}
-                        start={time.start}
-                        end={time.end}
-                        onClick={handleRemoveTimes}
-                    />
-                    ))}
-        <Grid container size={12} justifyContent="center" gap={.5} sx={{ marginTop: 5 }}>
+          <DisplayTime
+              index={index}
+              day={time.Day}
+              start={time.start_time}
+              end={time.end_time}
+              key={index}
+              // end={time.end ? dayjs(time.end).format('HH:mm') : 'No end time'}
+              onClick={onRemoveTime}
+          />
+          ))}
+        <Grid container size={12} justifyContent="center" gap={1} sx={{ marginTop: 5 }}>
           <Grid size={4}> 
               <FormControl fullWidth>
                   <InputLabel sx={{color:"black", fontFamily:"Lexend", fontSize:"12px"}}>Select Day</InputLabel>
@@ -141,6 +148,15 @@ function DateAdd() {
                   }}
                   
               />
+            {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DemoContainer components={['TimePicker']}>
+                <TimePicker
+                  value={end}
+                  onChange={handleTimeEndChange}
+                  label="Basic time picker" />
+              </DemoContainer>
+            </LocalizationProvider> */}
+
           </Grid>
           <Grid size={1} container alignItems="center" >
             <img src={checkIcon} onClick={handleAddTime} />
@@ -151,7 +167,7 @@ function DateAdd() {
      
 
       
-    </Box>
+    </div>
   );
 }
 

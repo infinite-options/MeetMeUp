@@ -34,11 +34,13 @@ export default function AccountSetup1Login() {
 
         <div className='App'>
             <div className='red-overlay' />
+            <Box sx={{marginLeft:'15%', marginRight:'15%'}}>
+
             <Grid container size={12} sx={{textAlign:"center"}}>
                 <Grid size={12} container justifyContent="center">
-                     <img src={backgroundImage}alt='accountSetup1Login'/>
+                     <img src={backgroundImage} alt='accountSetup1Login'/>
                 </Grid>
-            <div className='rounded-box'>
+                <div className='rounded-box'>
                     <div className='title-text' style={{fontFamily:"Inria Sans"}}>
                         meet me up
                     </div>
@@ -108,6 +110,7 @@ export default function AccountSetup1Login() {
                 
             </div>
             </Grid>
+            </Box>
         </div>
     );
 }

@@ -53,7 +53,7 @@ const SelectionResults = () => {
   }
   // making a component since used twice - easier to edit
   const UserBox = ({user, type}) => (
-    <Box sx={{ marginLeft:{xs:"0%", sm:"15%"}, marginRight:{xs:"0%", sm:"15%"}}}>
+    <Box>
     <ListItem alignItems="flex-start">
       <ListItemButton onClick={() => handleUserClick(user, type)}>
           <ListItemAvatar>
@@ -89,27 +89,27 @@ const SelectionResults = () => {
   )
 
   return (
-    <div>
+    <Box sx={{marginLeft:'15%', marginRight:'15%'}}>
       <div className="selection-results-container">
 
         <TopTitle title={'Selection Results'}></TopTitle>
           {/* TODO: FIX BUTTON FORMATTING MAKE ON THE SAME LINE */}
 
       <br></br>
-      <Typography sx={{marginLeft:{xs:"0%", sm:"15%"}, marginRight:{xs:"0%", sm:"15%"},  fontSize:"18px", color:"grey", fontWeight:"bold"}}>Matched Results</Typography>
+      <Typography sx={{fontSize:"18px", color:"grey", fontWeight:"bold"}}>Matched Results</Typography>
       <List>
       {matchedResults.map((user, index) => (
         <UserBox user={user} type={'matchedResults'}></UserBox>
       ))}
       </List>
-      <Typography sx={{marginLeft:{xs:"0%", sm:"15%"}, marginRight:{xs:"0%", sm:"15%"},  fontSize:"18px", color:"grey", fontWeight:"bold"}}>People who selected you</Typography>
+      <Typography sx={{fontSize:"18px", color:"grey", fontWeight:"bold"}}>People who selected you</Typography>
       <List>
       {usersWhoSelectedYou.map((user, index) => (
         <UserBox user={user} type={'usersWhoSelectedYou'}></UserBox>
       ))}
       </List>
 
-      <Typography sx={{marginLeft:{xs:"0%", sm:"15%"}, marginRight:{xs:"0%", sm:"15%"},  fontSize:"18px", color:"grey", fontWeight:"bold"}}>People who you selected</Typography>
+      <Typography sx={{  fontSize:"18px", color:"grey", fontWeight:"bold"}}>People who you selected</Typography>
       <List>
       {usersWhoYouSelected.map((user, index) => (
         <UserBox user={user} type={'usersWhoYouSelected'}></UserBox>
@@ -123,7 +123,7 @@ const SelectionResults = () => {
     <Grid container size={12} justifyContent="center" >
         <Button onClick={handleEditPreferences} sx={{width:"auto", minWidth: "130px", backgroundColor:"#E4423F", borderRadius:"25px", height:"45px", color:"white", mb:"5px", textTransform:"none", fontFamily:"Segoe UI", fontSize:"18px", fontWeight:"regular"}}>Edit Preferences</Button>
     </Grid>
-  </div>
+  </Box>
   );
 }
 

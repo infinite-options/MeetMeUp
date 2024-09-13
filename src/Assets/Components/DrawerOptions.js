@@ -103,12 +103,16 @@ function DrawerOptions() {
             console.log('complete: ', complete);
             console.log('passData: ', passData);
             
-            // setOption('');
+            setOption('');
             // when complete is selected set specifics
         }}>Complete</CustomRedButton>
     </Box>
     )
-
+  const handleTextChange = (name) => (event) => {
+    const { value } = event.target;
+    handleSetSpecifics(name, value); 
+  };
+  
 
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
@@ -241,15 +245,15 @@ function DrawerOptions() {
            </div>)}
         {option=='position' && (<div>
             <TitleBox title={"Your Current Position"} subtitle={'What is your current line of work? Potentional matches love seeing what you get up in your day to day.'}></TitleBox>
-            <ContentBox content={<TextField label={'Your Job'}></TextField>}></ContentBox>
+            <ContentBox content={<TextField value={specifics.position || ''} onChange={handleTextChange('position')} label={'Your Job'}></TextField>}></ContentBox>
         </div>)}
         {option=='religion' && (<div>
             <TitleBox title={"Religion"} subtitle={'If you follow any religions and religion is important to your relationship please tell us the faith you follow.'}></TitleBox>
-            <ContentBox content={<TextField label={'Your Religion'}></TextField>}></ContentBox>
+            <ContentBox content={<TextField value={specifics.religion || ''} onChange={handleTextChange('religion')} label={'Your Religion'}></TextField>}></ContentBox>
         </div>)}
         {option=='gender' && (<div>
             <TitleBox title={"Gender Specific"} subtitle={'To help potential matches understand who you are and how you identify, tell us your specific gender.'}></TitleBox>
-            <ContentBox content={<TextField label={'Specific Gender'}></TextField>}></ContentBox>
+            <ContentBox content={<TextField value={specifics.gender || ''} onChange={handleTextChange('gender')} label={'Specific Gender'}></TextField>}></ContentBox>
         </div>)}
         {option=='height' && (<div>
             <TitleBox title={"What's Your Height?"} subtitle={'Some of our users like to match with people that are of similar stature.'}></TitleBox>
@@ -257,7 +261,7 @@ function DrawerOptions() {
         </div>)}
         {option=='nationality' && (<div>
             <TitleBox title={"Your Nationality"} subtitle={'To help potential matches understand who you are and how you identify, tell us your specific nationality.'}></TitleBox>
-            <ContentBox content={<TextField label={'Nationality'}></TextField>}></ContentBox>
+            <ContentBox content={<TextField value={specifics.nationality || ''} onChange={handleTextChange('nationality')} label={'Nationality'}></TextField>}></ContentBox>
            </div>)}
       </SwipeableDrawer>
     </Root>

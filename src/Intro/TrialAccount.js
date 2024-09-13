@@ -4,6 +4,7 @@ import arrow from '../Assets/Images/arrow.png';
 import background from '../Assets/Images/background.png'; 
 import { useNavigate } from 'react-router-dom'; 
 import './Start.css';
+import TopTitle from '../Assets/Components/TopTitle';
 
 const TrialAccount = () => {
   const handleBackClick = () => {
@@ -30,52 +31,33 @@ const TrialAccount = () => {
   }
   return (
     <Container 
-      style={{ 
-        position: 'relative', 
-        minHeight: '100vh', 
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: '0px 20px',
-        backgroundImage: `url(${background})`,
-        backgroundSize: "cover",
-        backgroundRepeat: "no-repeat",
-      }}
+      style={{
+      position: 'relative',
+      minHeight: '100vh',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundImage: `url(${background})`,
+      backgroundSize: 'cover', 
+      backgroundRepeat: 'no-repeat',
+      backgroundPosition: 'center', 
+    }}
     >
-      {/* <Container sx={backgroundStyle}> */}
-
-
-      {/* <img
-        src={background}
-        alt="Background"
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100vw', 
-          height: '100vh', 
-          objectFit: 'cover',
-          zIndex: -1,
-          padding:'none',
-          margin:'none'
-        }}
-      /> */}
-
       <Box 
         style={{
           backgroundColor: '#FFFFFF',  
-          width: '100vw',
+          width: '100%',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          padding: '10px 20px',
           position: 'absolute',
           top: 0,
-          zIndex: 2, 
+          zIndex: 2,
         }}
       >
-        <IconButton onClick={handleBackClick}>
+        <TopTitle title={'Trial Account'} weight={'bold'}></TopTitle>
+        {/* <IconButton onClick={handleBackClick}>
           <img src={arrow} alt="Back" style={{ width: '30px', height: '30px' }} />
         </IconButton>
         <Typography 
@@ -88,8 +70,7 @@ const TrialAccount = () => {
           }}
         >
           Trial Account
-        </Typography>
-        <div style={{ width: '30px' }} /> 
+        </Typography> */}
       </Box>
 
       <Grid
