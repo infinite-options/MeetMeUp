@@ -141,17 +141,17 @@ const Profile = () => {
       <Grid size={12}>
         <Typography sx={{ fontSize: "30px", textAlign: { xs: "left", sm: "center" } }}>About You</Typography>
       </Grid>
-      <Grid container size={{ xs: 12, sm: 8, md: 5, lg: 4, xl: 3 }}>
-        <Grid size={6}>
-          <Grid size={12}>
+      <Grid container size={12} spacing={1} sx={{mb:"10px"}}>
+        <Grid size={6} container>
+          <Grid size={12} container justifyContent="flex-end">
             <img src={img1} alt='img1' />
           </Grid>
-          <Grid size={12} container>
+          <Grid size={12} container justifyContent="flex-end">
             <img src={img3} alt='img3' />
           </Grid>
         </Grid>
         <Grid size={6}>
-          <Grid size={12}>
+          <Grid size={12} container>
             <img src={img2} alt='img2' />
           </Grid>
         </Grid>

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Container, Box, Typography, Grid, Button, ListItemButton, ListItemIcon, ListItemText, ListItem, IconButton, Switch } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Container, Box, Typography, Button, ListItemButton, ListItemIcon, ListItemText, ListItem, IconButton, Switch, Grid2 } from '@mui/material';
 import account from "../Assets/Images/account.png";
 import location from "../Assets/Images/location.png";
 import notification from "../Assets/Images/notification.png";
@@ -12,6 +12,7 @@ import BackArrowButton from '../Assets/Components/BackArrowButton';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { useNavigate } from 'react-router-dom'; 
 import TopTitle from '../Assets/Components/TopTitle';
+import axios from 'axios';
 
 const switchStyle = {
   '& .MuiSwitch-track': {
@@ -22,11 +23,44 @@ const switchStyle = {
   },
 }
 const Settings = () => {
-  const [locationServices, setLocationServices] = useState(false);
-  const [notifications, setNotifications] = useState(false);
+
+  const [locationServices, setLocationServices] = useState(null);
+  const [notifications, setNotifications] = useState(null);
+
+  useEffect(()=> {
+    axios.get('https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/100-000001')
+      .then(res=> {
+        console.log(res.data.result[0].user_location_service)
+        console.log(res.data.result[0].user_notification_preference)
+        setLocationServices(res.data.result[0].user_location_service==="True")
+        setNotifications(res.data.result[0].user_notification_preference==="True")
+      })
+      .catch(err=> {
+        console.log(err)
+      })
+  },[])
+
+  useEffect(() => {
+    if (locationServices !== null && notifications !== null) {
+      const formData = new FormData();
+      formData.append('user_uid', '100-000001');
+      formData.append('user_email_id', 'bobhawk@gmail.com');
+      formData.append('user_location_service', locationServices);
+      formData.append('user_notification_preference', notifications);
+
+      axios.put('https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo', formData)
+        .then(res => {
+          console.log(res.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+  }, [locationServices, notifications]);
 
   const handleToggleLocationServices = () => {
     setLocationServices(!locationServices);
+    console.log(locationServices)
   };
 
   const handleToggleNotifications = () => {
@@ -45,7 +79,7 @@ const Settings = () => {
   };
 
   return (
-    <Box style={{ backgroundColor: '#FFFFFF', minHeight: '100vh' }}>
+    <Box sx={{ backgroundColor: '#FFFFFF', minHeight: '100vh', marginLeft:{xs:"0",md:"15%"}, marginRight:{xs:"0",md:"15%"} }}>
       <Container style={{ padding: '32px' }}>
         
       <Box>
@@ -107,7 +141,6 @@ const Settings = () => {
                         fontSize: '18px',
                         fontWeight: 400,
                         color:'#1A1A1A'
-                        
                       }}
                     >Update Password</Typography>
                   </ListItemText>
@@ -118,8 +151,7 @@ const Settings = () => {
               </ListItem>
 
 
-
-    <ListItem alignItems="flex-start">
+    <ListItem alignItems="flex-start" style={{marginLeft:"15px"}}>
           <ListItemIcon>
               <img src={location} 
                 style={{ 
@@ -148,12 +180,26 @@ const Settings = () => {
             <Switch
               checked={locationServices}
               onChange={handleToggleLocationServices}
-              sx={switchStyle}
+              sx={{switchStyle,
+                '& .MuiSwitch-switchBase': {
+                  color: 'white',
+                  '&.Mui-checked': {
+                    color: 'white', 
+                  },
+                  '&.Mui-checked + .MuiSwitch-track': {
+                    backgroundColor: '#E4423F',
+                    opacity:1
+                  },
+                },
+                '& .MuiSwitch-track': {
+                  backgroundColor: '#E4423F', 
+              },
+              }}
               inputProps={{ 'aria-label': 'location services switch' }} 
             />
     </ListItem>
  
-    <ListItem alignItems="flex-start">
+    <ListItem alignItems="flex-start" style={{marginLeft:"15px"}}>
           <ListItemIcon>
               <img src={notification} 
                 style={{ 
@@ -180,10 +226,24 @@ const Settings = () => {
           />
   
           {/* onClick={() => handleUserClick(user, 'usersWhoYouSelected')} */}
-            <Switch
+          <Switch
               checked={notifications}
               onChange={handleToggleNotifications}
-              sx={switchStyle}
+              sx={{switchStyle,
+                '& .MuiSwitch-switchBase': {
+                  color: 'white', 
+                  '&.Mui-checked': {
+                    color: 'white', 
+                  },
+                  '&.Mui-checked + .MuiSwitch-track': {
+                    backgroundColor: '#E4423F',
+                    opacity:1
+                  },
+                },
+                '& .MuiSwitch-track': {
+                  backgroundColor: '#E4423F', 
+              },
+              }}
               inputProps={{ 'aria-label': 'location services switch' }} 
             />
             

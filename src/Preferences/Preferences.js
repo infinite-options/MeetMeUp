@@ -18,15 +18,17 @@ const MatchPreferences = ({prev}) => {
     }
  
     return (
-        <Grid container sx={{maxWidth:"414px", margin:"0 auto"}}>
+        <Grid container sx={{marginLeft:"15%", marginRight:'15%', marginTop:"10px"}}>
             <Grid container alignItems="center" size={12}>
-                <Grid size={3}>
-                    <Link to="/accountSetup7Summary">
-                        <img src={arrow} style={{width:"40px", height:"40px"}} />
+                <Grid item size={2} sx={{ position: "relative",left:"7%" }}>
+                    <Link to="/accountSetup7Summary" style={{ position: "absolute", left: 0 }}>
+                    <img src={arrow} style={{ width: "40px", height: "40px" }} />
                     </Link>
                 </Grid>
-                <Grid size={9}>
-                    <Typography sx={{fontSize:'22px', fontFamily:"Lexend"}}>Match Preferences</Typography>
+                <Grid size={12} container justifyContent="center">
+                    <Typography sx={{ fontSize: '22px', fontFamily: "Lexend", textAlign: "center" }}>
+                    Match Preferences
+                    </Typography>
                 </Grid>
             </Grid>
             <Container>

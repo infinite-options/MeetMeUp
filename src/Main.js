@@ -59,6 +59,7 @@ function Main() {
         <Route path="/account2" element={<AccountDetails2 />} />
         <Route path="/account3" element={<AccountDetails3 />} />
         <Route path="/account4" element={<AccountDetails4 />} />
+        
         <Route path="/account5" element={<AccountDetails5 />} />
         <Route path="/start" element={<Start />} />
         <Route path="/trial" element={<TrialAccount />} />
