@@ -8,7 +8,7 @@ const AccountInfo = ({img, info}) => {
                 <img src={img}></img>
             </Grid>
             <Grid size={10} justifyContent="flex-start">
-                <Typography sx={{fontSize:'14px', fontWeight:"bold"}}>{info}</Typography>
+                <Typography sx={{fontSize:'14px', fontWeight:"bold"}}>{info ? info : "no data"}</Typography>
             </Grid>
         </Grid>
     );
