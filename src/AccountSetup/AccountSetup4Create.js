@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Button, StyleSheet, Image, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import NextButton from '../src/Assets/Components/NextButton';
-import HelperTextBox from '../src/Assets/Components/helperTextBox'; 
-import Progress from '../src/Assets/Components/Progress';
+import NextButton from '../Assets/Components/NextButton';
+import HelperTextBox from '../Assets/Components/helperTextBox'; 
+import Progress from '../Assets/Components/Progress';
 
 
-import backButton from '../src/Assets/Images/BackButton.png';
-import progressBar from '../src/Assets/Images/progressBar60.png';
+import backButton from '../Assets/Images/BackButton.png';
+import progressBar from '../Assets/Images/progressBar60.png';
 
 export default function AccountSetup4Create() {
     const [option, setOption] = useState('');
@@ -115,7 +115,8 @@ export default function AccountSetup4Create() {
       
 
             <View style={styles.buttonContainer}>
-                <NextButton next="AccountSetup4Create" onPress={handleNext} />
+                {/* <NextButton next="AccountSetup4Create" onPress={handleNext} /> */}
+                <NextButton next="LocationPage" onPress={handleNext} />
             </View>
         </ScrollView>
     );

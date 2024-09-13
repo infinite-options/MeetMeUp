@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import Progress from '../src/Assets/Components/Progress';
-import NextButton from '../src/Assets/Components/NextButton';
-import HelperTextBox from '../src/Assets/Components/helperTextBox';
+import Progress from '../Assets/Components/Progress';
+import NextButton from '../Assets/Components/NextButton';
+import HelperTextBox from '../Assets/Components/helperTextBox';
 
 export default function AccountSetup2Create() {
     const navigation = useNavigation();
-
+    
     const [formData, setFormData] = useState({
         email: '',
         phoneNumber: '',

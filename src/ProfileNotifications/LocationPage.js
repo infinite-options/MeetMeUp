@@ -1,24 +1,40 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native'; 
+import { postUserData } from "../../Api.js";
+
 const LocationPage = () => {
-  const navigation = useNavigation();
+const [loading, setLoading] = useState(false);
 
-  const handleYesClick = () => {
-    navigation.navigate('Location2'); 
-  };
+const handleUpdate = async (choice) => {
 
-  const handleLaterClick = () => {
-    navigation.navigate('Location2'); 
-  };
+  const formData = new FormData();
+  formData.append('user_uid', '100-000001');
+  formData.append('user_email_id', 'bobhawk@gmail.com');
+  formData.append('user_location_service', choice);
 
-  return (
+  await postUserData(formData);
+
+}
+const navigation = useNavigation();
+
+const handleYesClick = () => {
+  handleUpdate('True');
+  navigation.navigate('LocationPage2'); 
+};
+
+const handleLaterClick = () => {
+  handleUpdate('False');
+  navigation.navigate('LocationPage2'); 
+};
+
+return (
     <ScrollView contentContainerStyle={styles.container}>
 
       <View style={styles.topBar}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image
-            source={require('../assets/arrow.png')}
+            source={require('../Assets/Images/arrow.png')}
             style={styles.arrowIcon}
           />
         </TouchableOpacity>
@@ -28,7 +44,7 @@ const LocationPage = () => {
       <View style={styles.contentContainer}>
         <View style={styles.iconContainer}>
           <Image
-            source={require('../assets/icon1.png')}
+            source={require('../Assets/Images/icon.png')}
             style={styles.icon}
           />
         </View>

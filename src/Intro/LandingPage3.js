@@ -6,7 +6,7 @@ const LandingPage = () => {
   const navigation = useNavigation(); 
 
   const handleStartClick = () => {
-    navigation.navigate('LandingPage2'); 
+    navigation.navigate('LandingPage4'); 
   };
 
   const handleSkipClick = () => {
@@ -16,24 +16,18 @@ const LandingPage = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.headerText}>
-        Hello, online <Text style={styles.bold}>daters</Text>.
-        {'\n'}Are you <Text style={styles.bold}>time poor</Text>?
+        Get to know your matches <Text style={styles.bold}>better</Text> with {'\n'} a profile 
+        and <Text style={styles.bold}>recording</Text> updated <Text style={styles.bold}>yearly</Text>.
       </Text>
 
-      <Image source={require('../assets/image1.png')} style={styles.customImage} />
-
-      <Text style={styles.subHeaderText}>
-        We do <Text style={styles.bold}>small talk</Text> for you.
-      </Text>
+      <Image source={require('../Assets/Images/image3.png')} style={styles.customImage} />
 
       <Text style={styles.descriptionText}>
-        <Text style={styles.bold}>Arrange</Text> your <Text style={styles.bold}>meeting</Text> time & <Text style={styles.bold}>destination</Text>{' '}
-        through the app with only{' '}
-        <Text style={styles.bold}>automated prompting</Text>.
+        No <Text style={styles.bold}>disappointment</Text> that they {'\n'} look <Text style={styles.bold}>nothing</Text> like their profile.
       </Text>
 
       <TouchableOpacity style={styles.startButton} onPress={handleStartClick}>
-        <Text style={styles.startButtonText}>Let's Start</Text>
+        <Text style={styles.startButtonText}>Let's Match</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.skipButton} onPress={handleSkipClick}>
@@ -55,9 +49,9 @@ const styles = StyleSheet.create({
   headerText: {
     fontFamily: 'Lexend-Regular',
     fontSize: 20,
+    fontWeight: '400',
     textAlign: 'center',
     color: '#1A1A1A',
-    
   },
   subHeaderText: {
     fontFamily: 'Lexend-Regular',
@@ -65,15 +59,15 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     textAlign: 'center',
     color: '#1A1A1A',
-    marginBottom:10
+
   },
   descriptionText: {
     fontFamily: 'Lexend-Regular',
-    fontSize: 14,
+    fontSize: 20,
     fontWeight: 'normal',
     textAlign: 'center',
-    color:'#000000',
-    marginBottom: 30
+    color: '#1A1A1A',
+    marginBottom: 40,
   },
   bold: {
     fontWeight: '700',
@@ -104,7 +98,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   skipButtonText: {
-    fontFamily: 'Lexend-Regular',
+    fontFamily: 'Lexend-Bold',
     fontSize: 12,
     color: '#000000',
     textTransform: 'none',

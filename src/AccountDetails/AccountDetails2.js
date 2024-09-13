@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity, Switch, Button, StyleSheet } from 'react-native';
-import account from '../assets/account.png';
-import location from '../assets/location.png';
-import notification from '../assets/notification.png';
-import password from '../assets/password.png';
-import arrow from '../assets/arrow.png';
+import account from '../Assets/Images/account.png';
+import location from '../Assets/Images/location.png';
+import notification from '../Assets/Images/notification.png';
+import password from '../Assets/Images/password.png';
+import arrow from '../Assets/Images/arrow.png';
 
-const Account = () => {
+const Account2 = () => {
   const [locationServices, setLocationServices] = useState(false);
   const [notifications, setNotifications] = useState(false);
 
@@ -56,7 +56,9 @@ const Account = () => {
         />
       </View>
       <Text style={styles.description}>
-        This will help assist you in meeting up for potential dates and meeting in the correct locations.
+      This will help assist you in meeting up for 
+potential dates and meeting in the correct 
+locations.
       </Text>
 
       <View style={styles.section}>
@@ -74,12 +76,10 @@ const Account = () => {
         Notifications will be sent to your device to help you coordinate and plan dates! It will also let you know when you have received a message from a potential date!
       </Text>
 
-      <TouchableOpacity style={styles.logoutButtonContainer} onPress={handleLogout}>
-        <Text style={styles.logoutButtonContainerText}>Log Out</Text>
+      <TouchableOpacity style={styles.settingsButton} onPress={handleLogout}>
+        <Text style={styles.settingsButtonText}>Settings Saved</Text>
       </TouchableOpacity>
     </View>
-
-      
   );
 };
 
@@ -130,24 +130,20 @@ const styles = StyleSheet.create({
   },
   description: {
     fontSize: 14,
-    fontWeight: '400',
+    fontWeight: 'normal',
     fontFamily: 'Segoe UI',
     marginTop: -10,
     marginBottom: 24,
     color:'#1A1A1A'
   },
-  logoutButtonContainer: {
+  settingsButton: {
     backgroundColor: '#E4423F',
-    borderRadius: 20,
-    width: 130,
-    height: 45,
     paddingVertical: 12,
     paddingHorizontal: 24,
     marginTop: 90,
     alignItems: 'center',
-    marginLeft: 100
   },
-  logoutButtonContainerText: {
+  settingsButtonText: {
     color: '#FFFFFF',
     fontSize: 18,
     fontWeight: 'normal',
@@ -155,4 +151,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Account;
+export default Account2;

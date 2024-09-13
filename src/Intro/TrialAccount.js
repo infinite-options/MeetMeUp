@@ -17,14 +17,14 @@ const TrialAccount = () => {
     <View style={styles.container}>
 
       <Image
-        source={require('../assets/background.png')}
+        source={require('../Assets/Images/background.png')}
         style={styles.backgroundImage}
       />
 
       <View style={styles.topBar}>
         <TouchableOpacity onPress={handleBackClick}>
           <Image
-            source={require('../assets/arrow.png')}
+            source={require('../Assets/Images/arrow.png')}
             style={styles.arrowIcon}
           />
         </TouchableOpacity>

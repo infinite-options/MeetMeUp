@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Alert } from 'react-native';
 //import MapView, { Marker } from 'react-native-maps'; 
 import { useNavigation } from '@react-navigation/native';
-import Progress from '../src/Assets/Components/Progress';
-import NextButton from '../src/Assets/Components/NextButton';
-import HelperTextBox from '../src/Assets/Components/helperTextBox';
+import Progress from '../Assets/Components/Progress';
+import NextButton from '../Assets/Components/NextButton';
+import HelperTextBox from '../Assets/Components/helperTextBox';
 import { Dropdown } from 'react-native-element-dropdown';
 
 const initialRegion = {

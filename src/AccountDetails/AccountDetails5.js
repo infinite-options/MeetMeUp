@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
-import arrow from '../assets/arrow.png'; 
+import arrow from '../Assets/Images/arrow.png'; 
 
 const { width } = Dimensions.get('window');
 

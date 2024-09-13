@@ -6,7 +6,7 @@ const LandingPage = () => {
   const navigation = useNavigation(); 
 
   const handleStartClick = () => {
-    navigation.navigate('LandingPage3'); 
+    navigation.navigate('TrialAccount'); 
   };
 
   const handleSkipClick = () => {
@@ -16,18 +16,22 @@ const LandingPage = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.headerText}>
-        Browse a <Text style={styles.bold}>soulmate</Text> or new friend 
-        {'\n'}and <Text style={styles.bold}>fastrack</Text> to meeting.
+        <Text style={styles.bold}>Time</Text> is so <Text style={styles.bold}> precious </Text> in
+        {'\n'} today's time and day!
       </Text>
 
-      <Image source={require('../assets/image2.png')} style={styles.customImage} />
+      <Image source={require('../Assets/Images/image4.png')} style={styles.customImage} />
+
+      <Text style={styles.subHeaderText}>
+       <Text style={styles.bold}>Meet me.</Text>
+      </Text>
 
       <Text style={styles.descriptionText}>
-        <Text style={styles.bold}>Remove</Text> that <Text style={styles.bold}>awkwardness{'\n'}</Text> asking for <Text style={styles.bold}>the first date</Text>.
+        Meet the missing piece that{'\n'} <Text style={styles.bold}>compliments</Text> you.
       </Text>
 
       <TouchableOpacity style={styles.startButton} onPress={handleStartClick}>
-        <Text style={styles.startButtonText}>Let's Match</Text>
+        <Text style={styles.startButtonText}>Let's Meet Up</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.skipButton} onPress={handleSkipClick}>
@@ -51,23 +55,21 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '400',
     textAlign: 'center',
-    color: '#1A1A1A',
+    marginTop: 30,
   },
   subHeaderText: {
     fontFamily: 'Lexend-Regular',
     fontSize: 22,
     fontWeight: 'normal',
     textAlign: 'center',
-    color: '#1A1A1A',
-
+    marginBottom: 10,
   },
   descriptionText: {
     fontFamily: 'Lexend-Regular',
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'normal',
     textAlign: 'center',
-    color:'#000000',
-    marginBottom: 40
+    marginBottom: 25,
   },
   bold: {
     fontWeight: '700',
@@ -78,7 +80,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     resizeMode: 'cover',
     marginVertical: 15,
-
   },
   startButton: {
     backgroundColor: '#E4423F',
