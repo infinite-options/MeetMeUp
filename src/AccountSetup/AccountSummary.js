@@ -122,6 +122,8 @@ const Profile = () => {
   const flag = userData.user_nationality;
   const bio = userData.user_profile_bio;
   const int = userData.user_general_interests;
+  var images = userData.user_photo_url;
+  const videoSource = userData.user_video_url;
 
   return (
     <Grid container size={12} justifyContent='center'>
@@ -146,7 +148,7 @@ const Profile = () => {
       <Grid container size={{ xs: 12, sm: 8, md: 5, lg: 4, xl: 3 }}>
         <Grid size={6}>
           <Grid size={12}>
-            <img src={img1} alt='img1' />
+            {images ? <img src={images.replaceAll("[", "").replaceAll("]", "").replaceAll("\"", "")} height='200' width='200' alt='img1' /> : null}
           </Grid>
           <Grid size={12} container>
             <img src={img3} alt='img3' />
@@ -154,7 +156,7 @@ const Profile = () => {
         </Grid>
         <Grid size={6}>
           <Grid size={12}>
-            <img src={img2} alt='img2' />
+            {videoSource ? <video src={videoSource.replaceAll("\"", "")} height="400" width="200" controls autoPlay muted/> : null}
           </Grid>
         </Grid>
       </Grid>
