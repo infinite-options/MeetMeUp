@@ -125,6 +125,19 @@ const Profile = () => {
   var images = userData.user_photo_url;
   const videoSource = userData.user_video_url;
 
+  var imageList = [];
+  if(images) {
+    try {
+      imageList = JSON.parse(images);
+      images = imageList[0];
+    }
+    catch (err) {
+      console.log("imageList = JSON.parse(images) err:", err);
+    }
+  }
+
+  console.log("imageList:", imageList);
+  
   return (
     <Grid container size={12} justifyContent='center'>
       <Grid size={4} container justifyContent='flex-end' alignItems='center'>
@@ -147,12 +160,24 @@ const Profile = () => {
       </Grid>
       <Grid container size={{ xs: 12, sm: 8, md: 5, lg: 4, xl: 3 }}>
         <Grid size={6}>
+          {/* {imageList ? imageList.map((imgSrc) => {
+            <Grid size={12} key={imgSrc}>
+              {console.log(imgSrc)}
+              {imgSrc ? <img src={imgSrc} height='200' width='200' alt={imgSrc} /> : null}
+            </Grid>
+          }) : null} */}
           <Grid size={12}>
-            {images ? <img src={images.replaceAll("[", "").replaceAll("]", "").replaceAll("\"", "")} height='200' width='200' alt='img1' /> : null}
+            {imageList[0] ? <img src={imageList[0]} height='200' width='200' alt={imageList[0]} /> : null}
           </Grid>
-          <Grid size={12} container>
+          <Grid size={12}>
+            {imageList[1] ? <img src={imageList[1]} height='200' width='200' alt={imageList[1]} /> : null}
+          </Grid>
+          <Grid size={12}>
+            {imageList[2] ? <img src={imageList[2]} height='200' width='200' alt={imageList[2]} /> : null}
+          </Grid>
+          {/* <Grid size={12} container>
             <img src={img3} alt='img3' />
-          </Grid>
+          </Grid> */}
         </Grid>
         <Grid size={6}>
           <Grid size={12}>
