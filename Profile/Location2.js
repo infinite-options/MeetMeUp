@@ -1,16 +1,32 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native'; // React Navigation for navigation
+import { postUserData } from "../Api.js";
 
 const LocationPage2 = () => {
   const navigation = useNavigation();
 
+
+  const handleUpdate = async (choice) => {
+
+    const formData = new FormData();
+    formData.append('user_uid', '100-000001');
+    formData.append('user_email_id', 'bobhawk@gmail.com');
+    formData.append('user_notification_preference', choice);
+  
+    await postUserData(formData);
+  
+  }
+
+
   const handleYesClick = () => {
-    navigation.navigate('Start'); // Replace with your target screen name
+    handleUpdate('True');
+    navigation.navigate('AccountSetup7Summary'); // Replace with your target screen name
   };
 
   const handleLaterClick = () => {
-    navigation.navigate('Start'); // Replace with your target screen name
+    handleUpdate('False');
+    navigation.navigate('AccountSetup7Summary'); // Replace with your target screen name
   };
 
   return (

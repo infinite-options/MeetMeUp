@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AccountSetup2Create from "./AccountSetup/AccountSetup2Create";
 import AccountSetup3Create from "./AccountSetup/AccountSetup3Create";
 import AccountSetup4Create from "./AccountSetup/AccountSetup4Create";
+import AccountSetup7Summary from "./AccountSetup/AccountSetup7Summary";
 
 import * as Font from "expo-font";
 // import { createStackNavigator } from '@react-navigation/stack';
@@ -44,6 +45,7 @@ export default function App() {
         <Stack.Screen name='Location' component={Location} />
         <Stack.Screen name='Location2' component={Location2} />
         <Stack.Screen name='AccountDetails' component={AccountDetails} />
+        <Stack.Screen name='AccountSetup7Summary' component={AccountSetup7Summary} />
       </Stack.Navigator>
     </NavigationContainer>
   );

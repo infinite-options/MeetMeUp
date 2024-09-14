@@ -6,6 +6,7 @@ import Progress from "../src/Assets/Components/Progress";
 import NextButton from "../src/Assets/Components/NextButton";
 import HelperTextBox from "../src/Assets/Components/helperTextBox";
 import { Dropdown } from "react-native-element-dropdown";
+import { postUserData } from "../Api.js";
 
 const initialRegion = {
   latitude: -32.015001263602,
@@ -15,7 +16,7 @@ const initialRegion = {
 };
 
 export default function AccountSetup3Create() {
-  console.log("In AccountSetup3Create.js");
+  //console.log("In AccountSetup3Create.js");
   const navigation = useNavigation();
 
   const genders = [
@@ -32,15 +33,26 @@ export default function AccountSetup3Create() {
     { key: "sexualityHomosexual", label: "Homosexual" },
   ];
 
+  const openTo = [
+    { key: "openToStraight", label: "Straight" },
+    { key: "openToBisexual", label: "Bi-Sexual" },
+    { key: "openToTransgender", label: "Trans-gender" },
+    { key: "openToLGBTQ", label: "LGBTQ" },
+    { key: "openToHomosexual", label: "Homosexual" },
+  ];
+
+
   const [value, setValue] = useState();
   const [isFocus, setIsFocus] = useState(false);
 
   const [formData, setFormData] = useState({
-    name: "",
-    age: "",
-    gender: "",
-    profileBio: "",
-    location: "",
+
+    firstname: '',
+    lastname: '',
+    age: '',
+    gender: '',
+    profileBio: '',
+    location: '',
     sexualityStraight: false,
     sexualityBisexual: false,
     sexualityTransgender: false,
@@ -53,22 +65,48 @@ export default function AccountSetup3Create() {
     openToHomosexual: false,
   });
 
+  
   const handleChange = (key, value) => {
+ 
     setFormData({
       ...formData,
       [key]: value,
     });
+
   };
 
   const handleButton = (key) => {
+    
     setFormData({
       ...formData,
       [key]: !formData[key],
     });
   };
 
+  const handleUpdate = async (entries) => {
+
+   // console.log("AccountSetup3Create.js entries: ", entries);
+
+    const formData = new FormData();
+
+
+    formData.append('user_uid', '100-000001');
+    formData.append('user_email_id', 'bobhawk@gmail.com');
+    formData.append('user_first_name', entries.firstname);
+    formData.append('user_last_name', entries.lastname);
+    formData.append('user_age', entries.age);
+    formData.append('user_gender', entries.gender);
+    formData.append('user_sexuality', entries.sexualityStraight);
+    formData.append('user_open_to', entries.openToStraight);
+
+   // console.log("AccountSetup3Create.js formData: ", formData);
+    await postUserData(formData);
+  
+  }
+
   const handleNext = () => {
-    console.log("AccountSetup3Create.js formData: ", formData);
+    
+    handleUpdate(formData);
     navigation.navigate("AccountSetup4Create"); // Navigate to the next screen
   };
 
@@ -80,7 +118,8 @@ export default function AccountSetup3Create() {
         <Text style={styles.subHeader}>These details are about you and will be public to potential matches on meet me up.</Text>
 
         {/* Name */}
-        <TextInput style={styles.input} placeholder='Name' value={formData.name} onChangeText={(value) => handleChange("name", value)} />
+        <TextInput style={styles.input} placeholder='First Name' value={formData.firstname} onChangeText={(value) => handleChange("firstname", value)} />
+        <TextInput style={styles.input} placeholder='Last Name' value={formData.lastname} onChangeText={(value) => handleChange("lastname", value)} />
 
         <View style={styles.row}>
           <TextInput style={[styles.input, styles.halfInput]} placeholder='Age' keyboardType='numeric' value={formData.age} onChangeText={(value) => handleChange("age", value)} />
@@ -147,7 +186,7 @@ export default function AccountSetup3Create() {
         <View style={styles.optionContainer}>
           <Text style={styles.header}>Open To...</Text>
           <Text style={styles.subHeader}>Select the fields that best describe what you are open to in a partner</Text>
-          {sexualityOptions.map((option) => (
+          {openTo.map((option) => (
             <TouchableOpacity
               key={option.key}
               onPress={() => handleButton(option.key)}
