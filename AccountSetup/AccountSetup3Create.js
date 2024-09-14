@@ -16,7 +16,7 @@ const initialRegion = {
 };
 
 export default function AccountSetup3Create() {
-  //console.log("In AccountSetup3Create.js");
+  console.log("In AccountSetup3Create.js");
   const navigation = useNavigation();
 
   const genders = [
@@ -41,18 +41,16 @@ export default function AccountSetup3Create() {
     { key: "openToHomosexual", label: "Homosexual" },
   ];
 
-
   const [value, setValue] = useState();
   const [isFocus, setIsFocus] = useState(false);
 
   const [formData, setFormData] = useState({
-
-    firstname: '',
-    lastname: '',
-    age: '',
-    gender: '',
-    profileBio: '',
-    location: '',
+    firstname: "",
+    lastname: "",
+    age: "",
+    gender: "",
+    profileBio: "",
+    location: "",
     sexualityStraight: false,
     sexualityBisexual: false,
     sexualityTransgender: false,
@@ -65,47 +63,41 @@ export default function AccountSetup3Create() {
     openToHomosexual: false,
   });
 
-  
   const handleChange = (key, value) => {
- 
     setFormData({
       ...formData,
       [key]: value,
     });
-
+    console.log("In Handle Change: ", formData);
   };
 
   const handleButton = (key) => {
-    
     setFormData({
       ...formData,
       [key]: !formData[key],
     });
+    console.log("In Handle Change: ", formData);
   };
 
   const handleUpdate = async (entries) => {
-
-   // console.log("AccountSetup3Create.js entries: ", entries);
+    // console.log("AccountSetup3Create.js entries: ", entries);
 
     const formData = new FormData();
 
+    formData.append("user_uid", "100-000001");
+    formData.append("user_email_id", "bobhawk@gmail.com");
+    formData.append("user_first_name", entries.firstname);
+    formData.append("user_last_name", entries.lastname);
+    formData.append("user_age", entries.age);
+    formData.append("user_gender", entries.gender);
+    formData.append("user_sexuality", entries.sexualityStraight);
+    formData.append("user_open_to", entries.openToStraight);
 
-    formData.append('user_uid', '100-000001');
-    formData.append('user_email_id', 'bobhawk@gmail.com');
-    formData.append('user_first_name', entries.firstname);
-    formData.append('user_last_name', entries.lastname);
-    formData.append('user_age', entries.age);
-    formData.append('user_gender', entries.gender);
-    formData.append('user_sexuality', entries.sexualityStraight);
-    formData.append('user_open_to', entries.openToStraight);
-
-   // console.log("AccountSetup3Create.js formData: ", formData);
+    console.log("AccountSetup3Create.js formData: ", formData);
     await postUserData(formData);
-  
-  }
+  };
 
   const handleNext = () => {
-    
     handleUpdate(formData);
     navigation.navigate("AccountSetup4Create"); // Navigate to the next screen
   };
