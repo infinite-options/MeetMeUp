@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native'; // React Navigation fo
 import { postUserData } from "../Api.js";
 
 const LocationPage2 = () => {
+  console.log("On location page2");
   const navigation = useNavigation();
 
 
