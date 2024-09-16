@@ -27,8 +27,10 @@ const MatchPreferences = ({prev}) => {
                         <img src={arrow} style={{width:"40px", height:"40px"}} />
                     </Link>
                 </Grid>
-                <Grid size={9}>
-                    <Typography sx={{fontSize:'22px', fontFamily:"Lexend"}}>Match Preferences</Typography>
+                <Grid size={12} container justifyContent="center">
+                    <Typography sx={{ fontSize: '22px', fontFamily: "Lexend", textAlign: "center" }}>
+                    Match Preferences
+                    </Typography>
                 </Grid>
             </Grid> */}
                 <Typography sx={{fontSize:"18px", fontFamily:"Lexend", marginTop:"10px", alignItems:"center"}}>Match Preferences</Typography>

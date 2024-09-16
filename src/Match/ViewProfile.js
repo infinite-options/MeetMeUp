@@ -43,7 +43,7 @@ const ViewProfile = ({ setIsFlipped, liked, onClick, isLiked, showPopup, user, A
     
 
     return (
-        <Grid container sx={{ maxWidth: "414px", margin: "0 auto", position:"relative" }}>
+        <Grid container sx={{ maxWidth: "414px", margin: "0 auto", position:"relative"}}>
             {showPopup && (
                 <div className='popup'>
                     <div className='popup-content' ref={popupRef}>

@@ -88,6 +88,7 @@ const MatchDetails = () => {
     }, [showPopup]);
 
     return (
+    <Box>
         <ReactCardFlip isFlipped={isFlipped} flipDirection="horizontal">
             <Box>
             {isLeftHeartVisible && isRightHeartFilled && showPopup && (
@@ -127,6 +128,8 @@ const MatchDetails = () => {
         <div></div>
         {/* <ViewProfile setIsFlipped={setIsFlipped} liked={liked} onClick={handleSetLiked} showPopup={showPopup} isLiked={isLeftHeartVisible} user={user} AccountUser={AccountUser} setShowPopup={setShowPopup} /> */}
     </ReactCardFlip>
+    
+    </Box>
     );
 };
 
