@@ -165,8 +165,19 @@ export default function AccountSetup5Create() {
         // const url = "http://127.0.0.1:4000/userinfo";
         const url = "https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo";
         let fd = new FormData();
-        fd.append("user_uid", "100-000008");
-        fd.append("user_email_id", "pmarathay@yahoo.com");
+        fd.append("user_uid", localStorage.getItem('user_uid'));
+        fd.append("user_email_id", localStorage.getItem('user_email_id'));
+
+        console.log("user_uid:", fd.user_uid);
+        console.log("user_email_id:", fd.user_email_id);
+
+        // fd.append("user_uid", "100-000058");
+        // fd.append("user_email_id", "hello@gmail.com");
+
+        // console.log("everything:", fd);
+        fd.forEach((value, key) => {
+            console.log(`${key}: ${value}`);
+        });
 
         let vidBlob = await fetch(videoSrc).then(r => r.blob());
         fd.append("user_video", vidBlob, "video_filename.mp4");

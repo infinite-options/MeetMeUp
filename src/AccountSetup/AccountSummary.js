@@ -54,7 +54,7 @@ const Profile = () => {
   const handleSettings = () => {
     navigate(`/settings`);
   };
-  const { details } = React.useContext(AccountContext);
+  /* const { details } = React.useContext(AccountContext);
 
   const separateInterests = (obj) => {
     const interests = {};
@@ -78,7 +78,7 @@ const Profile = () => {
     key: key.replace("interests", ""),
   }));
   console.log("interestArray: ", interestArray);
-  console.log("passedDetails: ", details);
+  console.log("passedDetails: ", details); */
   const handleUpdate = () => {
     navigate(`/accountSetup3Create`);
   };
@@ -120,7 +120,24 @@ const Profile = () => {
   const drink = userData.user_drinking;
   const smoke = userData.user_smoking;
   const flag = userData.user_nationality;
+  const bio = userData.user_profile_bio;
+  const int = userData.user_general_interests;
+  var images = userData.user_photo_url;
+  const videoSource = userData.user_video_url;
 
+  var imageList = [];
+  if(images) {
+    try {
+      imageList = JSON.parse(images);
+      images = imageList[0];
+    }
+    catch (err) {
+      console.log("imageList = JSON.parse(images) err:", err);
+    }
+  }
+
+  console.log("imageList:", imageList);
+  
   return (
     <Grid container size={12} justifyContent='center'>
       <Grid size={4} container justifyContent='flex-end' alignItems='center'>
@@ -143,16 +160,28 @@ const Profile = () => {
       </Grid>
       <Grid container size={{ xs: 12, sm: 8, md: 5, lg: 4, xl: 3 }}>
         <Grid size={6}>
+          {/* {imageList ? imageList.map((imgSrc) => {
+            <Grid size={12} key={imgSrc}>
+              {console.log(imgSrc)}
+              {imgSrc ? <img src={imgSrc} height='200' width='200' alt={imgSrc} /> : null}
+            </Grid>
+          }) : null} */}
           <Grid size={12}>
-            <img src={img1} alt='img1' />
+            {imageList[0] ? <img src={imageList[0]} height='200' width='200' alt={imageList[0]} /> : null}
           </Grid>
-          <Grid size={12} container>
+          <Grid size={12}>
+            {imageList[1] ? <img src={imageList[1]} height='200' width='200' alt={imageList[1]} /> : null}
+          </Grid>
+          <Grid size={12}>
+            {imageList[2] ? <img src={imageList[2]} height='200' width='200' alt={imageList[2]} /> : null}
+          </Grid>
+          {/* <Grid size={12} container>
             <img src={img3} alt='img3' />
-          </Grid>
+          </Grid> */}
         </Grid>
         <Grid size={6}>
           <Grid size={12}>
-            <img src={img2} alt='img2' />
+            {videoSource ? <video src={videoSource.replaceAll("\"", "")} height="400" width="200" controls autoPlay muted/> : null}
           </Grid>
         </Grid>
       </Grid>
@@ -182,7 +211,7 @@ const Profile = () => {
       </Grid>
       <Grid size={12} container justifyContent='center' sx={{ mb: "20px" }}>
         <Typography sx={{ fontSize: "20px" }}>
-          {age}-{gender}-{where}
+          {age ? age : "no data"}&nbsp;-&nbsp;{gender ? gender : "no data"}&nbsp;-&nbsp;{where ? where : "no data"}
         </Typography>
       </Grid>
       <Container sx={{ justifyContent: "center", marginLeft: "15%", marginRight: "15%" }}>
@@ -190,11 +219,11 @@ const Profile = () => {
           <Typography sx={{ fontSize: "18px" }}>Interests</Typography>
         </Grid>
         <Grid container size={12}>
-          {interestArray.map((interest, index) => (
-            <Grid item xs={4} key={index}>
-              <Type type={interest.key} />
+          {int ? int.split(",").map((interest) => (
+            <Grid item xs={4} key={interest}>
+              <Type type={interest} />
             </Grid>
-          ))}
+          )) : null}
         </Grid>
         <Grid size={12}>
           <Typography sx={{ fontSize: "18px" }}>A Little About Me ...</Typography>
@@ -202,9 +231,7 @@ const Profile = () => {
         <Grid size={12} sx={{ mb: "20px" }}>
           <Grid>
             <Typography sx={{ fontSize: "14px" }}>
-              Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut. <br />
-              <br />
-              Consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut.
+              {bio}
             </Typography>
           </Grid>
         </Grid>

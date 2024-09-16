@@ -5,7 +5,7 @@ import DrawerContext from './DrawerContext';
 
 function BodyScroll({ options }) {
   const [pickerValue, setPickerValue] = useState({
-    single: options[options.length/2]
+    single: options[Math.floor(options.length/2)]
   })
   // due to a rerender
   const {setPassData, setComplete, passData, complete, setOption, option, handleSetSpecifics} = useContext(DrawerContext);
@@ -47,7 +47,8 @@ function BodyScroll({ options }) {
   }
 
   const handlePickerChange = (value) => {
-    setPickerValue(value); 
+    setPickerValue(value);
+
     if (option) {
       handleSetSpecifics(option, value.single)
       setComplete(false);
@@ -60,7 +61,6 @@ function BodyScroll({ options }) {
   //   setComplete(false);
   // }
   console.log('pickerValue: ', pickerValue);
-
 
   // useEffect(() => {
   //   console.log('useEffect pickerValue: ', pickerValue);
