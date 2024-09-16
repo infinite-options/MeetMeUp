@@ -11,6 +11,8 @@ export default function Begin() {
     const [selectedDay, setSelectedDay] = useState("");
     const [selectedTime, setSelectedTime] = useState("");
 
+    
+
     const handleDayChange = (event) => {
         setSelectedDay(event.target.value);
     };
@@ -19,21 +21,58 @@ export default function Begin() {
         setSelectedTime(event.target.value);
     };
 
-    const handleNextButton = (user) => {
-        navigate('/nextPlace', { state: { user, selectedDay, selectedTime, AccountUser } });
+    const handleNextButton = async (user) => {
+        try {
+            await sendDataToAPI(selectedDay, selectedTime);
+            navigate('/nextPlace', { state: { user, selectedDay, selectedTime, AccountUser } });
+        } catch (error) {    
+            console.error('Error:', error);
+        }
+    };
+    const sendDataToAPI = async(day, time)=>{
+       
+        const formData = new FormData();
+        formData.append('meet_user_id', ' ');
+        formData.append('meet_date_user_id', ' ');
+        formData.append('meet_day', day);
+        formData.append('meet_time', time);
+        // const data ={
+        //     meet_user_id:'',
+        //     meet_date_user_id:'',
+        //     day,
+        //     time};
+        try{
+            const response= await fetch('https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/meet',{
+                method: 'POST',
+                // headers:{
+                //     'Content-Type': 'application/json',
+                // },
+                // body: JSON.stringify(data)
+                body: formData
+            });
+
+            if(!response.ok){
+                throw new Error('Network response not okay');
+            }
+
+            const result = await response.json();
+            console.log("success:", result)
+        } catch (error){
+            console.error('Error:', error);
+        }
     }
 
     return (
-        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-            <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: '15px', mt: 2 }}>
-                <Box sx={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                    <Box sx={{ mr: 2 }}><TopTitle /></Box>
+        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }} >
+            <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: { xs: '10px', md: '20px' }, mt: 4, width: '100%' }}>
+                <Box sx={{ mr: { xs: 5, md: 10 } }}><TopTitle /></Box>
+                <Box sx={{ position: 'relative', display: 'flex', alignItems: 'center', mr: { xs: 4, md: 20 } }}>
                     <Avatar
                         src={AccountUser[0]?.src}
                         alt='Account User'
                         sx={{
-                            width: 50,
-                            height: 50,
+                            width: { xs: 40, sm: 50 },
+                            height: { xs: 40, sm: 50 },
                             border: '2px solid white',
                             zIndex: 1
                         }}
@@ -42,15 +81,15 @@ export default function Begin() {
                         src={user.src}
                         alt='Matched User'
                         sx={{
-                            width: 50,
-                            height: 50,
+                            width: { xs: 40, sm: 50 },
+                            height: { xs: 40, sm: 50 },
                             border: '2px solid white',
                             marginLeft: '-15px',
                             zIndex: 0
                         }}
                     />
+                    <Typography variant="h6" sx={{ mt: 1, fontFamily: 'Lexend', fontSize: { xs: '16px', md: '20px' }, ml: { xs: 1, md: 2 } }}>{user.name}</Typography>
                 </Box>
-                <Typography variant="h6" sx={{ mt: 2, fontFamily: 'Lexend' }}>{user.name}</Typography>
             </Box>
 
             <Typography variant="h5" sx={{ textAlign: 'center', mt: 7, fontFamily: 'Lexend' }}>

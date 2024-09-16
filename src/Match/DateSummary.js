@@ -11,8 +11,8 @@ export default function DateSummary() {
     const { user, selectedDay, selectedTime, selectedDateIdea, AccountUser = [], formattedAddress } = location.state || {};
     const navigate = useNavigate();
 
-    const handleSelectionResults=()=>{
-        navigate('/selectionResults', {state:{user}})
+    const handleSelectionResults = () => {
+        navigate('/selectionResults', { state: { user } })
     }
 
     const EditableItem = ({ label, value }) => (
@@ -57,34 +57,34 @@ export default function DateSummary() {
 
     return (
         <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", padding: { xs: 2, md: 4 } }}>
-            <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: { xs: '10px', md: '20px' }, mt: 2, width: '100%' }}>
-                <Box sx={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                    <Box sx={{ mr: 2 }}><TopTitle /></Box>
+            <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: { xs: '10px', md: '20px' }, mt: 2, width: '100%' }}>
+                <Box sx={{ mr: { xs: 5, md: 10 } }}><TopTitle /></Box>
+                <Box sx={{ position: 'relative', display: 'flex', alignItems: 'center', mr: { xs: 4, md: 20 } }}>
                     <Avatar
                         src={AccountUser[0]?.src}
                         alt='Account User'
                         sx={{
-                            width: { xs: 40, md: 50 },
-                            height: { xs: 40, md: 50 },
+                            width: { xs: 40, sm: 50 },
+                            height: { xs: 40, sm: 50 },
                             border: '2px solid white',
-                            zIndex: 1,
+                            zIndex: 1
                         }}
                     />
                     <Avatar
                         src={user.src}
                         alt='Matched User'
                         sx={{
-                            width: { xs: 40, md: 50 },
-                            height: { xs: 40, md: 50 },
+                            width: { xs: 40, sm: 50 },
+                            height: { xs: 40, sm: 50 },
                             border: '2px solid white',
                             marginLeft: '-15px',
-                            zIndex: 0,
+                            zIndex: 0
                         }}
                     />
+                    <Typography variant="h6" sx={{ mt: 1, fontFamily: 'Lexend', fontSize: { xs: '16px', md: '20px' }, ml: { xs: 1, md: 2 } }}>{user.name}</Typography>
                 </Box>
-                <Typography variant="h6" sx={{ mt: 2, fontFamily: 'Lexend', fontSize: { xs: '16px', md: '20px' } }}>{user.name}</Typography>
             </Box>
-            <Typography variant="body1" sx={{ padding: '25px', fontFamily: 'Lexend', fontSize: { xs: '18px', md: '23px' }, textAlign: 'center', mt: { xs: 4, md: '160px' }, mx: { xs: '5%', sm: '10%' } }}>
+            <Typography variant="body1" sx={{ padding: '25px', fontFamily: 'Lexend', fontSize: { xs: '18px', md: '23px' }, textAlign: 'center', mt: { xs: 4, md: '110px' }, mx: { xs: '5%', sm: '10%' } }}>
                 Let's meet up on <span style={{ color: '#E4423F' }}>{selectedDay} {selectedTime},</span> and go to <span style={{ color: '#E4423F' }}>{selectedDateIdea}</span> at the <span style={{ color: '#E4423F' }}>{formattedAddress}</span>
             </Typography>
 
@@ -106,18 +106,31 @@ export default function DateSummary() {
                     onChange={handleSliderChange}
                     aria-labelledby="slide-to-send"
                     sx={{
-                        mt: '15px',
-                        ml: { xs: '20px', md: '30px' },
+                        mt: { xs: '8px', md: '15px' },
+                        ml: { xs: '27px', md: '30px' },
                         '& .MuiSlider-thumb': {
-                            width: { xs: 40, md: 50 },
-                            height: { xs: 40, md: 50 },
+                            width: { xs: 45, md: 50 },
+                            height: { xs: 45, md: 50 },
                             backgroundColor: '#E4423F',
                             borderRadius: '18px',
+                            position: 'relative', 
                             '&:hover, &.Mui-focusVisible': {
                                 boxShadow: '0px 0px 0px 8px rgba(228, 66, 63, 0.16)',
                             },
                             '&:before': {
                                 boxShadow: 'none',
+                            },
+                            '&::after': {
+                                content: '""', 
+                                position: 'absolute',
+                                top: '50%',
+                                left: '50%',
+                                width: '20px', 
+                                height: '20px', 
+                                backgroundImage: `url(${SendArrowIcon})`, 
+                                backgroundSize: 'contain', 
+                                backgroundRepeat: 'no-repeat',
+                                transform: 'translate(-50%, -50%)', 
                             },
                         },
                         '& .MuiSlider-track': {
@@ -147,7 +160,7 @@ export default function DateSummary() {
                 </Typography>
             </Box>
             <Box>
-            <Button
+                <Button
                     variant="contained"
                     onClick={() => handleSelectionResults(user)}
                     sx={{

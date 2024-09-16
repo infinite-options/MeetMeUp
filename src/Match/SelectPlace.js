@@ -63,15 +63,15 @@ export default function SelectPlace() {
     return (
         <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", padding: '20px' }}>
             
-            <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: '15px', mt: 2, width: '100%' }}>
-                <Box sx={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                    <TopTitle />
+            <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: { xs: '10px', md: '20px' }, mt: 2, width: '100%' }}>
+                <Box sx={{ mr: { xs: 5, md: 10 } }}><TopTitle /></Box>
+                <Box sx={{ position: 'relative', display: 'flex', alignItems: 'center', mr: { xs: 4, md: 20 } }}>
                     <Avatar
                         src={AccountUser[0]?.src}
                         alt='Account User'
                         sx={{
-                            width: 50,
-                            height: 50,
+                            width: { xs: 40, sm: 50 },
+                            height: { xs: 40, sm: 50 },
                             border: '2px solid white',
                             zIndex: 1
                         }}
@@ -80,17 +80,16 @@ export default function SelectPlace() {
                         src={user.src}
                         alt='Matched User'
                         sx={{
-                            width: 50,
-                            height: 50,
+                            width: { xs: 40, sm: 50 },
+                            height: { xs: 40, sm: 50 },
                             border: '2px solid white',
                             marginLeft: '-15px',
                             zIndex: 0
                         }}
                     />
+                    <Typography variant="h6" sx={{ mt: 1, fontFamily: 'Lexend', fontSize: { xs: '16px', md: '20px' }, ml: { xs: 1, md: 2 } }}>{user.name}</Typography>
                 </Box>
-                <Typography variant="h6" sx={{ mt: 2, fontFamily: 'Lexend', fontSize: '16px' }}>{user.name}</Typography>
             </Box>
-
             
             <Typography variant="h5" sx={{ textAlign: 'center', mt: 7, fontFamily: 'Lexend', fontSize: '22px', mx: '15%' }}>
                 Let's meet up on

@@ -15,19 +15,67 @@ export default function SelectLocation() {
     const navigate = useNavigate();
     const [center, setCenter] = useState({ lat: -32.015001263602, lng: 115.83650856893345 });
     const [searchResult, setSearchResult] = useState('');
+
+    const handleNextButton = async (user) => {
+        try {
+            await sendDataToAPI(selectedDateIdea, formattedAddress,'-32.015001263602', '115.83650856893345', '200-0000011');
+            navigate('/nextSummary', { state: { user, selectedDay, selectedTime, selectedDateIdea, AccountUser, formattedAddress } });
+        } catch (error) {    
+            console.error('Error:', error);
+           
+        }
+    };
+
+    // const handleNextButton = (user) => {
+    //     navigate('/nextSummary', { state: { user, selectedDay, selectedTime, selectedDateIdea, AccountUser, formattedAddress } });
+    // }
+
+    const sendDataToAPI = async (datetype, datelocation, latitude, longitude, uid) => {
+        const formData = new FormData();
+        formData.append('meet_date_type', datetype);
+        formData.append('meet_location', datelocation);
+        formData.append('meet_latitude', latitude);
+        formData.append('meet_longitude', longitude);
+        formData.append('meet_uid', uid);
+
+        // const data={
+        //     meet_data_type : datatype,
+        //     meet_location: datelocation,
+        //     meet_latitude: latitude,
+        //     meet_longitude: longitude,
+        //     meet_uid:uid
+        // };
     
-    const handleNextButton = (user) => {
-        navigate('/nextSummary', { state: { user, selectedDay, selectedTime, selectedDateIdea, AccountUser, formattedAddress } });
-    }
+        try {
+            const response = await fetch('https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/meet', {
+                method: 'PUT',
+                body: formData
+            });
     
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+            }
+    
+            const result = await response.json();
+            console.log("Success:", result);
+            return result;
+        } catch (error) {
+            console.error('API Error:', error);
+            throw error; 
+        }
+    };
+    
+
+
 
 
     const GOOGLE_API_KEY = process.env.REACT_APP_GOOGLE_API_KEY;
     const placesLibrary = ['places'];
 
     const mapContainerStyle = {
-        width: '100%',
-        height: '250px',
+        width: { xs: '80%', md: '100%' },
+        height: '300px',
         border: '2px solid #000',
         borderRadius: '10px',
     };
@@ -62,11 +110,10 @@ export default function SelectLocation() {
     }
 
     return (
-        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", padding: { xs: '10px', sm: '20px' } }}>
-            
-            <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: '10px', mt: 2, width: '100%' }}>
-                <Box sx={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                    <Box sx={{ mr:2}}><TopTitle /></Box>
+        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", padding: { xs: 2, md: 4 } }}>
+            <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: { xs: '10px', md: '20px' }, mt: 2, width: '100%' }}>
+                <Box sx={{ mr: { xs: 5, md: 10 } }}><TopTitle /></Box>
+                <Box sx={{ position: 'relative', display: 'flex', alignItems: 'center', mr: { xs: 4, md: 20 } }}>
                     <Avatar
                         src={AccountUser[0]?.src}
                         alt='Account User'
@@ -88,13 +135,13 @@ export default function SelectLocation() {
                             zIndex: 0
                         }}
                     />
+                    <Typography variant="h6" sx={{ mt: 1, fontFamily: 'Lexend', fontSize: { xs: '16px', md: '20px' }, ml: { xs: 1, md: 2 } }}>{user.name}</Typography>
                 </Box>
-                <Typography variant="h6" sx={{ mt: 2, fontFamily: 'Lexend', fontSize: { xs: 14, sm: 16 } }}>{user.name}</Typography>
             </Box>
 
-            
+
             <Box sx={{ mt: 3, textAlign: 'center', mx: { xs: 1, sm: 5 } }}>
-                <Typography variant="body1" sx={{ fontFamily: 'Lexend' }}>
+                <Typography variant="body1" sx={{ padding: '5px', fontFamily: 'Lexend', fontSize: { xs: '18px', md: '23px' }, textAlign: 'center', mt: { xs: 4, md: '100px' }, mx: { xs: '5%', sm: '10%' } }}>
                     This is when <Box component="span" sx={{ fontWeight: 'bold' }}>{user.name}</Box> is available and these are the <Box component="span" sx={{ fontWeight: 'bold' }}>activities</Box> they enjoy:
                 </Typography>
                 <Box sx={{ mt: 1 }}>
@@ -108,7 +155,7 @@ export default function SelectLocation() {
                                 padding: '5px 10px',
                                 borderRadius: '20px',
                                 fontFamily: 'Lexend',
-                                fontSize: { xs: 12, sm: 14 },
+                                fontSize: { xs: 12, md: 14 },
                                 cursor: 'pointer',
                                 marginRight: '5px',
                                 mt: 1,
@@ -126,7 +173,7 @@ export default function SelectLocation() {
                 </Box>
             </Box>
 
-            
+
             <Typography
                 variant="h5"
                 sx={{
@@ -140,7 +187,7 @@ export default function SelectLocation() {
             >
                 Location
             </Typography>
-            <Typography sx={{ textAlign: 'center', mt: 1, fontSize: { xs: 12, sm: 13 }, fontFamily: 'Lexend', mx: { xs: 2, sm: '15%' } }}>
+            <Typography sx={{ textAlign: 'center', mt: 1, fontSize: { xs: 12, sm: 13 }, fontFamily: 'Lexend', mx: { xs: 2, sm: '15%' } }}  >
                 Here's a map you can use to find out what might be convenient.
             </Typography>
 
@@ -155,8 +202,8 @@ export default function SelectLocation() {
                     padding: { xs: '10px', sm: '20px' },
                 }}
             >
-                
-                <Box sx={{ width: '100%', maxWidth: '350px', mb: 2, mx: { xs: 1, sm: '15%' } }}>
+
+                <Box sx={{ width: { xs: '80%', md: '100%' }, maxWidth: '360px', mb: 2, fontFamily: 'Lexend', textAlign: 'center', mx: { xs: '15%', sm: '10%' }, padding: '5px' }} >
                     <Autocomplete onPlaceChanged={onPlaceChanged} onLoad={onLoad}>
                         <TextField
                             placeholder="Location"
@@ -171,8 +218,8 @@ export default function SelectLocation() {
                     </Autocomplete>
                 </Box>
 
-                
-                <Box sx={{ width: '100%', maxWidth: '350px', mb: 2, mx: { xs: 1, sm: '15%' } }}>
+
+                <Box sx={{ width: { xs: '80%', md: '100%' }, maxWidth: '360px', mb: 2, mx: { xs: 1, sm: '15%' } }}>
                     <GoogleMap
                         mapContainerStyle={mapContainerStyle}
                         zoom={15}
@@ -183,7 +230,7 @@ export default function SelectLocation() {
                     </GoogleMap>
                 </Box>
 
-                
+
                 <Button
                     variant="contained"
                     onClick={() => handleNextButton(user)}
