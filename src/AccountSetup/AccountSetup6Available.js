@@ -40,8 +40,7 @@ const AccountSetup6Available = () => {
         console.log(formData[type]);
     };
 
-    const handleNext = async (e) => {
-        console.log(e);
+    const handleNext = async () => {
         console.log(formData);
 
         const url = "https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo";
@@ -50,37 +49,21 @@ const AccountSetup6Available = () => {
         fd.append("user_uid", localStorage.getItem('user_uid'));
         fd.append("user_email_id", localStorage.getItem('user_email_id'));
         const dateType = formData['dates'];
-        console.log('dateType: ', dateType);
-        const dates = [];
-        dateType.forEach((type) => {
-            times.forEach((time) => {
-                console.log('each: ', type, time);
-                const dateObj = {};
+        const typeString = dateType.join(', ');
 
-                const key = type;
-                const value = {
-                    Day: time.Day,
-                    start_time: time.start_time,
-                    end_time: time.end_time,
-                }
-                dateObj[key] = value;
-                console.log('each, ', dateObj)
-                dates.push(dateObj);
-            })
-        });
-        fd.append("user_date_interests", dates);
-        console.log('dates: ', dates);
+        console.log('typeString: ', typeString);
+        fd.append("user_date_interests", typeString);   
+        console.log('times: ', times)
+        // fd.append("user_available_time", times);
 
-    
         try {
             const response = await fetch(url, {
                 method: 'PUT',
                 body: fd,
             });
-
             if(response.ok) {
                 const result = await response.json();
-                console.log('result: ', result);
+                console.log(result.data);
             }
             else {
                 console.error('Response Err:', response.statusText);
@@ -88,6 +71,15 @@ const AccountSetup6Available = () => {
         } catch (err) {
             console.log("Try Catch Err:", err);
         }
+        // console.log('dateType: ', dateType);
+        // times.forEach((time) => {
+        //     const value = {
+        //         Day: time.Day,
+        //         start_time: time.start_time,
+        //         end_time: time.end_time,
+        //     }
+        //     console.log('value: ', value)
+        // })
     };
 
     console.log('times: ', times);

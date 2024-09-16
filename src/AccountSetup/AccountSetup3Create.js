@@ -1,12 +1,12 @@
 import '../App.css';
 import HelperTextBox from '../Assets/Components/helperTextBox';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Box, Grid2, MenuItem, TextField } from '@mui/material';
 import { Autocomplete, GoogleMap, useJsApiLoader, MarkerF } from '@react-google-maps/api';
 import Progress from '../Assets/Components/Progress';
 import NextButton from '../Assets/Components/NextButton';
 import Dates from "../Assets/Components/Dates";
-
+import axios from 'axios';
 const GOOGLE_API_KEY = process.env.REACT_APP_GOOGLE_API_KEY;
 const placesLibrary = ['places'];
 
@@ -19,6 +19,9 @@ const mapContainerStyle = {
 };
 
 export default function AccountSetup3Create() {
+    // set the formData to the current existing data
+    const [userData, setUserData] = useState({});
+    const userId = localStorage.getItem('user_uid');
     const [formData, setFormData] = useState({
         name: '',
         age: '',
@@ -29,6 +32,45 @@ export default function AccountSetup3Create() {
         sexuality: '',
         openTo: [],
     });
+
+    console.log('openTo formData: ', formData.openTo)
+    useEffect(() => {
+        axios
+          .get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/${userId}`)
+          .then((res) => {
+            setUserData(res.data.result[0]);
+            console.log(res.data.result[0]);
+            const fetchedData = res.data.result[0];
+            const openToArray = fetchedData.user_open_to.split(',');
+            console.log('openTo: ', fetchedData.user_open_to)
+            setFormData({
+                name: `${fetchedData.user_first_name} ${fetchedData.user_last_name}`,
+                age: fetchedData.user_age,
+                gender: fetchedData.user_gender || '',
+                profileBio: fetchedData.user_profileBio || '',
+                suburb: fetchedData.user_suburb || '',
+                country: fetchedData.user_country || '',
+                sexuality: fetchedData.user_sexuality || '',
+                openTo: openToArray || [],
+              });
+          })
+          .catch((error) => {
+            console.log("Error fetching data", error);
+          });
+      }, []);
+    console.log('userData: ', userData);
+    console.log('userData Age: ', userData.user_age);
+    
+    // const [formData, setFormData] = useState({
+    //     name: userData ? userData.user_first_name + userData.user_last_name : '',
+    //     age: userData ? userData.user_age : '',
+    //     gender: userData ? userData.user_age : '',
+    //     profileBio: userData ? userData.user_age : '',
+    //     suburb: userData ? userData.user_age : '',
+    //     country: userData ? userData.user_country : '',
+    //     sexuality: userData ? userData.user_age : '',
+    //     openTo: [],
+    // });
 
     const genders = [
         'Male',
@@ -50,7 +92,7 @@ export default function AccountSetup3Create() {
         'Transgender',
         'LGBTQ',
         'Homosexual',
-    ]
+    ] 
 
     const [center, setCenter] = useState({lat: -32.015001263602, lng: 115.83650856893345});
     const [searchResult, setSearchResult] = useState('');
@@ -93,13 +135,14 @@ export default function AccountSetup3Create() {
     const handleButtonSexuality = (id, type) => {
         if(formData[type] === id) {
             setFormData({
-                ...formData,
+                ...formData, 
                 [type]: ''
             });
+            
         }
         else {
             setFormData({
-                ...formData,
+                ...formData, 
                 [type]: id
             });
         }
@@ -172,6 +215,8 @@ export default function AccountSetup3Create() {
                         sx={{'& .MuiOutlinedInput-root': {'&.Mui-focused fieldset': {borderColor: '#E4423F'}}}}
                         InputLabelProps={{style: { color: "#E4423F" }}}
                         name='name' label='Full Name' type='text' variant='outlined'
+                        value={formData['name']}
+
                     />
                     <Grid2 container >
                         <Grid2 size={6}>
@@ -179,13 +224,14 @@ export default function AccountSetup3Create() {
                                 sx={{width:"98%",'& .MuiOutlinedInput-root': {'&.Mui-focused fieldset': {borderColor: '#E4423F'}}}}
                                 InputLabelProps={{style: { color: "#E4423F" }}}
                                 name='age' label='Age' type='number' variant='outlined'
+                                value={formData['age']}
                             />
                         </Grid2>
                         <Grid2 size={6} >
                             <TextField onChange={handleChange}
                                 sx={{'& .MuiOutlinedInput-root': {'&.Mui-focused fieldset': {borderColor: '#E4423F'}}, width: 1}}
                                 InputLabelProps={{style: { color: "#E4423F" }}}
-                                name='gender' label='Gender' variant='outlined' select defaultValue = ''>
+                                name='gender' label='Gender' variant='outlined' select defaultValue = {formData['gender']}>
                                 {genders.map((gender) => (
                                     <MenuItem key={gender} value={gender}>
                                         {gender}
@@ -198,11 +244,13 @@ export default function AccountSetup3Create() {
                         sx={{'& .MuiOutlinedInput-root': {'&.Mui-focused fieldset': {borderColor: '#E4423F'}}}}
                         InputLabelProps={{style: { color: "#E4423F" }}}
                         name='suburb' label='Suburb' type='text' variant='outlined'
+                        value={formData['suburb']}
                     />
                     <TextField onChange={handleChange}
                         sx={{'& .MuiOutlinedInput-root': {'&.Mui-focused fieldset': {borderColor: '#E4423F'}}}}
                         InputLabelProps={{style: { color: "#E4423F" }}}
                         name='profileBio' label='Profile Bio' type='text' variant='outlined' multiline rows={4}
+                        value={formData['profileBio']}
                     />
                 </Grid2>
                 <div className='pc-header-text'>
@@ -230,6 +278,7 @@ export default function AccountSetup3Create() {
                             borderRadius: '5px',
                             textOverflow: 'ellipses',
                         }}
+                        value={formData['country']}
                     />
                 </Autocomplete>
                     <GoogleMap
