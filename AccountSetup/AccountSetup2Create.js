@@ -9,10 +9,10 @@ export default function AccountSetup2Create() {
     const navigation = useNavigation();
 
     const [formData, setFormData] = useState({
-        email: '',
-        phoneNumber: '',
-        password: '',
-        passwordConfirm: '',
+        user_email_id: '',
+        user_phone_number: '',
+        user_password_hash: '',
+        //passwordConfirm: '',
     });
 
     const handleChange = (name, value) => {
@@ -22,10 +22,41 @@ export default function AccountSetup2Create() {
         });
     };
 
-    const handleNext = () => {
+   /* const handleNext = () => {
         console.log('formData: ', formData);
         navigation.navigate('AccountSetup3Create');
+    }; */
+
+    const handleNext = async () => {
+        const url = "https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo"
+        let fd = new formData();
+        fd.append('user_email_id', 'shrutisen03@gmail.com')
+        fd.append('user_phone_number', '123456789')
+        fd.append('user_password_hash', 'test123')
+
+        try{
+            const response = await fetch(url, {
+                method: 'POST',
+                body: fd,
+            });
+
+            if(!response.ok) {
+                const statusCode = response.status;
+                const errorText = await response.text();
+                console.log(response);
+            }
+
+            const result = await response.json();
+            console.log('Success: ' + JSON.stringify(result));
+        } catch (error) {
+            console.log('Error--: ' + error.message);
+        } finally{
+            setLoading(false);
+        }
+
+    
     };
+    
 
     return (
         <ScrollView contentContainerStyle={styles.container}>

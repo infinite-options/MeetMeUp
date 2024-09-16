@@ -7,6 +7,7 @@ import NextButton from '../src/Assets/Components/NextButton';
 import HelperTextBox from '../src/Assets/Components/helperTextBox';
 import { Dropdown } from 'react-native-element-dropdown';
 
+
 const initialRegion = {
     latitude: -32.015001263602,
     longitude: 115.83650856893345,
@@ -66,10 +67,44 @@ export default function AccountSetup3Create() {
         });
     };
 
-    const handleNext = () => {
+    /*const handleNext = () => {
         console.log(formData);
         navigation.navigate('AccountSetup4Create'); // Navigate to the next screen
+    };*/
+
+    const handleNext = async () => {
+        const url = "https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo"
+        let fd = new formData();
+        fd.append('user_email_id', 'shrutisen03@gmail.com');
+        fd.append('user_first_name', entries.firstname);
+        fd.append('user_last_name', entries.lastname);
+        fd.append('user_age', entries.age);
+        fd.append('user_gender', entries.gender);
+        fd.append('user_sexuality', entries.sexualityStraight);
+        fd.append('user_open_to', entries.openToStraight);
+
+        try{
+            const response = await fetch(url, {
+                method: 'PUT',
+                body: fd,
+            });
+
+            if(!response.ok) {
+                const statusCode = response.status;
+                const errorText = await response.text();
+                console.log(response);
+            }
+
+            const result = await response.json();
+            console.log('Success: ' + JSON.stringify(result));
+        } catch (error) {
+            console.log('Error--: ' + error.message);
+        } finally{
+            setLoading(false);
+        }
+
     };
+    
 
     return (
         <ScrollView contentContainerStyle={styles.scrollContainer}>
