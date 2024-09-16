@@ -61,11 +61,13 @@ const Puller = styled('div')(({ theme }) => ({
 }));
 
 function DrawerOptions() {
+
   const [open, setOpen] = React.useState(false);
   const {option, setOption} = React.useContext(DrawerContext);
   const {specifics, handleSetSpecifics} = React.useContext(DrawerContext);
   const {details, setDetails} = React.useContext(AccountContext);
   const {passData, complete, setComplete, setPassData} = React.useContext(DrawerContext);
+  
   const TitleBox = ({title, subtitle}) => (
     <div>
         <StyledBox
@@ -94,7 +96,9 @@ function DrawerOptions() {
             flexDirection: 'column',
             alignItems: 'center',
         }}>
+        <Box sx={{overflow:"auto", height:"150px"}}>
         {content}
+        </Box>
         <CustomRedButton onClick={() => {
             setComplete(true);
             // handleSetSpecifics(option, passData);
