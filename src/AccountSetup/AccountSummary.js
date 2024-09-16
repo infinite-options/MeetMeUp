@@ -122,7 +122,22 @@ const Profile = () => {
   const flag = userData.user_nationality;
   const bio = userData.user_profile_bio;
   const int = userData.user_general_interests;
+  var images = userData.user_photo_url;
+  const videoSource = userData.user_video_url;
 
+  var imageList = [];
+  if(images) {
+    try {
+      imageList = JSON.parse(images);
+      images = imageList[0];
+    }
+    catch (err) {
+      console.log("imageList = JSON.parse(images) err:", err);
+    }
+  }
+
+  console.log("imageList:", imageList);
+  
   return (
     <Grid container size={12} justifyContent='center'>
       <Grid size={4} container justifyContent='flex-end' alignItems='center'>
@@ -143,18 +158,30 @@ const Profile = () => {
       <Grid size={12}>
         <Typography sx={{ fontSize: "30px", textAlign: { xs: "left", sm: "center" } }}>About You</Typography>
       </Grid>
-      <Grid container size={12} spacing={1} sx={{mb:"10px"}}>
-        <Grid size={6} container>
-          <Grid size={12} container justifyContent="flex-end">
-            <img src={img1} alt='img1' />
+      <Grid container size={{ xs: 12, sm: 8, md: 5, lg: 4, xl: 3 }}>
+        <Grid size={6}>
+          {/* {imageList ? imageList.map((imgSrc) => {
+            <Grid size={12} key={imgSrc}>
+              {console.log(imgSrc)}
+              {imgSrc ? <img src={imgSrc} height='200' width='200' alt={imgSrc} /> : null}
+            </Grid>
+          }) : null} */}
+          <Grid size={12}>
+            {imageList[0] ? <img src={imageList[0]} height='200' width='200' alt={imageList[0]} /> : null}
           </Grid>
-          <Grid size={12} container justifyContent="flex-end">
+          <Grid size={12}>
+            {imageList[1] ? <img src={imageList[1]} height='200' width='200' alt={imageList[1]} /> : null}
+          </Grid>
+          <Grid size={12}>
+            {imageList[2] ? <img src={imageList[2]} height='200' width='200' alt={imageList[2]} /> : null}
+          </Grid>
+          {/* <Grid size={12} container>
             <img src={img3} alt='img3' />
-          </Grid>
+          </Grid> */}
         </Grid>
         <Grid size={6}>
-          <Grid size={12} container>
-            <img src={img2} alt='img2' />
+          <Grid size={12}>
+            {videoSource ? <video src={videoSource.replaceAll("\"", "")} height="400" width="200" controls autoPlay muted/> : null}
           </Grid>
         </Grid>
       </Grid>
