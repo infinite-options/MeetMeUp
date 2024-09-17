@@ -7,6 +7,7 @@ import arrow from "../Assets/Images/arrow.png"
 import arrow2 from "../Assets/Images/arrow2.png"
 import { useState } from "react";
 import LogoutButton from "../Assets/Components/LogoutButton";
+import TopTitle from "../Assets/Components/TopTitle";
 
 const MatchPreferences = ({prev}) => {
     const [open, setOpen] = useState(false);
@@ -18,18 +19,20 @@ const MatchPreferences = ({prev}) => {
     }
  
     return (
-        <Grid container sx={{maxWidth:"414px", margin:"0 auto"}}>
-            <Grid container alignItems="center" size={12}>
+        <Box sx={{marginLeft:'15%', marginRight:'15%'}}>
+            <TopTitle title={'Match Preferences'}></TopTitle>
+            {/* <Grid container alignItems="center" size={12}>
                 <Grid size={3}>
                     <Link to="/accountSetup7Summary">
                         <img src={arrow} style={{width:"40px", height:"40px"}} />
                     </Link>
                 </Grid>
-                <Grid size={9}>
-                    <Typography sx={{fontSize:'22px', fontFamily:"Lexend"}}>Match Preferences</Typography>
+                <Grid size={12} container justifyContent="center">
+                    <Typography sx={{ fontSize: '22px', fontFamily: "Lexend", textAlign: "center" }}>
+                    Match Preferences
+                    </Typography>
                 </Grid>
-            </Grid>
-            <Container>
+            </Grid> */}
                 <Typography sx={{fontSize:"18px", fontFamily:"Lexend", marginTop:"10px", alignItems:"center"}}>Match Preferences</Typography>
                 <Grid container size={12} alignItems="center">
                     <Grid size={10.5}>
@@ -78,8 +81,7 @@ const MatchPreferences = ({prev}) => {
                 <Grid container size={12} justifyContent="center" >
                     <LogoutButton></LogoutButton>
                 </Grid>
-            </Container>
-        </Grid>
+        </Box>
     );
 }
  

@@ -14,7 +14,7 @@ import { styled } from '@mui/material/styles';
 import Progress from '../Assets/Components/Progress';
 import NextButton from '../Assets/Components/NextButton';
 import Webcam from 'react-webcam';
-
+import axios from 'axios';
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
     clipPath: 'inset(50%)',
@@ -39,6 +39,13 @@ export default function AccountSetup5Create() {
         image: '',
         imgFav: '',
     });
+    const userId = localStorage.getItem('user_uid');
+    const [userData, setUserData] = useState({});
+    const [obtain, setObtain] = useState('false');
+    const [prevVideo, setPrevVideo] = useState('');
+    const [newRecord, setNewRecord] = useState(false);
+
+    console.log('formData: ', formData);
 
     const webcamRef = useRef(null);
     const mediaRecorderRef = useRef(null);
@@ -54,6 +61,49 @@ export default function AccountSetup5Create() {
         }
     }, [setRecordedChunks]);
 
+    console.log('videoSrc: ', videoSrc);
+    useEffect(() => {
+        axios
+          .get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/${userId}`)
+          .then((res) => {
+            setUserData(res.data.result[0]);
+            console.log('userData: ', userData);
+            console.log(res.data.result[0]);
+            const fetchedData = res.data.result[0];
+            const fetchedURL = fetchedData.user_video;
+            console.log('fetchedURL: ', fetchedURL);
+            console.log(fetchedData.user_video_url);
+
+            // const fetchedURL = fetchedData.user_video_url.replaceAll("\"", "");
+            // fetch(fetchedURL)
+            // .then(response => response.blob())
+            // .then(blob => {
+            //   const url = URL.createObjectURL(blob);
+            //   setVideoSrc(url);
+            
+            //   setViewRecording(true);
+            // })
+            // .catch((error) => {
+            //   console.error('Error fetching video data: ', error);
+            // });
+            // const blob = new Blob(recordedChunks, {type: "video/mp4"});
+            // const url = URL.createObjectURL(blob);
+            
+            setVideoSrc(fetchedData.user_video_url.replaceAll("\"", ""));
+            // setPrevVideo(fetchedData.user_video_url.replaceAll("\"", ""))
+            console.log('prevVide: ', prevVideo)
+            setObtain(true);
+            setViewRecording(true);
+            // setFormData({
+            //     video: fetchedData.user_video_url,
+            //     image: '',
+            //     imgFav: '',
+            //   });
+          })
+          .catch((error) => {
+            console.log("Error fetching data", error);
+          });
+      }, []);
     const handleStartCaptureClick = useCallback(() => {
         if(webcamRef.current.stream !== undefined) {
             if(videoSrc !== null) {
@@ -165,11 +215,28 @@ export default function AccountSetup5Create() {
         // const url = "http://127.0.0.1:4000/userinfo";
         const url = "https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo";
         let fd = new FormData();
-        fd.append("user_uid", "100-000008");
-        fd.append("user_email_id", "pmarathay@yahoo.com");
+        fd.append("user_uid", localStorage.getItem('user_uid'));
+        fd.append("user_email_id", localStorage.getItem('user_email_id'));
 
-        let vidBlob = await fetch(videoSrc).then(r => r.blob());
-        fd.append("user_video", vidBlob, "video_filename.mp4");
+        console.log("user_uid:", fd.user_uid);
+        console.log("user_email_id:", fd.user_email_id);
+
+        // fd.append("user_uid", "100-000058");
+        // fd.append("user_email_id", "hello@gmail.com");
+
+        // console.log("everything:", fd);
+        fd.forEach((value, key) => {
+            console.log(`${key}: ${value}`);
+        });
+
+        // TODO: error occurs right here not allowing fetch
+        console.log('videoSrc before: ', videoSrc);
+        if (newRecord) { // if there hasnt been a previous video
+            let vidBlob = await fetch(videoSrc).then(r => r.blob());
+            console.log('vidBlob: ', vidBlob);
+            fd.append("user_video", vidBlob, "video_filename.mp4");
+        }
+        
 
         var imageArray = formData['image'].split(',');
         for(var i = 0; i < imageArray.length - 1; i++) {
@@ -219,11 +286,22 @@ export default function AccountSetup5Create() {
                 </div>
                 {formData['video'] ? <div className='general-container'><video width='75%' height='100%' controls src={formData['video']}/></div> : null}
                 <div className='general-container'>
-                {viewRecording ?
-                    <video src={videoSrc} height="400" width="300" controls/>
-                    :
-                    <Webcam ref={webcamRef} height={400} width={300} audio={false} mirrored={true} videoConstraints={videoConstraints}/>
-                }
+                {viewRecording ? (
+                        // prevVideo ? (
+                        //     <video src={prevVideo} height="400" width="300" controls />
+                        // ) : (
+                            <video src={videoSrc} height="400" width="300" controls />
+                        // )
+                    ) : (
+                        <Webcam
+                            ref={webcamRef}
+                            height={400}
+                            width={300}
+                            audio={false}
+                            mirrored={true}
+                            videoConstraints={videoConstraints}
+                        />
+                    )}
                 </div>
                 <div className='general-container'>
                 {capturing ?
@@ -270,7 +348,10 @@ export default function AccountSetup5Create() {
                                     <Button component='label' variant='contained'
                                         sx={{ backgroundColor: '#E4423F', color: '#000000', maxWidth: '202px',
                                         borderRadius: '41px', textTransform: 'none' }}
-                                        onClick={handleStartCaptureClick}
+                                        onClick={() => {
+                                            handleStartCaptureClick()
+                                            setNewRecord(true);
+                                        }}
                                     >
                                         <div className='white-text-video'>
                                             Record&nbsp;
@@ -295,7 +376,9 @@ export default function AccountSetup5Create() {
                             (<Button component='label' variant='contained'
                                 sx={{ backgroundColor: '#E4423F', color: '#000000', maxWidth: '202px',
                                 borderRadius: '41px', textTransform: 'none' }}
-                                onClick={handleStartCaptureClick}
+                                onClick={() => {
+                                    setNewRecord(true)
+                                    handleStartCaptureClick()}}
                             >
                                 <div className='white-text-video'>
                                     Record&nbsp;

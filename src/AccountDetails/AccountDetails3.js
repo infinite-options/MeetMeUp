@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Container, Typography } from '@mui/material';
+import { Box, Container, TextField, Typography } from '@mui/material';
 import arrow from '../Assets/Images/arrow.png'; 
 
 const AccountDetails3 = () => {
@@ -75,47 +75,81 @@ const AccountDetails3 = () => {
           We need some basic account details to help verify your identity and account.
         </Typography>
 
-        <Box
-          style={{
-            backgroundColor: '#E2E2E2',
-            width: '354px',
-            height: '50px',
-            padding: '1rem',
-            borderRadius: '8px',
-            marginBottom: '1rem',
-            
-            
-          }}
-        >
-          <Typography variant="body2" style={{ fontFamily: 'Segoe UI', 
-            fontSize: '14px',
-            fontWeight: 500,backgroundColor:'#E2E2E2', color: '#E4423F', marginBottom: '0.5rem' }}>
-            Email
-          </Typography>
-          <Typography variant="body2"style={{ fontFamily: 'Segoe UI', 
-            fontSize: '14px',
-            fontWeight: 400,backgroundColor:'#E2E2E2', color: '1A1A1A' }}>lachlan@konnectdigital.io</Typography>
-        </Box>
+        <TextField
+            variant="filled"
+            label="Email"
+            defaultValue="lachlan@konnectdigital.io"
+            InputProps={{
+              disableUnderline: true, 
+            }}
+            sx={{
+              fontFamily: 'Segoe UI',
+              width:"100%",
+              fontSize: '14px',
+              fontWeight: 500,
+              color: '#E4423F',
+              marginBottom: '0.5rem',
+              '@media (max-width: 600px)': {
+                fontSize: '12px',
+              },
+              '& .MuiOutlinedInput-notchedOutline': {
+                border: 'none',
+              },
+              '& .MuiInputLabel-root': {
+              color: '#E4423F',
+              fontWeight:"bold",
+              fontSize:'14px',
+            },
+            '& .MuiInputLabel-root.Mui-focused': {
+              color: '#E4423F', 
+            },
+            '& .MuiFilledInput-root': {
+              backgroundColor: 'rgba(226,226,226,.5)', 
+              borderRadius:"10px",
+              borderStyle:"solid",
+              borderWidth:"1px",
+              borderColor:"#CECECE",
+            },
+            }}
+          />
+        <TextField
+            variant="filled"
+            label="Phone Number"
+            defaultValue="0412 345 678"
+            InputProps={{
+              disableUnderline: true, 
+            }}
+            sx={{
+              fontFamily: 'Segoe UI',
+              width:"100%",
+              fontSize: '14px',
+              fontWeight: 500,
+              color: '#E4423F',
+              marginBottom: '0.5rem',
+              '@media (max-width: 600px)': {
+                fontSize: '12px',
+              },
+              '& .MuiOutlinedInput-notchedOutline': {
+                border: 'none',
+              },
+              '& .MuiInputLabel-root': {
+              color: '#E4423F',
+              fontWeight:"bold",
+              fontSize:'14px',
+            },
+            '& .MuiInputLabel-root.Mui-focused': {
+              color: '#E4423F', 
+            },
+            '& .MuiFilledInput-root': {
+              backgroundColor: 'rgba(226,226,226,.5)', 
+              borderRadius:"10px",
+              borderStyle:"solid",
+              borderWidth:"1px",
+              borderColor:"#CECECE",
+            },
+            }}
+          />
 
-        <Box
-          style={{
-            backgroundColor: '#E2E2E2',
-            width: '354px',
-            height: '50px',
-            padding: '1rem',
-            borderRadius: '8px',
-            
-          }}
-        >
-          <Typography variant="body2" style={{ fontFamily: 'Segoe UI', 
-            fontSize: '14px',
-            fontWeight: 500,backgroundColor:'#E2E2E2', color: '#E4423F', marginBottom: '0.5rem' }}>
-            Phone Number
-          </Typography>
-          <Typography variant="body2"style={{ fontFamily: 'Segoe UI', 
-            fontSize: '14px',
-            fontWeight: 400,backgroundColor:'#E2E2E2', color: '1A1A1A' }}>0412 345 678</Typography>
-        </Box>
       </Container>
     </Box>
   );

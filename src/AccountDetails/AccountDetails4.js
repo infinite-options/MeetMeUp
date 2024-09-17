@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Box, Typography, Button } from '@mui/material';
+import { Container, Box, Typography, Button, TextField } from '@mui/material';
 import arrow from '../Assets/Images/arrow.png';
 
 const AccountDetails4 = () => {
@@ -101,22 +101,16 @@ const AccountDetails4 = () => {
           Please verify your identity by providing us your current password for your meet me up account.
         </Typography>
 
-        <Box
-          sx={{
-            backgroundColor: '#E2E2E2',
-            width: '100%',
-            padding: '1rem',
-            borderRadius: '8px',
-            marginBottom: '1rem',
-            '@media (max-width: 600px)': {
-              padding: '0.75rem',
-            },
-          }}
-        >
-          <Typography
-            variant="body2"
+        <TextField
+            variant="filled"
+            label="Current Password"
+            type="password"
+            InputProps={{
+              disableUnderline: true, 
+            }}
             sx={{
               fontFamily: 'Segoe UI',
+              width:"100%",
               fontSize: '14px',
               fontWeight: 500,
               color: '#E4423F',
@@ -124,25 +118,26 @@ const AccountDetails4 = () => {
               '@media (max-width: 600px)': {
                 fontSize: '12px',
               },
-            }}
-          >
-            Current Password
-          </Typography>
-          <Typography
-            variant="body2"
-            sx={{
-              fontFamily: 'Segoe UI',
-              fontSize: '14px',
-              fontWeight: 400,
-              color: '#1A1A1A',
-              '@media (max-width: 600px)': {
-                fontSize: '12px',
+              '& .MuiOutlinedInput-notchedOutline': {
+                border: 'none',
               },
+              '& .MuiInputLabel-root': {
+              color: '#E4423F',
+              fontWeight:"bold",
+              fontSize:'14px',
+            },
+            '& .MuiInputLabel-root.Mui-focused': {
+              color: '#E4423F', 
+            },
+            '& .MuiFilledInput-root': {
+              backgroundColor: 'rgba(226,226,226,.5)', 
+              borderRadius:"10px",
+              borderStyle:"solid",
+              borderWidth:"1px",
+              borderColor:"#CECECE",
+            },
             }}
-          >
-            **********
-          </Typography>
-        </Box>
+          />
       </Container>
 
       <Button

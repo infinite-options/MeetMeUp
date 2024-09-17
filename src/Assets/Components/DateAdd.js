@@ -9,8 +9,12 @@ import checkIcon from "../Images/addcheck.png"
 // import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 // import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 // import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-
-import TimePicker from 'react-time-picker';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+// import TimePicker from 'react-time-picker';
+import dayjs from 'dayjs';
 
 // import Grid  from "@mui/material/Grid2";
 
@@ -28,55 +32,64 @@ const CustomButton = styled(Button)({
     textTransform: 'capitalize',
 
 });
-function DateAdd() {
+function DateAdd({ onAddTime, onRemoveTime, times }) {
   const [day, setDay] = useState("")
-  const [start, setStart] = useState("")
-  const [end, setEnd] = useState("")
-  const [times, setTimes] = useState([]);
+  const [start, setStart] = useState(dayjs())
+  // const [end, setEnd] = useState("")
+  const [end, setEnd] = useState(dayjs());
+  const [endTimeString, setEndTimeString] = useState('');
+  const [startTimeString, setStartTimeString] = useState('');
 
-  const handleRemoveTimes = (index) => {
-    console.log(index)
-    setTimes(times.filter((_, i) => i !== index)); 
+  // const [times, setTimes] = useState([]);
+  
+  // const handleRemoveTimes = (index) => {
+  //   console.log(index)
+  //   setTimes(times.filter((_, i) => i !== index)); 
+  // };
+  // const handleAddTime=()=> {
+  //   setTimes([...times, {day, start, end}]);
+  // }
+
+  const handleAddTime = () => {
+      onAddTime(day, startTimeString, endTimeString);
+      setDay("");
+      setStart(dayjs());
+      setEnd(dayjs());
+    
   };
-  const handleAddTime=()=> {
-    setTimes([...times, {day, start, end}]);
-  }
 
   const handleChange=(event)=> {
       setDay(event.target.value)
   }
-  const handleStart=(event)=> {
-      setStart(event.target.value)
+  const handleStart=(newValue)=> {
+      setStart(newValue);
+      const formattedTime = newValue.format('hh:mm A');
+      setStartTimeString(formattedTime);
+      console.log('Formatted Time:', formattedTime); 
   }
-  const handleEnd=(event)=> {
-      setEnd(event.target.value)
+  const handleEnd=(newValue)=> {
+      setEnd(newValue);
+      const formattedTime = newValue.format('hh:mm A');
+      setEndTimeString(formattedTime);
+      console.log('Formatted Time:', formattedTime); 
   }
   const inputProps = {
     step: 300,
   };
   return (
-    <Box
-    sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center', 
-    }}>
-      {/* <Grid size={4}>
-          <Typography sx={{fontSize:"18px"}}>Day</Typography>
-      </Grid>
-      <Grid size={8} container justifyContent="flex-start">
-          <Typography sx={{fontSize:"18px"}}>Times</Typography>
-      </Grid> */}
+    <div>
       {times.map((time, index) => (
-                    <DisplayTime
-                        index={index}
-                        day={time.day}
-                        start={time.start}
-                        end={time.end}
-                        onClick={handleRemoveTimes}
-                    />
-                    ))}
-        <Grid container size={12} justifyContent="center" gap={.5} sx={{ marginTop: 5 }}>
+          <DisplayTime
+              index={index}
+              day={time.day}
+              start={time.start_time}
+              end={time.end_time}
+              key={index}
+              // end={time.end ? dayjs(time.end).format('HH:mm') : 'No end time'}
+              onClick={onRemoveTime}
+          />
+          ))}
+        <Grid container size={12} justifyContent="center" gap={1} sx={{ marginTop: 5 }}>
           <Grid size={4}> 
               <FormControl fullWidth>
                   <InputLabel sx={{color:"black", fontFamily:"Lexend", fontSize:"12px"}}>Select Day</InputLabel>
@@ -97,11 +110,11 @@ function DateAdd() {
               </FormControl>
           </Grid>
           <Grid size={3}>
-              <TextField
+              {/* <TextField
                   label="Start Time"
                   variant="outlined"
-                  value={start}
-                  onChange={handleStart}
+                  value={startTimeString}
+                  // onChange={handleStart}
                   sx={{
                     backgroundColor:"#CECECE",
                     '& .MuiInputBase-root': {
@@ -116,14 +129,15 @@ function DateAdd() {
                        color:"black"
                     },
                   }}
-              />
+              /> */}
+              
           </Grid>
           <Grid size={3}>
-              <TextField
+              {/* <TextField
                   label="End Time"
                   variant="outlined"
                   value={end}
-                  onChange={handleEnd}
+                  // onChange={handleEnd}
                   sx={{
                     backgroundColor:"#CECECE",
                     '& .MuiInputBase-root': {
@@ -140,10 +154,37 @@ function DateAdd() {
                     },
                   }}
                   
-              />
+              /> */}
+              
           </Grid>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <Box sx={{ width: '100%' }}>
+
+                <DemoContainer components={['TimePicker']}>
+                  <TimePicker
+                    value={start}
+                    onChange={handleStart}
+                    label="Start Time" />
+                </DemoContainer>
+              </Box>
+              </LocalizationProvider>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Box sx={{ width: '100%' }}>
+              <DemoContainer components={['TimePicker']}>
+                <TimePicker
+                  value={end}
+                  onChange={handleEnd}
+                  label="End Time" />
+              </DemoContainer>
+            </Box>
+          </LocalizationProvider>
+          
+          
           <Grid size={1} container alignItems="center" >
-            <img src={checkIcon} onClick={handleAddTime} />
+            <IconButton>
+              <img src={checkIcon} onClick={handleAddTime} />
+
+            </IconButton>
           </Grid>
       </Grid>
 
@@ -151,7 +192,7 @@ function DateAdd() {
      
 
       
-    </Box>
+    </div>
   );
 }
 

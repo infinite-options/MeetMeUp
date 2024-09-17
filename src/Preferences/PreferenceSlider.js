@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Container, Slider, Typography } from "@mui/material";
 import Grid from '@mui/material/Grid2';
+import axios from 'axios';
 
 const PreferenceSlider = ({ preference, measurement, start, min, max }) => {
     const [value, setValue] = useState(start);
+    const [debouncedValue, setDebouncedValue] = useState(start);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -15,6 +17,34 @@ const PreferenceSlider = ({ preference, measurement, start, min, max }) => {
         }
         return value
     }
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedValue(value);
+        }, 300);
+
+        return () => {
+            clearTimeout(handler);
+        };
+    }, [value]);
+
+    useEffect(() => {
+        console.log("Slider value changed:", debouncedValue);
+        const formData = new FormData();
+        formData.append('user_uid', '100-000003');
+        formData.append('user_email_id', 'lachlalcollis@gmail.com');
+        if (preference==="Height in centimetres") {
+            formData.append('user_prefer_height_min', debouncedValue);
+        }
+        else if (preference==="Maximum distance") {
+            formData.append('user_prefer_distance', debouncedValue);
+        }
+        else if (preference==="Age range") {
+            formData.append('user_prefer_age_min', debouncedValue[0]);
+            formData.append('user_prefer_age_max', debouncedValue[1]);
+        }
+        axios.put("https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo",formData)
+    }, [debouncedValue]);
+
 
     return (
         <Grid container>

@@ -4,45 +4,39 @@ import backButton from '../Assets/Images/BackButton.png';
 import progressBar from '../Assets/Images/progressBar60.png';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Container } from '@mui/material';
+import { Button, Container, Grid2, Box } from '@mui/material';
 import DrawerContext from '../Assets/Components/DrawerContext';
 import AccountContext from './AccountContext';
 import React from 'react';
 import DrawerOptions from '../Assets/Components/DrawerOptions';
 import Progress from '../Assets/Components/Progress';
 import NextButton from '../Assets/Components/NextButton';
+import Dates from '../Assets/Components/Dates';
+import axios from 'axios';
+
 export default function AccountSetup4Create() {
     const [option, setOption] = React.useState('');
     // const 
     const {details, setDetails} = React.useContext(AccountContext);
     const [pickerValue, setPickerValue] = useState({
         single: ''
-      })
+    })
+    // TODO: a lot of general interests are getting created!!
     const [formData, setFormData] = useState({
-        interestsEatingOut: false,
-        interestsBikeRides: false,
-        interestsDrinking: false,
-        interestsDancing: false,
-        interestsCooking: false,
-        interestsBaking: false,
-        interestsCrafting: false,
-        interestsPainting: false,
-        interestsSurfing: false,
-        interestsTraveling: false,
-        height: '',
-        education: '',
-        body: '',
-        star: '',
-        drinking: '',
-        smoking: '',
-        children: '',
-        position: '',
-        religion: '',
-        gender: '',
-        nationality: '',
+        user_height: '',
+        user_education: '',
+        user_body_composition: '',
+        user_star_sign: '',
+        user_drinking: '',
+        user_smoking: '',
+        user_kids: '',
+        user_job: '',
+        user_religion: '',
+        user_nationality: '',
+        user_general_interests: [],
     });
-
-    
+    console.log('userGeneral Interests', formData['user_general_interests'])
+    console.log('setup4 formData: ', formData);
 
     // based on option set specific to passData
     const [specifics, setSpecifics] = useState({
@@ -57,73 +51,141 @@ export default function AccountSetup4Create() {
         religion: '',
         gender: '',
         nationality: '',
+        general_interests: [],
     })
+
     const handleSetSpecifics = (name, value) => {
         setSpecifics((prevSpecifics) => ({
-          ...prevSpecifics,
-          [name]: value,
+            ...prevSpecifics,
+            [name]: value,
         }));
+
         setFormData((formData) => ({
             ...formData,
-            [name]: value,
-          }));
-      };
+            [specificsName[name]]: value,
+        }));
+
+        return value;
+    };
+
+    // use the setSpecifics
+    const userId = localStorage.getItem('user_uid');
+    const [loading, setLoading] = useState(true); 
+    const [userData, setUserData] = useState({});
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const response = await axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/${userId}`);
+                const fetchedData = response.data.result[0];
+                setUserData(fetchedData);
+                console.log('userData: ', userData)
+                setLoading(false);
+                handleSetSpecifics('height', fetchedData.user_height);
+                handleSetSpecifics('education', fetchedData.user_education);
+                handleSetSpecifics('body', fetchedData.user_body_composition);
+                handleSetSpecifics('star', fetchedData.user_star_sign);
+                handleSetSpecifics('drinking', fetchedData.user_drinking);
+                handleSetSpecifics('smoking', fetchedData.user_smoking);
+                handleSetSpecifics('children', fetchedData.user_kids);
+                handleSetSpecifics('position', fetchedData.user_job);
+                handleSetSpecifics('religion', fetchedData.user_religion);
+                handleSetSpecifics('nationality', fetchedData.user_nationality);
+                
+                const interestsArray = fetchedData.user_general_interests.split(',');
+                setFormData(prevFormData => ({
+                    ...prevFormData,
+                    user_general_interests: interestsArray
+                }));
+
+                } catch (error) {
+                    console.log("Error fetching data", error);
+                };
+        }
+        fetchUserData();
+      }, [userId]);
+
     const [passData, setPassData] = useState(null);
     const [complete, setComplete] = useState(false);
 
-    const handleButtonBoolean = (e) => {
-        const { name } = e.target;
-        setFormData({
-            ...formData,
-            [name]: !formData[name]
-        });
-    };
-
-    const handleNext = (e) => {
+    const handleNext = async (e) => {
         console.log(e);
-        console.log(formData);
+        console.log('formData: ', formData);
         const specificsForm = populateFormData();
-        console.log('formData: ', specificsForm.get('education'), specificsForm.get('body'));
-        const formObj = {
-            interestsEatingOut: specificsForm.get('interestsEatingOut'),
-            interestsBikeRides: specificsForm.get('interestsBikeRides'),
-            interestsDrinking: specificsForm.get('interestsDrinking'),
-            interestsDancing: specificsForm.get('interestsDancing'),
-            interestsCooking: specificsForm.get('interestsCooking'),
-            interestsBaking: specificsForm.get('interestsBaking'),
-            interestsCrafting: specificsForm.get('interestsCrafting'),
-            interestsPainting: specificsForm.get('interestsPainting'),
-            interestsSurfing: specificsForm.get('interestsSurfing'),
-            interestsTraveling: specificsForm.get('interestsTraveling'),
-            height: specificsForm.get('height'),
-            education: specificsForm.get('education'),
-            body: specificsForm.get('body'),
-            star: specificsForm.get('star'),
-            drinking: specificsForm.get('drinking'),
-            smoking: specificsForm.get('smoking'),
-            children: specificsForm.get('children'),
-            position: specificsForm.get('position'),
-            religion: specificsForm.get('religion'),
-            gender: specificsForm.get('gender'),
-            nationality: specificsForm.get('nationality')
-        };
-        setDetails(formObj);
-        console.log('formObj: ', formObj);
+        console.log('specificsForm: ', specificsForm);
+        const url = "https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo";
+        try {
+            const response = await fetch(url, {
+                method: 'PUT',
+                body: specificsForm,
+            });
+
+            if(response.ok) {
+                const result = await response.json();
+                console.log(result);
+            }
+            else {
+                console.error('Response Err:', response.statusText);
+            }
+        } catch (err) {
+            console.log("Try Catch Err:", err);
+        }
     };
 
     const populateFormData = () => {
-        const specificsForm = new FormData();    
+        const specificsForm = new FormData();
+        specificsForm.append("user_uid", localStorage.getItem('user_uid'));
+        specificsForm.append("user_email_id", localStorage.getItem('user_email_id'));
         Object.entries(formData).forEach(([key, value]) => {
             specificsForm.append(key, value);
         });
 
         return specificsForm;
-        };
-    
+    };
+
+    const handleButton = (id, type) => {
+        if(formData[type].includes(id)) {
+            const index = formData[type].indexOf(id);
+            formData[type].splice(index, 1);
+        }
+        else {
+            formData[type].push(id);
+        }
+    };
+
+    const generalInterests= [
+        'Eating Out',
+        'Bike Rides',
+        'Drinking',
+        'Dancing',
+        'Cooking',
+        'Baking',
+        'Crafting',
+        'Painting',
+        'Surfing',
+        'Traveling'
+    ]
+
+    const specificsName = {
+        height: 'user_height',
+        education: 'user_education',
+        body: 'user_body_composition',
+        star: 'user_star_sign',
+        drinking: 'user_drinking',
+        smoking: 'user_smoking',
+        children: 'user_kids',
+        position: 'user_job',
+        religion: 'user_religion',
+        nationality: 'user_nationality',
+    };
+
+    if (loading) {
+        return <div>Loading specifics</div>; 
+    }
 
     return (
         <div className='App'>
-            <Container>
+            <Box sx={{marginLeft:'15%', marginRight:'15%'}}>
                 {/* <Link to='/accountSetup3Create'><img src={backButton} alt='back button' className='back-button'/></Link>
                 <div className='pc-title-back-button-text'>
                     Profile Creation
@@ -139,66 +201,14 @@ export default function AccountSetup4Create() {
                     <div className='pc-sub-header-text'>
                         These interests help match you to better people on meet me up. Select or add as many interests as you want.
                     </div>
-                    <Button variant='contained' onClick={handleButtonBoolean} name='interestsEatingOut'
-                        sx={{ backgroundColor: formData['interestsEatingOut'] ? '#E4423F' : '#ffffff', color: '#000000',
-                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', marginRight: '-10px', textTransform: 'none' }}
-                    >
-                        Eating Out
-                    </Button>
-                    <Button variant='contained' onClick={handleButtonBoolean} name='interestsBikeRides'
-                        sx={{ backgroundColor: formData['interestsBikeRides'] ? '#E4423F' : '#ffffff', color: '#000000',
-                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', marginRight: '-10px', textTransform: 'none' }}
-                    >
-                        Bike Rides
-                    </Button>
-                    <Button variant='contained' onClick={handleButtonBoolean} name='interestsDrinking'
-                        sx={{ backgroundColor: formData['interestsDrinking'] ? '#E4423F' : '#ffffff', color: '#000000',
-                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', marginRight: '-10px', textTransform: 'none' }}
-                    >
-                        Drinking
-                    </Button>
-                    <Button variant='contained' onClick={handleButtonBoolean} name='interestsDancing'
-                        sx={{ backgroundColor: formData['interestsDancing'] ? '#E4423F' : '#ffffff', color: '#000000',
-                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', marginRight: '-10px', textTransform: 'none' }}
-                    >
-                        Dancing
-                    </Button>
-                    <Button variant='contained' onClick={handleButtonBoolean} name='interestsCooking'
-                        sx={{ backgroundColor: formData['interestsCooking'] ? '#E4423F' : '#ffffff', color: '#000000',
-                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', marginRight: '-10px', textTransform: 'none' }}
-                    >
-                        Cooking
-                    </Button>
-                    <Button variant='contained' onClick={handleButtonBoolean} name='interestsBaking'
-                        sx={{ backgroundColor: formData['interestsBaking'] ? '#E4423F' : '#ffffff', color: '#000000',
-                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', marginRight: '-10px', textTransform: 'none' }}
-                    >
-                        Baking
-                    </Button>
-                    <Button variant='contained' onClick={handleButtonBoolean} name='interestsCrafting'
-                        sx={{ backgroundColor: formData['interestsCrafting'] ? '#E4423F' : '#ffffff', color: '#000000',
-                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', marginRight: '-10px', textTransform: 'none' }}
-                    >
-                        Crafting
-                    </Button>
-                    <Button variant='contained' onClick={handleButtonBoolean} name='interestsPainting'
-                        sx={{ backgroundColor: formData['interestsPainting'] ? '#E4423F' : '#ffffff', color: '#000000',
-                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', marginRight: '-10px', textTransform: 'none' }}
-                    >
-                        Painting
-                    </Button>
-                    <Button variant='contained' onClick={handleButtonBoolean} name='interestsSurfing'
-                        sx={{ backgroundColor: formData['interestsSurfing'] ? '#E4423F' : '#ffffff', color: '#000000',
-                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', marginRight: '-10px', textTransform: 'none' }}
-                    >
-                        Surfing
-                    </Button>
-                    <Button variant='contained' onClick={handleButtonBoolean} name='interestsTraveling'
-                        sx={{ backgroundColor: formData['interestsTraveling'] ? '#E4423F' : '#ffffff', color: '#000000',
-                            maxWidth: '202px', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', marginRight: '-10px', textTransform: 'none' }}
-                    >
-                        Traveling
-                    </Button>
+
+                    <Grid2 container spacing={1} sx={{marginTop: 3}}>
+                        {generalInterests.map((index) => 
+                            <Grid2>
+                                <Dates id={index} handleButton={handleButton} array={formData['user_general_interests']} type={'user_general_interests'}/>
+                            </Grid2>
+                        )}
+                    </Grid2>
                     <div className='pc-header-text'>
                         Some Specifics
                     </div>
@@ -207,7 +217,7 @@ export default function AccountSetup4Create() {
                     </div>
                     <Button variant='contained' name='height' style={{justifyContent: 'space-between'}}
                         sx={{ backgroundColor: '#ffffff', color: '#000000',
-                            width: '90%', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', textTransform: 'none' }}
+                            width: '100%', borderRadius: '41px', marginTop: '20px', textTransform: 'none' }}
                         onClick={()=>{
                             setOption('height');
                         }}
@@ -217,7 +227,7 @@ export default function AccountSetup4Create() {
                     </Button>
                     <Button variant='contained' name='education' style={{justifyContent: 'space-between'}}
                         sx={{ backgroundColor: '#ffffff', color: '#000000',
-                            width: '90%', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', textTransform: 'none' }}
+                            width: '100%', borderRadius: '41px', marginTop: '20px', textTransform: 'none' }}
                         onClick={()=>{
                             setOption('education');
                         }}
@@ -228,7 +238,7 @@ export default function AccountSetup4Create() {
                     </Button>
                     <Button variant='contained' name='bodyComp' style={{justifyContent: 'space-between'}}
                         sx={{ backgroundColor: '#ffffff', color: '#000000',
-                            width: '90%', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', textTransform: 'none' }}
+                            width: '100%', borderRadius: '41px', marginTop: '20px', textTransform: 'none' }}
                         onClick={()=>{
                             setOption('body');
                         }}
@@ -238,7 +248,7 @@ export default function AccountSetup4Create() {
                     </Button>
                     <Button variant='contained' name='starSign' style={{justifyContent: 'space-between'}}
                         sx={{ backgroundColor: '#ffffff', color: '#000000',
-                            width: '90%', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', textTransform: 'none' }}
+                            width: '100%', borderRadius: '41px', marginTop: '20px', textTransform: 'none' }}
                         onClick={()=>{
                             setOption('star');
                         }}
@@ -249,7 +259,7 @@ export default function AccountSetup4Create() {
                     </Button>
                     <Button variant='contained' name='drinking' style={{justifyContent: 'space-between'}}
                         sx={{ backgroundColor: '#ffffff', color: '#000000',
-                            width: '90%', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', textTransform: 'none' }}
+                            width: '100%', borderRadius: '41px', marginTop: '20px', textTransform: 'none' }}
                         onClick={()=>{
                             setOption('drinking');
                         }}
@@ -260,7 +270,7 @@ export default function AccountSetup4Create() {
                     </Button>
                     <Button variant='contained' name='smoking' style={{justifyContent: 'space-between'}}
                         sx={{ backgroundColor: '#ffffff', color: '#000000',
-                            width: '90%', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', textTransform: 'none' }}
+                            width: '100%', borderRadius: '41px', marginTop: '20px', textTransform: 'none' }}
                         onClick={()=>{
                             setOption('smoking');
                         }}
@@ -271,7 +281,7 @@ export default function AccountSetup4Create() {
                     </Button>
                     <Button variant='contained' name='kids' style={{justifyContent: 'space-between'}}
                         sx={{ backgroundColor: '#ffffff', color: '#000000',
-                            width: '90%', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', textTransform: 'none' }}
+                            width: '100%', borderRadius: '41px', marginTop: '20px', textTransform: 'none' }}
                         onClick={()=>{
                             setOption('children');
                         }}
@@ -281,7 +291,7 @@ export default function AccountSetup4Create() {
                     </Button>
                     <Button variant='contained' name='currentJob' style={{justifyContent: 'space-between'}}
                         sx={{ backgroundColor: '#ffffff', color: '#000000',
-                            width: '90%', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', textTransform: 'none' }}
+                            width: '100%', borderRadius: '41px', marginTop: '20px', textTransform: 'none' }}
                         onClick={()=>{
                             setOption('position');
                         }}
@@ -291,7 +301,7 @@ export default function AccountSetup4Create() {
                     </Button>
                     <Button variant='contained' name='religion' style={{justifyContent: 'space-between'}}
                         sx={{ backgroundColor: '#ffffff', color: '#000000',
-                            width: '90%', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', textTransform: 'none' }}
+                            width: '100%', borderRadius: '41px', marginTop: '20px', textTransform: 'none' }}
                         onClick={()=>{
                             setOption('religion');
                         }}
@@ -299,19 +309,19 @@ export default function AccountSetup4Create() {
                         <span>Religion</span>
                         {specifics.religion?<span>{specifics.religion}</span>:<span>Not Entered</span>}
                     </Button>
-                    <Button variant='contained' name='genderID' style={{justifyContent: 'space-between'}}
+                    {/* <Button variant='contained' name='genderID' style={{justifyContent: 'space-between'}}
                         sx={{ backgroundColor: '#ffffff', color: '#000000',
-                            width: '90%', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', textTransform: 'none' }}
+                            width: '100%', borderRadius: '41px', marginTop: '20px',  textTransform: 'none' }}
                         onClick={()=>{
                             setOption('gender');
                         }}
                     >
                         <span>Gender Identification</span>
                         {specifics.gender?<span>{specifics.gender}</span>:<span>Not Entered</span>}
-                    </Button>
+                    </Button> */}
                     <Button variant='contained' name='nationality' style={{justifyContent: 'space-between'}}
                         sx={{ backgroundColor: '#ffffff', color: '#000000',
-                            width: '90%', borderRadius: '41px', marginTop: '20px', marginLeft: '20px', textTransform: 'none' }}
+                            width: '100%', borderRadius: '41px', marginTop: '20px',  textTransform: 'none' }}
                         onClick={()=>{
                             setOption('nationality');
                         }}
@@ -326,10 +336,10 @@ export default function AccountSetup4Create() {
 
                     </div>
                 </form>
-                <DrawerContext.Provider value={{option, setOption, handleSetSpecifics, passData, setPassData, complete, setComplete, pickerValue, setPickerValue}}>
+                <DrawerContext.Provider value={{specifics, option, setOption, handleSetSpecifics, passData, setPassData, complete, setComplete, pickerValue, setPickerValue}}>
                     <DrawerOptions></DrawerOptions>
                 </DrawerContext.Provider>
-            </Container>
+            </Box>
         </div>
     )
 }
