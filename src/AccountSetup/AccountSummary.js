@@ -32,9 +32,6 @@ import { useNavigate } from "react-router-dom";
 import AccountContext from "./AccountContext";
 import React, { useEffect, useState } from "react";
 import { useContext } from "react";
-// victors code
-// TODO: add context to pass as an object for the specifics
-// specific object
 
 const Profile = () => {
   const [userData, setUserData] = useState({});
@@ -54,31 +51,7 @@ const Profile = () => {
   const handleSettings = () => {
     navigate(`/settings`);
   };
-  /* const { details } = React.useContext(AccountContext);
 
-  const separateInterests = (obj) => {
-    const interests = {};
-    const specifics = {};
-
-    for (const key in obj) {
-      if (key.startsWith("interests") && obj[key] === "true") {
-        interests[key] = obj[key];
-      } else {
-        specifics[key] = obj[key];
-      }
-    }
-
-    return { interests, specifics };
-  };
-  const { interests, specifics } = separateInterests(details);
-
-  console.log("Interests:", interests);
-  console.log("Specifics:", specifics);
-  const interestArray = Object.keys(interests).map((key) => ({
-    key: key.replace("interests", ""),
-  }));
-  console.log("interestArray: ", interestArray);
-  console.log("passedDetails: ", details); */
   const handleUpdate = () => {
     navigate(`/accountSetup3Create`);
   };
@@ -106,9 +79,11 @@ const Profile = () => {
   // const smoke = "I Dont Smoke";
   // const flag = "Australian";
   // default values
+  console.log('saved Data: ', userData);
   const name = userData.user_first_name + " " + userData.user_last_name;
   const age = userData.user_age;
   const gender = userData.user_gender;
+  console.log('saved gender: ', gender);
   const where = userData.user_suburb;
   const height = userData.user_height;
   const religion = userData.user_religion;
@@ -158,7 +133,7 @@ const Profile = () => {
       <Grid size={12}>
         <Typography sx={{ fontSize: "30px", textAlign: { xs: "left", sm: "center" } }}>About You</Typography>
       </Grid>
-      <Grid container size={{ xs: 12, sm: 8, md: 5, lg: 4, xl: 3 }}>
+      <Grid container size={{ xs: 12, sm: 8, md: 5, lg: 4, xl: 3 }} justifyContent={'center'}>
         <Grid size={6}>
           {/* {imageList ? imageList.map((imgSrc) => {
             <Grid size={12} key={imgSrc}>
