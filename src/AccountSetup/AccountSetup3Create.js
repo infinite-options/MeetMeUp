@@ -289,7 +289,7 @@ export default function AccountSetup3Create() {
                             <TextField onChange={handleChange}
                                 sx={{'& .MuiOutlinedInput-root': {'&.Mui-focused fieldset': {borderColor: '#E4423F'}}, width: 1}}
                                 InputLabelProps={{style: { color: "#E4423F" }}}
-                                name='gender' label='Gender' variant='outlined' select defaultValue={defaultGender}>
+                                name='gender' label='Gender' variant='outlined' select defaultValue={defaultGender} value={formData['gender']}>
                                 {genders.map((gender) => (
                                     <MenuItem key={gender} value={gender}>
                                         {gender}

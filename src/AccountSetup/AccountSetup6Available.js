@@ -26,7 +26,7 @@ const AccountSetup6Available = () => {
     const handleAddTime = (day, start_time, end_time) => {
         console.log('day: ', day);
         console.log('start_time: ', )
-        setTimes(() => [{ "day": day, "start_time": start_time, "end_time": end_time }]);
+        setTimes((prevTimes) => [...prevTimes, { day, "start_time": start_time, "end_time": end_time }]);
     };
 
     console.log('times (formatted): ', times);

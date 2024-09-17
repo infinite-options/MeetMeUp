@@ -51,12 +51,10 @@ function DateAdd({ onAddTime, onRemoveTime, times }) {
   // }
 
   const handleAddTime = () => {
-    if (day && startTimeString && endTimeString) {
       onAddTime(day, startTimeString, endTimeString);
       setDay("");
       setStart(dayjs());
       setEnd(dayjs());
-    }
     
   };
 
@@ -83,7 +81,7 @@ function DateAdd({ onAddTime, onRemoveTime, times }) {
       {times.map((time, index) => (
           <DisplayTime
               index={index}
-              day={time.Day}
+              day={time.day}
               start={time.start_time}
               end={time.end_time}
               key={index}

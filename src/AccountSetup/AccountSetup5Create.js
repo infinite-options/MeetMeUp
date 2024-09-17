@@ -67,6 +67,7 @@ export default function AccountSetup5Create() {
           .get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/${userId}`)
           .then((res) => {
             setUserData(res.data.result[0]);
+            console.log('userData: ', userData);
             console.log(res.data.result[0]);
             const fetchedData = res.data.result[0];
             const fetchedURL = fetchedData.user_video;

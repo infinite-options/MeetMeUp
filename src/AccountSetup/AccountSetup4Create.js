@@ -32,7 +32,6 @@ export default function AccountSetup4Create() {
         user_kids: '',
         user_job: '',
         user_religion: '',
-        user_gender: '',
         user_nationality: '',
         user_general_interests: [],
     });
@@ -177,7 +176,6 @@ export default function AccountSetup4Create() {
         children: 'user_kids',
         position: 'user_job',
         religion: 'user_religion',
-        gender: 'user_gender',
         nationality: 'user_nationality',
     };
 
