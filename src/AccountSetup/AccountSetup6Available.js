@@ -71,15 +71,6 @@ const AccountSetup6Available = () => {
         } catch (err) {
             console.log("Try Catch Err:", err);
         }
-        // console.log('dateType: ', dateType);
-        // times.forEach((time) => {
-        //     const value = {
-        //         Day: time.Day,
-        //         start_time: time.start_time,
-        //         end_time: time.end_time,
-        //     }
-        //     console.log('value: ', value)
-        // })
     };
 
     console.log('times: ', times);

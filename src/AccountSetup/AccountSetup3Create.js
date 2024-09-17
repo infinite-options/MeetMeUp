@@ -28,7 +28,7 @@ export default function AccountSetup3Create() {
     const tempValue = 'hello'
     const [loading, setLoading] = useState(true); 
     const [defaultAddress, setDefaultAddress] = useState('');
-
+    const [defaultGender, setDefaultGender] = useState('');
 
     const [formData, setFormData] = useState({
         name: '',
@@ -63,6 +63,7 @@ export default function AccountSetup3Create() {
                 setLoading(false);
                 // setSearchResult(savedAddress);
                 console.log('fetchedData Center: ', center);
+                setDefaultGender(fetchedData.user_gender);
                 setFormData(
                     {
                     ...formData,
@@ -189,6 +190,10 @@ export default function AccountSetup3Create() {
         }
     };
 
+    console.log('original gender: ', defaultGender);
+    useEffect(() => {
+        console.log('new gender: ', defaultGender)
+    }, [formData])
 
     const handleNext = async () => {
         const url = "https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo";
@@ -216,7 +221,7 @@ export default function AccountSetup3Create() {
 
             if(response.ok) {
                 const result = await response.json();
-                console.log(result.data);
+                console.log('response: ', result.data);
             }
             else {
                 console.error('Response Err:', response.statusText);
@@ -275,7 +280,7 @@ export default function AccountSetup3Create() {
                             <TextField onChange={handleChange}
                                 sx={{'& .MuiOutlinedInput-root': {'&.Mui-focused fieldset': {borderColor: '#E4423F'}}, width: 1}}
                                 InputLabelProps={{style: { color: "#E4423F" }}}
-                                name='gender' label='Gender' variant='outlined' select value={formData['gender']}>
+                                name='gender' label='Gender' variant='outlined' select defaultValue={defaultGender}>
                                 {genders.map((gender) => (
                                     <MenuItem key={gender} value={gender}>
                                         {gender}

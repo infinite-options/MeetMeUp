@@ -12,6 +12,7 @@ import DrawerOptions from '../Assets/Components/DrawerOptions';
 import Progress from '../Assets/Components/Progress';
 import NextButton from '../Assets/Components/NextButton';
 import Dates from '../Assets/Components/Dates';
+import axios from 'axios';
 
 export default function AccountSetup4Create() {
     const [option, setOption] = React.useState('');
@@ -35,6 +36,7 @@ export default function AccountSetup4Create() {
         user_nationality: '',
         user_general_interests: [],
     });
+    console.log('setup4 formData: ', formData);
 
     // based on option set specific to passData
     const [specifics, setSpecifics] = useState({
@@ -49,6 +51,7 @@ export default function AccountSetup4Create() {
         religion: '',
         gender: '',
         nationality: '',
+        general_interests: [],
     })
 
     const handleSetSpecifics = (name, value) => {
@@ -65,6 +68,36 @@ export default function AccountSetup4Create() {
         return value;
     };
 
+    // use the setSpecifics
+    const userId = localStorage.getItem('user_uid');
+    const [loading, setLoading] = useState(true); 
+    const [userData, setUserData] = useState({});
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const response = await axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/${userId}`);
+                const fetchedData = response.data.result[0];
+                setUserData(fetchedData);
+                console.log('userData: ', userData)
+                setLoading(false);
+                handleSetSpecifics('height', fetchedData.user_height);
+                handleSetSpecifics('education', fetchedData.user_education);
+                handleSetSpecifics('body', fetchedData.user_body_composition);
+                handleSetSpecifics('star', fetchedData.user_star_sign);
+                handleSetSpecifics('drinking', fetchedData.user_drinking);
+                handleSetSpecifics('smoking', fetchedData.user_smoking);
+                handleSetSpecifics('children', fetchedData.user_kids);
+                handleSetSpecifics('position', fetchedData.user_job);
+                handleSetSpecifics('religion', fetchedData.user_religion);
+                handleSetSpecifics('nationality', fetchedData.user_nationality);
+                } catch (error) {
+                    console.log("Error fetching data", error);
+                };
+        }
+        fetchUserData();
+      }, [userId]);
+
     const [passData, setPassData] = useState(null);
     const [complete, setComplete] = useState(false);
 
@@ -73,23 +106,6 @@ export default function AccountSetup4Create() {
         console.log('formData: ', formData);
         const specificsForm = populateFormData();
         console.log('specificsForm: ', specificsForm);
-        const formObj = {
-            height: specificsForm.get('height'),
-            education: specificsForm.get('education'),
-            body: specificsForm.get('body'),
-            star: specificsForm.get('star'),
-            drinking: specificsForm.get('drinking'),
-            smoking: specificsForm.get('smoking'),
-            children: specificsForm.get('children'),
-            position: specificsForm.get('position'),
-            religion: specificsForm.get('religion'),
-            gender: specificsForm.get('gender'),
-            nationality: specificsForm.get('nationality'),
-            generalInterests: specificsForm.get('generalInterests')
-        };
-        setDetails(formObj);
-        console.log('formObj: ', formObj);
-
         const url = "https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo";
         try {
             const response = await fetch(url, {
@@ -156,6 +172,10 @@ export default function AccountSetup4Create() {
         gender: 'user_gender',
         nationality: 'user_nationality',
     };
+
+    if (loading) {
+        return <div>Loading specifics</div>; 
+    }
 
     return (
         <div className='App'>
