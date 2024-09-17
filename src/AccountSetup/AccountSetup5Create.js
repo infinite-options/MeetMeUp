@@ -43,6 +43,8 @@ export default function AccountSetup5Create() {
     const [userData, setUserData] = useState({});
     const [obtain, setObtain] = useState('false');
     const [prevVideo, setPrevVideo] = useState('');
+    const [newRecord, setNewRecord] = useState(false);
+
     console.log('formData: ', formData);
 
     const webcamRef = useRef(null);
@@ -65,6 +67,7 @@ export default function AccountSetup5Create() {
           .get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/${userId}`)
           .then((res) => {
             setUserData(res.data.result[0]);
+            console.log('userData: ', userData);
             console.log(res.data.result[0]);
             const fetchedData = res.data.result[0];
             const fetchedURL = fetchedData.user_video;
@@ -86,8 +89,8 @@ export default function AccountSetup5Create() {
             // const blob = new Blob(recordedChunks, {type: "video/mp4"});
             // const url = URL.createObjectURL(blob);
             
-            // setVideoSrc(fetchedData.user_video_url.replaceAll("\"", ""));
-            setPrevVideo(fetchedData.user_video_url.replaceAll("\"", ""))
+            setVideoSrc(fetchedData.user_video_url.replaceAll("\"", ""));
+            // setPrevVideo(fetchedData.user_video_url.replaceAll("\"", ""))
             console.log('prevVide: ', prevVideo)
             setObtain(true);
             setViewRecording(true);
@@ -228,9 +231,12 @@ export default function AccountSetup5Create() {
 
         // TODO: error occurs right here not allowing fetch
         console.log('videoSrc before: ', videoSrc);
-        let vidBlob = await fetch(videoSrc).then(r => r.blob());
-        console.log('vidBlob: ', vidBlob);
-        fd.append("user_video", vidBlob, "video_filename.mp4");
+        if (newRecord) { // if there hasnt been a previous video
+            let vidBlob = await fetch(videoSrc).then(r => r.blob());
+            console.log('vidBlob: ', vidBlob);
+            fd.append("user_video", vidBlob, "video_filename.mp4");
+        }
+        
 
         var imageArray = formData['image'].split(',');
         for(var i = 0; i < imageArray.length - 1; i++) {
@@ -281,11 +287,11 @@ export default function AccountSetup5Create() {
                 {formData['video'] ? <div className='general-container'><video width='75%' height='100%' controls src={formData['video']}/></div> : null}
                 <div className='general-container'>
                 {viewRecording ? (
-                        prevVideo ? (
-                            <video src={prevVideo} height="400" width="300" controls />
-                        ) : (
+                        // prevVideo ? (
+                        //     <video src={prevVideo} height="400" width="300" controls />
+                        // ) : (
                             <video src={videoSrc} height="400" width="300" controls />
-                        )
+                        // )
                     ) : (
                         <Webcam
                             ref={webcamRef}
@@ -342,7 +348,10 @@ export default function AccountSetup5Create() {
                                     <Button component='label' variant='contained'
                                         sx={{ backgroundColor: '#E4423F', color: '#000000', maxWidth: '202px',
                                         borderRadius: '41px', textTransform: 'none' }}
-                                        onClick={handleStartCaptureClick}
+                                        onClick={() => {
+                                            handleStartCaptureClick()
+                                            setNewRecord(true);
+                                        }}
                                     >
                                         <div className='white-text-video'>
                                             Record&nbsp;
@@ -367,7 +376,9 @@ export default function AccountSetup5Create() {
                             (<Button component='label' variant='contained'
                                 sx={{ backgroundColor: '#E4423F', color: '#000000', maxWidth: '202px',
                                 borderRadius: '41px', textTransform: 'none' }}
-                                onClick={handleStartCaptureClick}
+                                onClick={() => {
+                                    setNewRecord(true)
+                                    handleStartCaptureClick()}}
                             >
                                 <div className='white-text-video'>
                                     Record&nbsp;

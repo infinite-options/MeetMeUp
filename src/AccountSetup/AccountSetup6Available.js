@@ -3,15 +3,17 @@ import Progress from "../Assets/Components/Progress";
 import { Box, Button, Grid2, Container, Typography } from "@mui/material";
 import NextButton from "../Assets/Components/NextButton";
 import DateAdd from "../Assets/Components/DateAdd";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Dates from "../Assets/Components/Dates";
-
+import axios from "axios";
 // victors code
 const AccountSetup6Available = () => {
     const [formData, setFormData] = useState({
         dates: [],
     });
-
+    const userId = localStorage.getItem('user_uid');
+    const [loading, setLoading] = useState(true); 
+    const [userData, setUserData] = useState({});
     const dates = [
         'Lunch',
         'Dinner',
@@ -21,9 +23,13 @@ const AccountSetup6Available = () => {
     ]
     const [times, setTimes] = useState([]);
 
-    const handleAddTime = (Day, start_time, end_time) => {
-        setTimes((prevTimes) => [...prevTimes, { Day, start_time, end_time }]);
+    const handleAddTime = (day, start_time, end_time) => {
+        console.log('day: ', day);
+        console.log('start_time: ', )
+        setTimes((prevTimes) => [...prevTimes, { day, "start_time": start_time, "end_time": end_time }]);
     };
+
+    console.log('times (formatted): ', times);
 
     const handleRemoveTime = (index) => {
         setTimes((prevTimes) => prevTimes.filter((_, i) => i !== index));
@@ -40,6 +46,31 @@ const AccountSetup6Available = () => {
         console.log(formData[type]);
     };
 
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const response = await axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/${userId}`);
+                const fetchedData = response.data.result[0];
+                setUserData(fetchedData);
+                console.log('userData: ', userData)
+                setLoading(false);
+                const datesArray = fetchedData.user_date_interests.split(',');
+                console.log('datesArray: ', datesArray);
+                setFormData(prevFormData => ({
+                    ...prevFormData,
+                    dates: datesArray
+                }));
+
+                } catch (error) {
+                    console.log("Error fetching data", error);
+                };
+        }
+        fetchUserData();
+      }, [userId]);
+
+    // call a get after the submission is properly imported
+
+
     const handleNext = async () => {
         console.log(formData);
 
@@ -49,12 +80,14 @@ const AccountSetup6Available = () => {
         fd.append("user_uid", localStorage.getItem('user_uid'));
         fd.append("user_email_id", localStorage.getItem('user_email_id'));
         const dateType = formData['dates'];
+        console.log('dateType: ', dateType);
         const typeString = dateType.join(', ');
-
+        const timeString = JSON.stringify(times);
+        const checkData = '[{"day": "Friday", "start_time": "11:15 AM", "end_time": "11:15 AM"},{"day": "Thursday", "start_time": "05:27 AM", "end_time": "05:24 AM"}]'
         console.log('typeString: ', typeString);
-        fd.append("user_date_interests", typeString);   
-        console.log('times: ', times)
-        // fd.append("user_available_time", times);
+        fd.append("user_date_interests", dateType);   
+        console.log('times (handleNext): ', times)
+        fd.append("user_available_time", timeString);
 
         try {
             const response = await fetch(url, {
@@ -64,6 +97,7 @@ const AccountSetup6Available = () => {
             if(response.ok) {
                 const result = await response.json();
                 console.log(result.data);
+                console.log(result);
             }
             else {
                 console.error('Response Err:', response.statusText);
@@ -71,18 +105,10 @@ const AccountSetup6Available = () => {
         } catch (err) {
             console.log("Try Catch Err:", err);
         }
-        // console.log('dateType: ', dateType);
-        // times.forEach((time) => {
-        //     const value = {
-        //         Day: time.Day,
-        //         start_time: time.start_time,
-        //         end_time: time.end_time,
-        //     }
-        //     console.log('value: ', value)
-        // })
     };
-
-    console.log('times: ', times);
+    if (loading) {
+        return <div>Loading specifics</div>; 
+    }
 
     return (
         <Box sx={{marginLeft:'15%', marginRight:'15%'}}>
@@ -116,12 +142,14 @@ const AccountSetup6Available = () => {
                         <Grid size={6} justifyContent={'center'}>
                             <Typography sx={{fontSize:"18px", display: 'flex', justifyContent: 'center'}}>Times</Typography>
                         </Grid>
-                        <Grid size={12} container justifyContent={'center'}>
+                        
+                    </Grid>
+
+                    <Grid size={12} container justifyContent={'center'}>
                             <DateAdd onAddTime={handleAddTime}
                             onRemoveTime={handleRemoveTime}
                             times={times}></DateAdd>
                         </Grid>
-                    </Grid>
                 </Box>
                 <NextButton onClick={handleNext} next={'/location'}/>
 

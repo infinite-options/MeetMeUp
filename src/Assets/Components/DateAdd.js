@@ -34,8 +34,12 @@ const CustomButton = styled(Button)({
 });
 function DateAdd({ onAddTime, onRemoveTime, times }) {
   const [day, setDay] = useState("")
-  const [start, setStart] = useState("")
-  const [end, setEnd] = useState("")
+  const [start, setStart] = useState(dayjs())
+  // const [end, setEnd] = useState("")
+  const [end, setEnd] = useState(dayjs());
+  const [endTimeString, setEndTimeString] = useState('');
+  const [startTimeString, setStartTimeString] = useState('');
+
   // const [times, setTimes] = useState([]);
   
   // const handleRemoveTimes = (index) => {
@@ -47,25 +51,27 @@ function DateAdd({ onAddTime, onRemoveTime, times }) {
   // }
 
   const handleAddTime = () => {
-    onAddTime(day, start, end);
-    setDay("");
-    setStart("");
-    setEnd("");
+      onAddTime(day, startTimeString, endTimeString);
+      setDay("");
+      setStart(dayjs());
+      setEnd(dayjs());
+    
   };
-
-  const handleTimeEndChange = (e) => {
-    setEnd(e.target.value);
-  };
-
 
   const handleChange=(event)=> {
       setDay(event.target.value)
   }
-  const handleStart=(event)=> {
-      setStart(event.target.value)
+  const handleStart=(newValue)=> {
+      setStart(newValue);
+      const formattedTime = newValue.format('hh:mm A');
+      setStartTimeString(formattedTime);
+      console.log('Formatted Time:', formattedTime); 
   }
-  const handleEnd=(event)=> {
-      setEnd(event.target.value)
+  const handleEnd=(newValue)=> {
+      setEnd(newValue);
+      const formattedTime = newValue.format('hh:mm A');
+      setEndTimeString(formattedTime);
+      console.log('Formatted Time:', formattedTime); 
   }
   const inputProps = {
     step: 300,
@@ -75,7 +81,7 @@ function DateAdd({ onAddTime, onRemoveTime, times }) {
       {times.map((time, index) => (
           <DisplayTime
               index={index}
-              day={time.Day}
+              day={time.day}
               start={time.start_time}
               end={time.end_time}
               key={index}
@@ -104,11 +110,11 @@ function DateAdd({ onAddTime, onRemoveTime, times }) {
               </FormControl>
           </Grid>
           <Grid size={3}>
-              <TextField
+              {/* <TextField
                   label="Start Time"
                   variant="outlined"
-                  value={start}
-                  onChange={handleStart}
+                  value={startTimeString}
+                  // onChange={handleStart}
                   sx={{
                     backgroundColor:"#CECECE",
                     '& .MuiInputBase-root': {
@@ -123,14 +129,15 @@ function DateAdd({ onAddTime, onRemoveTime, times }) {
                        color:"black"
                     },
                   }}
-              />
+              /> */}
+              
           </Grid>
           <Grid size={3}>
-              <TextField
+              {/* <TextField
                   label="End Time"
                   variant="outlined"
                   value={end}
-                  onChange={handleEnd}
+                  // onChange={handleEnd}
                   sx={{
                     backgroundColor:"#CECECE",
                     '& .MuiInputBase-root': {
@@ -147,19 +154,37 @@ function DateAdd({ onAddTime, onRemoveTime, times }) {
                     },
                   }}
                   
-              />
-            {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+              /> */}
+              
+          </Grid>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <Box sx={{ width: '100%' }}>
+
+                <DemoContainer components={['TimePicker']}>
+                  <TimePicker
+                    value={start}
+                    onChange={handleStart}
+                    label="Start Time" />
+                </DemoContainer>
+              </Box>
+              </LocalizationProvider>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Box sx={{ width: '100%' }}>
               <DemoContainer components={['TimePicker']}>
                 <TimePicker
                   value={end}
-                  onChange={handleTimeEndChange}
-                  label="Basic time picker" />
+                  onChange={handleEnd}
+                  label="End Time" />
               </DemoContainer>
-            </LocalizationProvider> */}
-
-          </Grid>
+            </Box>
+          </LocalizationProvider>
+          
+          
           <Grid size={1} container alignItems="center" >
-            <img src={checkIcon} onClick={handleAddTime} />
+            <IconButton>
+              <img src={checkIcon} onClick={handleAddTime} />
+
+            </IconButton>
           </Grid>
       </Grid>
 

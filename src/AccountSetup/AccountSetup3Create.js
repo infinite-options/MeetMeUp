@@ -21,7 +21,16 @@ const mapContainerStyle = {
 export default function AccountSetup3Create() {
     // set the formData to the current existing data
     const [userData, setUserData] = useState({});
+    const [savedAddress, setSavedAddress] = useState('');
     const userId = localStorage.getItem('user_uid');
+    const [center, setCenter] = useState({lat: -32.015001263602, lng: 115.83650856893345});
+    const [searchResult, setSearchResult] = useState('');
+    const tempValue = 'hello'
+    const [loading, setLoading] = useState(true); 
+    const [defaultAddress, setDefaultAddress] = useState('');
+    const [defaultGender, setDefaultGender] = useState('');
+    const [defaultBio, setDefaultBio] = useState('');
+
     const [formData, setFormData] = useState({
         name: '',
         age: '',
@@ -32,46 +41,80 @@ export default function AccountSetup3Create() {
         sexuality: '',
         openTo: [],
     });
+    function onLoad(autocomplete) {
+        setSearchResult(autocomplete);
+    }
 
     console.log('openTo formData: ', formData.openTo)
     useEffect(() => {
-        axios
-          .get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/${userId}`)
-          .then((res) => {
-            setUserData(res.data.result[0]);
-            console.log(res.data.result[0]);
-            const fetchedData = res.data.result[0];
-            const openToArray = fetchedData.user_open_to.split(',');
-            console.log('openTo: ', fetchedData.user_open_to)
-            setFormData({
-                name: `${fetchedData.user_first_name} ${fetchedData.user_last_name}`,
-                age: fetchedData.user_age,
-                gender: fetchedData.user_gender || '',
-                profileBio: fetchedData.user_profileBio || '',
-                suburb: fetchedData.user_suburb || '',
-                country: fetchedData.user_country || '',
-                sexuality: fetchedData.user_sexuality || '',
-                openTo: openToArray || [],
-              });
-          })
-          .catch((error) => {
-            console.log("Error fetching data", error);
-          });
-      }, []);
+        const fetchUserData = async () => {
+            try {
+                const response = await axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/${userId}`);
+                const fetchedData = response.data.result[0];
+                console.log('openTo: ', fetchedData.user_open_to);
+                const openToArray = fetchedData.user_open_to.split(',');
+
+                await handleAddress(fetchedData.user_latitude, fetchedData.user_longitude);
+
+                // console.log('openTo: ', fetchedData.user_open_to);
+                // handleAddress(fetchedData.user_latitude, fetchedData.user_longitude)
+                setCenter({lat: Number(fetchedData.user_latitude), lng: Number(fetchedData.user_longitude)});
+                // TODO: might fix to go under handleAddress
+                setUserData(fetchedData);
+                setDefaultAddress(savedAddress);
+                setLoading(false);
+                // setSearchResult(savedAddress);
+                console.log('fetchedData Center: ', center);
+                await setDefaultGender(fetchedData.user_gender);
+                await setDefaultBio(fetchedData.user_profile_bio)
+                setFormData(
+                    {
+                    ...formData,
+                    name: `${fetchedData.user_first_name} ${fetchedData.user_last_name}`,
+                    age: fetchedData.user_age,
+                    gender: fetchedData.user_gender || '',
+                    profileBio: fetchedData.user_profile_bio || '',
+                    suburb: fetchedData.user_suburb || '',
+                    // country: '',
+                    sexuality: fetchedData.user_sexuality || '',
+                    openTo: openToArray || [],
+                });
+                } catch (error) {
+                console.log("Error fetching data", error);
+                };
+        }
+        fetchUserData();
+      }, [userId, savedAddress]);
+    
+    const handleAddress = async (lat, lang) => {
+        try {
+            const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lang}&key=${GOOGLE_API_KEY}`, {
+                method: 'GET',
+            });
+        
+            if(response.ok) {
+                const result = await response.json();
+                console.log(result);
+                if (result.results.length > 0) {
+                    const address = result.results[0].formatted_address;
+                    setSavedAddress(address);  
+                    console.log('Fetched Address: ', address); 
+                  } else {
+                    console.error('No address found for the given coordinates');
+                  }
+                // NOT ACTUALLY BEING SAVED!!
+            }
+            else {
+                console.error('Response Err:', response.statusText);
+            }
+            } catch (err) {
+                console.log("Try Catch Err:", err);
+            }
+    }
+    
     console.log('userData: ', userData);
     console.log('userData Age: ', userData.user_age);
     
-    // const [formData, setFormData] = useState({
-    //     name: userData ? userData.user_first_name + userData.user_last_name : '',
-    //     age: userData ? userData.user_age : '',
-    //     gender: userData ? userData.user_age : '',
-    //     profileBio: userData ? userData.user_age : '',
-    //     suburb: userData ? userData.user_age : '',
-    //     country: userData ? userData.user_country : '',
-    //     sexuality: userData ? userData.user_age : '',
-    //     openTo: [],
-    // });
-
     const genders = [
         'Male',
         'Female',
@@ -94,22 +137,20 @@ export default function AccountSetup3Create() {
         'Homosexual',
     ] 
 
-    const [center, setCenter] = useState({lat: -32.015001263602, lng: 115.83650856893345});
-    const [searchResult, setSearchResult] = useState('');
     
-    function onLoad(autocomplete) {
-        setSearchResult(autocomplete);
-    }
-
+    
     function onPlaceChanged() {
         if (searchResult !== '') {
             const place = searchResult.getPlace();
+            console.log('place full: ', place.address_components);
             for(var i = 0; i < place.address_components.length; i++) {
+                console.log('place: ', place.address_components[i]["long_name"]);
                 if(place.address_components[i]["types"].includes("country")) {
                     formData['country'] = place.address_components[i]["long_name"];
                 }
             }
             setCenter({lat: place.geometry.location.lat(), lng: place.geometry.location.lng()})
+            console.log('onPlaceCenter: ', center);
         } else {
             alert('Enter in a new location');
         }
@@ -120,6 +161,10 @@ export default function AccountSetup3Create() {
             ...formData,
             [name]: value
         });
+    };
+
+    const handleAddressChange = (e) => {
+        setSavedAddress(e.target.value);
     };
 
     const handleButton = (id, type) => {
@@ -148,6 +193,16 @@ export default function AccountSetup3Create() {
         }
     };
 
+    console.log('original gender: ', defaultGender);
+    useEffect(() => {
+        console.log('new gender: ', defaultGender)
+    }, [formData])
+
+    // Checking bio
+    // console.log('original Bio: ', defaultBio);
+    // useEffect(() => {
+    //     console.log('new Bio: ', defaultBio)
+    // }, [formData])
 
     const handleNext = async () => {
         const url = "https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo";
@@ -175,7 +230,7 @@ export default function AccountSetup3Create() {
 
             if(response.ok) {
                 const result = await response.json();
-                console.log(result);
+                console.log('response: ', result.data);
             }
             else {
                 console.error('Response Err:', response.statusText);
@@ -197,7 +252,10 @@ export default function AccountSetup3Create() {
     if (!isLoaded) {
         return <div>Loading maps</div>;
     }
-
+    
+    if (loading) {
+        return <div>Loading location</div>; 
+    }
     return (
         <div className='App'>
             <form className='form-container' onSubmit={handleNext}>
@@ -231,7 +289,7 @@ export default function AccountSetup3Create() {
                             <TextField onChange={handleChange}
                                 sx={{'& .MuiOutlinedInput-root': {'&.Mui-focused fieldset': {borderColor: '#E4423F'}}, width: 1}}
                                 InputLabelProps={{style: { color: "#E4423F" }}}
-                                name='gender' label='Gender' variant='outlined' select defaultValue = {formData['gender']}>
+                                name='gender' label='Gender' variant='outlined' select defaultValue={defaultGender} value={formData['gender']}>
                                 {genders.map((gender) => (
                                     <MenuItem key={gender} value={gender}>
                                         {gender}
@@ -250,7 +308,7 @@ export default function AccountSetup3Create() {
                         sx={{'& .MuiOutlinedInput-root': {'&.Mui-focused fieldset': {borderColor: '#E4423F'}}}}
                         InputLabelProps={{style: { color: "#E4423F" }}}
                         name='profileBio' label='Profile Bio' type='text' variant='outlined' multiline rows={4}
-                        value={formData['profileBio']}
+                        value={defaultBio}
                     />
                 </Grid2>
                 <div className='pc-header-text'>
@@ -259,9 +317,12 @@ export default function AccountSetup3Create() {
                 <div className='pc-sub-header-text'>
                     Your location helps us pin point where you are to provide better matches to you.
                 </div>
+                <Grid2 container
+                    sx={{ '& > :not(style)': { marginTop: 1.5, width: 1 } }}>
+
                 <Autocomplete onPlaceChanged={onPlaceChanged} onLoad={onLoad}>
                     {/* NOTE: why is this input and not textField? does this affect the googlemap? */}
-                    <input
+                    {/* <input
                         className='autocomplete-text'
                         type='text'
                         placeholder='Location'
@@ -278,9 +339,19 @@ export default function AccountSetup3Create() {
                             borderRadius: '5px',
                             textOverflow: 'ellipses',
                         }}
-                        value={formData['country']}
+                    /> */}
+                    <TextField
+                        className='autocomplete-text' onChange={handleAddressChange}
+                        sx={{'& .MuiOutlinedInput-root': {'&.Mui-focused fieldset': {borderColor: '#E4423F'}}}}
+                        InputLabelProps={{style: { color: "#E4423F" }}}
+                        variant='outlined'
+                        fullWidth
+                        name='location' label='Location' type='text'
+                        defaultValue={`${savedAddress}`}
                     />
                 </Autocomplete>
+                </Grid2>
+
                     <GoogleMap
                         mapContainerStyle={mapContainerStyle}
                         zoom={15}
