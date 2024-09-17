@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { Box, Button, Checkbox, FormGroup, FormControlLabel, TextField, Container, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2'
 import { useNavigate } from 'react-router-dom'; 
-
+import axios from 'axios';
 export default function AccountSetup1Login() {
     const [formDataLogin, setFormDataLogin] = useState({
         email: '',
@@ -22,10 +22,35 @@ export default function AccountSetup1Login() {
             [name]: value
         });
     };
-    const handleSubmitLogin = (e) => {
-        console.log(e)
-        console.log(formDataLogin);
-        handleLogin();
+ 
+    const handleSubmitLogin = async (e) => {
+        e.preventDefault();
+
+        const saltUrl = "https://mrle52rri4.execute-api.us-west-1.amazonaws.com/dev/api/v2/AccountSalt/MMU"; // Endpoint 8
+        const loginUrl = "https://mrle52rri4.execute-api.us-west-1.amazonaws.com/dev/api/v2/Login/MMU"; // Endpoint 9
+
+        try {
+            const saltResponse = await axios.post(saltUrl, { email: formDataLogin.email});
+            const { password_salt } = saltResponse.data.result[0]; //This has the hashed password
+            console.log("SALT RESPONSE: ",saltResponse.data.result[0].password_salt);
+            console.log("Hashed Password received: ", password_salt);
+            
+            const loginResponse = await axios.post(loginUrl, {
+                email: formDataLogin.email,
+                password: password_salt 
+            },{
+                headers:{ 'Content-Type': 'application/json'}
+            });
+            console.log("Login successful:", loginResponse.data);
+            navigate(`/accountSetup7Summary`);
+        } catch (error) {
+            console.error("Error occurred:", error);
+            if (error.response && error.response.status === 401) {
+                window.alert('Invalid credentials. Please try again.');
+            } else {
+                window.alert('An error occurred. Please try again later.');
+            }
+        }
     };
     const handleSubmitCreate = (e) => {
         console.log(e)

@@ -39,6 +39,7 @@ import { useContext } from "react";
 const Profile = () => {
   const [userData, setUserData] = useState({});
   const userId = localStorage.getItem('user_uid');
+  console.log(userId);
   useEffect(() => {
     axios
       .get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/${userId}`)

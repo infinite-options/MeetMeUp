@@ -18,7 +18,7 @@ export default function AccountSetup2Create() {
     const formRef = useRef(null);
     const [formData, setFormData] = useState({
         email: '',
-        phoneNumber: '',
+        phone_number: '',
         password: '',
         passwordConfirm: '',
     });
@@ -33,28 +33,37 @@ export default function AccountSetup2Create() {
     };
 
     const handleNext = async () => {
-        const url = "https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo";
+        const url = "https://mrle52rri4.execute-api.us-west-1.amazonaws.com/dev/api/v2/CreateAccount/MMU"; //Changed Endpoing
+        
         let data = new FormData();
         data.append("user_uid", formData['profileBio']);
-        data.append("user_email_id", formData['user_email_id']);
-        data.append("user_password_hash", formData['user_password_hash']);
-        data.append("user_phone_number", formData['user_phone_number']);
-        data.forEach((value, key) => {
+        data.append("email", formData['email']);  
+        data.append("password", formData['password']);
+        data.append("phone_number", formData['phone_number']);
+        data.forEach((value, key) => {  
             console.log(`${key}: ${value}`);
         });
         setCheck(false);  
 
         try {
-            const response = await axios.post(url, data);
+            const response = await axios.post(url, data,{
+                headers: { 'Content-Type': 'application/json'}
+            });
             console.log("RESPONSE: ", response.data);
-            localStorage.setItem('user_uid', response.data.user_uid);
-            localStorage.setItem('user_email_id', formData['user_email_id']);
+            // if(response.data = "User Already Exists"){  
+            //     alert("User Alreaady Exists");
+            // }
+            console.log("U_ID",response.data.result[0].user_uid)
+            localStorage.setItem('user_uid', response.data.result[0].user_uid);
+            localStorage.setItem('user_email_id', formData['email']);
             console.log('localStorage items: ', localStorage.getItem('user_uid'), localStorage.getItem('user_email_id'));
 
         } catch (error) {
             // setSubmit(false); 
             setCheck(true);
             console.error("Error occurred:", error);
+            console.error(error.response);
+
             if (error.response && error.response.status === 409) {
                 window.alert('User Already Exists');
             }
@@ -78,8 +87,8 @@ export default function AccountSetup2Create() {
                         sx={{ '& > :not(style)': { marginTop: 1.5, width: 1 } }}
                         autoComplete='off'
                     >
-                        <TextField onChange={handleChange} name='user_email_id' label='Email' type='email' variant='outlined'/>
-                        <TextField onChange={handleChange} name='user_phone_number' label='Phone Number' type='tel' variant='outlined'/>
+                        <TextField onChange={handleChange} name='email' label='Email' type='email' variant='outlined'/>
+                        <TextField onChange={handleChange} name='phone_number' label='Phone Number' type='tel' variant='outlined'/>
                     </Grid2>
                     <div className='pc-sub-header-text'>
                         Already have an account? <span onClick={() => {
@@ -96,7 +105,7 @@ export default function AccountSetup2Create() {
                         sx={{ '& > :not(style)': { marginTop: 1.5, width: 1 } }}
                         autoComplete='off'
                     >
-                        <TextField onChange={handleChange} name='user_password_hash' label='Create Password' type='password' variant='outlined'/>
+                        <TextField onChange={handleChange} name='password' label='Create Password' type='password' variant='outlined'/>
                         <TextField onChange={handleChange} name='passwordConfirm' label='Confirm Password' type='password' variant='outlined'/>
                     </Grid2>
                     <HelperTextBox text='How do you need to make a secure password?'/>
