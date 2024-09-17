@@ -26,6 +26,9 @@ export default function AccountSetup3Create() {
     const [center, setCenter] = useState({lat: -32.015001263602, lng: 115.83650856893345});
     const [searchResult, setSearchResult] = useState('');
     const tempValue = 'hello'
+    const [loading, setLoading] = useState(true); 
+    const [defaultAddress, setDefaultAddress] = useState('');
+
 
     const [formData, setFormData] = useState({
         name: '',
@@ -43,36 +46,41 @@ export default function AccountSetup3Create() {
 
     console.log('openTo formData: ', formData.openTo)
     useEffect(() => {
-        axios
-          .get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/${userId}`)
-          .then((res) => {
-            setUserData(res.data.result[0]);
-            console.log(res.data.result[0]);
-            const fetchedData = res.data.result[0];
-            const openToArray = fetchedData.user_open_to.split(',');
-            console.log('openTo: ', fetchedData.user_open_to);
-            handleAddress(fetchedData.user_latitude, fetchedData.user_longitude)
-            setCenter({lat: Number(fetchedData.user_latitude), lng: Number(fetchedData.user_longitude)});
-            // setSearchResult(savedAddress);
-            // TODO: might fix to go under handleAddress
-            console.log('fetchedData Center: ', center);
-            setFormData(
-                {
-                ...formData,
-                name: `${fetchedData.user_first_name} ${fetchedData.user_last_name}`,
-                age: fetchedData.user_age,
-                gender: fetchedData.user_gender || '',
-                profileBio: fetchedData.user_profileBio || '',
-                suburb: fetchedData.user_suburb || '',
-                // country: '',
-                sexuality: fetchedData.user_sexuality || '',
-                openTo: openToArray || [],
-              });
-          })
-          .catch((error) => {
-            console.log("Error fetching data", error);
-          });
-      }, []);
+        const fetchUserData = async () => {
+            try {
+                const response = await axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/${userId}`);
+                const fetchedData = response.data.result[0];
+                const openToArray = fetchedData.user_open_to.split(',');
+
+                await handleAddress(fetchedData.user_latitude, fetchedData.user_longitude);
+
+                // console.log('openTo: ', fetchedData.user_open_to);
+                // handleAddress(fetchedData.user_latitude, fetchedData.user_longitude)
+                setCenter({lat: Number(fetchedData.user_latitude), lng: Number(fetchedData.user_longitude)});
+                // TODO: might fix to go under handleAddress
+                setUserData(fetchedData);
+                setDefaultAddress(savedAddress);
+                setLoading(false);
+                // setSearchResult(savedAddress);
+                console.log('fetchedData Center: ', center);
+                setFormData(
+                    {
+                    ...formData,
+                    name: `${fetchedData.user_first_name} ${fetchedData.user_last_name}`,
+                    age: fetchedData.user_age,
+                    gender: fetchedData.user_gender || '',
+                    profileBio: fetchedData.user_profileBio || '',
+                    suburb: fetchedData.user_suburb || '',
+                    // country: '',
+                    sexuality: fetchedData.user_sexuality || '',
+                    openTo: openToArray || [],
+                });
+                } catch (error) {
+                console.log("Error fetching data", error);
+                };
+        }
+        fetchUserData();
+      }, [userId, savedAddress]);
     
     const handleAddress = async (lat, lang) => {
         try {
@@ -83,9 +91,6 @@ export default function AccountSetup3Create() {
             if(response.ok) {
                 const result = await response.json();
                 console.log(result);
-                // const address = result.results[0]?.formatted_address;
-                // // return address;
-                // setSavedAddress(address);
                 if (result.results.length > 0) {
                     const address = result.results[0].formatted_address;
                     setSavedAddress(address);  
@@ -105,7 +110,7 @@ export default function AccountSetup3Create() {
     
     console.log('userData: ', userData);
     console.log('userData Age: ', userData.user_age);
-
+    
     const genders = [
         'Male',
         'Female',
@@ -234,6 +239,9 @@ export default function AccountSetup3Create() {
         return <div>Loading maps</div>;
     }
     
+    if (loading) {
+        return <div>Loading location</div>; 
+    }
     return (
         <div className='App'>
             <form className='form-container' onSubmit={handleNext}>
