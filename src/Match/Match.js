@@ -40,6 +40,9 @@ const Match = () => {
     const handleFlip = (index) => {
         const updatedStates = [...userStates];
         updatedStates[index].isFlipped = !updatedStates[index].isFlipped;
+        if (!updatedStates[index].isFlipped) {
+            window.scroll({top:index * 700, behavior:"smooth"});
+        }
         setUserStates(updatedStates);
     };
 
@@ -49,6 +52,7 @@ const Match = () => {
         setUserStates(updatedStates);
     };
 
+
     return (
         <Box>
             {userData && userData.map((user, index) => (
@@ -57,7 +61,7 @@ const Match = () => {
                     flipDirection="horizontal"
                     key={user.user_id} // assuming user has a unique ID
                 >
-                    <Box sx={{mb:"334px"}}>
+                    <Box>
                         <Box sx={{ backgroundColor: "#E4423F", paddingTop: "30px", paddingBottom: "50px", borderRadius: "10px", display: "flex", justifyContent: "center", position: "relative", maxWidth: "414px", margin: "0 auto", marginTop: "20px" }}>
                             <img src={profileImg} style={{ width: "100%", height: "90%" }} alt="Profile" />
 
@@ -73,7 +77,17 @@ const Match = () => {
                             <img src={userStates[index]?.liked ? likedImg : like} style={{ position: "absolute", right: "2%", top: "1%" }} onClick={() => handleLike(index)} alt="Like" />
                         </Box>
 
-                        <Grid container justifyContent="center">
+                    </Box>
+
+                    <ViewProfile
+                        setIsFlipped={() => handleFlip(index)}
+                        liked={userStates[index]?.liked}
+                        onClick={() => handleLike(index)}
+                        userData={user}
+                    />
+                </ReactCardFlip>
+            ))}
+            <Grid container justifyContent="center">
                             <Link to="/matching1PreferencesPage">
                                 <Button sx={{ width: "130px", backgroundColor: "#E4423F", borderRadius: "25px", height: "45px", color: "white", marginTop: "20px", mb: "20px", textTransform: "none", fontFamily: "Segoe UI", fontSize: "18px", fontWeight: "regular" }}>
                                     Back
@@ -88,16 +102,6 @@ const Match = () => {
                         <Grid container justifyContent="center">
                             <LogoutButton />
                         </Grid>
-                    </Box>
-
-                    <ViewProfile
-                        setIsFlipped={() => handleFlip(index)}
-                        liked={userStates[index]?.liked}
-                        onClick={() => handleLike(index)}
-                        userData={user}
-                    />
-                </ReactCardFlip>
-            ))}
         </Box>
     );
 };
