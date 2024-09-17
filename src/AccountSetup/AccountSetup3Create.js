@@ -47,13 +47,23 @@ export default function AccountSetup3Create() {
 
     console.log('openTo formData: ', formData.openTo)
     useEffect(() => {
+        console.log("In fetch data use effect");
         const fetchUserData = async () => {
             try {
                 const response = await axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/${userId}`);
                 const fetchedData = response.data.result[0];
                 console.log('openTo: ', fetchedData.user_open_to);
-                const openToArray = fetchedData.user_open_to.split(',');
-
+                const openToArray = fetchedData.user_open_to?.split(',') || [];
+                console.log(fetchedData.user_latitude);
+                console.log(fetchedData.user_longitude)
+                if(fetchedData.user_latitude==null){
+                    fetchUserData.user_latitude=-32.015001263602
+                }
+                if(fetchedData.user_longitude==null){
+                    fetchUserData.user_longitude=115.83650856893345
+                }
+                console.log(fetchedData.user_latitude);
+                console.log(fetchedData.user_longitude)
                 await handleAddress(fetchedData.user_latitude, fetchedData.user_longitude);
 
                 // console.log('openTo: ', fetchedData.user_open_to);
@@ -254,6 +264,7 @@ export default function AccountSetup3Create() {
     }
     
     if (loading) {
+
         return <div>Loading location</div>; 
     }
     return (
