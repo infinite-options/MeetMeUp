@@ -40,6 +40,9 @@ const AccountSetup6Available = () => {
         console.log(formData[type]);
     };
 
+    // call a get after the submission is properly imported
+
+
     const handleNext = async () => {
         console.log(formData);
 
@@ -49,12 +52,13 @@ const AccountSetup6Available = () => {
         fd.append("user_uid", localStorage.getItem('user_uid'));
         fd.append("user_email_id", localStorage.getItem('user_email_id'));
         const dateType = formData['dates'];
+        console.log('dateType: ', dateType);
         const typeString = dateType.join(', ');
 
         console.log('typeString: ', typeString);
-        fd.append("user_date_interests", typeString);   
-        console.log('times: ', times)
-        // fd.append("user_available_time", times);
+        // fd.append("user_date_interests", dateType);   
+        console.log('times (handleNext): ', times)
+        fd.append("user_available_time", times);
 
         try {
             const response = await fetch(url, {
@@ -73,7 +77,6 @@ const AccountSetup6Available = () => {
         }
     };
 
-    console.log('times: ', times);
 
     return (
         <Box sx={{marginLeft:'15%', marginRight:'15%'}}>

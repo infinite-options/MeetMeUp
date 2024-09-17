@@ -36,17 +36,34 @@ import { useContext } from "react";
 const Profile = () => {
   const [userData, setUserData] = useState({});
   const userId = localStorage.getItem('user_uid');
+  const [loading, setLoading] = useState(true); 
+
   useEffect(() => {
-    axios
-      .get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/${userId}`)
-      .then((res) => {
-        setUserData(res.data.result[0]);
-        console.log(res.data.result[0]);
-      })
-      .catch((error) => {
-        console.log("Error fetching data", error);
-      });
-  }, []);
+    const fetchUserData = async () => {
+        try {
+            const response = await axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/${userId}`);
+            const fetchedData = response.data.result[0];
+            await setUserData(fetchedData);
+            setLoading(false);
+
+            const openToArray = fetchedData.user_open_to.split(',');
+            } catch (error) {
+            console.log("Error fetching data", error);
+            };
+    }
+    fetchUserData();
+  }, [userId]);
+  // useEffect(() => {
+  //   axios
+  //     .get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/${userId}`)
+  //     .then((res) => {
+  //       setUserData(res.data.result[0]);
+  //       console.log(res.data.result[0]);
+  //     })
+  //     .catch((error) => {
+  //       console.log("Error fetching data", error);
+  //     });
+  // }, []);
   const navigate = useNavigate();
   const handleSettings = () => {
     navigate(`/settings`);
@@ -64,25 +81,14 @@ const Profile = () => {
     navigate(`/selectionResults`);
   };
 
-  // const name = "Lachlan Collis";
-  // const age = "21";
-  // const gender = "Male";
-  // const where = "Brisbane";
-  // const height = "170cm Tall";
-  // const religion = "Atheist";
-  // const sign = "Cancer";
-  // const status = "None Currently";
-  // const education = "Associates Degree in UI & UX design";
-  // const heart = "Plus Size";
-  // const job = "UI + UX Designer";
-  // const drink = "Socially";
-  // const smoke = "I Dont Smoke";
-  // const flag = "Australian";
   // default values
   console.log('saved Data: ', userData);
   const name = userData.user_first_name + " " + userData.user_last_name;
   const age = userData.user_age;
   const gender = userData.user_gender;
+  useEffect(() => {
+    console.log('useEffect gender: ', userData.user_gender);
+  }, userData)
   console.log('saved gender: ', gender);
   const where = userData.user_suburb;
   const height = userData.user_height;

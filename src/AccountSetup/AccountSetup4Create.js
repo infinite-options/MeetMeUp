@@ -21,7 +21,7 @@ export default function AccountSetup4Create() {
     const [pickerValue, setPickerValue] = useState({
         single: ''
     })
-    
+    // TODO: a lot of general interests are getting created!!
     const [formData, setFormData] = useState({
         user_height: '',
         user_education: '',
@@ -36,6 +36,7 @@ export default function AccountSetup4Create() {
         user_nationality: '',
         user_general_interests: [],
     });
+    console.log('userGeneral Interests', formData['user_general_interests'])
     console.log('setup4 formData: ', formData);
 
     // based on option set specific to passData
@@ -91,6 +92,12 @@ export default function AccountSetup4Create() {
                 handleSetSpecifics('position', fetchedData.user_job);
                 handleSetSpecifics('religion', fetchedData.user_religion);
                 handleSetSpecifics('nationality', fetchedData.user_nationality);
+                
+                const interestsArray = fetchedData.user_general_interests.split(',');
+                interestsArray.forEach(interest => {
+                    formData['user_general_interests'].push(interest)
+                    });
+
                 } catch (error) {
                     console.log("Error fetching data", error);
                 };

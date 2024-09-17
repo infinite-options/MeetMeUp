@@ -29,6 +29,7 @@ export default function AccountSetup3Create() {
     const [loading, setLoading] = useState(true); 
     const [defaultAddress, setDefaultAddress] = useState('');
     const [defaultGender, setDefaultGender] = useState('');
+    const [defaultBio, setDefaultBio] = useState('');
 
     const [formData, setFormData] = useState({
         name: '',
@@ -50,6 +51,7 @@ export default function AccountSetup3Create() {
             try {
                 const response = await axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/${userId}`);
                 const fetchedData = response.data.result[0];
+                console.log('openTo: ', fetchedData.user_open_to);
                 const openToArray = fetchedData.user_open_to.split(',');
 
                 await handleAddress(fetchedData.user_latitude, fetchedData.user_longitude);
@@ -63,14 +65,15 @@ export default function AccountSetup3Create() {
                 setLoading(false);
                 // setSearchResult(savedAddress);
                 console.log('fetchedData Center: ', center);
-                setDefaultGender(fetchedData.user_gender);
+                await setDefaultGender(fetchedData.user_gender);
+                await setDefaultBio(fetchedData.user_profile_bio)
                 setFormData(
                     {
                     ...formData,
                     name: `${fetchedData.user_first_name} ${fetchedData.user_last_name}`,
                     age: fetchedData.user_age,
                     gender: fetchedData.user_gender || '',
-                    profileBio: fetchedData.user_profileBio || '',
+                    profileBio: fetchedData.user_profile_bio || '',
                     suburb: fetchedData.user_suburb || '',
                     // country: '',
                     sexuality: fetchedData.user_sexuality || '',
@@ -195,6 +198,11 @@ export default function AccountSetup3Create() {
         console.log('new gender: ', defaultGender)
     }, [formData])
 
+    console.log('original Bio: ', defaultBio);
+    useEffect(() => {
+        console.log('new Bio: ', defaultBio)
+    }, [formData])
+
     const handleNext = async () => {
         const url = "https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo";
         let fd = new FormData();
@@ -299,7 +307,7 @@ export default function AccountSetup3Create() {
                         sx={{'& .MuiOutlinedInput-root': {'&.Mui-focused fieldset': {borderColor: '#E4423F'}}}}
                         InputLabelProps={{style: { color: "#E4423F" }}}
                         name='profileBio' label='Profile Bio' type='text' variant='outlined' multiline rows={4}
-                        value={formData['profileBio']}
+                        value={defaultBio}
                     />
                 </Grid2>
                 <div className='pc-header-text'>
