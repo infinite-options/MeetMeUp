@@ -94,9 +94,10 @@ export default function AccountSetup4Create() {
                 handleSetSpecifics('nationality', fetchedData.user_nationality);
                 
                 const interestsArray = fetchedData.user_general_interests.split(',');
-                interestsArray.forEach(interest => {
-                    formData['user_general_interests'].push(interest)
-                    });
+                setFormData(prevFormData => ({
+                    ...prevFormData,
+                    user_general_interests: interestsArray
+                }));
 
                 } catch (error) {
                     console.log("Error fetching data", error);
