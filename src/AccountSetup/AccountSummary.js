@@ -36,6 +36,7 @@ import { useContext } from "react";
 const Profile = () => {
   const [userData, setUserData] = useState({});
   const userId = localStorage.getItem('user_uid');
+  console.log(userId);
   const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
