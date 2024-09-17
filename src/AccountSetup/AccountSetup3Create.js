@@ -198,10 +198,11 @@ export default function AccountSetup3Create() {
         console.log('new gender: ', defaultGender)
     }, [formData])
 
-    console.log('original Bio: ', defaultBio);
-    useEffect(() => {
-        console.log('new Bio: ', defaultBio)
-    }, [formData])
+    // Checking bio
+    // console.log('original Bio: ', defaultBio);
+    // useEffect(() => {
+    //     console.log('new Bio: ', defaultBio)
+    // }, [formData])
 
     const handleNext = async () => {
         const url = "https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo";
