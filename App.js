@@ -18,11 +18,16 @@ import TrialAccount from "./Intro/TrialAccount";
 import Location from "./Profile/Location";
 import Location2 from "./Profile/Location2";
 import AccountDetails from "./AccountDetails/AccountDetails";
+import AccountDetails2 from "./AccountDetails/AccountDetails2";
+import AccountDetails3 from "./AccountDetails/AccountDetails3";
+import AccountDetails4 from "./AccountDetails/AccountDetails4";
+import AccountDetails5 from "./AccountDetails/AccountDetails5";
 
 const Stack = createNativeStackNavigator();
 // const Stack = createStackNavigator();
 
 export default function App() {
+  
   return (
     <NavigationContainer>
       {/*
@@ -32,7 +37,7 @@ export default function App() {
         <Stack.Screen name='AccountSetup4Create' component={AccountSetup4Create} />
       </Stack.Navigator>
   */}
-      <Stack.Navigator initialRouteName='Start' screenOptions={{ headerShown: false }}>
+      <Stack.Navigator initialRouteName='AccountDetails4' screenOptions={{ headerShown: false }}>
         <Stack.Screen name='Start' component={Start} />
         <Stack.Screen name='LandingPage' component={LandingPage} />
         <Stack.Screen name='LandingPage2' component={LandingPage2} />
@@ -45,6 +50,12 @@ export default function App() {
         <Stack.Screen name='Location' component={Location} />
         <Stack.Screen name='Location2' component={Location2} />
         <Stack.Screen name='AccountDetails' component={AccountDetails} />
+        <Stack.Screen name='AccountDetails2' component={AccountDetails2} />
+        <Stack.Screen name='AccountDetails3' component={AccountDetails3} />
+        <Stack.Screen name='AccountDetails4' component={AccountDetails4} />
+        <Stack.Screen name='AccountDetails5' component={AccountDetails5} />
+
+
         <Stack.Screen name='AccountSetup7Summary' component={AccountSetup7Summary} />
       </Stack.Navigator>
     </NavigationContainer>
