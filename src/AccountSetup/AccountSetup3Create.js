@@ -224,7 +224,7 @@ export default function AccountSetup3Create() {
         const url = "https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo";
         let fd = new FormData();
         const nameArray = formData['name'] ? formData['name'].split(" ") : [];
-        const lastName = nameArray.length > 0 ? nameArray[nameArray.length - 1] : '';
+        const lastName = nameArray.length > 1 ? nameArray[nameArray.length - 1] : '';
         const firstName = nameArray.length > 0 ? nameArray[0] : '';
 
         console.log('user_uid local: ', localStorage.getItem('user_uid'));

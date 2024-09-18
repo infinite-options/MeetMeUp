@@ -43,9 +43,11 @@ function Main() {
     }
   });
   const [details, setDetails] = useState('');
+  const [selections, setSelections] = useState('');
+
   return (
     <ThemeProvider theme={theme}>
-    <AccountContext.Provider value={{details, setDetails}}>
+    <AccountContext.Provider value={{details, setDetails, selections, setSelections}}>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Start></Start>} />

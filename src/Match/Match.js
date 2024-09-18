@@ -11,15 +11,38 @@ import likedImg from "../Assets/Images/filledheart.png";
 import { useNavigate } from 'react-router-dom';         
 import LogoutButton from "../Assets/Components/LogoutButton";
 import axios from "axios";
-
+import AccountContext from "../AccountSetup/AccountContext";
+import { useContext } from "react";
 const Match = () => {
     const navigate = useNavigate(); 
-    const handleNavigate = () => {
-        navigate(`/grid`);
-    };
-
+    
     const [userData, setUserData] = useState([]);
     const [userStates, setUserStates] = useState([]);
+    const [userSelections, setUserSelections] = useState([]);
+    const {selections, setSelections} = useContext(AccountContext);
+    console.log("userData: ", userData);
+    const handleNavigate = () => {
+        navigate(`/grid`);
+        // save the final data
+        let selectArray = [];
+        for (let i = 0; i < userStates.length; i++) { //user should the index
+            console.log('userStates[i]: ', userStates[i]);
+            if (userStates[i].liked == true) {
+                console.log(i, ' is true');
+                selectArray.push(userData[i]);
+                // if this user is liked then add this user into userSelections
+                // setSelections([...selections, userData[i]]);
+            }
+            setSelections(selectArray);
+
+        }
+        console.log('final userSelections: ', userSelections)
+    };
+
+
+    // save the index of the final user states that is true
+
+    console.log('userSelections: ', userSelections);
 
     useEffect(() => {
         axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/matches/100-000003`)
@@ -46,10 +69,11 @@ const Match = () => {
         setUserStates(updatedStates);
     };
 
-    const handleLike = (index) => {
+    const handleLike = (index, user) => {
         const updatedStates = [...userStates];
         updatedStates[index].liked = !updatedStates[index].liked;
         setUserStates(updatedStates);
+        console.log('updatedStates: ', updatedStates);
     };
 
 
@@ -74,7 +98,7 @@ const Match = () => {
                             <Typography sx={{ position: "absolute", zIndex: '10', bottom: "2%", color: "white", fontSize: "18px" }} onClick={() => handleFlip(index)}>
                                 Tap to See Profile
                             </Typography>
-                            <img src={userStates[index]?.liked ? likedImg : like} style={{ position: "absolute", right: "2%", top: "1%" }} onClick={() => handleLike(index)} alt="Like" />
+                            <img src={userStates[index]?.liked ? likedImg : like} style={{ position: "absolute", right: "2%", top: "1%" }} onClick={() => handleLike(index, user)} alt="Like" />
                         </Box>
 
                     </Box>

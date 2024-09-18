@@ -20,7 +20,8 @@ import List from '@mui/material/List';
 import BackArrowButton from '../Assets/Components/BackArrowButton';
 import Grid from "@mui/material/Grid2";
 import TopTitle from '../Assets/Components/TopTitle';
-
+import AccountContext from '../AccountSetup/AccountContext';
+import { useContext } from 'react';
 const matchedResults = [
 
 ];
@@ -30,6 +31,8 @@ const usersWhoSelectedYou = [
   { name: 'Cherrywood', age: 23, gender: 'female', where: 'Mandurah', src: CherryImg, source: 'usersWhoSelectedYou' },
 ];
 
+// append onto this list after selecting
+// { name: 'firstname + lastname, age: '}
 const usersWhoYouSelected = [
   { name: 'Tiffany', age: 31, gender: 'female', where: 'Mandurah',  src: TiffanyImg, source: 'usersWhoYouSelected' },
   { name: 'Bob Hawk', age: 43, gender: 'male', where: 'Mandurah', src: BobImg, source: 'usersWhoYouSelected' },
@@ -38,8 +41,20 @@ const usersWhoYouSelected = [
 ];
 
 
+
+
 const SelectionResults = () => {
   const navigate = useNavigate();
+    
+  // usersWhoYouSelected should be passed in
+  const {selections, setSelections} = useContext(AccountContext);
+  let tempArray;
+  if (selections) {
+    tempArray = selections.concat(usersWhoYouSelected);
+  } else {
+    tempArray = usersWhoYouSelected
+  }
+  console.log('concattedArray: ', tempArray);
   const handleEditPreferences = () => {
     navigate('/matchPreferences');
   }
@@ -60,7 +75,7 @@ const SelectionResults = () => {
             <Avatar alt="Remy Sharp" src={user.src? user.src: ''}/>
           </ListItemAvatar>
           <ListItemText
-            primary={user.name}
+            primary={user.user_first_name}
             secondary={
               <React.Fragment>
                 <Typography
@@ -104,7 +119,7 @@ const SelectionResults = () => {
       </List>
       <Typography sx={{fontSize:"18px", color:"grey", fontWeight:"bold"}}>People who selected you</Typography>
       <List>
-      {usersWhoSelectedYou.map((user, index) => (
+      {tempArray.map((user, index) => (
         <UserBox user={user} type={'usersWhoSelectedYou'}></UserBox>
       ))}
       </List>
@@ -128,83 +143,3 @@ const SelectionResults = () => {
 }
 
 export default SelectionResults;
-
-
-   {/* <div>
-       <div className="selection-results-container">
-         <button className="back-button" onClick={handleBackClick}>
-           <img src={ArrowBackIcon}/>
-         </button>
-         <h2>Selection Results</h2>
-         <div style={{ marginTop:'50px', marginLeft:'0px',}}>
-           <h4 style={{ color: 'grey'}}>Matched Results</h4>
-           {matchedResults.length === 0 ? (
-             <p style={{ padding: '20px 0' }} />
-           ) : (
-             matchedResults.map((user, index) => (
-               <div key={index} className="user-card">
-                 <img src={user.src} alt={user.name} className="user-avatar" />
-                 <div className="user-info">
-                   <span className="user-name">{user.name}</span>
-                   <span className="user-age-gender">
-                     {user.age} {user.gender}
-                   </span>
-                 </div>
-                 <button
-                   className="navigate-button"
-                   onClick={() => handleUserClick(user, 'matchedResults')}
-                 >
-                   ➔
-                 </button>
-               </div>
-             ))
-           )}
-         </div>
-
-        
-         <div className="section">
-           <h4 style={{ color: 'grey' }}>People who selected you</h4>
-           {usersWhoSelectedYou.map((user, index) => (
-             <div key={index} className="user-card">
-               <img src={user.src} alt={user.name} className="user-avatar" />
-               <div className="user-info">
-                 <span className="user-name">{user.name}</span>
-                 <span className="user-age-gender">
-                   {user.age} {user.gender}
-                 </span>
-               </div>
-               <button
-                 className="navigate-button"
-                 onClick={() => handleUserClick(user, 'usersWhoSelectedYou')}
-               >
-                 ➔
-               </button>
-             </div>
-           ))}
-         </div>
-
-         <div className="section">
-           <h4 style={{ color: 'grey' }}>People who you selected</h4>
-           {usersWhoYouSelected.map((user, index) => (
-             <div key={index} className="user-card">
-               <img src={user.src} alt={user.name} className="user-avatar" />
-               <div className="user-info">
-                 <span className="user-name">{user.name}</span>
-                 <span className="user-age-gender">
-                   {user.age} {user.gender}
-                 </span>
-               </div>
-               <button
-                 className="navigate-button"
-                 onClick={() => handleUserClick(user, 'usersWhoYouSelected')}
-               >
-                 ➔
-               </button>
-             </div>
-           ))}
-         </div>
-       </div>
-       <div>
-         <button className='editButton' onClick={() => { handleEditPreferences() }}>Edit Preferences</button>
-       </div>
-     </div> */}

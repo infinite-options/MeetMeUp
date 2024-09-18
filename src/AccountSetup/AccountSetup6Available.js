@@ -56,13 +56,16 @@ const AccountSetup6Available = () => {
                 console.log('userData: ', userData)
                 setLoading(false);
                 // const openToArray = fetchedData.user_open_to ? fetchedData.user_open_to.split(',') : [];
-
                 const datesArray = fetchedData.user_date_interests ? fetchedData.user_date_interests.split(',') : [];
                 console.log('datesArray: ', datesArray);
                 setFormData(prevFormData => ({
                     ...prevFormData,
                     dates: datesArray
                 }));
+
+                const newTimes = JSON.parse(fetchedData.user_available_time)
+
+                setTimes(newTimes);
 
                 } catch (error) {
                     console.log("Error fetching data", error);

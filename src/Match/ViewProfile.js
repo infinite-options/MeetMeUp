@@ -40,6 +40,22 @@ const ViewProfile = ({ setIsFlipped, liked, onClick, isLiked, showPopup, user, A
     const smoke = userData.user_smoking;
     const flag = userData.user_nationality;
     const popupRef = useRef(null);
+
+    // const name = "Lachlan Collis";
+    // const age = "21";
+    // const gender = "Male";
+    // const where = "Brisbane";
+    // const height = "170cm Tall";
+    // const religion = "Atheist";
+    // const sign = "Cancer";
+    // const status = "None Currently";
+    // const education = "Associates Degree in UI & UX design";
+    // const heart = "Plus Size";
+    // const job = "UI + UX Designer";
+    // const drink = "Socially";
+    // const smoke = "I Dont Smoke";
+    // const flag = "Australian";
+    // const popupRef = useRef(null);
     
 
     return (
@@ -53,7 +69,7 @@ const ViewProfile = ({ setIsFlipped, liked, onClick, isLiked, showPopup, user, A
                     )}
             <Grid size={11} container justifyContent="flex-end" sx={{margin:"20px"}}>
                 {isLiked && <img src={redliked} style={{position:"absolute", left:"5%", top:"1%"}}></img>}
-                <img src={liked ? redlike : redliked} style={{position:"absolute", right:"5%", top:"1%"}} onClick={() => {
+                <img src={liked ? redliked : redlike} style={{position:"absolute", right:"5%", top:"1%"}} onClick={() => {
                     onClick();
                     console.log('profile liked')}}></img>
             </Grid>

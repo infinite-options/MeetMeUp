@@ -30,6 +30,21 @@ const MatchDetails = () => {
     const popupRef = useRef(null);
     const isLeftHeartVisible = source === 'usersWhoSelectedYou';
 
+    // NOTE: user is being saved as a different object make a new object
+    // TEMP FOR NOW
+
+const nameArray = user.name ? user.name.split(" ") : [];
+    const lastName = nameArray.length > 1 ? nameArray[nameArray.length - 1] : '';
+    const firstName = nameArray.length > 0 ? nameArray[0] : '';
+    const userData = {
+        user_first_name: firstName,
+        user_last_name: lastName,
+        user_age: user.age,
+        user_gender: user.gender,
+        // user_height: 
+    }
+
+
     // LEFT WILL ONLY SHOW IF THEY SELECTED YOU
     const handleRightHeartClick = () => {
         console.log('handling heart click');
@@ -63,7 +78,6 @@ const MatchDetails = () => {
       }
     const handleBackClick = () => {
         window.history.back();
-        // TODO: make the entire program use this!
     };
 
 
@@ -129,7 +143,7 @@ const MatchDetails = () => {
             </Grid>
         </Box>
        
-        <ViewProfile setIsFlipped={setIsFlipped} liked={liked} onClick={handleSetLiked} showPopup={showPopup} isLiked={isLeftHeartVisible} user={user} AccountUser={AccountUser} setShowPopup={setShowPopup} />
+        <ViewProfile setIsFlipped={setIsFlipped} liked={liked} onClick={handleSetLiked} showPopup={showPopup} isLiked={isLeftHeartVisible} user={user} AccountUser={AccountUser} setShowPopup={setShowPopup} userData={userData} />
        
         {/* <ViewProfile setIsFlipped={setIsFlipped} liked={liked} onClick={handleSetLiked} showPopup={showPopup} isLiked={isLeftHeartVisible} user={user} AccountUser={AccountUser} setShowPopup={setShowPopup} /> */}
     </ReactCardFlip>

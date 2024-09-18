@@ -39,7 +39,7 @@ function DateAdd({ onAddTime, onRemoveTime, times }) {
   const [end, setEnd] = useState(dayjs());
   const [endTimeString, setEndTimeString] = useState('');
   const [startTimeString, setStartTimeString] = useState('');
-
+  console.log('times: ', times);
   // const [times, setTimes] = useState([]);
   
   // const handleRemoveTimes = (index) => {
@@ -90,7 +90,7 @@ function DateAdd({ onAddTime, onRemoveTime, times }) {
               onClick={onRemoveTime}
           />
           ))}
-        <Grid container size={12} justifyContent="center" gap={1} sx={{ marginTop: 5 }}>
+        <Grid container size={12} justifyContent="center" gap={1} sx={{ marginTop: 5, }}>
           <Grid size={4}> 
               <FormControl fullWidth>
                   <InputLabel sx={{color:"black", fontFamily:"Lexend", fontSize:"12px"}}>Select Day</InputLabel>
@@ -111,53 +111,6 @@ function DateAdd({ onAddTime, onRemoveTime, times }) {
               </FormControl>
           </Grid>
           <Grid size={3}>
-              {/* <TextField
-                  label="Start Time"
-                  variant="outlined"
-                  value={startTimeString}
-                  // onChange={handleStart}
-                  sx={{
-                    backgroundColor:"#CECECE",
-                    '& .MuiInputBase-root': {
-                      height: '50px', 
-                    },
-                    '& .MuiInputBase-input': {
-                       fontFamily:"Lexend"
-                    },
-                    '& .MuiFormLabel-root': {
-                       fontFamily:"Lexend",
-                       fontSize:"13px",
-                       color:"black"
-                    },
-                  }}
-              /> */}
-              
-          </Grid>
-          <Grid size={3}>
-              {/* <TextField
-                  label="End Time"
-                  variant="outlined"
-                  value={end}
-                  // onChange={handleEnd}
-                  sx={{
-                    backgroundColor:"#CECECE",
-                    '& .MuiInputBase-root': {
-                      height: '50px', 
-                      fontFamily:"Lexend",
-                    },
-                    '& .MuiInputBase-input': {
-                       fontFamily:"Lexend",
-                    },
-                    '& .MuiFormLabel-root': {
-                       fontFamily:"Lexend",
-                       fontSize:"13px",
-                       color:"black"
-                    },
-                  }}
-                  
-              /> */}
-              
-          </Grid>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
               <Box sx={{ width: '100%' }}>
                   <TimePicker
@@ -168,6 +121,7 @@ function DateAdd({ onAddTime, onRemoveTime, times }) {
                       backgroundColor:"#CECECE",
                       '& .MuiInputBase-root': {
                         fontFamily:"Lexend",
+                        fontSize:"12px"
                       },
                       '& .MuiFormLabel-root': {
                          fontFamily:"Lexend",
@@ -178,7 +132,9 @@ function DateAdd({ onAddTime, onRemoveTime, times }) {
                     />
               </Box>
               </LocalizationProvider>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
+          </Grid>
+          <Grid size={3}>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Box sx={{ width: '100%' }}>
                 <TimePicker
                   // value={end}
@@ -188,6 +144,7 @@ function DateAdd({ onAddTime, onRemoveTime, times }) {
                       backgroundColor:"#CECECE",
                       '& .MuiInputBase-root': {
                         fontFamily:"Lexend",
+                        fontSize:"12px"
                       },
                       '& .MuiFormLabel-root': {
                          fontFamily:"Lexend",
@@ -197,6 +154,9 @@ function DateAdd({ onAddTime, onRemoveTime, times }) {
                     }} />
             </Box>
           </LocalizationProvider>
+          </Grid>
+          
+              
           
           
           <Grid size={1} container alignItems="center" >
