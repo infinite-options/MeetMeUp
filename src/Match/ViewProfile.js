@@ -43,7 +43,7 @@ const ViewProfile = ({ setIsFlipped, liked, onClick, isLiked, showPopup, user, A
     
 
     return (
-        <Grid container sx={{ maxWidth: "414px", margin: "0 auto", position:"relative"}}>
+        <Grid container sx={{ maxWidth: "414px", margin: "0 auto", position:"relative" }}>
             {showPopup && (
                 <div className='popup'>
                     <div className='popup-content' ref={popupRef}>
@@ -102,7 +102,7 @@ const ViewProfile = ({ setIsFlipped, liked, onClick, isLiked, showPopup, user, A
                         <Typography sx={{ fontSize: "14px" }}>
                             Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
                             sed diam nonumy eirmod tempor invidunt ut. <br /><br />
-                            Consetetur sadipscing elitr, sed diam nonumy eirmod 
+                            Consetetur sadipscing elitr, sed diam nonumy eirmod
                             tempor invidunt ut.
                         </Typography>
                     </Grid>
@@ -130,5 +130,6 @@ const ViewProfile = ({ setIsFlipped, liked, onClick, isLiked, showPopup, user, A
         </Grid>
     );
 };
+
 
 export default ViewProfile;

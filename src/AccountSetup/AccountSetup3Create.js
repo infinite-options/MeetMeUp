@@ -305,7 +305,7 @@ export default function AccountSetup3Create() {
                 </div>
                 <Grid2 container
                     sx={{ '& > :not(style)': { marginTop: 1.5, width: 1 } }}>
-                    <TextField onChange={handleChange}
+                    <TextField onChange={handleChange} required
                         sx={{'& .MuiOutlinedInput-root': {'&.Mui-focused fieldset': {borderColor: '#E4423F'}}}}
                         InputLabelProps={{style: { color: "#E4423F" }}}
                         name='name' label='Full Name' type='text' variant='outlined'
