@@ -11,7 +11,7 @@ import NextButton from '../Assets/Components/NextButton';
 import React, { useRef } from 'react';
 import Grid from "@mui/material/Grid2";
 import axios from "axios";
-
+localStorage.clear()//To make sure its not using any local storage and loads the information we entered
 export default function AccountSetup2Create() {
     const navigate = useNavigate(); 
 
@@ -50,12 +50,13 @@ export default function AccountSetup2Create() {
                 headers: { 'Content-Type': 'application/json'}
             });
             console.log("RESPONSE: ", response.data);
-            // if(response.data = "User Already Exists"){  
-            //     alert("User Alreaady Exists");
-            // }
+            if(response.data = "User Already Exists"){  
+                alert("User Alreaady Exists");
+            }
             console.log("U_ID",response.data.result[0].user_uid)
             localStorage.setItem('user_uid', response.data.result[0].user_uid);
             localStorage.setItem('user_email_id', formData['email']);
+            localStorage.setItem('phone_number',formData["phone_number"]);
             console.log('localStorage items: ', localStorage.getItem('user_uid'), localStorage.getItem('user_email_id'));
 
         } catch (error) {

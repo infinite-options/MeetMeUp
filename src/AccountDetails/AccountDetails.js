@@ -66,9 +66,14 @@ const Settings = () => {
   const handleToggleNotifications = () => {
     setNotifications(!notifications);
   };
-
-  const handleLogout = () => {
-    console.log('Logged out');
+//Changes to make sure that local storage does not have any user data.
+  const handleLogout   = () => {  
+    console.log("Before logging out",localStorage.getItem("user_uid"));
+    localStorage.removeItem('user_uid');
+    setLocationServices(null);
+    setNotifications(null);
+    localStorage.clear();
+    console.log('Logged out',localStorage.getItem('user_uid'));
   };
   const navigate = useNavigate();
   const handleAccount= () => {
@@ -77,7 +82,6 @@ const Settings = () => {
   const handlePassword= () => {
     navigate(`/account4`);
   };
-
   return (
     <Box sx={{ backgroundColor: '#FFFFFF', minHeight: '100vh', marginLeft:{xs:"0",md:"15%"}, marginRight:{xs:"0",md:"15%"} }}>
       <Container style={{ padding: '32px' }}>
@@ -249,7 +253,7 @@ const Settings = () => {
             
     </ListItem>
     </List>
-        <LogoutButton></LogoutButton>
+        <LogoutButton onClick={handleLogout}></LogoutButton>
         </Box>
       </Container>
     </Box>

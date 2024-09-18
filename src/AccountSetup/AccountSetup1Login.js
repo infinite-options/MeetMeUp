@@ -72,11 +72,11 @@ export default function AccountSetup1Login() {
                     }, {
                         headers: { 'Content-Type': 'application/json' }
                     });
-
+            
                    console.log("Login successful:", loginResponse.data);
                    console.log("ACTUAL USER ID",loginResponse.data.result.user_uid);
                    localStorage.setItem('user_uid',loginResponse.data.result.user_uid) //IMPORTANT FOR SETTING THE ID TO ACTUAL ID AND NOT USE OLD ONE
-                    navigate(`/accountSetup7Summary`);
+                   navigate(`/accountSetup7Summary`);
                 } else {
                     throw new Error('Hash algorithm or salt is missing.');
                 }

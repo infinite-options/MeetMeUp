@@ -46,7 +46,6 @@ const Profile = () => {
             const fetchedData = response.data.result[0];
             await setUserData(fetchedData);
             setLoading(false);
-
             const openToArray = fetchedData.user_open_to.split(',');
             } catch (error) {
             console.log("Error fetching data", error);
@@ -84,6 +83,8 @@ const Profile = () => {
 
   // default values
   console.log('saved Data: ', userData);
+  localStorage.setItem('user_email_id',userData.user_email_id); //Changed to keep email in local storage
+  localStorage.setItem('phone_number',userData.user_phone_number) // Changed to keep phone number in local storage
   const name = userData.user_first_name + " " + userData.user_last_name;
   const age = userData.user_age;
   const gender = userData.user_gender;
