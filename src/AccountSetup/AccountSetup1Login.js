@@ -1,20 +1,25 @@
 import '../App.css';
-import backgroundImage from '../Assets/Images/accountSetup1Login.jpg'
+import backgroundImage from '../Assets/Images/accountSetup1Login.jpg';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Box, Button, Checkbox, FormGroup, FormControlLabel, TextField, Container, Typography } from '@mui/material';
-import Grid from '@mui/material/Grid2'
+import Grid from '@mui/material/Grid2';
 import { useNavigate } from 'react-router-dom'; 
 import axios from 'axios';
+
 export default function AccountSetup1Login() {
     const [formDataLogin, setFormDataLogin] = useState({
         email: '',
         password: '',
     });
+    const [errorMessage, setErrorMessage] = useState('');
+    const [showSpinner, setShowSpinner] = useState(false);
     const navigate = useNavigate();
-    const handleLogin= () => {
+
+    const handleLogin = () => {
         navigate(`/accountSetup7Summary`);
     };
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormDataLogin({
@@ -22,27 +27,63 @@ export default function AccountSetup1Login() {
             [name]: value
         });
     };
- 
+
     const handleSubmitLogin = async (e) => {
         e.preventDefault();
 
-        const saltUrl = "https://mrle52rri4.execute-api.us-west-1.amazonaws.com/dev/api/v2/AccountSalt/MMU"; // Endpoint 8
-        const loginUrl = "https://mrle52rri4.execute-api.us-west-1.amazonaws.com/dev/api/v2/Login/MMU"; // Endpoint 9
+        if (formDataLogin.email === "" || formDataLogin.password === "") {
+            setErrorMessage("Please fill out all fields");
+            return;
+        }
 
+        const saltUrl = "https://mrle52rri4.execute-api.us-west-1.amazonaws.com/dev/api/v2/AccountSalt/MMU";
+        const loginUrl = "https://mrle52rri4.execute-api.us-west-1.amazonaws.com/dev/api/v2/Login/MMU";
+        
         try {
-            const saltResponse = await axios.post(saltUrl, { email: formDataLogin.email});
-            const { password_salt } = saltResponse.data.result[0]; //This has the hashed password
-            console.log("SALT RESPONSE: ",saltResponse.data.result[0].password_salt);
-            console.log("Hashed Password received: ", password_salt);
+            setShowSpinner(true);
+            const saltResponse = await axios.post(saltUrl, { email: formDataLogin.email });
+            const saltObject = saltResponse.data;
             
-            const loginResponse = await axios.post(loginUrl, {
-                email: formDataLogin.email,
-                password: password_salt 
-            },{
-                headers:{ 'Content-Type': 'application/json'}
-            });
-            console.log("Login successful:", loginResponse.data);
-            navigate(`/accountSetup7Summary`);
+            if (saltObject.code === 200) {
+                let hashAlg = saltObject.result[0].password_algorithm;
+                let salt = saltObject.result[0].password_salt;
+
+                if (hashAlg && salt) {
+                    switch (hashAlg) {
+                        case "SHA256":
+                            hashAlg = "SHA-256";
+                            break;
+                        default:
+                            break;
+                    }
+
+                    const saltedPassword = formDataLogin.password + salt;
+                    const encoder = new TextEncoder();
+                    const data = encoder.encode(saltedPassword);
+
+                    const hashedBuffer = await crypto.subtle.digest(hashAlg, data);
+                    const hashArray = Array.from(new Uint8Array(hashedBuffer));
+                    const hashedPassword = hashArray.map((byte) => byte.toString(16).padStart(2, "0")).join("");
+                    const password = hashedPassword
+                    console.log(password)
+                    const loginResponse = await axios.post(loginUrl, {
+                        email: formDataLogin.email,
+                        password: hashedPassword
+                    }, {
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+
+                   console.log("Login successful:", loginResponse.data);
+                   console.log("ACTUAL USER ID",loginResponse.data.result.user_uid);
+                   localStorage.setItem('user_uid',loginResponse.data.result.user_uid) //IMPORTANT FOR SETTING THE ID TO ACTUAL ID AND NOT USE OLD ONE
+                    navigate(`/accountSetup7Summary`);
+                } else {
+                    throw new Error('Hash algorithm or salt is missing.');
+                }
+            } else {
+                window.alert('User does not exist.');
+                setShowSpinner(false);
+            }
         } catch (error) {
             console.error("Error occurred:", error);
             if (error.response && error.response.status === 401) {
@@ -50,11 +91,14 @@ export default function AccountSetup1Login() {
             } else {
                 window.alert('An error occurred. Please try again later.');
             }
+            setShowSpinner(false);
         }
     };
+
     const handleSubmitCreate = (e) => {
-        console.log(e)
+        console.log(e);
     };
+
     return (
 
         <div className='App'>
@@ -83,6 +127,7 @@ export default function AccountSetup1Login() {
                     <TextField required onChange={handleChange} name='email' label='Email' type='email' variant='outlined'/>
                     <TextField required onChange={handleChange} name='password' label='Password' type='password' autoComplete='current-password'/>
                     <Button
+                    onClick={handleSubmitLogin}
                         variant='contained'
                         type='submit'
                         sx={{

@@ -36,7 +36,7 @@ export default function AccountSetup2Create() {
         const url = "https://mrle52rri4.execute-api.us-west-1.amazonaws.com/dev/api/v2/CreateAccount/MMU"; //Changed Endpoing
         
         let data = new FormData();
-        data.append("user_uid", formData['profileBio']);
+        /*data.append("user_uid", formData['profileBio']);*/
         data.append("email", formData['email']);  
         data.append("password", formData['password']);
         data.append("phone_number", formData['phone_number']);
