@@ -103,7 +103,9 @@ const Profile = () => {
   const smoke = userData.user_smoking;
   const flag = userData.user_nationality;
   const bio = userData.user_profile_bio;
-  const int = userData.user_general_interests;
+
+  const int = userData.user_general_interests
+  console.log('int: ', int);
   var images = userData.user_photo_url;
   const videoSource = userData.user_video_url;
 

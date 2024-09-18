@@ -71,6 +71,10 @@ export default function AccountSetup4Create() {
     // use the setSpecifics
     const userId = localStorage.getItem('user_uid');
     const [loading, setLoading] = useState(true); 
+    if (!userId) {
+        // if a user does not exist
+        setLoading(false);
+    }
     const [userData, setUserData] = useState({});
 
     useEffect(() => {
@@ -81,18 +85,19 @@ export default function AccountSetup4Create() {
                 setUserData(fetchedData);
                 console.log('userData: ', userData)
                 setLoading(false);
-                handleSetSpecifics('height', fetchedData.user_height);
-                handleSetSpecifics('education', fetchedData.user_education);
-                handleSetSpecifics('body', fetchedData.user_body_composition);
-                handleSetSpecifics('star', fetchedData.user_star_sign);
-                handleSetSpecifics('drinking', fetchedData.user_drinking);
-                handleSetSpecifics('smoking', fetchedData.user_smoking);
-                handleSetSpecifics('children', fetchedData.user_kids);
-                handleSetSpecifics('position', fetchedData.user_job);
-                handleSetSpecifics('religion', fetchedData.user_religion);
-                handleSetSpecifics('nationality', fetchedData.user_nationality);
-                
-                const interestsArray = fetchedData.user_general_interests.split(',');
+                handleSetSpecifics('height', fetchedData.user_height || '',);
+                handleSetSpecifics('education', fetchedData.user_education || '',);
+                handleSetSpecifics('body', fetchedData.user_body_composition || '',);
+                handleSetSpecifics('star', fetchedData.user_star_sign || '',);
+                handleSetSpecifics('drinking', fetchedData.user_drinking || '',);
+                handleSetSpecifics('smoking', fetchedData.user_smoking || '',);
+                handleSetSpecifics('children', fetchedData.user_kids || '',);
+                handleSetSpecifics('position', fetchedData.user_job || '',);
+                handleSetSpecifics('religion', fetchedData.user_religion || '',);
+                handleSetSpecifics('nationality', fetchedData.user_nationality || '',);
+                // const openToArray = fetchedData.user_open_to ? fetchedData.user_open_to.split(',') : [];
+
+                const interestsArray = fetchedData.user_general_interests? fetchedData.user_general_interests.split(',') : [];
                 setFormData(prevFormData => ({
                     ...prevFormData,
                     user_general_interests: interestsArray

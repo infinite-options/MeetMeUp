@@ -40,6 +40,7 @@ const AccountSetup6Available = () => {
             formData[type].splice(index, 1);
         }
         else {
+            console.log('id: ', id);
             formData[type].push(id);
         }
 
@@ -54,7 +55,9 @@ const AccountSetup6Available = () => {
                 setUserData(fetchedData);
                 console.log('userData: ', userData)
                 setLoading(false);
-                const datesArray = fetchedData.user_date_interests.split(',');
+                // const openToArray = fetchedData.user_open_to ? fetchedData.user_open_to.split(',') : [];
+
+                const datesArray = fetchedData.user_date_interests ? fetchedData.user_date_interests.split(',') : [];
                 console.log('datesArray: ', datesArray);
                 setFormData(prevFormData => ({
                     ...prevFormData,

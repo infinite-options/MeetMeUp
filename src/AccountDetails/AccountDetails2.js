@@ -6,6 +6,7 @@ import notification from "../Assets/Images/notification.png";
 import password from "../Assets/Images/password.png";
 import arrow from "../Assets/Images/arrow.png";
 import './AccountDetails.css';  
+import TopTitle from '../Assets/Components/TopTitle';
 
 const AccountDetails2 = () => {
   const [locationServices, setLocationServices] = useState(false);
@@ -27,7 +28,7 @@ const AccountDetails2 = () => {
     <Box style={{ backgroundColor: '#FFFFFF', minHeight: '100vh' }}>
       <Container maxWidth="sm" style={{ padding: '32px' }}>
       <Box>
-          <Grid container alignItems="center" style={{ marginBottom: '24px' }}>
+          {/* <Grid container alignItems="center" style={{ marginBottom: '24px' }}>
             <Box 
               component="button"
               onClick={() => console.log('Back clicked')} 
@@ -59,7 +60,8 @@ const AccountDetails2 = () => {
               }}
             >
                 Settings</Typography>
-          </Grid>
+          </Grid> */}
+          <TopTitle title={'Settings'}></TopTitle>
 
           <Grid container alignItems="center" 
             style={{ 

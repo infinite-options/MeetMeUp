@@ -51,11 +51,12 @@ function DateAdd({ onAddTime, onRemoveTime, times }) {
   // }
 
   const handleAddTime = () => {
-      onAddTime(day, startTimeString, endTimeString);
-      setDay("");
-      setStart(dayjs());
-      setEnd(dayjs());
-    
+      if (day && startTimeString && endTimeString) {
+        onAddTime(day, startTimeString, endTimeString);
+        setDay("");
+        setStart(dayjs());
+        setEnd(dayjs());
+      }
   };
 
   const handleChange=(event)=> {
@@ -159,23 +160,41 @@ function DateAdd({ onAddTime, onRemoveTime, times }) {
           </Grid>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
               <Box sx={{ width: '100%' }}>
-
-                <DemoContainer components={['TimePicker']}>
                   <TimePicker
-                    value={start}
+                    // value={start}
                     onChange={handleStart}
-                    label="Start Time" />
-                </DemoContainer>
+                    label="Start Time" 
+                    sx={{
+                      backgroundColor:"#CECECE",
+                      '& .MuiInputBase-root': {
+                        fontFamily:"Lexend",
+                      },
+                      '& .MuiFormLabel-root': {
+                         fontFamily:"Lexend",
+                         fontSize:"13px",
+                         color:"black"
+                      },
+                    }}
+                    />
               </Box>
               </LocalizationProvider>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Box sx={{ width: '100%' }}>
-              <DemoContainer components={['TimePicker']}>
                 <TimePicker
-                  value={end}
+                  // value={end}
                   onChange={handleEnd}
-                  label="End Time" />
-              </DemoContainer>
+                  label="End Time"
+                  sx={{
+                      backgroundColor:"#CECECE",
+                      '& .MuiInputBase-root': {
+                        fontFamily:"Lexend",
+                      },
+                      '& .MuiFormLabel-root': {
+                         fontFamily:"Lexend",
+                         fontSize:"13px",
+                         color:"black"
+                      },
+                    }} />
             </Box>
           </LocalizationProvider>
           

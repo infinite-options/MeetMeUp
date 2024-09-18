@@ -73,32 +73,10 @@ export default function AccountSetup5Create() {
             const fetchedURL = fetchedData.user_video;
             console.log('fetchedURL: ', fetchedURL);
             console.log(fetchedData.user_video_url);
-
-            // const fetchedURL = fetchedData.user_video_url.replaceAll("\"", "");
-            // fetch(fetchedURL)
-            // .then(response => response.blob())
-            // .then(blob => {
-            //   const url = URL.createObjectURL(blob);
-            //   setVideoSrc(url);
-            
-            //   setViewRecording(true);
-            // })
-            // .catch((error) => {
-            //   console.error('Error fetching video data: ', error);
-            // });
-            // const blob = new Blob(recordedChunks, {type: "video/mp4"});
-            // const url = URL.createObjectURL(blob);
-            
             setVideoSrc(fetchedData.user_video_url.replaceAll("\"", ""));
-            // setPrevVideo(fetchedData.user_video_url.replaceAll("\"", ""))
             console.log('prevVide: ', prevVideo)
             setObtain(true);
             setViewRecording(true);
-            // setFormData({
-            //     video: fetchedData.user_video_url,
-            //     image: '',
-            //     imgFav: '',
-            //   });
           })
           .catch((error) => {
             console.log("Error fetching data", error);

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Container, TextField, Typography } from '@mui/material';
 import arrow from '../Assets/Images/arrow.png'; 
+import TopTitle from '../Assets/Components/TopTitle';
 
 const AccountDetails3 = () => {
   return (
@@ -12,7 +13,6 @@ const AccountDetails3 = () => {
         padding: 0 
       }}>
       <Container
-        maxWidth="sm"
         style={{
           marginTop: '2rem',
           backgroundColor: '#FFFFFF', 
@@ -20,7 +20,7 @@ const AccountDetails3 = () => {
           borderRadius: '8px',
         }}
       >
-        <Box style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
+        {/* <Box style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
           <Box
             component="button"
             style={{
@@ -54,7 +54,8 @@ const AccountDetails3 = () => {
             }}>
             Settings
           </Typography>
-        </Box>
+        </Box> */}
+        <TopTitle title={'Settings'}></TopTitle>
 
         <Typography variant="body1" 
           style={{ 

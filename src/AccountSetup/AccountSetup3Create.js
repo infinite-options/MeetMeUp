@@ -25,12 +25,17 @@ export default function AccountSetup3Create() {
     const userId = localStorage.getItem('user_uid');
     const [center, setCenter] = useState({lat: -32.015001263602, lng: 115.83650856893345});
     const [searchResult, setSearchResult] = useState('');
-    const tempValue = 'hello'
     const [loading, setLoading] = useState(true); 
     const [defaultAddress, setDefaultAddress] = useState('');
     const [defaultGender, setDefaultGender] = useState('');
     const [defaultBio, setDefaultBio] = useState('');
+    const [isChanged, setIsChanged] = useState(false); // if any of the info has been changed then PUT
 
+    if (!userId) {
+        // if a user does not exist
+        setLoading(false);
+        // just load the page
+    }
     const [formData, setFormData] = useState({
         name: '',
         age: '',
@@ -53,22 +58,18 @@ export default function AccountSetup3Create() {
                 const response = await axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/${userId}`);
                 const fetchedData = response.data.result[0];
                 console.log('openTo: ', fetchedData.user_open_to);
-                const openToArray = fetchedData.user_open_to?.split(',') || [];
+                console.log('fetchedData: ', fetchedData);
+                const openToArray = fetchedData.user_open_to ? fetchedData.user_open_to.split(',') : [];
                 console.log(fetchedData.user_latitude);
                 console.log(fetchedData.user_longitude)
-                if(fetchedData.user_latitude==null){
-                    fetchUserData.user_latitude=-32.015001263602
-                }
-                if(fetchedData.user_longitude==null){
-                    fetchUserData.user_longitude=115.83650856893345
+                if(fetchedData.user_latitude && fetchedData.user_longitude){
+                    setCenter({lat: Number(fetchedData.user_latitude), lng: Number(fetchedData.user_longitude)});
+                } else {
+                    setCenter({lat: -32.015001263602, lng: 115.83650856893345});
                 }
                 console.log(fetchedData.user_latitude);
                 console.log(fetchedData.user_longitude)
                 await handleAddress(fetchedData.user_latitude, fetchedData.user_longitude);
-
-                // console.log('openTo: ', fetchedData.user_open_to);
-                // handleAddress(fetchedData.user_latitude, fetchedData.user_longitude)
-                setCenter({lat: Number(fetchedData.user_latitude), lng: Number(fetchedData.user_longitude)});
                 // TODO: might fix to go under handleAddress
                 setUserData(fetchedData);
                 setDefaultAddress(savedAddress);
@@ -80,8 +81,8 @@ export default function AccountSetup3Create() {
                 setFormData(
                     {
                     ...formData,
-                    name: `${fetchedData.user_first_name} ${fetchedData.user_last_name}`,
-                    age: fetchedData.user_age,
+                    name: fetchedData.user_first_name && fetchedData.user_last_name ? `${fetchedData.user_first_name} ${fetchedData.user_last_name}` : '',
+                    age: fetchedData.user_age || '',
                     gender: fetchedData.user_gender || '',
                     profileBio: fetchedData.user_profile_bio || '',
                     suburb: fetchedData.user_suburb || '',
@@ -93,7 +94,9 @@ export default function AccountSetup3Create() {
                 console.log("Error fetching data", error);
                 };
         }
-        fetchUserData();
+        if (userId) {
+            fetchUserData();
+        }
       }, [userId, savedAddress]);
     
     const handleAddress = async (lat, lang) => {
@@ -112,7 +115,6 @@ export default function AccountSetup3Create() {
                   } else {
                     console.error('No address found for the given coordinates');
                   }
-                // NOT ACTUALLY BEING SAVED!!
             }
             else {
                 console.error('Response Err:', response.statusText);
@@ -166,6 +168,7 @@ export default function AccountSetup3Create() {
         }
     }
     const handleChange = (e) => {
+        setIsChanged(true);
         const { name, value } = e.target;
         setFormData({
             ...formData,
@@ -174,10 +177,12 @@ export default function AccountSetup3Create() {
     };
 
     const handleAddressChange = (e) => {
+        setIsChanged(true);
         setSavedAddress(e.target.value);
     };
 
     const handleButton = (id, type) => {
+        setIsChanged(true);
         if(formData[type].includes(id)) {
             const index = formData[type].indexOf(id);
             formData[type].splice(index, 1);
@@ -188,6 +193,7 @@ export default function AccountSetup3Create() {
     };
 
     const handleButtonSexuality = (id, type) => {
+        setIsChanged(true);
         if(formData[type] === id) {
             setFormData({
                 ...formData, 
@@ -217,11 +223,27 @@ export default function AccountSetup3Create() {
     const handleNext = async () => {
         const url = "https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo";
         let fd = new FormData();
+        const nameArray = formData['name'] ? formData['name'].split(" ") : [];
+        const lastName = nameArray.length > 0 ? nameArray[nameArray.length - 1] : '';
+        const firstName = nameArray.length > 0 ? nameArray[0] : '';
+
         console.log('user_uid local: ', localStorage.getItem('user_uid'));
         fd.append("user_uid", localStorage.getItem('user_uid'));
         fd.append("user_email_id", localStorage.getItem('user_email_id'));
-        fd.append("user_first_name", formData['name'].split(" ")[0]);
-        fd.append("user_last_name", formData['name'].split(" ")[1]);
+
+        
+        // const dataToAppend = {'user_first_name': firstName, 'user_last_name': lastName,
+        // 'user_gender': formData['gender'], 'user_age': formData['age'], 
+        // 'user_suburb': formData['suburb'], 'user_profile_bio': formData['profileBio'],
+        // 'user_country': formData['country'], 'user_latitude': formData['lat'], 
+        // 'user_longitude': formData['lng'], 'user_sexuality': formData['sexuality'], 
+        // 'user_open_to': formData['openTo']}
+        
+        // for (const [key, value] of Object.entries(dataToAppend)) {
+        //     fd.append(key, value);
+        // }
+        fd.append("user_first_name", firstName);
+        fd.append("user_last_name", lastName);
         fd.append("user_age", formData['age']);
         fd.append("user_gender", formData['gender']);
         fd.append("user_suburb", formData['suburb']);
@@ -231,23 +253,26 @@ export default function AccountSetup3Create() {
         fd.append("user_longitude", center['lng']);
         fd.append("user_sexuality", formData['sexuality']);
         fd.append("user_open_to", formData['openTo']);
+        
+        if (isChanged) {
+            try {
+                const response = await fetch(url, {
+                    method: 'PUT',
+                    body: fd,
+                });
     
-        try {
-            const response = await fetch(url, {
-                method: 'PUT',
-                body: fd,
-            });
-
-            if(response.ok) {
-                const result = await response.json();
-                console.log('response: ', result.data);
+                if(response.ok) {
+                    const result = await response.json();
+                    console.log('response: ', result.data);
+                }
+                else {
+                    console.error('Response Err:', response.statusText);
+                }
+            } catch (err) {
+                console.log("Try Catch Err:", err);
             }
-            else {
-                console.error('Response Err:', response.statusText);
-            }
-        } catch (err) {
-            console.log("Try Catch Err:", err);
         }
+       
     };
 
     const { isLoaded, loadError } = useJsApiLoader({
@@ -319,7 +344,7 @@ export default function AccountSetup3Create() {
                         sx={{'& .MuiOutlinedInput-root': {'&.Mui-focused fieldset': {borderColor: '#E4423F'}}}}
                         InputLabelProps={{style: { color: "#E4423F" }}}
                         name='profileBio' label='Profile Bio' type='text' variant='outlined' multiline rows={4}
-                        value={defaultBio}
+                        defaultValue={defaultBio}
                     />
                 </Grid2>
                 <div className='pc-header-text'>

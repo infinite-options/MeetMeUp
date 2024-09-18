@@ -9,9 +9,12 @@ const LogoutButton = ({onClick}) => {
     const handleNavigate = () => {
         if (onClick) {
             onClick();
-
+            
         }
         navigate(`/accountSetup1Login`);
+        localStorage.setItem('user_uid', '');
+        localStorage.setItem('user_email_id', '');
+        localStorage.clear();
     };
 
     return (
