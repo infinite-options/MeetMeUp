@@ -79,7 +79,7 @@ const AccountDetails3 = () => {
         <TextField
             variant="filled"
             label="Email"
-            defaultValue="lachlan@konnectdigital.io"
+            defaultValue={localStorage.getItem("user_email_id")} //Changed from default to local storage
             InputProps={{
               disableUnderline: true, 
             }}
@@ -116,7 +116,7 @@ const AccountDetails3 = () => {
         <TextField
             variant="filled"
             label="Phone Number"
-            defaultValue="0412 345 678"
+            defaultValue={localStorage.getItem("phone_number")} //Changed it from default value to local storage
             InputProps={{
               disableUnderline: true, 
             }}

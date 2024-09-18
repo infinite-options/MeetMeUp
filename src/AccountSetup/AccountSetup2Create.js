@@ -11,7 +11,7 @@ import NextButton from '../Assets/Components/NextButton';
 import React, { useRef } from 'react';
 import Grid from "@mui/material/Grid2";
 import axios from "axios";
-
+localStorage.clear()//To make sure its not using any local storage and loads the information we entered
 export default function AccountSetup2Create() {
     const navigate = useNavigate(); 
 
@@ -36,7 +36,7 @@ export default function AccountSetup2Create() {
         const url = "https://mrle52rri4.execute-api.us-west-1.amazonaws.com/dev/api/v2/CreateAccount/MMU"; //Changed Endpoing
         
         let data = new FormData();
-        data.append("user_uid", formData['profileBio']);
+        /*data.append("user_uid", formData['profileBio']);*/
         data.append("email", formData['email']);  
         data.append("password", formData['password']);
         data.append("phone_number", formData['phone_number']);
@@ -50,12 +50,13 @@ export default function AccountSetup2Create() {
                 headers: { 'Content-Type': 'application/json'}
             });
             console.log("RESPONSE: ", response.data);
-            // if(response.data = "User Already Exists"){  
-            //     alert("User Alreaady Exists");
-            // }
+            if(response.data = "User Already Exists"){  
+                alert("User Alreaady Exists");
+            }
             console.log("U_ID",response.data.result[0].user_uid)
             localStorage.setItem('user_uid', response.data.result[0].user_uid);
             localStorage.setItem('user_email_id', formData['email']);
+            localStorage.setItem('phone_number',formData["phone_number"]);
             console.log('localStorage items: ', localStorage.getItem('user_uid'), localStorage.getItem('user_email_id'));
 
         } catch (error) {
