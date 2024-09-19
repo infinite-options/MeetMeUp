@@ -30,11 +30,12 @@ export default function AccountSetup3Create() {
   const [defaultGender, setDefaultGender] = useState("");
   const [defaultBio, setDefaultBio] = useState("");
   const [isChanged, setIsChanged] = useState(false); // if any of the info has been changed then PUT
+  const [noId, setNoId] = useState(false); // if any of the info has been changed then PUT
 
   if (!userId) {
     // if a user does not exist
-    setLoading(false);
-    // just load the page
+    setNoId(true);
+    // DO NOT LOAD PAGE
   }
   const [formData, setFormData] = useState({
     name: "",
@@ -63,12 +64,12 @@ export default function AccountSetup3Create() {
         console.log(fetchedData.user_longitude);
         if (fetchedData.user_latitude && fetchedData.user_longitude) {
           setCenter({ lat: Number(fetchedData.user_latitude), lng: Number(fetchedData.user_longitude) });
+          await handleAddress(fetchedData.user_latitude, fetchedData.user_longitude);
         } else {
           setCenter({ lat: -32.015001263602, lng: 115.83650856893345 });
         }
         console.log(fetchedData.user_latitude);
         console.log(fetchedData.user_longitude);
-        await handleAddress(fetchedData.user_latitude, fetchedData.user_longitude);
         // TODO: might fix to go under handleAddress
         setUserData(fetchedData);
         setDefaultAddress(savedAddress);
@@ -94,7 +95,7 @@ export default function AccountSetup3Create() {
     };
     if (userId) {
       fetchUserData();
-    }
+    } 
   }, [userId, savedAddress]);
 
   const handleAddress = async (lat, lang) => {
@@ -264,6 +265,9 @@ export default function AccountSetup3Create() {
   if (loading) {
     return <div>Loading location</div>;
   }
+  if (noId) {
+    return <div>No User Found</div>;
+  }
   return (
     <div className='App'>
       <form className='form-container' onSubmit={handleNext}>
@@ -343,25 +347,6 @@ export default function AccountSetup3Create() {
           <div className='pc-sub-header-text'>Your location helps us pin point where you are to provide better matches to you.</div>
           <Grid2 container sx={{ "& > :not(style)": { marginTop: 1.5, width: 1 } }}>
             <Autocomplete onPlaceChanged={onPlaceChanged} onLoad={onLoad}>
-              {/* NOTE: why is this input and not textField? does this affect the googlemap? */}
-              {/* <input
-                        className='autocomplete-text'
-                        type='text'
-                        placeholder='Location'
-                        style={{
-                            fontSize: '14px',
-                            display: 'flex',
-                            width: '100%',
-                            height: '25px',
-                            marginTop: '10px',
-                            marginLeft: 'auto',
-                            marginRight: 'auto',
-                            padding: '10px',
-                            border: '1px solid gray',
-                            borderRadius: '5px',
-                            textOverflow: 'ellipses',
-                        }}
-                    /> */}
               <TextField
                 className='autocomplete-text'
                 onChange={handleAddressChange}

@@ -26,7 +26,11 @@ const AccountSetup6Available = () => {
     const handleAddTime = (day, start_time, end_time) => {
         console.log('day: ', day);
         console.log('start_time: ', )
-        setTimes((prevTimes) => [...prevTimes, { day, "start_time": start_time, "end_time": end_time }]);
+        if (times) {
+            setTimes((prevTimes) => [...prevTimes, { day, "start_time": start_time, "end_time": end_time }]);
+        } else {
+            setTimes([{ day, "start_time": start_time, "end_time": end_time }]);
+        }
     };
 
     console.log('times (formatted): ', times);
@@ -52,6 +56,9 @@ const AccountSetup6Available = () => {
             try {
                 const response = await axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/${userId}`);
                 const fetchedData = response.data.result[0];
+                if (!fetchedData) {
+                    setLoading(false);
+                }
                 setUserData(fetchedData);
                 console.log('userData: ', userData)
                 setLoading(false);

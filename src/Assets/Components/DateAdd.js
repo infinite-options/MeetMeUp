@@ -79,7 +79,8 @@ function DateAdd({ onAddTime, onRemoveTime, times }) {
   };
   return (
     <div>
-      {times.map((time, index) => (
+
+      {times ? times.map((time, index) => (
           <DisplayTime
               index={index}
               day={time.day}
@@ -89,7 +90,7 @@ function DateAdd({ onAddTime, onRemoveTime, times }) {
               // end={time.end ? dayjs(time.end).format('HH:mm') : 'No end time'}
               onClick={onRemoveTime}
           />
-          ))}
+          )) : ''}
         <Grid container size={12} justifyContent="center" gap={1} sx={{ marginTop: 5, }}>
           <Grid size={4}> 
               <FormControl fullWidth>
