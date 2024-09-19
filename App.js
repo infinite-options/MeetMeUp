@@ -2,6 +2,12 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
+import Start from "./Intro/Start";
+import TrialAccount from "./Intro/TrialAccount";
+import Location from "./Profile/Location";
+import Location2 from "./Profile/Location2";
+import AccountDetails from "./AccountDetails/AccountDetails";
 import AccountSetup2Create from "./AccountSetup/AccountSetup2Create";
 import AccountSetup3Create from "./AccountSetup/AccountSetup3Create";
 import AccountSetup4Create from "./AccountSetup/AccountSetup4Create";
@@ -12,12 +18,7 @@ import * as Font from "expo-font";
 import LandingPage from "./Intro/LandingPage";
 import LandingPage2 from "./Intro/LandingPage2";
 import LandingPage3 from "./Intro/LandingPage3";
-import LandingPage4 from "./Intro/LandingPage4";
-import Start from "./Intro/Start";
-import TrialAccount from "./Intro/TrialAccount";
-import Location from "./Profile/Location";
-import Location2 from "./Profile/Location2";
-import AccountDetails from "./AccountDetails/AccountDetails";
+import LandingPage4 from "./Intro/LandingPage4"; 
 
 const Stack = createNativeStackNavigator();
 // const Stack = createStackNavigator();
@@ -31,7 +32,10 @@ export default function App() {
         <Stack.Screen name='AccountSetup3Create' component={AccountSetup3Create} />
         <Stack.Screen name='AccountSetup4Create' component={AccountSetup4Create} />
       </Stack.Navigator>
-  */}
+  */
+
+        
+  }
       <Stack.Navigator initialRouteName='Start' screenOptions={{ headerShown: false }}>
         <Stack.Screen name='Start' component={Start} />
         <Stack.Screen name='LandingPage' component={LandingPage} />
@@ -46,6 +50,7 @@ export default function App() {
         <Stack.Screen name='Location2' component={Location2} />
         <Stack.Screen name='AccountDetails' component={AccountDetails} />
         <Stack.Screen name='AccountSetup7Summary' component={AccountSetup7Summary} />
+        
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -1,8 +1,9 @@
 {
   "expo": {
+    "platforms": ["ios", "android"],
     "name": "MeetMeUpvi",
     "slug": "MeetMeUpvi",
-    "version": "1.0.2 ",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -23,17 +24,11 @@
       },
       "package": "com.varsana.MeetMeUpvi"
     },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    },
     "extra": {
       "eas": {
         "projectId": "2b38dee4-3a65-41b8-80f5-45827ee6bb39"
       }
     }
-  },
-  "web": {
-    "favicon": "./assets/favicon.png"
   },
   "plugins": ["expo-font"]
 }
