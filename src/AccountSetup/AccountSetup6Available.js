@@ -14,6 +14,7 @@ const AccountSetup6Available = () => {
     const userId = localStorage.getItem('user_uid');
     const [loading, setLoading] = useState(true); 
     const [userData, setUserData] = useState({});
+    const [noId, setNoId] = useState(false); // if any of the info has been changed then PUT
     const dates = [
         'Lunch',
         'Dinner',
@@ -78,7 +79,12 @@ const AccountSetup6Available = () => {
                     console.log("Error fetching data", error);
                 };
         }
-        fetchUserData();
+        if (userId) {
+            fetchUserData();
+        } else {
+            setLoading(false);
+            setNoId(true);
+        }
       }, [userId]);
 
     // call a get after the submission is properly imported
@@ -121,6 +127,9 @@ const AccountSetup6Available = () => {
     };
     if (loading) {
         return <div>Loading specifics</div>; 
+    }
+    if (noId) {
+        return <div>No User Found</div>;
     }
 
     return (

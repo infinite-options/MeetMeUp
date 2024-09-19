@@ -32,11 +32,6 @@ export default function AccountSetup3Create() {
   const [isChanged, setIsChanged] = useState(false); // if any of the info has been changed then PUT
   const [noId, setNoId] = useState(false); // if any of the info has been changed then PUT
 
-  if (!userId) {
-    // if a user does not exist
-    setNoId(true);
-    // DO NOT LOAD PAGE
-  }
   const [formData, setFormData] = useState({
     name: "",
     age: "",
@@ -95,7 +90,10 @@ export default function AccountSetup3Create() {
     };
     if (userId) {
       fetchUserData();
-    } 
+    } else {
+        setLoading(false);
+        setNoId(true);
+    }
   }, [userId, savedAddress]);
 
   const handleAddress = async (lat, lang) => {

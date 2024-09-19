@@ -39,6 +39,8 @@ export default function AccountSetup5Create() {
         image: '',
         imgFav: '',
     });
+    const [loading, setLoading] = useState(true); 
+    const [noId, setNoId] = useState(false); // if any of the info has been changed then PUT
     const userId = localStorage.getItem('user_uid');
     const [userData, setUserData] = useState({});
     const [obtain, setObtain] = useState('false');
@@ -62,10 +64,12 @@ export default function AccountSetup5Create() {
     }, [setRecordedChunks]);
 
     console.log('videoSrc: ', videoSrc);
+
+    // TODO: fix the lack of users
     useEffect(() => {
-        axios
-          .get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/${userId}`)
-          .then((res) => {
+        const fetchUserData = async () => {
+        try {
+            const res = axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/${userId}`)
             setUserData(res.data.result[0]);
             console.log('userData: ', userData);
             console.log(res.data.result[0]);
@@ -77,11 +81,17 @@ export default function AccountSetup5Create() {
             console.log('prevVide: ', prevVideo)
             setObtain(true);
             setViewRecording(true);
-          })
-          .catch((error) => {
+        }   catch (error) {
             console.log("Error fetching data", error);
-          });
-      }, []);
+            };
+        }
+        if (userId) {
+            fetchUserData();
+        } else {
+            setLoading(false);
+            setNoId(true);
+        }
+      }, [userId]);
     const handleStartCaptureClick = useCallback(() => {
         if(webcamRef.current.stream !== undefined) {
             if(videoSrc !== null) {
@@ -245,6 +255,14 @@ export default function AccountSetup5Create() {
             }
         } catch (err) {
             console.log("Try Catch Err:", err);
+        }
+
+        
+        if (loading) {
+            return <div>Loading specifics</div>; 
+        }
+        if (noId) {
+            return <div>No User Found</div>;
         }
     };
 
