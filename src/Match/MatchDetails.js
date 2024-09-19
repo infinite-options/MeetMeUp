@@ -33,16 +33,16 @@ const MatchDetails = () => {
     // NOTE: user is being saved as a different object make a new object
     // TEMP FOR NOW
 
-const nameArray = user.name ? user.name.split(" ") : [];
-    const lastName = nameArray.length > 1 ? nameArray[nameArray.length - 1] : '';
-    const firstName = nameArray.length > 0 ? nameArray[0] : '';
-    const userData = {
-        user_first_name: firstName,
-        user_last_name: lastName,
-        user_age: user.age,
-        user_gender: user.gender,
-        // user_height: 
-    }
+// const nameArray = user.name ? user.name.split(" ") : [];
+//     const lastName = nameArray.length > 1 ? nameArray[nameArray.length - 1] : '';
+//     const firstName = nameArray.length > 0 ? nameArray[0] : '';
+//     const userData = {
+//         user_first_name: firstName,
+//         user_last_name: lastName,
+//         user_age: user.age,
+//         user_gender: user.gender,
+//         // user_height: 
+//     }
 
 
     // LEFT WILL ONLY SHOW IF THEY SELECTED YOU
@@ -115,11 +115,11 @@ const nameArray = user.name ? user.name.split(" ") : [];
                     )}
                 <Box sx={{backgroundColor:"#E4423F", paddingTop:"30px", paddingBottom:"50px", borderRadius:"10px", display:"flex",justifyContent:"center", position:"relative", minHeight: '600px' , maxWidth:"414px", margin:"0 auto", marginTop:"20px"}}>
                     <img src={user.src} style={{width:"100%", height:"90%"}} height={440}></img>
-
+{/* FIX THE SRC  */}
 
                     {/* <img src="profileimg.png" style={{width:"100%", height:"90%"}}></img> */}
-                    <Typography sx={{position:"absolute", zIndex: '10', top:"10%", color:"white", fontSize:'20px'}}>{user.name}</Typography>
-                    <Typography sx={{position:"absolute", zIndex: '10',top:"14%", color:"white", fontSize:"10px"}}>{user.age} - {user.gender} - {user.where}</Typography>
+                    <Typography sx={{position:"absolute", zIndex: '10', top:"10%", color:"white", fontSize:'20px'}}>{user.user_first_name + ' ' + user.user_last_name}</Typography>
+                    <Typography sx={{position:"absolute", zIndex: '10',top:"14%", color:"white", fontSize:"10px"}}>{user.user_age} - {user.user_gender} - {user.user_country}</Typography>
                     <Typography sx={{position:"absolute", zIndex: '10', bottom:"2%", color:"white", fontSize:"18px"}} onClick={()=>setIsFlipped(true)}>Tap to See Profile</Typography>
                     {/* <img src="like.png" style={{position:"absolute", right:"2%", top:"2%"}}></img> */}
                     <img src={liked ? like : likedImg} style={{position:"absolute", right:"2%", top:"1%"}}
@@ -143,7 +143,7 @@ const nameArray = user.name ? user.name.split(" ") : [];
             </Grid>
         </Box>
        
-        <ViewProfile setIsFlipped={setIsFlipped} liked={liked} onClick={handleSetLiked} showPopup={showPopup} isLiked={isLeftHeartVisible} user={user} AccountUser={AccountUser} setShowPopup={setShowPopup} userData={userData} />
+        <ViewProfile setIsFlipped={setIsFlipped} liked={liked} onClick={handleSetLiked} showPopup={showPopup} isLiked={isLeftHeartVisible} user={user} AccountUser={AccountUser} setShowPopup={setShowPopup} userData={user} />
        
         {/* <ViewProfile setIsFlipped={setIsFlipped} liked={liked} onClick={handleSetLiked} showPopup={showPopup} isLiked={isLeftHeartVisible} user={user} AccountUser={AccountUser} setShowPopup={setShowPopup} /> */}
     </ReactCardFlip>

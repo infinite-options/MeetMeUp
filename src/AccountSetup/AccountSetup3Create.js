@@ -156,7 +156,7 @@ export default function AccountSetup3Create() {
 
   const handleAddressChange = (e) => {
     setIsChanged(true);
-    setSavedAddress(e.target.value);
+    // setSavedAddress(e.target.value); // TODO: CAUSING RERENDER
   };
 
   const handleButton = (id, type) => {

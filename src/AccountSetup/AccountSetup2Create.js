@@ -11,8 +11,9 @@ import NextButton from '../Assets/Components/NextButton';
 import React, { useRef } from 'react';
 import Grid from "@mui/material/Grid2";
 import axios from "axios";
-localStorage.clear()//To make sure its not using any local storage and loads the information we entered
 export default function AccountSetup2Create() {
+    localStorage.clear() // NOTE: do not put this outside of a function!!!
+
     const navigate = useNavigate(); 
 
     const formRef = useRef(null);

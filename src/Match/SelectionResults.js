@@ -63,7 +63,7 @@ const SelectionResults = () => {
     window.history.back(); 
   };
   const handleUserClick = (user, source) => {
-    const userName = encodeURIComponent(user.name);
+    const userName = encodeURIComponent(user.user_first_name + user.user_last_name);
     navigate(`/user-details/${userName}`, { state: { user, source } });
   }
   // making a component since used twice - easier to edit
@@ -75,7 +75,7 @@ const SelectionResults = () => {
             <Avatar alt="Remy Sharp" src={user.src? user.src: ''}/>
           </ListItemAvatar>
           <ListItemText
-            primary={user.user_first_name}
+            primary={user.user_first_name + ' ' + user.user_last_name}
             secondary={
               <React.Fragment>
                 <Typography

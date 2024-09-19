@@ -40,6 +40,7 @@ const ViewProfile = ({ setIsFlipped, liked, onClick, isLiked, showPopup, user, A
     const smoke = userData.user_smoking;
     const flag = userData.user_nationality;
     const popupRef = useRef(null);
+    console.log('userData: ', userData);
 
     // const name = "Lachlan Collis";
     // const age = "21";
