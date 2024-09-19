@@ -8,6 +8,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 export default function AccountSetup1Login() {
+    localStorage.clear() // NOTE: do not put this outside of a function!!!
+
     const [formDataLogin, setFormDataLogin] = useState({
         email: '',
         password: '',
