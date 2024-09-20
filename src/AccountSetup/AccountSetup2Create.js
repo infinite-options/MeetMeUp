@@ -97,7 +97,7 @@ export default function AccountSetup2Create() {
                     <div className='pc-sub-header-text'>
                         Already have an account? <span onClick={() => {
                             navigate('/accountSetup1Login');
-                        }}>Click Here</span>
+                        }}> <div className='red-text'>Click here</div></span>
                     </div>
                     <div className='pc-header-text'>
                         Security

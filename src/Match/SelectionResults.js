@@ -137,7 +137,7 @@ useEffect(() => {
     return <div>Loading specifics</div>; 
   }
   if (noId) {
-      return <div>No User Found</div>;
+      navigate('/accountSetup1Login');  
   }
 
   return (
