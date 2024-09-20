@@ -20,6 +20,7 @@ const Match = () => {
     const [userStates, setUserStates] = useState([]);
     const [userSelections, setUserSelections] = useState([]);
     const {selections, setSelections} = useContext(AccountContext);
+    const userId = localStorage.getItem('user_uid');
     console.log("userData: ", userData);
     const handleNavigate = () => {
         navigate(`/grid`);
@@ -43,7 +44,7 @@ const Match = () => {
     // save the index of the final user states that is true
 
     console.log('userSelections: ', userSelections);
-    const userId = localStorage.getItem('user_uid');
+
     useEffect(() => {
         axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/matches/${userId}`)
             .then(res => {
@@ -73,7 +74,25 @@ const Match = () => {
         const updatedStates = [...userStates];
         updatedStates[index].liked = !updatedStates[index].liked;
         setUserStates(updatedStates);
-        console.log('updatedStates: ', updatedStates);
+        const fd = new FormData;
+        fd.append('liker_user_id',userId)
+        fd.append('liked_user_id', user.user_uid)
+        console.log(user.user_uid)
+        if (updatedStates[index].liked===true) {
+            axios.post('https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/likes', fd)
+                .then(res => {
+                    console.log(res)
+                })
+        }
+        else {
+            console.log('deleting')
+            axios.delete('https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/likes', {
+                data:fd})
+                .then(res => {
+                    console.log(res)
+                })
+        }
+        console.log('updatedStates: ', updatedStates[index]);
     };
 
 
