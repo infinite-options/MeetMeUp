@@ -8,6 +8,11 @@ import TrialAccount from "./Intro/TrialAccount";
 import Location from "./Profile/Location";
 import Location2 from "./Profile/Location2";
 import AccountDetails from "./AccountDetails/AccountDetails";
+import AccountDetails2 from "./AccountDetails/AccountDetails2";
+import AccountDetails3 from "./AccountDetails/AccountDetails3";
+import AccountDetails4 from "./AccountDetails/AccountDetails4";
+import AccountDetails5 from "./AccountDetails/AccountDetails5";
+
 import AccountSetup2Create from "./AccountSetup/AccountSetup2Create";
 import AccountSetup3Create from "./AccountSetup/AccountSetup3Create";
 import AccountSetup4Create from "./AccountSetup/AccountSetup4Create";
@@ -49,6 +54,11 @@ export default function App() {
         <Stack.Screen name='Location' component={Location} />
         <Stack.Screen name='Location2' component={Location2} />
         <Stack.Screen name='AccountDetails' component={AccountDetails} />
+        <Stack.Screen name='AccountDetails2' component={AccountDetails2} />
+        <Stack.Screen name='AccountDetails3' component={AccountDetails2} />
+        <Stack.Screen name='AccountDetails4' component={AccountDetails2} />
+        <Stack.Screen name='AccountDetails5' component={AccountDetails2} />
+
         <Stack.Screen name='AccountSetup7Summary' component={AccountSetup7Summary} />
         
       </Stack.Navigator>
