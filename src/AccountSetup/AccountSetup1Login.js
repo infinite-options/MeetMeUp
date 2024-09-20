@@ -107,7 +107,7 @@ export default function AccountSetup1Login() {
 
         <div className='App'>
             <div className='red-overlay' />
-            <Box sx={{marginLeft:'15%', marginRight:'15%'}}>
+            <Box sx={{ marginLeft: {xs: '5%',sm: '15%'}, marginRight: { xs: '5%',sm: '15%'}}}>
 
             <Grid container size={12} sx={{textAlign:"center"}}>
                 <Grid size={12} container justifyContent="center">
@@ -117,6 +117,8 @@ export default function AccountSetup1Login() {
                     <div className='title-text' style={{fontFamily:"Inria Sans"}}>
                         meet me up
                     </div>
+                    <br>
+                    </br>
                     <div className='header-text' style={{fontFamily:"Lexend"}}>
                         Let’s get you out there
                     </div>
@@ -130,22 +132,24 @@ export default function AccountSetup1Login() {
                 >
                     <TextField required onChange={handleChange} name='email' label='Email' type='email' variant='outlined'/>
                     <TextField required onChange={handleChange} name='password' label='Password' type='password' autoComplete='current-password'/>
-                    <Button
-                    onClick={handleSubmitLogin}
-                        variant='contained'
-                        type='submit'
-                        sx={{
-                            backgroundColor: '#E4423F',
-                            maxWidth: '131px',
-                            borderRadius: '41px',
-                            boxShadow: 'none',
-                            textTransform:"none",
-                            fontSize:"18px",
-                            fontFamily:"Lexend",
-                        }}
-                    >
-                        Login
-                    </Button>
+                    {/* <Grid container size={12} justifyContent="center" >     */}
+                        <Button
+                        onClick={handleSubmitLogin}
+                            variant='contained'
+                            type='submit'
+                            sx={{
+                                backgroundColor: '#E4423F',
+                                maxWidth: '131px',
+                                borderRadius: '41px',
+                                boxShadow: 'none',
+                                textTransform:"none",
+                                fontSize:"18px",
+                                fontFamily:"Lexend",
+                            }}
+                        >
+                            Login
+                        </Button>
+                    {/* </Grid> */}
                     <div className='sub-header-text'>Forgot password? <div className='red-text'>Retrieve here</div></div>
                     <Grid container justifyContent="center" size={12}>
                         <hr style={{width:"90%", borderStyle:"solid", borderColor:"#CECECE"}} />
@@ -154,6 +158,7 @@ export default function AccountSetup1Login() {
                 <div className='header-text' style={{fontFamily:"Lexend", fontWeight:"semibold"}}>
                     Not with us yet?
                 </div>
+                <br></br>
                 <div className='sub-header-text' style={{marginLeft:"5%", marginRight:"5%", fontFamily:"DM Sans", fontSize:"14px"}}>
                     Diam pulvinar pharetra nulla dolor nullam. Neque aliquam est amet scelerisque. Massa aenean.
                 </div>

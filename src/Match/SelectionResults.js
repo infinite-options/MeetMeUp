@@ -141,7 +141,7 @@ useEffect(() => {
   }
 
   return (
-    <Box sx={{marginLeft:'15%', marginRight:'15%'}}>
+    <Box sx={{ marginLeft: {xs: '5%',sm: '15%'}, marginRight: { xs: '5%',sm: '15%'}}}>
       <div className="selection-results-container">
 
         <TopTitle title={'Selection Results'}></TopTitle>

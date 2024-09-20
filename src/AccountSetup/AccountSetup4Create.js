@@ -13,10 +13,11 @@ import Progress from '../Assets/Components/Progress';
 import NextButton from '../Assets/Components/NextButton';
 import Dates from '../Assets/Components/Dates';
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 
 export default function AccountSetup4Create() {
     const [option, setOption] = React.useState('');
-    // const 
+    const navigate = useNavigate(); 
     const {details, setDetails} = React.useContext(AccountContext);
     const [pickerValue, setPickerValue] = useState({
         single: ''
@@ -192,13 +193,15 @@ export default function AccountSetup4Create() {
     }
     
     if (noId) {
-        return <div>No User Found</div>;
+        // return <div>No User Found</div>;
+        navigate('/accountSetup1Login')
+
       }
 
     return (
         <div className='App'>
-            <Box sx={{marginLeft:'15%', marginRight:'15%'}}>
-                {/* <Link to='/accountSetup3Create'><img src={backButton} alt='back button' className='back-button'/></Link>
+            <Box sx={{ marginLeft: {xs: '5%',sm: '15%'}, marginRight: { xs: '5%',sm: '15%'}}}>
+            {/* <Link to='/accountSetup3Create'><img src={backButton} alt='back button' className='back-button'/></Link>
                 <div className='pc-title-back-button-text'>
                     Profile Creation
                 </div>
@@ -341,7 +344,7 @@ export default function AccountSetup4Create() {
                         <span>Nationality</span>
                         {specifics.nationality?<span>{specifics.nationality}</span>:<span>Not Entered</span>}
                     </Button>
-                    <HelperTextBox text="That's a lot of information..."/>
+                    <HelperTextBox text="That's a lot of information..." title={'Why so much information?'} subtitle={'Sharing more about yourself enhances the compatibility and increases the likelihood of finding what both you and your match are seeking in each other.'}/>
                     <div className='form-button-container'>
                         
                         <NextButton onClick={handleNext} next={'/accountSetup5Create'}></NextButton>

@@ -51,7 +51,9 @@ const Profile = () => {
             console.log("Error fetching data", error);
             };
     }
-    fetchUserData();
+    if (userId) {
+      fetchUserData();
+    }
   }, [userId]);
   // useEffect(() => {
   //   axios

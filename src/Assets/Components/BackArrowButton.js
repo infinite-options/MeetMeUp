@@ -18,24 +18,22 @@ const BackArrowButton = ({onClick, page}) => {
     };
 
     return (
-        <Grid container size={12} justifyContent="center" >
-            <IconButton 
-                sx={{
-                    backgroundColor: "#EDEDED", color: "#333333", borderRadius: "25px", border: 'solid', borderWidth: '1px', borderColor: '#CECECE',
-                    marginRight: '16px', marginTop: '10px', zIndex: '10', fontFamily:"Lexend", 
-                    // '&:hover': {
-                    // backgroundColor: "#D3D3D3", 
-                    // },
-                    '&:active': {
-                    backgroundColor: "#BEBEBE", 
-                    }
-                }} 
-                onClick={() => {
-                    handleNavigate();
-            }}>
-                <ArrowBackIcon/>
-            </IconButton>
-        </Grid>
+        <IconButton 
+            sx={{
+                backgroundColor: "#EDEDED", color: "#333333", borderRadius: "25px", border: 'solid', borderWidth: '1px', borderColor: '#CECECE',
+                margin: '10px', marginTop: '5px',  zIndex: '10', fontFamily:"Lexend", 
+                // '&:hover': {
+                // backgroundColor: "#D3D3D3", 
+                // },
+                '&:active': {
+                backgroundColor: "#BEBEBE", 
+                }
+            }} 
+            onClick={() => {
+                handleNavigate();
+        }}>
+            <ArrowBackIcon/>
+        </IconButton>
     );
 }
  
