@@ -4,9 +4,8 @@ import './BodyScroll.css';
 import DrawerContext from './DrawerContext';
 
 function BodyScroll({ options }) {
-  const [pickerValue, setPickerValue] = useState({
-    single: options[Math.floor(options.length/2)]
-  })
+  const [pickerValue, setPickerValue] = useState({})
+  const [hoveredOption, setHoveredOption] = useState(null);
   // due to a rerender
   const {setPassData, setComplete, passData, complete, setOption, option, handleSetSpecifics} = useContext(DrawerContext);
   // NOTE: no need for another useEffect possibly
@@ -41,12 +40,19 @@ function BodyScroll({ options }) {
   // }
 
   // its complete that causes the rerender
-  if (option) {
-    console.log(pickerValue.single)
-    // handleSetSpecifics(option, pickerValue.single)
-  }
+  // if (option) {
+  //   console.log(pickerValue.single)
+  //   // handleSetSpecifics(option, pickerValue.single)
+  // }
+//CHANGES - DARSHIT
+  const handleMouseEnter = (option) => {
+    setHoveredOption(option);
+  };
 
-
+  const handleMouseLeave = () => {
+    setHoveredOption(null);
+  };
+///
   const handlePickerChange = (value) => {
     setPickerValue(value)
     console.log(value)
@@ -62,7 +68,7 @@ function BodyScroll({ options }) {
   //   handleSetSpecifics(option, pickerValue.single)
   //   setComplete(false);
   // }
-  console.log('pickerValue: ', pickerValue);
+  //console.log('pickerValue: ', pickerValue);
 
   // useEffect(() => {
   //   console.log('useEffect pickerValue: ', pickerValue);
@@ -74,15 +80,20 @@ function BodyScroll({ options }) {
   // // console.log('pickerValue: ', pickerValue);
 
   return (
-    <Picker value={pickerValue} onChange={handlePickerChange}>
+    <Picker className='picker-container' value={pickerValue} onChange={handlePickerChange}>
         <Picker.Column name='single'>
           {options.map(option => (
             <Picker.Item key={option} value={option}
             style={{
-              backgroundColor: pickerValue.single === option ? 'lightgray' : 'transparent',
+              //changes
+       backgroundColor: //pickerValue.single === option ? 'lightgray' : 
+                              hoveredOption === option ? 'lightgray' : 'transparent',
               borderRadius: '4px',
               padding: '10px',
-            }}>
+              //changes
+               cursor: 'pointer'
+            }} onMouseEnter={() => handleMouseEnter(option)} // Handle mouse enter
+            onMouseLeave={handleMouseLeave}>
               {option}
             </Picker.Item>
           ))}
