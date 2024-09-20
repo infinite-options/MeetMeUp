@@ -26,12 +26,13 @@ const PreferenceSlider = ({ preference, measurement, start, min, max }) => {
             clearTimeout(handler);
         };
     }, [value]);
-
+    const userId = localStorage.getItem('user_uid');
+    const userEmail = localStorage.getItem("user_email_id");
     useEffect(() => {
         console.log("Slider value changed:", debouncedValue);
         const formData = new FormData();
-        formData.append('user_uid', '100-000003');
-        formData.append('user_email_id', 'lachlalcollis@gmail.com');
+        formData.append('user_uid', userId);
+        formData.append('user_email_id', userEmail);
         if (preference==="Height in centimetres") {
             formData.append('user_prefer_height_min', debouncedValue);
         }

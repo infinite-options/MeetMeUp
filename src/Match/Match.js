@@ -43,9 +43,9 @@ const Match = () => {
     // save the index of the final user states that is true
 
     console.log('userSelections: ', userSelections);
-
+    const userId = localStorage.getItem('user_uid');
     useEffect(() => {
-        axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/matches/100-000003`)
+        axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/matches/${userId}`)
             .then(res => {
                 console.log(res.data.result)
                 setUserData(res.data.result);
