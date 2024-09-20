@@ -4,10 +4,31 @@ import './BodyScroll.css';
 import DrawerContext from './DrawerContext';
 
 function BodyScroll({ options }) {
-  const [pickerValue, setPickerValue] = useState({})
+  const [pickerValue, setPickerValue] = useState({single: options[Math.floor(options.length/2)]})
   const [hoveredOption, setHoveredOption] = useState(null);
   // due to a rerender
+  const scrollCooldownRef = useRef(false);
   const {setPassData, setComplete, passData, complete, setOption, option, handleSetSpecifics} = useContext(DrawerContext);
+ const handleWheelScroll = (e) => {
+    
+    if (scrollCooldownRef.current) return;  // If still in cooldown, it will ignore the event
+
+    const currentIndex = options.indexOf(pickerValue.single);
+    const scrollThreshold = 1;  // Will control sensitivity, Higher Value = Slower scroll
+
+    // Prevent further scrolling for a short time (So that it is smooth)
+    scrollCooldownRef.current = true;
+    setTimeout(() => {
+      scrollCooldownRef.current = false;
+    }, 150); // Throttle duration
+    //e.deltaY is used to track the position -> Negative e.deltaY == user scrolled up else down
+    if (e.deltaY > scrollThreshold && currentIndex < options.length - 1) {
+      //console.log(e.deltaY);
+      setPickerValue({ single: options[currentIndex + 1] });
+    } else if (e.deltaY < -scrollThreshold && currentIndex > 0) {
+      setPickerValue({ single: options[currentIndex - 1] });
+    }
+  };
   // NOTE: no need for another useEffect possibly
 //   useEffect(() => {
 //     console.log('useEffect pickerValue: ', pickerValue);
@@ -60,7 +81,7 @@ function BodyScroll({ options }) {
     if (option) {
       handleSetSpecifics(option, value.single)
       setComplete(false);
-      // setOption('');
+      setOption('');
     }
     // handleSetSpecifics(option, value.single); 
   };
@@ -80,10 +101,10 @@ function BodyScroll({ options }) {
   // // console.log('pickerValue: ', pickerValue);
 
   return (
-    <Picker className='picker-container' value={pickerValue} onChange={handlePickerChange}>
+    <Picker className='picker-container' value={pickerValue} onChange={handlePickerChange}  onWheel={handleWheelScroll}>
         <Picker.Column name='single'>
           {options.map(option => (
-            <Picker.Item key={option} value={option}
+            <Picker.Item key={option} value={String(option)} 
             style={{
               //changes
        backgroundColor: //pickerValue.single === option ? 'lightgray' : 

@@ -133,9 +133,9 @@ function DrawerOptions() {
       </Box>
     )
   }
-    const handleTextChange = (filedName, event) => {
+    const handleTextChange = (filledName, event) => {
       // const { value } = event.target;
-      setName(filedName)
+      setName(filledName)
       setTextValue(event.target.value) 
     };
 
@@ -162,7 +162,6 @@ function DrawerOptions() {
         styles={{
           '.MuiDrawer-root > .MuiPaper-root': {
             height: `calc(50% - ${drawerBleeding}px)`,
-            overflow: 'visible',
           },
         }}
       />
@@ -229,7 +228,18 @@ function DrawerOptions() {
             <div>
                 <TitleBox title={"What's Your Star Sign"} subtitle={'Some of our users love to know what personality traits you have.'}></TitleBox>
                 <ContentBox content={<BodyScroll options={[
-                    "Aries", 'Taurus', 'Gemini', 'Cancer', 'Leo','Virgo', 'Libra', 'Scorpio', 'Sagittarius', 'Capricorn', 'Aquarius', 'Pisces'
+                    'Aries', 
+                    'Taurus', 
+                    'Gemini',
+                    'Cancer', 
+                    'Leo',
+                    'Virgo', 
+                    'Libra', 
+                    'Scorpio', 
+                    'Sagittarius', 
+                    'Capricorn', 
+                    'Aquarius', 
+                    'Pisces'
                 ]}></BodyScroll>}></ContentBox>
             </div>)}
         {option=='smoking' && (<div>
@@ -253,17 +263,18 @@ function DrawerOptions() {
         {option=='children' && (<div>
             <TitleBox title={"Do You Have Any Children"} subtitle={'If you have any children please select an accurate amount.'}></TitleBox>
             <ContentBox content={<BodyScroll options={[
-                    1,
-                    2,
-                    3,
-                    4,
-                    5,
-                    6,
-                    7,
-                    8,
-                    9,
-                    10
-                ]}></BodyScroll>}></ContentBox>
+                       '0',
+                       '1',
+                       '2',
+                       '3',
+                       '4',
+                       '5',
+                       '6',
+                       '7',
+                       '8',
+                       '9',
+                       '10'
+                ]}></BodyScroll>}></ContentBox> 
            </div>)}
         {option=='position' && (<div>
             <TitleBox title={"Your Current Position"} subtitle={'What is your current line of work? Potentional matches love seeing what you get up in your day to day.'}></TitleBox>
@@ -279,7 +290,7 @@ function DrawerOptions() {
         </div>)}
         {option=='height' && (<div>
             <TitleBox title={"What's Your Height?"} subtitle={'Some of our users like to match with people that are of similar stature.'}></TitleBox>
-            <ContentBox content={<BodyScroll options={['170cm', '169cm', '168cm', '167cm', '166cm']}></BodyScroll>}></ContentBox>
+            <ContentBox content={<BodyScroll options={['170', '169', '168', '167', '166']}></BodyScroll>}></ContentBox>
         </div>)}
         {option=='nationality' && (<div>
             <TitleBox title={"Your Nationality"} subtitle={'To help potential matches understand who you are and how you identify, tell us your specific nationality.'}></TitleBox>
