@@ -88,7 +88,7 @@ export default function Begin() {
                             zIndex: 0
                         }}
                     />
-                    <Typography variant="h6" sx={{ mt: 1, fontFamily: 'Lexend', fontSize: { xs: '16px', md: '20px' }, ml: { xs: 1, md: 2 } }}>{user.name}</Typography>
+                    <Typography variant="h6" sx={{ mt: 1, fontFamily: 'Lexend', fontSize: { xs: '16px', md: '20px' }, ml: { xs: 1, md: 2 } }}>{user.user_first_name}</Typography>
                 </Box>
             </Box>
 

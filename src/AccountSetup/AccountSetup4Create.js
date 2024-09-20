@@ -35,6 +35,8 @@ export default function AccountSetup4Create() {
         user_nationality: '',
         user_general_interests: [],
     });
+    const [noId, setNoId] = useState(false); // if any of the info has been changed then PUT
+
     console.log('userGeneral Interests', formData['user_general_interests'])
     console.log('setup4 formData: ', formData);
 
@@ -71,10 +73,6 @@ export default function AccountSetup4Create() {
     // use the setSpecifics
     const userId = localStorage.getItem('user_uid');
     const [loading, setLoading] = useState(true); 
-    if (!userId) {
-        // if a user does not exist
-        setLoading(false);
-    }
     const [userData, setUserData] = useState({});
 
     useEffect(() => {
@@ -107,7 +105,12 @@ export default function AccountSetup4Create() {
                     console.log("Error fetching data", error);
                 };
         }
-        fetchUserData();
+        if (userId) {
+            fetchUserData();
+        } else {
+            setLoading(false);
+            setNoId(true);
+        }
       }, [userId]);
 
     const [passData, setPassData] = useState(null);
@@ -187,6 +190,10 @@ export default function AccountSetup4Create() {
     if (loading) {
         return <div>Loading specifics</div>; 
     }
+    
+    if (noId) {
+        return <div>No User Found</div>;
+      }
 
     return (
         <div className='App'>

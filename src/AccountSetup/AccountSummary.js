@@ -83,8 +83,9 @@ const Profile = () => {
 
   // default values
   console.log('saved Data: ', userData);
-  localStorage.setItem('user_email_id',userData.user_email_id); //Changed to keep email in local storage
-  localStorage.setItem('phone_number',userData.user_phone_number) // Changed to keep phone number in local storage
+  // not needed
+  // localStorage.setItem('user_email_id',userData.user_email_id); //Changed to keep email in local storage
+  // localStorage.setItem('phone_number',userData.user_phone_number) // Changed to keep phone number in local storage
   const name = userData.user_first_name + " " + userData.user_last_name;
   const age = userData.user_age;
   const gender = userData.user_gender;

@@ -2,12 +2,12 @@ import BackArrowButton from "./BackArrowButton";
 import { Typography, Box } from "@mui/material";
 import Grid from '@mui/material/Grid2';
 
-const TopTitle = ({title, weight}) => {
+const TopTitle = ({title, weight, page}) => {
     return (
         <Box sx={{ position: 'relative', width: '100%', marginTop: '15px' }}>
             <Grid container alignItems="center">
                 <Grid item xs={3} container alignItems="center" zIndex='10' justifyContent="flex-start">
-                    <BackArrowButton />
+                    <BackArrowButton page={page}/>
                 </Grid>
             </Grid>
             <Box sx={{

@@ -22,6 +22,8 @@ import Grid from "@mui/material/Grid2";
 import TopTitle from '../Assets/Components/TopTitle';
 import AccountContext from '../AccountSetup/AccountContext';
 import { useContext } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 const matchedResults = [
 
 ];
@@ -43,9 +45,37 @@ const usersWhoYouSelected = [
 
 
 
+
+
 const SelectionResults = () => {
   const navigate = useNavigate();
-    
+  const [loading, setLoading] = useState(false); // temp set to false
+  const [noId, setNoId] = useState(false); // if any of the info has been changed then PUT
+  const [peopleYouSelected, setPeopleYouSelected] = useState([]);
+  const [peopleSelectedYou, setPeopleSelectedYou] = useState([]);
+
+    // /likes/<user_id>
+  const userId = localStorage.getItem('user_uid');
+  const [userData, setUserData] = useState({});
+useEffect(() => {
+  const fetchUserData = async () => {
+    // will be used to fetch the data
+    try {
+        const res = axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/likes/${userId}`)
+        setUserData(res);
+        console.log('userData: ', userData);
+        console.log(res);
+    }   catch (error) {
+      console.log("Error fetching data", error);
+    };
+  }
+  if (userId) {
+      fetchUserData();
+  } else {
+      setLoading(false);
+      setNoId(true);
+  }
+}, [userId]);
   // usersWhoYouSelected should be passed in
   const {selections, setSelections} = useContext(AccountContext);
   let tempArray;
@@ -63,7 +93,7 @@ const SelectionResults = () => {
     window.history.back(); 
   };
   const handleUserClick = (user, source) => {
-    const userName = encodeURIComponent(user.name);
+    const userName = encodeURIComponent(user.user_first_name + user.user_last_name);
     navigate(`/user-details/${userName}`, { state: { user, source } });
   }
   // making a component since used twice - easier to edit
@@ -75,7 +105,7 @@ const SelectionResults = () => {
             <Avatar alt="Remy Sharp" src={user.src? user.src: ''}/>
           </ListItemAvatar>
           <ListItemText
-            primary={user.user_first_name}
+            primary={user.user_first_name + ' ' + user.user_last_name}
             secondary={
               <React.Fragment>
                 <Typography
@@ -102,6 +132,13 @@ const SelectionResults = () => {
     </Box>
 
   )
+
+  if (loading) {
+    return <div>Loading specifics</div>; 
+  }
+  if (noId) {
+      return <div>No User Found</div>;
+  }
 
   return (
     <Box sx={{marginLeft:'15%', marginRight:'15%'}}>

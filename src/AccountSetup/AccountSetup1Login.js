@@ -8,6 +8,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 export default function AccountSetup1Login() {
+    localStorage.clear() // NOTE: do not put this outside of a function!!!
+
     const [formDataLogin, setFormDataLogin] = useState({
         email: '',
         password: '',
@@ -76,6 +78,8 @@ export default function AccountSetup1Login() {
                    console.log("Login successful:", loginResponse.data);
                    console.log("ACTUAL USER ID",loginResponse.data.result.user_uid);
                    localStorage.setItem('user_uid',loginResponse.data.result.user_uid) //IMPORTANT FOR SETTING THE ID TO ACTUAL ID AND NOT USE OLD ONE
+                   localStorage.setItem('user_email_id',loginResponse.data.result.user_email_id) // DONT FORGET EMAIL ID!!
+
                    navigate(`/accountSetup7Summary`);
                 } else {
                     throw new Error('Hash algorithm or salt is missing.');
