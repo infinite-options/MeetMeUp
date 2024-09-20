@@ -38,6 +38,7 @@ const Profile = () => {
   const userId = localStorage.getItem('user_uid');
   console.log(userId);
   const [loading, setLoading] = useState(true); 
+  const [noId, setNoId] = useState(false); // if any of the info has been changed then PUT
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -51,7 +52,12 @@ const Profile = () => {
             console.log("Error fetching data", error);
             };
     }
-    fetchUserData();
+    if (userId) {
+      fetchUserData();
+    } else {
+        setLoading(false);
+        setNoId(true);
+    }
   }, [userId]);
   // useEffect(() => {
   //   axios
@@ -123,7 +129,16 @@ const Profile = () => {
   }
 
   console.log("imageList:", imageList);
-  
+  if (loading) {
+    return <div>Loading specifics</div>; 
+  }
+
+  if (noId) {
+    // return <div>No User Found</div>;
+    navigate('/accountSetup1Login')
+
+  }
+
   return (
     <Grid container size={12} justifyContent='center'>
       <Grid size={4} container justifyContent='flex-end' alignItems='center'>

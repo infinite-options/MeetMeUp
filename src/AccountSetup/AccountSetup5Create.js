@@ -15,6 +15,8 @@ import Progress from '../Assets/Components/Progress';
 import NextButton from '../Assets/Components/NextButton';
 import Webcam from 'react-webcam';
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
+
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
     clipPath: 'inset(50%)',
@@ -46,6 +48,9 @@ export default function AccountSetup5Create() {
     const [obtain, setObtain] = useState('false');
     const [prevVideo, setPrevVideo] = useState('');
     const [newRecord, setNewRecord] = useState(false);
+    const [newImage, setNewImage] = useState(false);
+
+    const navigate = useNavigate(); 
 
     console.log('formData: ', formData);
 
@@ -62,23 +67,32 @@ export default function AccountSetup5Create() {
             setRecordedChunks((prev) => prev.concat(data));
         }
     }, [setRecordedChunks]);
-
+    console.log('formData: ', formData);
     console.log('videoSrc: ', videoSrc);
 
-    // TODO: fix the lack of users
     useEffect(() => {
         const fetchUserData = async () => {
         try {
-            const res = axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/${userId}`)
+            const res = await axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/${userId}`)
+            const fetchedData = res.data.result[0];
+            console.log('fetchedData VIDEO: ', fetchedData);
+
             setUserData(res.data.result[0]);
             console.log('userData: ', userData);
             console.log(res.data.result[0]);
-            const fetchedData = res.data.result[0];
+            // const fetchedData = res.data.result[0];
             const fetchedURL = fetchedData.user_video;
             console.log('fetchedURL: ', fetchedURL);
             console.log(fetchedData.user_video_url);
-            setVideoSrc(fetchedData.user_video_url.replaceAll("\"", ""));
-            console.log('prevVide: ', prevVideo)
+            const imageArray = JSON.parse(fetchedData.user_photo_url)
+            const joinedImages = imageArray.join(','); 
+
+
+            console.log('iamges: ', imageArray);
+            await setFormData({...formData, image: joinedImages});
+            await setVideoSrc(fetchedData.user_video_url.replaceAll("\"", ""));
+            // await setFormData({...formData, video: fetchedData.user_video_url.replaceAll("\"", "")});
+            console.log('prevVide: ', videoSrc)
             setObtain(true);
             setViewRecording(true);
         }   catch (error) {
@@ -140,6 +154,7 @@ export default function AccountSetup5Create() {
     const handleImageUpload = async (e) => {
         const img = e.target.files[0];
         console.log("img:", img);
+        setNewImage(true);
         if(!img) {
             return;
         }
@@ -157,6 +172,7 @@ export default function AccountSetup5Create() {
     };
 
     const handleDelete = (e) => {
+        setNewImage(true);
         var imageArray = formData['image'].split(',');
         var imageString = "";
         for(var i = imageArray.length - 2; i >= 0; i--) {
@@ -225,20 +241,28 @@ export default function AccountSetup5Create() {
             fd.append("user_video", vidBlob, "video_filename.mp4");
         }
         
+        if (newImage) {
 
-        var imageArray = formData['image'].split(',');
-        for(var i = 0; i < imageArray.length - 1; i++) {
-            let imgBlob = await fetch(imageArray[i]).then(r => r.blob());
-            if(i === 0) {
-                fd.append("img_0", imgBlob, "img_0_filename");
+            var imageArray = formData['image'].split(',');
+            for(var i = 0; i < imageArray.length - 1; i++) {
+                let imgBlob = await fetch(imageArray[i]).then(r => r.blob());
+                if(i === 0) {
+                    fd.append("img_0", imgBlob, "img_0_filename");
+                }
+                else if(i === 1) {
+                    fd.append("img_1", imgBlob, "img_1_filename");
+                }
+                else if(i === 2) {
+                    fd.append("img_2", imgBlob, "img_2_filename");
+                }
             }
-            else if(i === 1) {
-                fd.append("img_1", imgBlob, "img_1_filename");
-            }
-            else if(i === 2) {
-                fd.append("img_2", imgBlob, "img_2_filename");
+            if (!formData['image']) {
+                fd.append('user_photo_url', '');
+
+
             }
         }
+
 
         try {
             const response = await fetch(url, {
@@ -262,12 +286,13 @@ export default function AccountSetup5Create() {
             return <div>Loading specifics</div>; 
         }
         if (noId) {
-            return <div>No User Found</div>;
+            navigate('/accountSetup1Login')
+            // return <div>No User Found</div>;
         }
     };
 
     return (
-        <Box sx={{marginLeft:'15%', marginRight:'15%'}}>
+        <Box sx={{ marginLeft: {xs: '5%',sm: '15%'}, marginRight: { xs: '5%',sm: '15%'}}}>
             <Progress percent="80%" prev="/accountSetup4Create" />
             <form className='form-container' onSubmit={handleNext} >
                 <div className='pc-header-text'>
@@ -293,7 +318,7 @@ export default function AccountSetup5Create() {
                             ref={webcamRef}
                             height={400}
                             width={300}
-                            audio={false}
+                            audio={true}
                             mirrored={true}
                             videoConstraints={videoConstraints}
                         />
@@ -387,7 +412,7 @@ export default function AccountSetup5Create() {
                     </div>
                 }
                 </div>
-                <HelperTextBox text='Why do I need to make this video?'/>
+                <HelperTextBox text='Why do I need to make this video?' title={'Why video?'} subtitle={"The video recording is mandatory to use the app. If you have any concerns providing this information there is an option to delete it, if you don't wish to become a member or keep on site for use of a deactivated account"}/>
                 <div className='pc-header-text'>
                     Complimentary Images
                 </div>

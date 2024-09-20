@@ -4,6 +4,7 @@ import { Box, Button, Grid2, Container, Typography } from "@mui/material";
 import NextButton from "../Assets/Components/NextButton";
 import DateAdd from "../Assets/Components/DateAdd";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Dates from "../Assets/Components/Dates";
 import axios from "axios";
 // victors code
@@ -15,6 +16,7 @@ const AccountSetup6Available = () => {
     const [loading, setLoading] = useState(true); 
     const [userData, setUserData] = useState({});
     const [noId, setNoId] = useState(false); // if any of the info has been changed then PUT
+    const navigate = useNavigate(); 
     const dates = [
         'Lunch',
         'Dinner',
@@ -23,12 +25,18 @@ const AccountSetup6Available = () => {
         'Surprise Me',
     ]
     const [times, setTimes] = useState([]);
+    const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
     const handleAddTime = (day, start_time, end_time) => {
         console.log('day: ', day);
         console.log('start_time: ', )
         if (times) {
-            setTimes((prevTimes) => [...prevTimes, { day, "start_time": start_time, "end_time": end_time }]);
+            setTimes((prevTimes) => {
+                const updatedTimes = [...prevTimes, { day, start_time, end_time }];
+                updatedTimes.sort((a, b) => daysOfWeek.indexOf(a.day) - daysOfWeek.indexOf(b.day));
+                return updatedTimes;
+            });
+            // setTimes((prevTimes) => [...prevTimes, { day, "start_time": start_time, "end_time": end_time }]);
         } else {
             setTimes([{ day, "start_time": start_time, "end_time": end_time }]);
         }
@@ -129,11 +137,12 @@ const AccountSetup6Available = () => {
         return <div>Loading specifics</div>; 
     }
     if (noId) {
-        return <div>No User Found</div>;
+        navigate('/accountSetup1Login');
+        // return <div>No User Found</div>;
     }
 
     return (
-        <Box sx={{marginLeft:'15%', marginRight:'15%'}}>
+        <Box sx={{ marginLeft: {xs: '5%',sm: '15%'}, marginRight: { xs: '5%',sm: '15%'}}}>
             <Progress percent="100%" prev="/accountSetup7Summary" />
 
             <Grid container sx={{margin: "0 auto", width: '100% '}}>
