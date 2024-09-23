@@ -86,7 +86,10 @@ const Profile = () => {
   const handleSelections = () => {
     navigate(`/selectionResults`);
   };
-
+  
+  const handleUpload = () =>{
+    navigate(`/accountSetup5Create`) //CHANGED THIS
+  }
   // default values
   console.log('saved Data: ', userData);
   // not needed
@@ -187,7 +190,7 @@ const Profile = () => {
         </Grid>
       </Grid>
       <Grid container size={12} justifyContent='center'>
-        <Button
+        <Button onClick={handleUpload}
           sx={{
             width: "130px",
             backgroundColor: "black",

@@ -1,10 +1,12 @@
 import React from 'react';
 import { Container, Box, Typography, Button, TextField } from '@mui/material';
 import arrow from '../Assets/Images/arrow.png';
-
+import { useNavigate } from 'react-router-dom';
 const AccountDetails4 = () => {
+  const navigate = useNavigate();
   const handleNext = () => {
     console.log('Next');
+    navigate(`/account5`); //CHANGED THIS
   };
 
   return (

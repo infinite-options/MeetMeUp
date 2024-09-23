@@ -104,16 +104,18 @@ function BodyScroll({ options }) {
     <Picker className='picker-container' value={pickerValue} onChange={handlePickerChange}  onWheel={handleWheelScroll}>
         <Picker.Column name='single'>
           {options.map(option => (
-            <Picker.Item key={option} value={String(option)} 
-            style={{
-              //changes
-       backgroundColor: //pickerValue.single === option ? 'lightgray' : 
-                              hoveredOption === option ? 'lightgray' : 'transparent',
-              borderRadius: '4px',
-              padding: '10px',
-              //changes
-               cursor: 'pointer'
-            }} onMouseEnter={() => handleMouseEnter(option)} // Handle mouse enter
+           <Picker.Item
+           key={option}
+           value={String(option)}
+           style={{
+             backgroundColor: hoveredOption === option ? 'lightgray' : 'transparent',
+             borderRadius: '4px',
+             padding: '10px',
+             cursor: 'pointer',
+             borderTop: pickerValue.single === option ? '1px solid gray' : 'none',
+             borderBottom: pickerValue.single === option ? '1px solid gray' : 'none',
+           }}
+           onClick={() => handlePickerChange({ single: option })} onMouseEnter={() => handleMouseEnter(option)} // Handle mouse enter
             onMouseLeave={handleMouseLeave}>
               {option}
             </Picker.Item>
