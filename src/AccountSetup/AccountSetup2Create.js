@@ -21,6 +21,8 @@ export default function AccountSetup2Create() {
         phone_number: '',
         password: '',
         passwordConfirm: '',
+        terms: '',
+        policies: '',
     });
     console.log('existing: ', existing);
     const [submit, setSubmit] = useState(false);
@@ -37,6 +39,15 @@ export default function AccountSetup2Create() {
         const url = "https://mrle52rri4.execute-api.us-west-1.amazonaws.com/dev/api/v2/CreateAccount/MMU"; //Changed Endpoing
         
         let data = new FormData();
+        if (!formData.email || !formData.password || !formData.phone_number) {
+            window.alert('Please fill in all required fields.');
+            return;
+        }
+        // FIX
+        if (!formData.terms || !formData.policies) {
+            window.alert('Please consent to terms and conditions.');
+            return;
+        }          
         /*data.append("user_uid", formData['profileBio']);*/
         data.append("email", formData['email']);  
         data.append("password", formData['password']);
@@ -54,14 +65,14 @@ export default function AccountSetup2Create() {
             if (response.data.message == "User already exists") {
                 await setExisting(true);
                 window.alert('User Already Exists');
-                // navigate('/accountSetup2Create')
+                return;
             }
             localStorage.setItem('user_uid', response.data.result[0].user_uid);
             localStorage.setItem('user_email_id', formData['email']);
             localStorage.setItem('phone_number',formData["phone_number"]);
             console.log('localStorage items: ', localStorage.getItem('user_uid'), localStorage.getItem('user_email_id'));
             console.log("U_ID ",response.data.result[0].user_uid)
-            
+            navigate('/accountSetup3Create')
 
         } catch (error) {
             // setSubmit(false); 
@@ -113,31 +124,34 @@ export default function AccountSetup2Create() {
                         <TextField onChange={handleChange} name='passwordConfirm' label='Confirm Password' type='password' variant='outlined'/>
                     </Grid2>
                     <HelperTextBox text='How do you need to make a secure password?' title={'Our Security Standards'}/>
-                    <NextButton onClick={handleNext} next={existing ? '/accountSetup2Create' :'/accountSetup3Create'} notallowed={false}></NextButton>
-                </Box>
+                    <NextButton onClick={handleNext} notallowed={true}></NextButton>
                 <Grid2 container justifyContent="center">
-                <FormGroup>
-                        <FormControlLabel
-                            required
-                            control={<Checkbox/>}
-                            label={
-                                <span>
-                                   I agree to the <Link to='/termsandconditions'><div className='red-text'>Terms and Conditions</div></Link>
-                                   </span>
-                            }
-                        />
-                        <FormControlLabel
-                            required
-                            control={<Checkbox/>}
-                            label={
-                                <span>
-                                    I agree to the<Link to='/privacypolicy'> <div className='red-text'>Privacy Policy</div></Link>
-                                </span>
-                            }
-                        />
-                    </FormGroup>
+                    <FormGroup>
+                            <FormControlLabel
+                                required
+                                name='terms'
+                                control={<Checkbox name='terms' onChange={handleChange}/>}
+                                label={
+                                    <span>
+                                    I agree to the <Link to='/termsandconditions'><div className='red-text'>Terms and Conditions</div></Link>
+                                    </span>
+                                }
+                            />
+                            <FormControlLabel
+                                required
+                                name='policies'
+                                control={<Checkbox  name='policies' onChange={handleChange}/>}
+                                label={
+                                    <span>
+                                        I agree to the<Link to='/privacypolicy'> <div className='red-text'>Privacy Policy</div></Link>
+                                    </span>
+                                }
+                            />
+                        </FormGroup>
                     </Grid2>
             </Box>
+            </Box>
+
         </div>
     )
 }
