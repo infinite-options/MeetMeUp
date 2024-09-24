@@ -4,8 +4,10 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Box, Button, Checkbox, FormGroup, FormControlLabel, TextField, Container, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import GoogleSignUp from './GoogleSignUp'
+import { GoogleLogin } from "@react-oauth/google";
 
 export default function AccountSetup1Login() {
     localStorage.clear() // NOTE: do not put this outside of a function!!!
@@ -40,12 +42,12 @@ export default function AccountSetup1Login() {
 
         const saltUrl = "https://mrle52rri4.execute-api.us-west-1.amazonaws.com/dev/api/v2/AccountSalt/MMU";
         const loginUrl = "https://mrle52rri4.execute-api.us-west-1.amazonaws.com/dev/api/v2/Login/MMU";
-        
+
         try {
             setShowSpinner(true);
             const saltResponse = await axios.post(saltUrl, { email: formDataLogin.email });
             const saltObject = saltResponse.data;
-            
+
             if (saltObject.code === 200) {
                 let hashAlg = saltObject.result[0].password_algorithm;
                 let salt = saltObject.result[0].password_salt;
@@ -74,13 +76,13 @@ export default function AccountSetup1Login() {
                     }, {
                         headers: { 'Content-Type': 'application/json' }
                     });
-            
-                   console.log("Login successful:", loginResponse.data);
-                   console.log("ACTUAL USER ID",loginResponse.data.result.user_uid);
-                   localStorage.setItem('user_uid',loginResponse.data.result.user_uid) //IMPORTANT FOR SETTING THE ID TO ACTUAL ID AND NOT USE OLD ONE
-                   localStorage.setItem('user_email_id',loginResponse.data.result.user_email_id) // DONT FORGET EMAIL ID!!
 
-                   navigate(`/accountSetup7Summary`);
+                    console.log("Login successful:", loginResponse.data);
+                    console.log("ACTUAL USER ID", loginResponse.data.result.user_uid);
+                    localStorage.setItem('user_uid', loginResponse.data.result.user_uid) //IMPORTANT FOR SETTING THE ID TO ACTUAL ID AND NOT USE OLD ONE
+                    localStorage.setItem('user_email_id', loginResponse.data.result.user_email_id) // DONT FORGET EMAIL ID!!
+
+                    navigate(`/accountSetup7Summary`);
                 } else {
                     throw new Error('Hash algorithm or salt is missing.');
                 }
@@ -107,83 +109,126 @@ export default function AccountSetup1Login() {
 
         <div className='App'>
             <div className='red-overlay' />
-            <Box sx={{marginLeft:'15%', marginRight:'15%'}}>
+            <Box sx={{ marginLeft: '15%', marginRight: '15%' }}>
 
-            <Grid container size={12} sx={{textAlign:"center"}}>
-                <Grid size={12} container justifyContent="center">
-                     <img src={backgroundImage} alt='accountSetup1Login'/>
-                </Grid>
-                <div className='rounded-box'>
-                    <div className='title-text' style={{fontFamily:"Inria Sans"}}>
-                        meet me up
-                    </div>
-                    <div className='header-text' style={{fontFamily:"Lexend"}}>
-                        Let’s get you out there
-                    </div>
- 
-
-                <Box
-                    component='form'
-                    onSubmit={handleSubmitLogin}
-                    sx={{ '& > :not(style)': { m: 2, width: 0.9 } }}
-                    autoComplete='off'
-                >
-                    <TextField required onChange={handleChange} name='email' label='Email' type='email' variant='outlined'/>
-                    <TextField required onChange={handleChange} name='password' label='Password' type='password' autoComplete='current-password'/>
-                    <Button
-                    onClick={handleSubmitLogin}
-                        variant='contained'
-                        type='submit'
-                        sx={{
-                            backgroundColor: '#E4423F',
-                            maxWidth: '131px',
-                            borderRadius: '41px',
-                            boxShadow: 'none',
-                            textTransform:"none",
-                            fontSize:"18px",
-                            fontFamily:"Lexend",
-                        }}
-                    >
-                        Login
-                    </Button>
-                    <div className='sub-header-text'>Forgot password? <div className='red-text'>Retrieve here</div></div>
-                    <Grid container justifyContent="center" size={12}>
-                        <hr style={{width:"90%", borderStyle:"solid", borderColor:"#CECECE"}} />
+                <Grid container size={12} sx={{ textAlign: "center" }}>
+                    <Grid size={12} container justifyContent="center">
+                        <img src={backgroundImage} alt='accountSetup1Login' />
                     </Grid>
-                </Box>
-                <div className='header-text' style={{fontFamily:"Lexend", fontWeight:"semibold"}}>
-                    Not with us yet?
-                </div>
-                <div className='sub-header-text' style={{marginLeft:"5%", marginRight:"5%", fontFamily:"DM Sans", fontSize:"14px"}}>
-                    Diam pulvinar pharetra nulla dolor nullam. Neque aliquam est amet scelerisque. Massa aenean.
-                </div>
-                <Box
-                    component='form'
-                    onSubmit={handleSubmitCreate}
-                    action='/accountSetup2Create'
-                    autoComplete='off'
-                    sx={{ '& > :not(style)': { m: 2, width: 0.9 } }}
-                >
-                    <Button
-                        variant='contained'
-                        type='submit'
-                        sx={{
-                        backgroundColor: '#E4423F',
-                        maxWidth: '202px',
-                        borderRadius: '41px',
-                        marginTop: '20px',
-                        boxShadow: 'none',
-                        textTransform:"none",
-                        fontSize:"18px",
-                        fontFamily:"Lexend"
-                        }}
-                    >
-                        Create Account
-                    </Button>
-                </Box>
-                
-            </div>
-            </Grid>
+                    <div className='rounded-box'>
+                        <div className='title-text' style={{ fontFamily: "Inria Sans" }}>
+                            meet me up
+                        </div>
+                        <div className='header-text' style={{ fontFamily: "Lexend" }}>
+                            Let’s get you out there
+                        </div>
+
+
+                        <Box
+                            component='form'
+                            onSubmit={handleSubmitLogin}
+                            sx={{ '& > :not(style)': { m: 2, width: 0.9 } }}
+                            autoComplete='off'
+                        >
+                            <TextField required onChange={handleChange} name='email' label='Email' type='email' variant='outlined' />
+                            <TextField required onChange={handleChange} name='password' label='Password' type='password' autoComplete='current-password' />
+                            <Button
+                                onClick={handleSubmitLogin}
+                                variant='contained'
+                                type='submit'
+                                sx={{
+                                    backgroundColor: '#E4423F',
+                                    maxWidth: '131px',
+                                    borderRadius: '41px',
+                                    boxShadow: 'none',
+                                    textTransform: "none",
+                                    fontSize: "18px",
+                                    fontFamily: "Lexend",
+                                }}
+                            >
+                                Login
+                            </Button>
+                            <div className='sub-header-text'>Forgot password? <div className='red-text'>Retrieve here</div></div>
+                            <Grid container justifyContent="center" size={12}>
+                                <hr style={{ width: "90%", borderStyle: "solid", borderColor: "#CECECE" }} />
+                            </Grid>
+                        </Box>
+                        <div className='header-text' style={{ fontFamily: "Lexend", fontWeight: "semibold" }}>
+                            Not with us yet?
+                        </div>
+                        <div className='sub-header-text' style={{ marginLeft: "5%", marginRight: "5%", fontFamily: "DM Sans", fontSize: "14px" }}>
+                            Diam pulvinar pharetra nulla dolor nullam. Neque aliquam est amet scelerisque. Massa aenean.
+                        </div>
+                        <Box
+                            component='form'
+                            onSubmit={handleSubmitCreate}
+                            action='/accountSetup2Create'
+                            autoComplete='off'
+                            sx={{ '& > :not(style)': { m: 2, width: 0.9 } }}
+                        >
+                            <Button
+                                variant='contained'
+                                type='submit'
+                                sx={{
+                                    backgroundColor: '#E4423F',
+                                    maxWidth: '202px',
+                                    borderRadius: '41px',
+                                    marginTop: '20px',
+                                    boxShadow: 'none',
+                                    textTransform: "none",
+                                    fontSize: "18px",
+                                    fontFamily: "Lexend"
+                                }}
+                            >
+                                Create Account
+                            </Button>
+                        </Box>
+                        <Box
+                            component='form'
+                            onSubmit={handleSubmitCreate}
+                            action='/googleSignUp'
+                            autoComplete='off'
+                            sx={{ '& > :not(style)': { m: 2, width: 0.9 } }}
+                        >
+                            <Button
+                                variant='contained'
+                                type='submit'
+                                sx={{
+                                    backgroundColor: '#E4423F',
+                                    maxWidth: '202px',
+                                    borderRadius: '41px',
+                                    marginTop: '20px',
+                                    boxShadow: 'none',
+                                    textTransform: "none",
+                                    fontSize: "18px",
+                                    fontFamily: "Lexend"
+                                }}
+                            >
+                                Google SignUp
+                            </Button>
+                        </Box>
+                        {/* <Box
+                            sx={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                height: '10vh',
+                                marginLeft:'435px',
+                                '& > :not(style)': { m: 2, width: 0.9 },
+                            }}
+                        >
+                            <GoogleLogin
+                                onSuccess={(credentialResponse) => {
+                                    console.log(credentialResponse)
+                                }}
+                                onError={() => {
+                                    console.log("Login failed");
+                                }}
+                            />
+                        </Box> */}
+
+                    </div>
+                </Grid>
             </Box>
         </div>
     );
