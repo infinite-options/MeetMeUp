@@ -35,6 +35,7 @@ export default function AccountSetup1Login() {
 
         if (formDataLogin.email === "" || formDataLogin.password === "") {
             setErrorMessage("Please fill out all fields");
+            window.alert("Please Fill out all the fields")
             return;
         }
 
@@ -79,7 +80,7 @@ export default function AccountSetup1Login() {
                    console.log("ACTUAL USER ID",loginResponse.data.result.user_uid);
                    localStorage.setItem('user_uid',loginResponse.data.result.user_uid) //IMPORTANT FOR SETTING THE ID TO ACTUAL ID AND NOT USE OLD ONE
                    localStorage.setItem('user_email_id',loginResponse.data.result.user_email_id) // DONT FORGET EMAIL ID!!
-
+                   localStorage.setItem('phone_number',loginResponse.data.result.user_phone_number) //Setting this to view it in account details
                    navigate(`/accountSetup7Summary`);
                 } else {
                     throw new Error('Hash algorithm or salt is missing.');
