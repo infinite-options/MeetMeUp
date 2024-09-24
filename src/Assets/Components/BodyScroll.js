@@ -101,7 +101,7 @@ function BodyScroll({ options }) {
   // // console.log('pickerValue: ', pickerValue);
 
   return (
-    <Picker className='picker-container' value={pickerValue} onChange={handlePickerChange}  onWheel={handleWheelScroll}>
+    <Picker className='picker-container' style={{ width: '250px'}} value={pickerValue} onChange={handlePickerChange}  onWheel={handleWheelScroll}>
         <Picker.Column name='single'>
           {options.map(option => (
            <Picker.Item

@@ -35,6 +35,7 @@ export default function AccountSetup1Login() {
 
         if (formDataLogin.email === "" || formDataLogin.password === "") {
             setErrorMessage("Please fill out all fields");
+            window.alert("Please Fill out all the fields")
             return;
         }
 
