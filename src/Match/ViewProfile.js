@@ -24,7 +24,7 @@ import redliked from "../Assets/Images/redliked.png"
 import MatchPopUp from "./MatchPopUp";
 import { useRef } from "react";
 
-const ViewProfile = ({ setIsFlipped, liked, onClick, isLiked, showPopup, user, AccountUser, userData }) => {
+const ViewProfile = ({ setIsFlipped, liked, onClick, isLiked, showPopup, user, AccountUser, userData, theyliked }) => {
     const name = userData.user_first_name + " " + userData.user_last_name
     const age = userData.user_age;
     const gender = userData.user_gender
@@ -73,6 +73,7 @@ const ViewProfile = ({ setIsFlipped, liked, onClick, isLiked, showPopup, user, A
                 <img src={liked ? redliked : redlike} style={{position:"absolute", right:"5%", top:"1%"}} onClick={() => {
                     onClick();
                     console.log('profile liked')}}></img>
+                 <img src={theyliked ? redliked : redlike} style={{position:"absolute", left:"5%", top:"1%"}}></img>
             </Grid>
             <Grid size={6}>
                 <Grid size={12}>

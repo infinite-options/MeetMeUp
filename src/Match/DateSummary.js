@@ -5,15 +5,18 @@ import EditIcon from "../Assets/Images/EditIcon.png";
 import './DateSummary.css';
 import TopTitle from '../Assets/Components/TopTitle';
 import SendArrowIcon from '../Assets/Images/SendArrow.png';
+import axios from "axios";
 
 export default function DateSummary() {
     const location = useLocation();
     const { user, selectedDay, selectedTime, selectedDateIdea, AccountUser = [], formattedAddress } = location.state || {};
     const navigate = useNavigate();
+    const userId = localStorage.getItem('user_uid');
 
     const handleSelectionResults = () => {
         navigate('/selectionResults', { state: { user } })
     }
+
 
     const EditableItem = ({ label, value }) => (
         <Paper elevation={3} sx={{
@@ -41,12 +44,30 @@ export default function DateSummary() {
 
     const [sliderValue, setSliderValue] = useState(0);
     const handleSliderChange = (event, newValue) => {
-        setSliderValue(newValue);
+        if (newValue < 80) {
+         setSliderValue(newValue);
+        }
+        else {
+            setSliderValue(81)
+        }
     };
 
     const handleSend = () => {
         console.log("Date invitation sent!");
-        setSliderValue(0);
+        console.log(selectedDay, selectedTime)
+        const fd = new FormData();
+        fd.append('meet_user_id', userId)
+        fd.append('meet_date_user_id', user.user_uid)
+        fd.append('meet_day', selectedDay)
+        fd.append('meet_time',selectedTime)
+        fd.append('meet_date_type',selectedDateIdea)
+        fd.append('meet_location', formattedAddress)
+
+        axios.post('https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/meet', fd)
+            .then(res => {
+                console.log(res)
+            })
+
     };
 
     useEffect(() => {
@@ -105,6 +126,7 @@ export default function DateSummary() {
                     value={sliderValue}
                     onChange={handleSliderChange}
                     aria-labelledby="slide-to-send"
+                    disabled={sliderValue === 81}
                     sx={{
                         mt: { xs: '8px', md: '15px' },
                         ml: { xs: '27px', md: '30px' },

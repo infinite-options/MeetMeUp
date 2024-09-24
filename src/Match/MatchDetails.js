@@ -17,6 +17,7 @@ import ViewProfile from "./ViewProfile";
 import profileImg from "../Assets/Images/profileimg.png"
 import like from "../Assets/Images/like.png"
 import likedImg from "../Assets/Images/filledheart.png"
+import axios from 'axios';
 
 const MatchDetails = () => {
     const location = useLocation();
@@ -28,7 +29,7 @@ const MatchDetails = () => {
     const [isFlipped, setIsFlipped] = useState(false);
     const [liked, setLiked] = useState(like)
     const popupRef = useRef(null);
-    const isLeftHeartVisible = source === 'usersWhoSelectedYou';
+    const isLeftHeartVisible = source === 'usersWhoSelectedYou' || source === 'matchedResults';
 
     // NOTE: user is being saved as a different object make a new object
     // TEMP FOR NOW
@@ -82,12 +83,31 @@ const MatchDetails = () => {
 
 
     const handleNavigate = () => {
-        navigate(`/grid`);
+        navigate(`/selectionResults`);
     };
 
-    const AccountUser = [
-        { name: 'Hawk Tuah Tey', age: 40, gender: 'female', where: 'Mandurah', src: AccountUserImg, source:'Account user' }
-    ]
+
+    const [AccountUser, setAccountUser] = useState([])
+    const userId = localStorage.getItem("user_uid");
+
+    useEffect(()=> {
+        axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/${userId}`)
+          .then(res=> {
+            const userData = res.data.result[0]
+            setAccountUser([{
+                name: userData.user_first_name,
+                age: userData.user_age,
+                gender: userData.user_gender,
+                where: userData.suburb,
+                source: 'Account user'
+            }])
+          })
+          .catch(err=> {
+            console.log(err)
+          })
+      },[])
+
+
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (popupRef.current && !popupRef.current.contains(event.target)) {

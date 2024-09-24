@@ -13,6 +13,7 @@ import LogoutButton from "../Assets/Components/LogoutButton";
 import axios from "axios";
 import AccountContext from "../AccountSetup/AccountContext";
 import { useContext } from "react";
+import MatchPopUp from "./MatchPopUp";
 const Match = () => {
     const navigate = useNavigate(); 
     
@@ -21,9 +22,9 @@ const Match = () => {
     const [userSelections, setUserSelections] = useState([]);
     const {selections, setSelections} = useContext(AccountContext);
     const userId = localStorage.getItem('user_uid');
-    console.log("userData: ", userData);
+
     const handleNavigate = () => {
-        navigate(`/grid`);
+        navigate(`/selectionResults`);
         // save the final data
         let selectArray = [];
         for (let i = 0; i < userStates.length; i++) { //user should the index
@@ -39,6 +40,7 @@ const Match = () => {
         }
         console.log('final userSelections: ', userSelections)
     };
+    const [liked, setLiked] = useState([])
 
 
     // save the index of the final user states that is true
@@ -46,19 +48,29 @@ const Match = () => {
     console.log('userSelections: ', userSelections);
 
     useEffect(() => {
-        axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/matches/${userId}`)
-            .then(res => {
-                console.log(res.data.result)
-                setUserData(res.data.result);
-                const initialUserStates = res.data.result.map(() => ({
-                    isFlipped: false,
-                    liked: false
-                }));
-                setUserStates(initialUserStates);
+        axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/likes/${userId}`)
+            .then(res=> {
+                const peopleLiked=(res.data.people_whom_you_selected.map(user=>user.user_uid)).concat(res.data.matched_results.map(user=>user.user_uid))
+                const peopleWhoLiked=(res.data.people_who_selected_you.map(user=>user.user_uid)).concat(res.data.matched_results.map(user=>user.user_uid))
+                return [peopleLiked,peopleWhoLiked]
             })
-            .catch(error => {
-                console.log('Error fetching data', error);
-            });
+            .then(peopleLiked => {
+                axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/matches/${userId}`)
+                    .then(res => {
+                        console.log(res.data.result)
+                        setUserData(res.data.result);
+                        const initialUserStates = res.data.result.map((user) => ({
+                            isFlipped: false,
+                            liked: peopleLiked[0].includes(user.user_uid),
+                            theyliked: peopleLiked[1].includes(user.user_uid),
+                            showPopup: false
+                        }));
+                        setUserStates(initialUserStates);
+                    })
+                    .catch(error => {
+                        console.log('Error fetching data', error);
+                    });
+            })
     }, []);
 
     const handleFlip = (index) => {
@@ -73,6 +85,9 @@ const Match = () => {
     const handleLike = (index, user) => {
         const updatedStates = [...userStates];
         updatedStates[index].liked = !updatedStates[index].liked;
+        if(updatedStates[index].theyliked === true && updatedStates[index].liked===true) {
+            updatedStates[index].showPopup = true
+        }
         setUserStates(updatedStates);
         const fd = new FormData;
         fd.append('liker_user_id',userId)
@@ -105,6 +120,12 @@ const Match = () => {
                     key={user.user_id} // assuming user has a unique ID
                 >
                     <Box>
+                        {userStates[index].theyliked && userStates[index].liked &&
+                        <div className='popup'>
+                            <div className='popup-content'>
+                                <MatchPopUp user={user} userStates={userStates} setUserStates={setUserStates} index={index}/>
+                            </div>
+                         </div>}
                         <Box sx={{ backgroundColor: "#E4423F", paddingTop: "30px", paddingBottom: "50px", borderRadius: "10px", display: "flex", justifyContent: "center", position: "relative", maxWidth: "414px", margin: "0 auto", marginTop: "20px" }}>
                             <img src={profileImg} style={{ width: "100%", height: "90%" }} alt="Profile" />
 
@@ -118,6 +139,7 @@ const Match = () => {
                                 Tap to See Profile
                             </Typography>
                             <img src={userStates[index]?.liked ? likedImg : like} style={{ position: "absolute", right: "2%", top: "1%" }} onClick={() => handleLike(index, user)} alt="Like" />
+                            <img src={userStates[index]?.theyliked ? likedImg : like} style={{ position: "absolute", left: "2%", top: "1%" }} alt="Liked" />
                         </Box>
 
                     </Box>
@@ -125,6 +147,7 @@ const Match = () => {
                     <ViewProfile
                         setIsFlipped={() => handleFlip(index)}
                         liked={userStates[index]?.liked}
+                        theyliked={userStates[index]?.theyliked}
                         onClick={() => handleLike(index)}
                         userData={user}
                     />

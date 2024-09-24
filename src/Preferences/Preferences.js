@@ -5,9 +5,10 @@ import PreferenceSlider from "./PreferenceSlider";
 import NextBtn from "../Assets/Components/NextButton";
 import arrow from "../Assets/Images/arrow.png"
 import arrow2 from "../Assets/Images/arrow2.png"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LogoutButton from "../Assets/Components/LogoutButton";
 import TopTitle from "../Assets/Components/TopTitle";
+import axios from "axios";
 
 const MatchPreferences = ({prev}) => {
     const [open, setOpen] = useState(false);
@@ -17,6 +18,23 @@ const MatchPreferences = ({prev}) => {
     const handleOpen = () => {
         setOpen(true);
     }
+    const userId = localStorage.getItem('user_uid');
+    const userEmail = localStorage.getItem("user_email_id");
+    const [distance, setDistance] = useState(null);
+    const [age, setAge] = useState(null);
+    const [height, setHeight] = useState(null);
+
+    useEffect(()=> {
+        axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/${userId}`)
+            .then(res=>{
+                const userData= res.data.result[0]
+                console.log(userData)
+                setDistance(userData.user_prefer_distance)
+                setAge([userData.user_prefer_age_min,userData.user_prefer_age_max])
+                setHeight(userData.user_prefer_height_min)
+            })
+    },[])
+
  
     return (
         <Box sx={{ marginLeft: {xs: '5%',sm: '15%'}, marginRight: { xs: '5%',sm: '15%'}}}>
@@ -44,7 +62,8 @@ const MatchPreferences = ({prev}) => {
                     <hr style={{width:"100%"}} />
                 </Grid>
                 <Grid>
-                    <PreferenceSlider preference="Maximum distance" measurement="km." start={80} min={1} max={160} />
+                    {distance!=null &&
+                    <PreferenceSlider preference="Maximum distance" measurement="km." start={distance} min={1} max={160} />}
                 </Grid>
                 <hr style={{width:"100%"}} />
                 <Grid container sx={{marginTop:"20px", mb:"20px"}}>
@@ -59,20 +78,22 @@ const MatchPreferences = ({prev}) => {
                     </Grid>
                 </Grid>
                 <hr style={{width:"100%"}} />
-                <PreferenceSlider preference="Age range" start={[20,40]} min={18} max={80} />
+                {age!=null &&
+                <PreferenceSlider preference="Age range" start={age} min={18} max={80} />}
                 <hr style={{width:"100%"}} />
-                <PreferenceSlider preference="Height in centimetres" start={150} min={75} max={225} />
+                {height!=null &&
+                <PreferenceSlider preference="Height in centimetres" start={height} min={75} max={225} />}
                 <hr style={{width:"100%"}} />
                 <Grid container size={12} justifyContent="center" >
                     <Link to="/match">
                         <Button sx={{width:"130px",backgroundColor:"#E4423F", borderRadius:"25px", height:"45px", color:"white",marginTop:"40px", mb:"20px", textTransform:"none", fontFamily:"Segoe UI", fontSize:"18px", fontWeight:"regular"}}>Match Me</Button>
                     </Link>
                 </Grid>
-                <Grid container size={12} justifyContent="center" >
+                {/* <Grid container size={12} justifyContent="center" >
                     <Link to="/grid">
                         <Button sx={{width:"130px",backgroundColor:"#E4423F", borderRadius:"25px", height:"45px", color:"white", mb:"20px", textTransform:"none", fontFamily:"Segoe UI", fontSize:"18px", fontWeight:"regular"}}>Grid</Button>
                     </Link>
-                </Grid>
+                </Grid> */}
                 <Grid container size={12} justifyContent="center" >
                     <Link to="/selectionResults">
                         <Button sx={{width:"130px",backgroundColor:"#E4423F", borderRadius:"25px", height:"45px", color:"white", mb:"20px", textTransform:"none", fontFamily:"Segoe UI", fontSize:"18px", fontWeight:"regular"}}>My Matches</Button>

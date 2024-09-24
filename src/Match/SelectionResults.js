@@ -29,16 +29,16 @@ const matchedResults = [
 ];
 
 const usersWhoSelectedYou = [
-  { name: 'Hawk Tuah Tey', age: 40, where: 'Mandurah', gender: 'female', src: HawkImg, source: 'usersWhoSelectedYou' },
-  { name: 'Cherrywood', age: 23, gender: 'female', where: 'Mandurah', src: CherryImg, source: 'usersWhoSelectedYou' },
+  // { name: 'Hawk Tuah Tey', age: 40, where: 'Mandurah', gender: 'female', src: HawkImg, source: 'usersWhoSelectedYou' },
+  // { name: 'Cherrywood', age: 23, gender: 'female', where: 'Mandurah', src: CherryImg, source: 'usersWhoSelectedYou' },
 ];
 
 // append onto this list after selecting
 // { name: 'firstname + lastname, age: '}
 const usersWhoYouSelected = [
-  { name: 'Tiffany', age: 31, gender: 'female', where: 'Mandurah',  src: TiffanyImg, source: 'usersWhoYouSelected' },
-  { name: 'Bob Hawk', age: 43, gender: 'male', where: 'Mandurah', src: BobImg, source: 'usersWhoYouSelected' },
-  { name: 'Esmeralda Butterfly', age: 29, where: 'Mandurah', gender: 'female', src: ButterflyImg, source: 'usersWhoYouSelected' },
+  // { name: 'Tiffany', age: 31, gender: 'female', where: 'Mandurah',  src: TiffanyImg, source: 'usersWhoYouSelected' },
+  // { name: 'Bob Hawk', age: 43, gender: 'male', where: 'Mandurah', src: BobImg, source: 'usersWhoYouSelected' },
+  // { name: 'Esmeralda Butterfly', age: 29, where: 'Mandurah', gender: 'female', src: ButterflyImg, source: 'usersWhoYouSelected' },
   //{ name: 'cherrywood', age: 23, gender: 'female', src: CherryImg, source:'usersWhoYouSelected'},
 ];
 
@@ -53,6 +53,7 @@ const SelectionResults = () => {
   const [noId, setNoId] = useState(false); // if any of the info has been changed then PUT
   const [peopleYouSelected, setPeopleYouSelected] = useState([]);
   const [peopleSelectedYou, setPeopleSelectedYou] = useState([]);
+  const [match, setMatch] = useState([]);
 
     // /likes/<user_id>
   const userId = localStorage.getItem('user_uid');
@@ -61,10 +62,14 @@ useEffect(() => {
   const fetchUserData = async () => {
     // will be used to fetch the data
     try {
-        const res = axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/likes/${userId}`)
-        setUserData(res);
-        console.log('userData: ', userData);
-        console.log(res);
+        axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/likes/${userId}`)
+          .then(res=> {
+            console.log(res.data)
+            setPeopleYouSelected(res.data.people_whom_you_selected)
+            setPeopleSelectedYou(res.data.people_who_selected_you)
+            setMatch(res.data.matched_results)
+            console.log(peopleYouSelected)
+          })
     }   catch (error) {
       console.log("Error fetching data", error);
     };
@@ -88,6 +93,9 @@ useEffect(() => {
   const handleEditPreferences = () => {
     navigate('/matchPreferences');
   }
+  const handleBegin = (user) => {
+    console.log("user",user)
+}
 
   const handleBackClick = () => {
     window.history.back(); 
@@ -113,7 +121,7 @@ useEffect(() => {
                   variant="body2"
                   sx={{ color: 'text.primary', display: 'inline'}}
                 >
-                  {`${user.age} ${user.name}`}
+                  {user.user_age} {user.user_gender}
                 </Typography>
               </React.Fragment>
             }
@@ -150,20 +158,20 @@ useEffect(() => {
       <br></br>
       <Typography sx={{fontSize:"18px", color:"grey", fontWeight:"bold"}}>Matched Results</Typography>
       <List>
-      {matchedResults.map((user, index) => (
-        <UserBox user={user} type={'matchedResults'}></UserBox>
+      {match.map((user, index) => (
+        <UserBox user={user} type={'matchedResults'} onclick={()=>handleBegin(user)}></UserBox>
       ))}
       </List>
       <Typography sx={{fontSize:"18px", color:"grey", fontWeight:"bold"}}>People who selected you</Typography>
       <List>
-      {tempArray.map((user, index) => (
+      {peopleSelectedYou.map((user, index) => (
         <UserBox user={user} type={'usersWhoSelectedYou'}></UserBox>
       ))}
       </List>
 
       <Typography sx={{  fontSize:"18px", color:"grey", fontWeight:"bold"}}>People who you selected</Typography>
       <List>
-      {usersWhoYouSelected.map((user, index) => (
+      {peopleYouSelected.map((user, index) => (
         <UserBox user={user} type={'usersWhoYouSelected'}></UserBox>
       ))}
       </List>
