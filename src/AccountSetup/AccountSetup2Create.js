@@ -13,9 +13,8 @@ import Grid from "@mui/material/Grid2";
 import axios from "axios";
 export default function AccountSetup2Create() {
     localStorage.clear() // NOTE: do not put this outside of a function!!!
-
     const navigate = useNavigate(); 
-
+    const [existing, setExisting] = useState(false);
     const formRef = useRef(null);
     const [formData, setFormData] = useState({
         email: '',
@@ -23,6 +22,7 @@ export default function AccountSetup2Create() {
         password: '',
         passwordConfirm: '',
     });
+    console.log('existing: ', existing);
     const [submit, setSubmit] = useState(false);
     const [check, setCheck] = useState(true);
     const handleChange = (e) => {
@@ -51,6 +51,11 @@ export default function AccountSetup2Create() {
                 headers: { 'Content-Type': 'application/json'}
             });
             console.log("RESPONSE: ", response.data);
+            if (response.data.message == "User already exists") {
+                await setExisting(true);
+                window.alert('User Already Exists');
+                // navigate('/accountSetup2Create')
+            }
             localStorage.setItem('user_uid', response.data.result[0].user_uid);
             localStorage.setItem('user_email_id', formData['email']);
             localStorage.setItem('phone_number',formData["phone_number"]);
@@ -64,9 +69,8 @@ export default function AccountSetup2Create() {
             console.error("Error occurred:", error);
             console.error(error.response);
 
-            if (error.response && error.response.status === 409) {
-                window.alert('User Already Exists');
-            }
+            // if (error.response && error.response.status === 409) {
+            // }
         }
     };
     const handleNavigate = () => {
@@ -74,7 +78,7 @@ export default function AccountSetup2Create() {
     };
     return (
         <div className='App'>
-            <Box sx={{marginLeft:'15%', marginRight:'15%'}}>
+            <Box sx={{ marginLeft: {xs: '5%',sm: '15%'}, marginRight: { xs: '5%',sm: '15%'}}}>
                 <Progress percent="20%" prev="/accountSetup1Login" />
                 <Box component="form" ref={formRef}>
                     <div className='pc-header-text'>
@@ -93,7 +97,7 @@ export default function AccountSetup2Create() {
                     <div className='pc-sub-header-text'>
                         Already have an account? <span onClick={() => {
                             navigate('/accountSetup1Login');
-                        }}>Click Here</span>
+                        }}> <div className='red-text'>Click here</div></span>
                     </div>
                     <div className='pc-header-text'>
                         Security
@@ -108,8 +112,8 @@ export default function AccountSetup2Create() {
                         <TextField onChange={handleChange} name='password' label='Create Password' type='password' variant='outlined'/>
                         <TextField onChange={handleChange} name='passwordConfirm' label='Confirm Password' type='password' variant='outlined'/>
                     </Grid2>
-                    <HelperTextBox text='How do you need to make a secure password?'/>
-                    <NextButton onClick={handleNext} next={'/accountSetup3Create'} notallowed={false}></NextButton>
+                    <HelperTextBox text='How do you need to make a secure password?' title={'Our Security Standards'}/>
+                    <NextButton onClick={handleNext} next={existing ? '/accountSetup2Create' :'/accountSetup3Create'} notallowed={false}></NextButton>
                 </Box>
                 <Grid2 container justifyContent="center">
                 <FormGroup>

@@ -19,7 +19,7 @@ const MatchPreferences = ({prev}) => {
     }
  
     return (
-        <Box sx={{marginLeft:'15%', marginRight:'15%'}}>
+        <Box sx={{ marginLeft: {xs: '5%',sm: '15%'}, marginRight: { xs: '5%',sm: '15%'}}}>
             <TopTitle title={'Match Preferences'} page={'/accountSetup7Summary'}></TopTitle>
             {/* <Grid container alignItems="center" size={12}>
                 <Grid size={3}>

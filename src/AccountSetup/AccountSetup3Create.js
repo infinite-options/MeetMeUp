@@ -1,6 +1,7 @@
 import "../App.css";
 import HelperTextBox from "../Assets/Components/helperTextBox";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Box, Grid2, MenuItem, TextField } from "@mui/material";
 import { Autocomplete, GoogleMap, useJsApiLoader, MarkerF } from "@react-google-maps/api";
 import Progress from "../Assets/Components/Progress";
@@ -31,7 +32,7 @@ export default function AccountSetup3Create() {
   const [defaultBio, setDefaultBio] = useState("");
   const [isChanged, setIsChanged] = useState(false); // if any of the info has been changed then PUT
   const [noId, setNoId] = useState(false); // if any of the info has been changed then PUT
-
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     age: "",
@@ -264,7 +265,9 @@ export default function AccountSetup3Create() {
     return <div>Loading location</div>;
   }
   if (noId) {
-    return <div>No User Found</div>;
+    // window.alert('No User Found');
+    // return <div>No User Found</div>;
+    navigate('/accountSetup1Login')
   }
   return (
     <div className='App'>
@@ -363,7 +366,7 @@ export default function AccountSetup3Create() {
           <GoogleMap mapContainerStyle={mapContainerStyle} zoom={15} center={center} mapId='map_id'>
             <MarkerF position={center} />
           </GoogleMap>
-          <HelperTextBox text='Why do we need your location?' />
+          <HelperTextBox text='Why do we need your location?' title={'Why Location?'} subtitle={'By sharing your location on the Meet Me up app, you can discover matches within your preferred distance and tailor your date locations based on your preferences.'}/>
           <div className='pc-header-text'>Your Sexuality</div>
           <div className='pc-sub-header-text'>Select the fields that best describe your sexuality</div>
           <Grid2 container spacing={1} sx={{ marginTop: 3 }}>
@@ -382,7 +385,7 @@ export default function AccountSetup3Create() {
               </Grid2>
             ))}
           </Grid2>
-          <HelperTextBox text='Why do we need this information?' />
+          <HelperTextBox text='Why do we need this information?' title={'Your Open To'} subtitle={'Specifying your identity and expressing your openness creates connections with individuals who share similar perspectives and values.'}/>
           <div className='form-button-container'>
             <NextButton onClick={handleNext} next={"/accountSetup4Create"}></NextButton>
           </div>
