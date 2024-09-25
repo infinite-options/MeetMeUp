@@ -18,6 +18,7 @@ import TrialAccount from "./Intro/TrialAccount";
 import Location from "./Profile/Location";
 import Location2 from "./Profile/Location2";
 import AccountDetails from "./AccountDetails/AccountDetails";
+import AccountSetup1Login from './AccountSetup/AccountSetup1Login'; 
 
 const Stack = createNativeStackNavigator();
 // const Stack = createStackNavigator();
@@ -39,6 +40,7 @@ export default function App() {
         <Stack.Screen name='LandingPage3' component={LandingPage3} />
         <Stack.Screen name='LandingPage4' component={LandingPage4} />
         <Stack.Screen name='TrialAccount' component={TrialAccount} />
+        <Stack.Screen name='AccountSetup1Login' component={AccountSetup1Login}/>
         <Stack.Screen name='AccountSetup2Create' component={AccountSetup2Create} />
         <Stack.Screen name='AccountSetup3Create' component={AccountSetup3Create} />
         <Stack.Screen name='AccountSetup4Create' component={AccountSetup4Create} />

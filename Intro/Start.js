@@ -13,9 +13,6 @@ const StartPage = () => {
     <View style={styles.container}>
       <TouchableOpacity onPress={handleNavigateStart} style={styles.button}>
         <Text style={styles.mainText}>meet me up</Text>
-        <Text style={styles.subText}>
-          optimized for mobile screens. click to begin
-        </Text>
       </TouchableOpacity>
     </View>
   );

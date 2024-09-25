@@ -25,13 +25,14 @@ export async function fetchUserInfo(user_uid) {
     try {
 
       const response = await fetch(apiUrl + '/' + user_uid);
-    
+      console.log(apiUrl+'/'+user_uid)
       if (!response.ok) {
        // console.log('Response status:', response.status);
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       const data = await response.json();
       //console.log('data.result[0]',data.result[0]);
+      console.log("TESTINGGG",data.result[0])
       return data.result[0];
         
     } catch (error) {

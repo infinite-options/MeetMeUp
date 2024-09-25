@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native'; // For navigation
 import { useContext } from 'react';
 //import AccountContext from '../AccountSetup/AccountContext'; 
 import { fetchUserInfo } from "../Api.js";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Import images
 const profile = require('../src/Assets/Images/profile.png');
@@ -37,6 +38,7 @@ const AccountInfo = ({ img, info }) => (
 );
 
 const Profile = () => {
+  console.log("HIIII",AsyncStorage.getItem('user_uid'))
   const navigation = useNavigation();
   const { details } = '';//useContext(AccountContext);
   const [userInfo, setUserInfo] = useState(null);
@@ -80,13 +82,13 @@ const Profile = () => {
   // Extract specifics
  // const { name,age,gender, where, height, religion, star: sign, status, education, body: heart, job, drinking: drink, smoking: smoke, nationality: flag } = specifics;
 
-  
 
   useEffect(() => {
     let isMounted = true; 
     const fetchData = async () => {
     try {
-        const data = await fetchUserInfo('100-000001');
+       const uid = await AsyncStorage.getItem('user_uid');
+        const data = await fetchUserInfo(uid);
         if (isMounted) { 
             setUserInfo(data);
           }          
@@ -111,8 +113,18 @@ const Profile = () => {
 
   let interestArray = [];
   if (userInfo && userInfo.user_general_interests) {
-    interestArray = JSON.parse(userInfo.user_general_interests);
+    if (typeof userInfo.user_general_interests === 'string') {
+      try {
+        interestArray = JSON.parse(userInfo.user_general_interests);
+      } catch (error) {
+        console.error('Error parsing JSON:', error);
+      }
+    } else {
+      // If it's already an object, no need to parse
+      interestArray = userInfo.user_general_interests;
+    }
   }
+  
 
   if (loading) {
     return <Text>Loading...</Text>; 
