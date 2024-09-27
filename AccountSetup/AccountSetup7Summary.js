@@ -87,8 +87,8 @@ const Profile = () => {
     let isMounted = true; 
     const fetchData = async () => {
     try {
-       const uid = await AsyncStorage.getItem('user_uid');
-        const data = await fetchUserInfo(uid);
+       const uid = await AsyncStorage.getItem('user_uid'); //Changed this
+        const data = await fetchUserInfo(uid); //Added this
         if (isMounted) { 
             setUserInfo(data);
           }          
@@ -115,16 +115,19 @@ const Profile = () => {
   if (userInfo && userInfo.user_general_interests) {
     if (typeof userInfo.user_general_interests === 'string') {
       try {
-        interestArray = JSON.parse(userInfo.user_general_interests);
+        interestArray = userInfo.user_general_interests.split(',').map(item => item.trim());
       } catch (error) {
         console.error('Error parsing JSON:', error);
       }
     } else {
       // If it's already an object, no need to parse
-      interestArray = userInfo.user_general_interests;
+      interestArray = userInfo.user_general_interests.split(',').map(item => item.trim());
     }
   }
   
+  // if (userInfo && typeof userInfo.user_general_interests === 'string') {
+  //   interestArray = userInfo.user_general_interests.split(',').map(item => item.trim());
+  // }
 
   if (loading) {
     return <Text>Loading...</Text>; 
@@ -161,34 +164,34 @@ const Profile = () => {
       </TouchableOpacity>
 
       <Text style={styles.name}>{userInfo.user_first_name} {userInfo.user_last_name}</Text>
-      <Text style={styles.subtitle}>{userInfo.user_age} - {userInfo.user_gender} - {userInfo.where}</Text>
+      <Text style={styles.subtitle}>{userInfo.user_age} - {userInfo.user_gender} - {userInfo.user_suburb}</Text>
 
       <Text style={styles.subtitle}>Interests</Text>
       <View style={styles.interestsContainer}>
-        {interestArray.map((interest, index) => (
-          <View key={index} style={styles.interestItem}>
-            <Text>{interest}</Text>
+       {interestArray.map((interest, index) => (
+           <View key={index} style={styles.interestItem}>
+             <Text style={styles.interestText}>{interest}</Text>
           </View>
         ))}
-      </View>
+      </View> 
+
 
       <Text style={styles.subtitle}>A Little About Me ...</Text>
       <Text style={styles.description}>
-        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut. {'\n'}{'\n'}
-        Consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut.
+        <AccountInfo info = {userInfo.user_profile_bio}/>
       </Text>
 
       <AccountInfo img={heightImg} info={userInfo.user_height} />
       <AccountInfo img={genderImg} info={userInfo.user_gender} />
       <AccountInfo img={faith} info={userInfo.user_religion} />
       <AccountInfo img={star} info={userInfo.user_star_sign} />
-      <AccountInfo img={multi} info={userInfo.user_status} />
+      <AccountInfo img={multi} info={userInfo.user_open_to} />
       <AccountInfo img={hat} info={userInfo.user_education} />
-      <AccountInfo img={heartImg} info={userInfo.user_heart} />
+      <AccountInfo img={heartImg} info={userInfo.user_body_composition} />
       <AccountInfo img={jobImg} info={userInfo.user_job} />
       <AccountInfo img={drinkImg} info={userInfo.user_drinking} />
       <AccountInfo img={smokeImg} info={userInfo.user_smoking} />
-      <AccountInfo img={flagImg} info={userInfo.user_flag} />
+      <AccountInfo img={flagImg} info={userInfo.user_nationality} />
 
       <View style={styles.footer}>
         <TouchableOpacity onPress={handleUpdate} style={styles.updateButton}>
@@ -279,13 +282,25 @@ const styles = StyleSheet.create({
   },
   interestsContainer: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
+    flexWrap: 'wrap',  // Allows interests to wrap to the next line if they don't fit
+    justifyContent: 'flex-start',
+    marginVertical: 16,
   },
   interestItem: {
-    width: '33%',
-    alignItems: 'center',
-    padding: 8,
+    backgroundColor: '#fff',
+    borderRadius: 25,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    margin: 5,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,  // for Android shadow
+  },
+  interestText: {
+    fontSize: 16,
+    color: '#000',
   },
   description: {
     fontSize: 14,

@@ -1,238 +1,297 @@
-import React, { useState } from "react";
-import { View, Text, TouchableOpacity, Button, StyleSheet, Image, ScrollView } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import NextButton from "../src/Assets/Components/NextButton";
-import HelperTextBox from "../src/Assets/Components/helperTextBox";
-import Progress from "../src/Assets/Components/Progress";
-
-import backButton from "../src/Assets/Images/BackButton.png";
-import progressBar from "../src/Assets/Images/progressBar60.png";
+import React, { useState, useEffect, useContext } from 'react';
+import { View, Text, TouchableOpacity, ScrollView, StyleSheet, ActivityIndicator, TextInput } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import HelperTextBox from '../src/Assets/Components/helperTextBox';
+import Progress from '../src/Assets/Components/Progress';
+import NextButton from '../src/Assets/Components/NextButton';
+import DrawerContext from '../src/Assets/Components/DrawerContext';
+import DrawerOptions from '../src/Assets/Components/DrawerOptions';
 
 export default function AccountSetup4Create() {
-  console.log("In AccountSetup4Create.js");
+  const [option, setOption] = useState('');
+  const [noId, setNoId] = useState(false);
   const navigation = useNavigation();
-  const [option, setOption] = useState("");
+  const [pickerValue, setPickerValue] = useState({ single: '' });
+  const [userId, setUserId] = useState(null); // Change useRef to useState
+  const[userEmail,setUserEmail]=useState(null);
   const [formData, setFormData] = useState({
-    interestsEatingOut: false,
-    interestsBikeRides: false,
-    interestsDrinking: false,
-    interestsDancing: false,
-    interestsCooking: false,
-    interestsBaking: false,
-    interestsCrafting: false,
-    interestsPainting: false,
-    interestsSurfing: false,
-    interestsTraveling: false,
-    height: "",
-    education: "",
-    body: "",
-    star: "",
-    drinking: "",
-    smoking: "",
-    children: "",
-    position: "",
-    religion: "",
-    gender: "",
-    nationality: "",
+    user_height: '',
+    user_education: '',
+    user_body_composition: '',
+    user_star_sign: '',
+    user_drinking: '',
+    user_smoking: '',
+    user_kids: '',
+    user_job: '',
+    user_religion: '',
+    user_nationality: '',
+    user_general_interests: [],
+  });
+  
+  const [specifics, setSpecifics] = useState({
+    height: '',
+    education: '',
+    body: '',
+    star: '',
+    drinking: '',
+    smoking: '',
+    children: '',
+    position: '',
+    religion: '',
+    gender: '',
+    nationality: '',
+    general_interests: [],
   });
 
-  const [specifics, setSpecifics] = useState({
-    height: "",
-    education: "",
-    body: "",
-    star: "",
-    drinking: "",
-    smoking: "",
-    children: "",
-    position: "",
-    religion: "",
-    gender: "",
-    nationality: "",
-  });
+  const [loading, setLoading] = useState(true);
+  const [passData, setPassData] = useState(null);
+  const [complete, setComplete] = useState(false);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const userIdValue = await AsyncStorage.getItem("user_uid");
+        const userEmail = await AsyncStorage.getItem("user_email_id");
+        console.log("EMAILL",userEmail)
+        if (userIdValue) {
+          setUserEmail(userEmail);
+          setUserId(userIdValue); // Set the userId in state
+          const response = await axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/${userIdValue}`);
+          const fetchedData = response.data.result[0];
+          setLoading(false);
+          
+          handleSetSpecifics('height', fetchedData.user_height || '');
+          handleSetSpecifics('education', fetchedData.user_education || '');
+          handleSetSpecifics('body', fetchedData.user_body_composition || '');
+          handleSetSpecifics('star', fetchedData.user_star_sign || '');
+          handleSetSpecifics('drinking', fetchedData.user_drinking || '');
+          handleSetSpecifics('smoking', fetchedData.user_smoking || '');
+          handleSetSpecifics('children', fetchedData.user_kids || '');
+          handleSetSpecifics('position', fetchedData.user_job || '');
+          handleSetSpecifics('religion', fetchedData.user_religion || '');
+          handleSetSpecifics('nationality', fetchedData.user_nationality || '');
+
+          const interestsArray = fetchedData.user_general_interests ? fetchedData.user_general_interests.split(',') : [];
+          setFormData((prevFormData) => ({
+            ...prevFormData,
+            user_general_interests: interestsArray,
+          }));
+        }
+      } catch (error) {
+        console.log('Error fetching data', error);
+      }
+    };
+    fetchUserData();
+  }, []);
 
   const handleSetSpecifics = (name, value) => {
-    setSpecifics((prev) => ({
-      ...prev,
+    setSpecifics((prevSpecifics) => ({
+      ...prevSpecifics,
       [name]: value,
     }));
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [specificsName[name]]: value,
     }));
   };
 
-  const handleButtonBoolean = (name) => {
-    setFormData((prev) => ({
-      ...prev,
-      [name]: !prev[name],
-    }));
+  const handleNext = async () => {
+    const specificsForm = populateFormData();
+    try {
+      const response = await axios.put(
+        'https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo',
+        specificsForm
+      );
+      if (response.status === 200) {
+        console.log(response.data);
+        navigation.navigate('AccountSetup7Summary');
+      }
+    } catch (err) {
+      console.log('Error:', err);
+    }
   };
 
-  const handleNext = () => {
-    navigation.navigate("Location");
+  const populateFormData = () => {
+    const specificsForm = new FormData();
+    specificsForm.append('user_uid', userId); // Ensure userId is appended here
+    specificsForm.append('user_email_id',userEmail);
+    Object.entries(formData).forEach(([key, value]) => {
+      specificsForm.append(key, value);
+    });
+    return specificsForm;
   };
+
+  const generalInterests = [
+    'Eating Out',
+    'Bike Rides',
+    'Drinking',
+    'Dancing',
+    'Cooking',
+    'Baking',
+    'Crafting',
+    'Painting',
+    'Surfing',
+    'Traveling',
+  ];
+
+  const specificsName = {
+    height: 'user_height',
+    education: 'user_education',
+    body: 'user_body_composition',
+    star: 'user_star_sign',
+    drinking: 'user_drinking',
+    smoking: 'user_smoking',
+    children: 'user_kids',
+    position: 'user_job',
+    religion: 'user_religion',
+    nationality: 'user_nationality',
+  };
+
+  if (loading) {
+    return <ActivityIndicator size="large" color="#0000ff" />;
+  }
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Progress percent='60%' prev='AccountSetup3Create' />
-      <Text style={styles.headerText}>Your General Interests</Text>
-      <Text style={styles.subHeaderText}>These interests help match you to better people on meet me up. Select or add as many interests as you want.</Text>
+    <ScrollView style={styles.container}>
+      <Progress percent="60%" />
 
-      <View style={styles.optionContainer}>
-        {["Eating Out", "Bike Rides", "Drinking", "Dancing", "Cooking", "Baking", "Crafting", "Painting", "Surfing", "Traveling"].map((interest) => (
-          <TouchableOpacity
-            key={interest}
-            style={[styles.option, { backgroundColor: formData[`interests${interest.replace(" ", "")}`] ? "#E4423F" : "#ffffff" }]}
-            onPress={() => handleButtonBoolean(`interests${interest.replace(" ", "")}`)}
-          >
-            <Text style={styles.optionText}>{interest}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+      {/* <Text style={styles.headerText}>Your General Interests</Text>
+      <Text style={styles.subHeaderText}>
+        These interests help match you to better people on meet me up. Select or add as many interests as you want.
+      </Text>
+
+      {generalInterests.map((interest, index) => (
+        <TouchableOpacity key={index} style={styles.interestButton}>
+          <Text>{interest}</Text>
+        </TouchableOpacity>
+      ))} */}
+
       <Text style={styles.headerText}>Some Specifics</Text>
-      <Text style={styles.subHeaderText}>These help give a better insight into who you are and will allow matches to better understand you as a person.</Text>
-      <View style={styles.specificContainer}>
-        {["height", "education", "body", "star", "drinking", "smoking", "children", "position", "religion", "gender", "nationality"].map((item) => (
-          <TouchableOpacity
-            key={item}
-            style={styles.specificOption}
-            onPress={() => setOption(item)}
-            activeOpacity={0.8} // Gives a slight opacity change on press
-          >
-            <Text style={styles.optionLabel}>{item.charAt(0).toUpperCase() + item.slice(1)}</Text>
-            <Text style={styles.optionValue}>{specifics[item] || "Not Entered"}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-      <HelperTextBox text="That's a lot of information..." />
+      <Text style={styles.subHeaderText}>
+        These help give a better insight into who you are and will allow matches to better understand you as a person.
+      </Text>
 
-      <View style={styles.buttonContainer}>
-        <NextButton next='Location' onPress={handleNext} />
-      </View>
+      <TouchableOpacity
+        style={styles.specificButton}
+        onPress={() => setOption('height')}
+      >
+        <Text>Height: {specifics.height || 'Not Entered'}</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.specificButton}
+        onPress={() => setOption('education')}
+      >
+        <Text>Education: {specifics.education || 'Not Entered'}</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.specificButton}
+        onPress={() => setOption('body')}
+      >
+        <Text>Body Composition: {specifics.body || 'Not Entered'}</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.specificButton}
+        onPress={() => setOption('star')}
+      >
+        <Text>Star Sign: {specifics.star || 'Not Entered'}</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.specificButton}
+        onPress={() => setOption('drinking')}
+      >
+        <Text>Drinking: {specifics.drinking || 'Not Entered'}</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.specificButton}
+        onPress={() => setOption('smoking')}
+      >
+        <Text>Smoking: {specifics.smoking || 'Not Entered'}</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.specificButton}
+        onPress={() => setOption('children')}
+      >
+        <Text>Kids: {specifics.children || 'Not Entered'}</Text>
+      </TouchableOpacity>
+      {/*JOB*/}
+      <TouchableOpacity
+        style={styles.specificButton}
+        onPress={() => setOption('position')}
+      >
+        <Text>Job: {specifics.position || 'Not Entered'}</Text>
+      </TouchableOpacity>
+      {/*Religion*/}
+      <TouchableOpacity
+        style={styles.specificButton}
+        onPress={() => setOption('religion')}
+      >
+        <Text>Religion: {specifics.religion || 'Not Entered'}</Text>
+      </TouchableOpacity>
+      {/*Nationality*/}
+      <TouchableOpacity
+        style={styles.specificButton}
+        onPress={() => setOption('nationality')}
+      >
+        <Text>Nationality: {specifics.nationality || 'Not Entered'}</Text>
+      </TouchableOpacity>
+      <HelperTextBox
+        text="That's a lot of information..."
+        title="Why so much information?"
+        subtitle="Sharing more about yourself enhances compatibility and increases the likelihood of finding a match."
+      />
+
+      <NextButton onPress={handleNext} />
+      <DrawerContext.Provider
+        value={{
+          specifics,
+          option,
+          setOption,
+          handleSetSpecifics,
+          passData,
+          setPassData,
+          complete,
+          setComplete,
+          pickerValue,
+          setPickerValue,
+        }}
+      >
+        <DrawerOptions />
+      </DrawerContext.Provider>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
-    backgroundColor: "#ffffff",
+    flex: 1,
     padding: 20,
-    marginTop: 30,
-  },
-  progressBar: {
-    width: "100%",
-    height: 20,
-    marginBottom: 20,
   },
   headerText: {
-    fontSize: 16,
-    //    fontWeight: 'bold',
-    marginVertical: 10,
-    fontFamily: "sans-serif",
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
   },
   subHeaderText: {
     fontSize: 16,
-    color: "#888",
     marginBottom: 20,
-    fontFamily: "sans-serif",
   },
-  button: {
+  specificButton: {
+    backgroundColor: '#ffffff',
     padding: 15,
-    borderRadius: 41,
-    marginVertical: 5,
-    marginRight: 10,
-    alignItems: "center",
-  },
-  buttonText: {
-    color: "#000000",
-    fontSize: 16,
-  },
-
-  optionValue: {
-    fontSize: 16,
-    color: "#888",
-  },
-  helperText: {
-    fontSize: 14,
-    color: "#888",
-    marginVertical: 20,
-  },
-  nextButton: {
-    marginTop: 20,
-    padding: 15,
-    backgroundColor: "#E4423F",
-    borderRadius: 41,
-    alignItems: "center",
-  },
-  nextButtonText: {
-    color: "#ffffff",
-    fontSize: 16,
-    fontFamily: "sans-serif",
-  },
-
-  optionContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "left",
-  },
-  option: {
-    backgroundColor: "#ffffff",
-    borderRadius: 41,
-    marginVertical: 10,
-    paddingHorizontal: 5,
-    paddingVertical: 10,
-    width: "30%",
-    justifyContent: "center",
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: "#ccc",
-    marginRight: 10,
-  },
-  optionText: {
-    color: "#000000",
-    fontSize: 12,
-    fontFamily: "sans-serif",
-  },
-
-  specificContainer: {
-    flexDirection: "column",
-    padding: 10,
-  },
-  specificOption: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: 15,
-    borderRadius: 25,
-    backgroundColor: "#f8f8f8",
-    borderWidth: 1,
-    borderColor: "#ddd",
+    borderRadius: 8,
     marginBottom: 10,
-    elevation: 2,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
+    borderColor: '#ccc',
+    borderWidth: 1,
   },
-  optionLabel: {
-    fontSize: 12,
-    color: "#333",
-    flex: 1,
-  },
-  optionValue: {
-    fontSize: 12,
-    color: "#666",
-    flex: 2,
-    textAlign: "right",
-  },
-
-  row: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    height: 60,
-  },
-  buttonContainer: {
-    marginTop: 20,
+  interestButton: {
+    backgroundColor: '#f0f0f0',
+    padding: 10,
+    borderRadius: 8,
+    marginBottom: 10,
   },
 });

@@ -1,293 +1,259 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Alert } from "react-native";
-//import MapView, { Marker } from 'react-native-maps';
-import { useNavigation } from "@react-navigation/native";
-import Progress from "../src/Assets/Components/Progress";
-import NextButton from "../src/Assets/Components/NextButton";
-import HelperTextBox from "../src/Assets/Components/helperTextBox";
-import { Dropdown } from "react-native-element-dropdown";
-import { postUserData } from "../Api.js";
+import React, { useState, useEffect, useRef } from "react";
+import { View, Text, TextInput, StyleSheet, ScrollView, TouchableOpacity, Alert, Pressable } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from "axios";
+import MapView, { Marker } from 'react-native-maps';
 
-const initialRegion = {
-  latitude: -32.015001263602,
-  longitude: 115.83650856893345,
-  latitudeDelta: 0.01,
-  longitudeDelta: 0.01,
-};
+// Replace this with your Google Maps API key
+const GOOGLE_API_KEY = 'YOUR_GOOGLE_API_KEY';
 
-export default function AccountSetup3Create() {
-  console.log("In AccountSetup3Create.js");
-  const navigation = useNavigation();
-
-  const genders = [
-    { label: "Male", value: "Male" },
-    { label: "Female", value: "Female" },
-    { label: "Nonbinary", value: "Nonbinary" },
-  ];
-
-  const sexualityOptions = [
-    { key: "sexualityStraight", label: "Straight" },
-    { key: "sexualityBisexual", label: "Bi-Sexual" },
-    { key: "sexualityTransgender", label: "Trans-gender" },
-    { key: "sexualityLGBTQ", label: "LGBTQ" },
-    { key: "sexualityHomosexual", label: "Homosexual" },
-  ];
-
-  const openTo = [
-    { key: "openToStraight", label: "Straight" },
-    { key: "openToBisexual", label: "Bi-Sexual" },
-    { key: "openToTransgender", label: "Trans-gender" },
-    { key: "openToLGBTQ", label: "LGBTQ" },
-    { key: "openToHomosexual", label: "Homosexual" },
-  ];
-
-  const [value, setValue] = useState();
-  const [isFocus, setIsFocus] = useState(false);
-
+export default function AccountSetup3Create({ navigation }) {
+  const [userData, setUserData] = useState({});
+  const [savedAddress, setSavedAddress] = useState("");
+  const [center, setCenter] = useState({ lat: -32.015001263602, lng: 115.83650856893345 });
   const [formData, setFormData] = useState({
-    firstname: "",
-    lastname: "",
+    name: "",
     age: "",
     gender: "",
     profileBio: "",
-    location: "",
-    sexualityStraight: false,
-    sexualityBisexual: false,
-    sexualityTransgender: false,
-    sexualityLGBTQ: false,
-    sexualityHomosexual: false,
-    openToStraight: false,
-    openToBisexual: false,
-    openToTransgender: false,
-    openToLGBTQ: false,
-    openToHomosexual: false,
+    suburb: "",
+    country: "",
+    sexuality: "",
+    openTo: [],
   });
+  const [isChanged, setIsChanged] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  const handleChange = (key, value) => {
+  const userId = useRef(null); // UseRef to store userId instead of localStorage
+  const genders = ["Male", "Female", "Nonbinary"];
+  const sexuality = ["Straight", "Bisexual", "Transgender", "LGBTQ", "Homosexual"];
+  const openTo = ["Straight", "Bisexual", "Transgender", "LGBTQ", "Homosexual"];
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const userIdValue = await AsyncStorage.getItem("user_uid");
+        userId.current = userIdValue;
+
+        if (userIdValue) {
+          const response = await axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/${userIdValue}`);
+          const fetchedData = response.data.result[0];
+          setUserData(fetchedData);
+          setFormData({
+            ...formData,
+            name: `${fetchedData.user_first_name} ${fetchedData.user_last_name}` || "",
+            age: fetchedData.user_age || "",
+            gender: fetchedData.user_gender || "",
+            profileBio: fetchedData.user_profile_bio || "",
+            suburb: fetchedData.user_suburb || "",
+            sexuality: fetchedData.user_sexuality || "",
+            openTo: fetchedData.user_open_to ? fetchedData.user_open_to.split(",") : [],
+          });
+          if (fetchedData.user_latitude && fetchedData.user_longitude) {
+            setCenter({
+              lat: Number(fetchedData.user_latitude),
+              lng: Number(fetchedData.user_longitude),
+            });
+            await handleAddress(fetchedData.user_latitude, fetchedData.user_longitude);
+          }
+        } else {
+          setLoading(false);
+        }
+      } catch (error) {
+        console.log("Error fetching data", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  const handleAddress = async (lat, lng) => {
+    try {
+      const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${GOOGLE_API_KEY}`);
+      if (response.ok) {
+        const result = await response.json();
+        if (result.results.length > 0) {
+          const address = result.results[0].formatted_address;
+          setSavedAddress(address);
+        }
+      }
+    } catch (error) {
+      console.log("Error fetching address:", error);
+    }
+  };
+
+  const handleChange = (name, value) => {
+    setIsChanged(true);
     setFormData({
       ...formData,
-      [key]: value,
+      [name]: value,
     });
-    console.log("In Handle Change: ", formData);
   };
 
-  const handleButton = (key) => {
-    setFormData({
-      ...formData,
-      [key]: !formData[key],
-    });
-    console.log("In Handle Change: ", formData);
+  const handleButton = (id, type) => {
+    setIsChanged(true);
+    if (formData[type].includes(id)) {
+      const newArray = formData[type].filter((item) => item !== id);
+      setFormData({ ...formData, [type]: newArray });
+    } else {
+      setFormData({ ...formData, [type]: [...formData[type], id] });
+    }
   };
 
-  const handleUpdate = async (entries) => {
-    // console.log("AccountSetup3Create.js entries: ", entries);
+  const handleNext = async () => {
+    const url = "https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo";
+    const fd = new FormData();
+    const nameArray = formData.name.split(" ");
+    const firstName = nameArray[0];
+    const lastName = nameArray.length > 1 ? nameArray[nameArray.length - 1] : "";
 
-    const formData = new FormData();
+    fd.append("user_uid", userId.current);
+    fd.append("user_email_id", await AsyncStorage.getItem("user_email"));
+    fd.append("user_first_name", firstName);
+    fd.append("user_last_name", lastName);
+    fd.append("user_age", formData.age);
+    fd.append("user_gender", formData.gender);
+    fd.append("user_suburb", formData.suburb);
+    fd.append("user_profile_bio", formData.profileBio);
+    fd.append("user_country", formData.country);
+    fd.append("user_latitude", center.lat);
+    fd.append("user_longitude", center.lng);
+    fd.append("user_sexuality", formData.sexuality);
+    fd.append("user_open_to", formData.openTo.join(","));
 
-    formData.append("user_uid", "100-000001");
-    formData.append("user_email_id", "bobhawk@gmail.com");
-    formData.append("user_first_name", entries.firstname);
-    formData.append("user_last_name", entries.lastname);
-    formData.append("user_age", entries.age);
-    formData.append("user_gender", entries.gender);
-    formData.append("user_sexuality", entries.sexualityStraight);
-    formData.append("user_open_to", entries.openToStraight);
-
-    console.log("AccountSetup3Create.js formData: ", formData);
-    await postUserData(formData);
-  };
-
-  const handleNext = () => {
-    handleUpdate(formData);
-    navigation.navigate("AccountSetup4Create"); // Navigate to the next screen
+    if (isChanged) {
+      try {
+        const response = await fetch(url, {
+          method: "PUT",
+          body: fd,
+        });
+        if (response.ok) {
+          const result = await response.json();
+          console.log("Response from server:", result);
+        }
+      } catch (error) {
+        console.log("Error updating user data:", error);
+      }
+    }
+    navigation.navigate("AccountSetup4Create");
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.scrollContainer}>
-      <View style={styles.container}>
-        <Progress percent='40%' prev='AccountSetup2Create' />
-        <Text style={styles.header}>About You</Text>
-        <Text style={styles.subHeader}>These details are about you and will be public to potential matches on meet me up.</Text>
+    <ScrollView contentContainerStyle={styles.container}>
+      <Text style={styles.headerText}>About You</Text>
+      <Text style={styles.subHeaderText}>These details are about you and will be public to potential matches on meet me up.</Text>
 
-        {/* Name */}
-        <TextInput style={styles.input} placeholder='First Name' value={formData.firstname} onChangeText={(value) => handleChange("firstname", value)} />
-        <TextInput style={styles.input} placeholder='Last Name' value={formData.lastname} onChangeText={(value) => handleChange("lastname", value)} />
-
-        <View style={styles.row}>
-          <TextInput style={[styles.input, styles.halfInput]} placeholder='Age' keyboardType='numeric' value={formData.age} onChangeText={(value) => handleChange("age", value)} />
-          <Dropdown
-            style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
-            data={genders}
-            maxHeight={150}
-            labelField='label'
-            valueField='value'
-            placeholder={!isFocus ? "Gender" : "..."}
-            value={value}
-            onFocus={() => setIsFocus(true)}
-            onBlur={() => setIsFocus(false)}
-            onChange={(item) => {
-              setValue(item.value);
-              handleChange("gender", item.value);
-              setIsFocus(false);
-            }}
-          />
-        </View>
-
+      <TextInput
+        style={styles.input}
+        placeholder="Full Name"
+        value={formData.name}
+        onChangeText={(text) => handleChange("name", text)}
+      />
+      <View style={styles.row}>
         <TextInput
-          style={styles.profileInput}
-          placeholder='Profile Bio'
-          multiline
-          numberOfLines={4}
-          value={formData.profileBio}
-          onChangeText={(value) => handleChange("profileBio", value)}
+          style={[styles.input, { width: "48%" }]}
+          label= "Age"
+          placeholder="Age"
+          value={formData.age}
+          keyboardType="numeric"
+          onChangeText={(text) => handleChange("age", text)}
         />
-
-        <Text style={styles.header}>Location</Text>
-        <Text style={styles.subHeader}>Your location helps us pinpoint where you are to provide better matches to you.</Text>
-        <TextInput style={styles.input} placeholder='Location' value={formData.location} onChangeText={(value) => handleChange("location", value)} />
-        {/*               
-                <MapView
-                    style={styles.map}
-                    initialRegion={initialRegion}
-                >
-                    <Marker coordinate={initialRegion} />
-                </MapView> 
-
- */}
-        <HelperTextBox text='Why do we need your location?' />
-
-        <View style={styles.optionContainer}>
-          <Text style={styles.header}>Your Sexuality</Text>
-          <Text style={styles.subHeader}>Select the fields that best describe your sexuality</Text>
-          {sexualityOptions.map((option) => (
-            <TouchableOpacity
-              key={option.key}
-              onPress={() => handleButton(option.key)}
-              style={[
-                styles.option,
-                {
-                  backgroundColor: formData[option.key] ? "red" : "white",
-                },
-              ]}
-            >
-              <Text style={styles.optionText}>{option.label}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-
-        <View style={styles.optionContainer}>
-          <Text style={styles.header}>Open To...</Text>
-          <Text style={styles.subHeader}>Select the fields that best describe what you are open to in a partner</Text>
-          {openTo.map((option) => (
-            <TouchableOpacity
-              key={option.key}
-              onPress={() => handleButton(option.key)}
-              style={[
-                styles.option,
-                {
-                  backgroundColor: formData[option.key] ? "red" : "white",
-                },
-              ]}
-            >
-              <Text style={styles.optionText}>{option.label}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-        <HelperTextBox text='Why do we need this information?' />
+        <TextInput
+          style={[styles.input, { width: "48%" }]}
+          placeholder="Gender"
+          value={formData.gender}
+          onChangeText={(text) => handleChange("gender", text)}
+        />
       </View>
-      <View style={styles.buttonContainer}>
-        <NextButton next='AccountSetup4Create' onPress={handleNext} />
-      </View>
+      <Text style={styles.label}>Suburb</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Suburb"
+        value={formData.suburb}
+        onChangeText={(text) => handleChange("suburb", text)}
+      />
+      <Text style={styles.label}>Profile Bio</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Profile Bio"
+        value={formData.profileBio}
+        multiline={true}
+        numberOfLines={4}
+        onChangeText={(text) => handleChange("profileBio", text)}
+      />
+
+      <Text style={styles.headerText}>Location</Text>
+      <Text style={styles.subHeaderText}>Your location helps us pin point where you are to provide better matches to you.</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Location"
+        value={savedAddress}
+        editable={false}
+      />
+      <MapView
+        style={styles.map}
+        initialRegion={{
+          latitude: center.lat,
+          longitude: center.lng,
+          latitudeDelta: 0.02,
+          longitudeDelta: 0.02,
+        }}
+      >
+        <Marker coordinate={{ latitude: center.lat, longitude: center.lng }} />
+      </MapView>
+
+    
+
+      <Text style={styles.headerText}>Your Sexuality</Text>
+
+      <Text style={styles.headerText}>Open To...</Text>
+
+  
+
+      <Pressable onPress={handleNext}><Text>Next</Text></Pressable>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  scrollContainer: {
-    flexGrow: 1,
-    backgroundColor: "#fff",
-    marginTop: 15,
-  },
   container: {
+    flexGrow: 1,
     padding: 20,
-    marginTop: 20,
+    backgroundColor: "#fff",
   },
-  header: {
+  headerText: {
     fontSize: 16,
-    //    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 10,
-    fontFamily: "sans-serif",
   },
-  subHeader: {
+  subHeaderText: {
     fontSize: 14,
+    color: "#888",
     marginBottom: 20,
-    fontFamily: "sans-serif",
   },
   input: {
+    height: 50,
+    borderColor: "#ddd",
     borderWidth: 1,
-    borderColor: "#ccc",
-    padding: 10,
-    borderRadius: 8,
-    marginBottom: 20,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    marginBottom: 15,
   },
-  profileInput: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    padding: 10,
-    borderRadius: 8,
-    marginBottom: 10,
-    height: 100,
-  },
+  label: {
+    fontSize: 10,
+    fontWeight: "bold",
+    color: "#E4423F",
+    marginBottom: 5,
+},
   row: {
     flexDirection: "row",
     justifyContent: "space-between",
-    height: 60,
-  },
-  halfInput: {
-    width: "48%",
+    marginBottom: 15,
   },
   map: {
     width: "100%",
-    height: 200,
+    height: 300,
     marginBottom: 20,
   },
-  dropdown: {
-    height: 40,
-    width: "48%",
-    borderColor: "grey",
-    borderWidth: 0.5,
-    borderRadius: 8,
-    paddingHorizontal: 8,
-    fontSize: 12,
-    fontFamily: "sans-serif",
-  },
-  optionContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "left",
-  },
-  option: {
-    backgroundColor: "#ffffff",
-    borderRadius: 41,
-    marginVertical: 10,
-    paddingHorizontal: 5,
-    paddingVertical: 10,
-    width: "30%",
-    justifyContent: "center",
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: "#ccc",
-    marginRight: 10,
-  },
-  optionText: {
-    color: "#000000",
-    fontSize: 12,
-    fontFamily: "sans-serif",
-  },
-  buttonContainer: {
-    padding: 10,
-    marginTop: 20,
-    borderTopWidth: 1,
-    borderTopColor: "#ddd",
-  },
 });
+

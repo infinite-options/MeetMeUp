@@ -18,7 +18,7 @@ import TrialAccount from "./Intro/TrialAccount";
 import Location from "./Profile/Location";
 import Location2 from "./Profile/Location2";
 import AccountDetails from "./AccountDetails/AccountDetails";
-import AccountSetup1Login from './AccountSetup/AccountSetup1Login'; 
+import AccountSetup1Login from './AccountSetup/AccountSetup1Login';  // Imported the newly created Login
 
 const Stack = createNativeStackNavigator();
 // const Stack = createStackNavigator();
