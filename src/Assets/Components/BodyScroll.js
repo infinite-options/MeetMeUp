@@ -109,11 +109,9 @@ function BodyScroll({ options }) {
            value={String(option)}
            style={{
              backgroundColor: hoveredOption === option ? 'lightgray' : 'transparent',
-             borderRadius: '4px',
              padding: '10px',
              cursor: 'pointer',
-             borderTop: pickerValue.single === option ? '1px solid gray' : 'none',
-             borderBottom: pickerValue.single === option ? '1px solid gray' : 'none',
+             boxShadow: '0px -1px 0px 0px gray, 0px 1px 0px 0px gray',
            }}
            onClick={() => handlePickerChange({ single: option })} onMouseEnter={() => handleMouseEnter(option)} // Handle mouse enter
             onMouseLeave={handleMouseLeave}>

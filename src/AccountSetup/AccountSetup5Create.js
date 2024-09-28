@@ -36,6 +36,8 @@ const videoConstraints = {
 };
 
 export default function AccountSetup5Create() {
+    const userId = localStorage.getItem('user_uid');
+    const userEmail = localStorage.getItem('user_email_id')
     const [formData, setFormData] = useState({
         video: '',
         image: '',
@@ -43,7 +45,6 @@ export default function AccountSetup5Create() {
     });
     const [loading, setLoading] = useState(true); 
     const [noId, setNoId] = useState(false); // if any of the info has been changed then PUT
-    const userId = localStorage.getItem('user_uid');
     const [userData, setUserData] = useState({});
     const [obtain, setObtain] = useState('false');
     const [prevVideo, setPrevVideo] = useState('');
@@ -87,8 +88,7 @@ export default function AccountSetup5Create() {
             const imageArray = JSON.parse(fetchedData.user_photo_url)
             const joinedImages = imageArray.join(','); 
 
-
-            console.log('iamges: ', imageArray);
+            console.log('images: ', imageArray);
             await setFormData({...formData, image: joinedImages});
             await setVideoSrc(fetchedData.user_video_url.replaceAll("\"", ""));
             // await setFormData({...formData, video: fetchedData.user_video_url.replaceAll("\"", "")});
@@ -258,8 +258,6 @@ export default function AccountSetup5Create() {
             }
             if (!formData['image']) {
                 fd.append('user_photo_url', '');
-
-
             }
         }
 
@@ -290,6 +288,13 @@ export default function AccountSetup5Create() {
             // return <div>No User Found</div>;
         }
     };
+
+    // useEffect(()=> {
+    //     axios.put('https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/100-000113', formData)
+    //         .then(res => {
+    //             console.log(res)
+    //         })
+    // },[formData])
 
     return (
         <Box sx={{ marginLeft: {xs: '5%',sm: '15%'}, marginRight: { xs: '5%',sm: '15%'}}}>
@@ -443,7 +448,7 @@ export default function AccountSetup5Create() {
                                     display: 'none',
                                 },
                             }}
-                        >
+                        >   
                             <ImageList
                                 sx={{ display: 'flex', flexWrap: 'nowrap' }} cols={5}>
                                 {formData['image'].split(',').slice(0, formData['image'].split(',').length - 1).map((img) => (

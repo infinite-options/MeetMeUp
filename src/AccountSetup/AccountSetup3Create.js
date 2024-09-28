@@ -47,7 +47,7 @@ export default function AccountSetup3Create() {
     setSearchResult(autocomplete);
   }
 
-  console.log("openTo formData: ", formData.openTo);
+  // console.log("openTo formData: ", formData.openTo);   // need to figure out where data is coming from
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -56,6 +56,7 @@ export default function AccountSetup3Create() {
         console.log("openTo: ", fetchedData.user_open_to);
         console.log("fetchedData: ", fetchedData);
         const openToArray = fetchedData.user_open_to ? fetchedData.user_open_to.split(",") : [];
+        console.log("openToArray", openToArray)
         console.log(fetchedData.user_latitude);
         console.log(fetchedData.user_longitude);
         if (fetchedData.user_latitude && fetchedData.user_longitude) {
@@ -128,7 +129,9 @@ export default function AccountSetup3Create() {
 
   const sexuality = ["Straight", "Bisexual", "Transgender", "LGBTQ", "Homosexual"];
 
-  const openTo = ["Straight", "Bisexual", "Transgender", "LGBTQ", "Homosexual"];
+  const openTo = ["Straight", "Bi-sexual", "Transgender", "LGBTQ", "Homosexual","Victor"];
+
+  console.log("openTo", openTo)
 
   function onPlaceChanged() {
     if (searchResult !== "") {
@@ -227,7 +230,21 @@ export default function AccountSetup3Create() {
     fd.append("user_latitude", center["lat"]);
     fd.append("user_longitude", center["lng"]);
     fd.append("user_sexuality", formData["sexuality"]);
-    fd.append("user_open_to", formData["openTo"]);
+    
+
+
+    // Object.keys(receiverPropertyMapping).forEach((receiver) => {
+    //   announcement_receivers.push(receiver);
+    // });
+    
+    // const openTo=formData["openTo"].map(item => `"${item}"`);
+    // let openToObject = {}
+    // openToObject.keys(formData["openTo"]).forEach((item) => {
+    //   console.log("item",item)
+    // });
+    // console.log("openTo", openToObject)
+    fd.append("user_open_to", JSON.stringify(formData["openTo"]))
+    console.log("append user_open_to", JSON.stringify(formData["openTo"]))
 
     if (isChanged) {
       try {
@@ -379,6 +396,7 @@ export default function AccountSetup3Create() {
           <div className='pc-header-text'>Open To...</div>
           <div className='pc-sub-header-text'>Select the fields that best describe what you are open to in a partner</div>
           <Grid2 container spacing={1} sx={{ marginTop: 3 }}>
+            {/* display list of options */}
             {openTo.map((index) => (
               <Grid2 key={index}>
                 <Dates id={index} handleButton={handleButton} array={formData["openTo"]} type={"openTo"} />

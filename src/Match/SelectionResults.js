@@ -24,25 +24,6 @@ import AccountContext from '../AccountSetup/AccountContext';
 import { useContext } from 'react';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-const matchedResults = [
-
-];
-
-const usersWhoSelectedYou = [
-  // { name: 'Hawk Tuah Tey', age: 40, where: 'Mandurah', gender: 'female', src: HawkImg, source: 'usersWhoSelectedYou' },
-  // { name: 'Cherrywood', age: 23, gender: 'female', where: 'Mandurah', src: CherryImg, source: 'usersWhoSelectedYou' },
-];
-
-// append onto this list after selecting
-// { name: 'firstname + lastname, age: '}
-const usersWhoYouSelected = [
-  // { name: 'Tiffany', age: 31, gender: 'female', where: 'Mandurah',  src: TiffanyImg, source: 'usersWhoYouSelected' },
-  // { name: 'Bob Hawk', age: 43, gender: 'male', where: 'Mandurah', src: BobImg, source: 'usersWhoYouSelected' },
-  // { name: 'Esmeralda Butterfly', age: 29, where: 'Mandurah', gender: 'female', src: ButterflyImg, source: 'usersWhoYouSelected' },
-  //{ name: 'cherrywood', age: 23, gender: 'female', src: CherryImg, source:'usersWhoYouSelected'},
-];
-
-
 
 
 
@@ -68,7 +49,8 @@ useEffect(() => {
             setPeopleYouSelected(res.data.people_whom_you_selected)
             setPeopleSelectedYou(res.data.people_who_selected_you)
             setMatch(res.data.matched_results)
-            console.log(peopleYouSelected)
+            console.log(res.data.people_whom_you_selected)
+            console.log(res.data.matched_results)
           })
     }   catch (error) {
       console.log("Error fetching data", error);
@@ -83,18 +65,14 @@ useEffect(() => {
 }, [userId]);
   // usersWhoYouSelected should be passed in
   const {selections, setSelections} = useContext(AccountContext);
-  let tempArray;
-  if (selections) {
-    tempArray = selections.concat(usersWhoYouSelected);
-  } else {
-    tempArray = usersWhoYouSelected
-  }
-  console.log('concattedArray: ', tempArray);
   const handleEditPreferences = () => {
     navigate('/matchPreferences');
   }
+  const handleMatchList = () => {
+    navigate('/match');
+  }
   const handleBegin = (user) => {
-    console.log("user",user)
+    console.log("user HERE",user)
 }
 
   const handleBackClick = () => {
@@ -104,13 +82,17 @@ useEffect(() => {
     const userName = encodeURIComponent(user.user_first_name + user.user_last_name);
     navigate(`/user-details/${userName}`, { state: { user, source } });
   }
+  const handleNext = (user) => {
+    console.log(user)
+    navigate('/messages', {state: {user}})
+  }
   // making a component since used twice - easier to edit
   const UserBox = ({user, type}) => (
     <Box>
     <ListItem alignItems="flex-start">
       <ListItemButton onClick={() => handleUserClick(user, type)}>
           <ListItemAvatar>
-            <Avatar alt="Remy Sharp" src={user.src? user.src: ''}/>
+            <Avatar alt={user.user_first_name} src={(user.user_photo_url?JSON.parse(user.user_photo_url):'')} />
           </ListItemAvatar>
           <ListItemText
             primary={user.user_first_name + ' ' + user.user_last_name}
@@ -126,7 +108,6 @@ useEffect(() => {
               </React.Fragment>
             }
           />
-  
           {/* onClick={() => handleUserClick(user, 'usersWhoYouSelected')} */}
         <IconButton sx={{
           backgroundColor: "#E0E3E6", borderRadius: "25px",
@@ -136,6 +117,7 @@ useEffect(() => {
         </IconButton>
       </ListItemButton>
     </ListItem>
+    <Button sx={{marginLeft:"50px"}} onClick={()=>handleNext(user)}>Message</Button>
     {/* <Divider component="li" variant="inset" sx={{width: '90%'}}/> */}
     </Box>
 
@@ -181,7 +163,10 @@ useEffect(() => {
       <button className='editButton' onClick={() => { handleEditPreferences() }}>Edit Preferences</button>
     </div> */}
     <Grid container size={12} justifyContent="center" >
-        <Button onClick={handleEditPreferences} sx={{width:"auto", minWidth: "130px", backgroundColor:"#E4423F", borderRadius:"25px", height:"45px", color:"white", mb:"5px", textTransform:"none", fontFamily:"Segoe UI", fontSize:"18px", fontWeight:"regular"}}>Edit Preferences</Button>
+        <Button onClick={handleEditPreferences} sx={{width:"150px", minWidth: "130px", backgroundColor:"#E4423F", borderRadius:"25px", height:"45px", color:"white", mb:"5px", textTransform:"none", fontFamily:"Segoe UI", fontSize:"18px", fontWeight:"regular"}}>Edit Preferences</Button>
+    </Grid>
+    <Grid container size={12} justifyContent="center" >
+        <Button onClick={handleMatchList} sx={{width:"150px", minWidth: "130px", backgroundColor:"#E4423F", borderRadius:"25px", height:"45px", color:"white", mb:"5px", textTransform:"none", fontFamily:"Segoe UI", fontSize:"18px", fontWeight:"regular"}}>Match List</Button>
     </Grid>
   </Box>
   );

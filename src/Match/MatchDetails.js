@@ -24,12 +24,13 @@ const MatchDetails = () => {
     const { user, source } = location.state || {};
     console.log("User:", user);
     console.log("Source:", source);
-    const [isRightHeartFilled, setIsRightHeartFilled] = useState(source === 'usersWhoYouSelected');
+    const [isRightHeartFilled, setIsRightHeartFilled] = useState(source === 'usersWhoYouSelected' || source ==='matchedResults');
     const [showPopup, setShowPopup] = useState(false);
     const [isFlipped, setIsFlipped] = useState(false);
     const [liked, setLiked] = useState(like)
     const popupRef = useRef(null);
     const isLeftHeartVisible = source === 'usersWhoSelectedYou' || source === 'matchedResults';
+    const userId = localStorage.getItem("user_uid");
 
     // NOTE: user is being saved as a different object make a new object
     // TEMP FOR NOW
@@ -50,26 +51,24 @@ const MatchDetails = () => {
     const handleRightHeartClick = () => {
         console.log('handling heart click');
         const newHeartState = !isRightHeartFilled;
-        setIsRightHeartFilled(newHeartState);
-        if (isLeftHeartVisible && newHeartState) {
-            setShowPopup(true);
-        } else {
-            setShowPopup(false);
+        const fd = new FormData();
+        fd.append('liker_user_id',userId)
+        fd.append('liked_user_id',user.user_uid)
+        if (newHeartState) {
+            axios.post('https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/likes',fd)
         }
+        else {
+            console.log("DELETE")
+            axios.delete('https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/likes', {
+                data:fd})
+        }
+        setIsRightHeartFilled(newHeartState);
     };
     const handleSetLiked = () => {
         setLiked(prevState=>!prevState)
-
-        // const newHeartState = !isRightHeartFilled;
-        // setIsRightHeartFilled(newHeartState);
-        if (isLeftHeartVisible && liked) {
-            console.log()
-            setShowPopup(true);
-        } else {
-            setShowPopup(false);
-        }
         handleRightHeartClick();
     }
+
     const handleClosePopup = () => {
         setShowPopup(false);
     };
@@ -88,7 +87,6 @@ const MatchDetails = () => {
 
 
     const [AccountUser, setAccountUser] = useState([])
-    const userId = localStorage.getItem("user_uid");
 
     useEffect(()=> {
         axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/${userId}`)
@@ -124,49 +122,50 @@ const MatchDetails = () => {
 
 
     return (
+        <Box>
         <ReactCardFlip isFlipped={isFlipped} flipDirection="horizontal">
-            <Box>
-            {isLeftHeartVisible && isRightHeartFilled && showPopup && (
-                <div className='popup'>
-                    <div className='popup-content' ref={popupRef}>
-                        <MatchPopUp user={user} AccountUser={AccountUser}/>
-                            </div>
-                        </div>
-                    )}
+            <Box >
                 <Box sx={{backgroundColor:"#E4423F", paddingTop:"30px", paddingBottom:"50px", borderRadius:"10px", display:"flex",justifyContent:"center", position:"relative", minHeight: '600px' , maxWidth:"414px", margin:"0 auto", marginTop:"20px"}}>
-                    <img src={user.src} style={{width:"100%", height:"90%"}} height={440}></img>
+                    <img src={user.user_photo_url?JSON.parse(user.user_photo_url)[0]: profileImg} style={{width:"100%"}}></img>
 {/* FIX THE SRC  */}
+                    {isLeftHeartVisible && isRightHeartFilled && (
+                    <Box sx={{position:"absolute", bottom:"10%", backgroundColor:"white", borderRadius:"30px", padding:"5px"}}>
+                        <MatchPopUp user={user} AccountUser={AccountUser}/>
+                    </Box>
+                    )}
 
                     {/* <img src="profileimg.png" style={{width:"100%", height:"90%"}}></img> */}
                     <Typography sx={{position:"absolute", zIndex: '10', top:"10%", color:"white", fontSize:'20px'}}>{user.user_first_name + ' ' + user.user_last_name}</Typography>
                     <Typography sx={{position:"absolute", zIndex: '10',top:"14%", color:"white", fontSize:"10px"}}>{user.user_age} - {user.user_gender} - {user.user_country}</Typography>
                     <Typography sx={{position:"absolute", zIndex: '10', bottom:"2%", color:"white", fontSize:"18px"}} onClick={()=>setIsFlipped(true)}>Tap to See Profile</Typography>
                     {/* <img src="like.png" style={{position:"absolute", right:"2%", top:"2%"}}></img> */}
-                    <img src={liked ? like : likedImg} style={{position:"absolute", right:"2%", top:"1%"}}
-                    onClick={handleSetLiked}></img>
+                    <img src={isRightHeartFilled ? likedImg : like} style={{position:"absolute", right:"2%", top:"1%"}}
+                    onClick={handleRightHeartClick}></img>
                     {isLeftHeartVisible && (
                         <img src={likedImg} style={{position:"absolute", left:"2%", top:"1%"}} ></img>
                     )}
 
 
                 </Box>
-                <Grid container size={12} justifyContent="center" >
-                <Link to="/matching1PreferencesPage">
-                    <Button sx={{width:"130px",backgroundColor:"#E4423F", borderRadius:"25px", height:"45px", color:"white", marginTop:"20px", mb:"20px", textTransform:"none", fontFamily:"Segoe UI", fontSize:"18px", fontWeight:"regular"}}>Back</Button>
+        </Box>
+       
+        <ViewProfile setIsFlipped={setIsFlipped} liked={isRightHeartFilled} onClick={handleSetLiked} isLiked={isLeftHeartVisible} user={user} AccountUser={AccountUser} userData={user} />
+       
+        {/* <ViewProfile setIsFlipped={setIsFlipped} liked={liked} onClick={handleSetLiked} showPopup={showPopup} isLiked={isLeftHeartVisible} user={user} AccountUser={AccountUser} setShowPopup={setShowPopup} /> */}
+    </ReactCardFlip>
+    <Grid container size={12} justifyContent="center" >
+            <Link to="/matching1PreferencesPage">
+                    <Button sx={{width:"150px",backgroundColor:"#E4423F", borderRadius:"25px", height:"45px", color:"white", marginTop:"20px", mb:"20px", textTransform:"none", fontFamily:"Segoe UI", fontSize:"18px", fontWeight:"regular"}}>Back</Button>
                 </Link>
             </Grid>
             <Grid container size={12} justifyContent="center" >
-                <Button onClick={handleNavigate} sx={{width:"130px",backgroundColor:"#E4423F", borderRadius:"25px", height:"45px", color:"white", mb:"20px", textTransform:"none", fontFamily:"Segoe UI", fontSize:"18px", fontWeight:"regular"}}>Continue</Button>
+                <Button onClick={handleNavigate} sx={{width:"150px",backgroundColor:"#E4423F", borderRadius:"25px", height:"45px", color:"white", mb:"20px", textTransform:"none", fontFamily:"Segoe UI", fontSize:"18px", fontWeight:"regular"}}>Continue</Button>
             </Grid>
             <Grid container size={12} justifyContent="center" >
                 <LogoutButton></LogoutButton>
             </Grid>
-        </Box>
-       
-        <ViewProfile setIsFlipped={setIsFlipped} liked={liked} onClick={handleSetLiked} showPopup={showPopup} isLiked={isLeftHeartVisible} user={user} AccountUser={AccountUser} setShowPopup={setShowPopup} userData={user} />
-       
-        {/* <ViewProfile setIsFlipped={setIsFlipped} liked={liked} onClick={handleSetLiked} showPopup={showPopup} isLiked={isLeftHeartVisible} user={user} AccountUser={AccountUser} setShowPopup={setShowPopup} /> */}
-    </ReactCardFlip>
+    </Box>
+    
     );
 };
 

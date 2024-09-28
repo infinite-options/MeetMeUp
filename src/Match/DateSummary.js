@@ -63,11 +63,21 @@ export default function DateSummary() {
         fd.append('meet_date_type',selectedDateIdea)
         fd.append('meet_location', formattedAddress)
 
+        const msg = `Let's meet up on ${selectedDay} ${selectedTime} and go to ${selectedDateIdea} at ${formattedAddress}`;
+
         axios.post('https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/meet', fd)
             .then(res => {
                 console.log(res)
             })
-
+        axios.post('https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/messages', {
+            sender_id: userId,
+            receiver_id: user.user_uid,
+            message_content: msg
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
     };
 
     useEffect(() => {
@@ -82,7 +92,7 @@ export default function DateSummary() {
                 <Box sx={{ mr: { xs: 5, md: 10 } }}><TopTitle /></Box>
                 <Box sx={{ position: 'relative', display: 'flex', alignItems: 'center', mr: { xs: 4, md: 20 } }}>
                     <Avatar
-                        src={AccountUser[0]?.src}
+                        src={AccountUser[0].photo?JSON.parse(AccountUser[0].photo):''}
                         alt='Account User'
                         sx={{
                             width: { xs: 40, sm: 50 },
@@ -92,7 +102,7 @@ export default function DateSummary() {
                         }}
                     />
                     <Avatar
-                        src={user.src}
+                        src={user.user_photo_url?JSON.parse(user.user_photo_url):''}
                         alt='Matched User'
                         sx={{
                             width: { xs: 40, sm: 50 },
