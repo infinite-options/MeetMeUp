@@ -18,6 +18,7 @@ import { createTheme, ThemeProvider } from '@mui/material';
 import AccountSetup1Login from './AccountSetup/AccountSetup1Login';
 import AccountSetup2Create from './AccountSetup/AccountSetup2Create';
 import GoogleSignup from './AccountSetup/GoogleSignUp';
+import GoogleLogin from './AccountSetup/GoogleLogin';
 import AccountSetup3Create from './AccountSetup/AccountSetup3Create';
 import AccountSetup4Create from './AccountSetup/AccountSetup4Create';
 import AccountSetup5Create from './AccountSetup/AccountSetup5Create';
@@ -70,6 +71,8 @@ function Main() {
         <Route path="/accountSetup1Login" element={<AccountSetup1Login/>}/>
         <Route path="/accountSetup2Create" element={<AccountSetup2Create/>}/>
         <Route path="/googleSignUp" element={<GoogleSignup/>}/>
+        <Route path="/google-login" element={<GoogleLogin/>}/>
+        
         <Route path="/accountSetup3Create" element={<AccountSetup3Create/>}/>
         <Route path="/accountSetup4Create" element={<AccountSetup4Create/>}/>
         <Route path="/accountSetup5Create" element={<AccountSetup5Create/>}/>

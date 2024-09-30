@@ -145,6 +145,22 @@ export default function AccountSetup1Login() {
               >
                 Login
               </Button>
+              <Button
+                onClick={() => navigate("/google-login")}
+                variant='contained'
+                type='submit'
+                sx={{
+                  backgroundColor: "#E4423F",
+                  maxWidth: "131px",
+                  borderRadius: "41px",
+                  boxShadow: "none",
+                  textTransform: "none",
+                  fontSize: "18px",
+                  fontFamily: "Lexend",
+                }}
+              >
+                Google Login
+              </Button>
               <div className='sub-header-text'>
                 Forgot password? <div className='red-text'>Retrieve here</div>
               </div>
@@ -194,25 +210,6 @@ export default function AccountSetup1Login() {
                 Google SignUp
               </Button>
             </Box>
-            {/* <Box
-                            sx={{
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                height: '10vh',
-                                marginLeft:'435px',
-                                '& > :not(style)': { m: 2, width: 0.9 },
-                            }}
-                        >
-                            <GoogleLogin
-                                onSuccess={(credentialResponse) => {
-                                    console.log(credentialResponse)
-                                }}
-                                onError={() => {
-                                    console.log("Login failed");
-                                }}
-                            />
-                        </Box> */}
           </div>
         </Grid>
       </Box>
