@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet, ActivityIndicator, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, StyleSheet, ActivityIndicator, TextInput, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -106,13 +106,12 @@ export default function AccountSetup4Create() {
       );
       if (response.status === 200) {
         console.log(response.data);
-        navigation.navigate('AccountSetup7Summary');
       }
     } catch (err) {
       console.log('Error:', err);
     }
+      navigation.replace("AccountSetup7Summary")
   };
-
   const populateFormData = () => {
     const specificsForm = new FormData();
     specificsForm.append('user_uid', userId); // Ensure userId is appended here
@@ -173,79 +172,76 @@ export default function AccountSetup4Create() {
         These help give a better insight into who you are and will allow matches to better understand you as a person.
       </Text>
 
-      <TouchableOpacity
-        style={styles.specificButton}
-        onPress={() => setOption('height')}
-      >
-        <Text>Height: {specifics.height || 'Not Entered'}</Text>
+      <TouchableOpacity style={styles.specificButton} onPress={() => setOption('height')}>
+        <View style={styles.specificRow}>
+          <Text>Height:</Text>
+          <Text style={styles.textStyle}>{specifics.height || 'Not Entered'}</Text>
+        </View>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.specificButton} onPress={() => setOption('education')}>
+        <View style={styles.specificRow}>
+          <Text>Education:</Text>
+          <Text style={styles.textStyle}>{specifics.education || 'Not Entered'}</Text>
+        </View>
       </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.specificButton}
-        onPress={() => setOption('education')}
-      >
-        <Text>Education: {specifics.education || 'Not Entered'}</Text>
+      <TouchableOpacity style={styles.specificButton} onPress={() => setOption('body')}>
+        <View style={styles.specificRow}>
+          <Text>Body Composition:</Text>
+          <Text style={styles.textStyle}>{specifics.body || 'Not Entered'}</Text>
+        </View>
       </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.specificButton}
-        onPress={() => setOption('body')}
-      >
-        <Text>Body Composition: {specifics.body || 'Not Entered'}</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.specificButton}
-        onPress={() => setOption('star')}
-      >
-        <Text>Star Sign: {specifics.star || 'Not Entered'}</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.specificButton}
-        onPress={() => setOption('drinking')}
-      >
-        <Text>Drinking: {specifics.drinking || 'Not Entered'}</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.specificButton}
-        onPress={() => setOption('smoking')}
-      >
-        <Text>Smoking: {specifics.smoking || 'Not Entered'}</Text>
+      <TouchableOpacity style={styles.specificButton} onPress={() => setOption('star')}>
+        <View style={styles.specificRow}>
+          <Text>Star Sign:</Text>
+          <Text style={styles.textStyle}>{specifics.star || 'Not Entered'}</Text>
+        </View>
       </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.specificButton}
-        onPress={() => setOption('children')}
-      >
-        <Text>Kids: {specifics.children || 'Not Entered'}</Text>
+      <TouchableOpacity style={styles.specificButton} onPress={() => setOption('drinking')}>
+        <View style={styles.specificRow}>
+          <Text>Drinking:</Text>
+          <Text style={styles.textStyle}>{specifics.drinking || 'Not Entered'}</Text>
+        </View>
       </TouchableOpacity>
-      {/*JOB*/}
-      <TouchableOpacity
-        style={styles.specificButton}
-        onPress={() => setOption('position')}
-      >
-        <Text>Job: {specifics.position || 'Not Entered'}</Text>
-      </TouchableOpacity>
-      {/*Religion*/}
-      <TouchableOpacity
-        style={styles.specificButton}
-        onPress={() => setOption('religion')}
-      >
-        <Text>Religion: {specifics.religion || 'Not Entered'}</Text>
-      </TouchableOpacity>
-      {/*Nationality*/}
-      <TouchableOpacity
-        style={styles.specificButton}
-        onPress={() => setOption('nationality')}
-      >
-        <Text>Nationality: {specifics.nationality || 'Not Entered'}</Text>
-      </TouchableOpacity>
-      <HelperTextBox
-        text="That's a lot of information..."
-        title="Why so much information?"
-        subtitle="Sharing more about yourself enhances compatibility and increases the likelihood of finding a match."
-      />
 
-      <NextButton onPress={handleNext} />
+      <TouchableOpacity style={styles.specificButton} onPress={() => setOption('smoking')}>
+        <View style={styles.specificRow}>
+          <Text>Smoking:</Text>
+          <Text style={styles.textStyle}>{specifics.smoking || 'Not Entered'}</Text>
+        </View>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.specificButton} onPress={() => setOption('children')}>
+        <View style={styles.specificRow}>
+          <Text>Kids:</Text>
+          <Text style={styles.textStyle}>{specifics.children || 'Not Entered'}</Text>
+        </View>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.specificButton} onPress={() => setOption('position')}>
+        <View style={styles.specificRow}>
+          <Text>Job:</Text>
+          <Text style={styles.textStyle}>{specifics.position || 'Not Entered'}</Text>
+        </View>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.specificButton} onPress={() => setOption('religion')}>
+        <View style={styles.specificRow}>
+          <Text>Religion:</Text>
+          <Text style={styles.textStyle}>{specifics.religion || 'Not Entered'}</Text>
+        </View>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.specificButton} onPress={() => setOption('nationality')}>
+        <View style={styles.specificRow}>
+          <Text>Nationality:</Text>
+          <Text style={styles.textStyle}>{specifics.nationality || 'Not Entered'}</Text>
+        </View>
+      </TouchableOpacity>
+
+
       <DrawerContext.Provider
         value={{
           specifics,
@@ -260,6 +256,13 @@ export default function AccountSetup4Create() {
           setPickerValue,
         }}
       >
+        <View style = {styles.buttonContainer}>
+             <Pressable style= {styles.button}onPress={handleNext}>
+              <Text style={styles.buttonText}>
+                Next
+              </Text>
+             </Pressable>
+             </View>
         <DrawerOptions />
       </DrawerContext.Provider>
     </ScrollView>
@@ -288,6 +291,35 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderWidth: 1,
   },
+  specificRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between', // This keeps the label on the left and the value on the right
+    alignItems: 'center', // Vertically align items in the center
+  },
+  buttonContainer: {
+    marginTop: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: 40,
+},
+textStyle:{
+    fontSize: 16,
+    fontWeight: '400',
+    color: '#E4423F', // Change the value to red
+    textAlign: 'right', // Align v
+},
+button: {
+  width: 130,
+  backgroundColor: '#E4423F',
+  borderRadius: 25,
+  height: 45,
+  justifyContent: 'center',
+  alignItems: 'center',
+},
+buttonText: {
+  color: 'white',
+  fontSize: 18,
+},
   interestButton: {
     backgroundColor: '#f0f0f0',
     padding: 10,

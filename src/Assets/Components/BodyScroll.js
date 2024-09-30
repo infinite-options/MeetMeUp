@@ -4,7 +4,7 @@ import { Picker } from '@react-native-picker/picker';
 import DrawerContext from './DrawerContext';
 
 function BodyScroll({ options }) {
-  const [pickerValue, setPickerValue] = useState(options[Math.floor(options.length / 2)]);
+  const [pickerValue, setPickerValue] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
 
   const { setPassData, setComplete, passData, complete, setOption, option, handleSetSpecifics } = useContext(DrawerContext);
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     flex: 1,
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
     width: '150%',
   },
   pickerTitle: {
+    textAlign: 'center',
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 20,
