@@ -67,7 +67,7 @@ export default function SelectPlace() {
                 <Box sx={{ mr: { xs: 5, md: 10 } }}><TopTitle /></Box>
                 <Box sx={{ position: 'relative', display: 'flex', alignItems: 'center', mr: { xs: 4, md: 20 } }}>
                     <Avatar
-                        src={AccountUser[0]?.src}
+                        src={AccountUser[0].photo?JSON.parse(AccountUser[0].photo):''}
                         alt='Account User'
                         sx={{
                             width: { xs: 40, sm: 50 },
@@ -77,7 +77,7 @@ export default function SelectPlace() {
                         }}
                     />
                     <Avatar
-                        src={user.src}
+                        src={user.user_photo_url?JSON.parse(user.user_photo_url):''}
                         alt='Matched User'
                         sx={{
                             width: { xs: 40, sm: 50 },

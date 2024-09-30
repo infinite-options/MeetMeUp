@@ -8,6 +8,9 @@ const Dates = ({ id, handleButton, array, type}) => {
         setSelected(prevSelected => !prevSelected);
     }
 
+    console.log("item", id)
+    console.log("array", array)
+
     return (
         <Button variant='contained' sx={{textTransform:"none",
             color: array.includes(id) ? "white":"black",

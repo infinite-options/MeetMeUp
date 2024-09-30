@@ -14,6 +14,8 @@ import axios from "axios";
 import AccountContext from "../AccountSetup/AccountContext";
 import { useContext } from "react";
 import MatchPopUp from "./MatchPopUp";
+import defaultImg from "../Assets/Images/default.jpg"
+
 const Match = () => {
     const navigate = useNavigate(); 
     
@@ -59,6 +61,7 @@ const Match = () => {
                     .then(res => {
                         console.log(res.data.result)
                         setUserData(res.data.result);
+                        console.log('test', res.data.result[4])
                         const initialUserStates = res.data.result.map((user) => ({
                             isFlipped: false,
                             liked: peopleLiked[0].includes(user.user_uid),
@@ -120,21 +123,19 @@ const Match = () => {
                     key={user.user_id} // assuming user has a unique ID
                 >
                     <Box>
-                        {userStates[index].theyliked && userStates[index].liked &&
-                        <div className='popup'>
-                            <div className='popup-content'>
-                                <MatchPopUp user={user} userStates={userStates} setUserStates={setUserStates} index={index}/>
-                            </div>
-                         </div>}
-                        <Box sx={{ backgroundColor: "#E4423F", paddingTop: "30px", paddingBottom: "50px", borderRadius: "10px", display: "flex", justifyContent: "center", position: "relative", maxWidth: "414px", margin: "0 auto", marginTop: "20px" }}>
-                            <img src={profileImg} style={{ width: "100%", height: "90%" }} alt="Profile" />
-
-                            <Typography sx={{ position: "absolute", zIndex: '10', top: "10%", color: "white", fontSize: '20px' }}>
+                        <Box sx={{ backgroundColor: "#E4423F", paddingTop: "30px", paddingBottom: "50px", borderRadius: "10px", display: "flex", justifyContent: "center", position: "relative", minHeight: '600px' , maxWidth:"414px", maxHeight:"680px",margin: "0 auto", marginTop: "20px"}}>
+                            <img src={user.user_photo_url?JSON.parse(user.user_photo_url)[0]: profileImg} style={{ width: "100%" }} alt="Profile" />
+                            <Typography sx={{ position: "absolute", zIndex: '10', top: "10%", color: "white", fontSize: '2  0px' }}>
                                 {user.user_first_name + " " + user.user_last_name}
                             </Typography>
                             <Typography sx={{ position: "absolute", zIndex: '10', top: "14%", color: "white", fontSize: "10px" }}>
                                 {user.user_age} - {user.user_gender} - {user.user_suburb}
                             </Typography>
+                            {userStates[index].theyliked && userStates[index].liked &&
+                                <Box sx={{position:"absolute", bottom:"10%", backgroundColor:"white", borderRadius:"30px", padding:"5px"}}>
+                                    <MatchPopUp user={user} userStates={userStates} setUserStates={setUserStates} index={index}/>
+                                </Box>
+                         }
                             <Typography sx={{ position: "absolute", zIndex: '10', bottom: "2%", color: "white", fontSize: "18px" }} onClick={() => handleFlip(index)}>
                                 Tap to See Profile
                             </Typography>
@@ -148,21 +149,21 @@ const Match = () => {
                         setIsFlipped={() => handleFlip(index)}
                         liked={userStates[index]?.liked}
                         theyliked={userStates[index]?.theyliked}
-                        onClick={() => handleLike(index)}
+                        onClick={() => handleLike(index, user)}
                         userData={user}
                     />
                 </ReactCardFlip>
             ))}
             <Grid container justifyContent="center">
                             <Link to="/matching1PreferencesPage">
-                                <Button sx={{ width: "130px", backgroundColor: "#E4423F", borderRadius: "25px", height: "45px", color: "white", marginTop: "20px", mb: "20px", textTransform: "none", fontFamily: "Segoe UI", fontSize: "18px", fontWeight: "regular" }}>
-                                    Back
+                                <Button sx={{ width: "150px", backgroundColor: "#E4423F", borderRadius: "25px", height: "45px", color: "white", marginTop: "20px", mb: "20px", textTransform: "none", fontFamily: "Segoe UI", fontSize: "18px", fontWeight: "regular" }}>
+                                    Edit Preferences
                                 </Button>
                             </Link>
                         </Grid>
                         <Grid container justifyContent="center">
-                            <Button onClick={handleNavigate} sx={{ width: "130px", backgroundColor: "#E4423F", borderRadius: "25px", height: "45px", color: "white", mb: "20px", textTransform: "none", fontFamily: "Segoe UI", fontSize: "18px", fontWeight: "regular" }}>
-                                Continue
+                            <Button onClick={handleNavigate} sx={{ width: "150px", backgroundColor: "#E4423F", borderRadius: "25px", height: "45px", color: "white", mb: "20px", textTransform: "none", fontFamily: "Segoe UI", fontSize: "18px", fontWeight: "regular" }}>
+                                My Matches
                             </Button>
                         </Grid>
                         <Grid container justifyContent="center">

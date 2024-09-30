@@ -106,7 +106,7 @@ const Profile = () => {
   const height = userData.user_height;
   const religion = userData.user_religion;
   const sign = userData.user_star_sign;
-  const status = userData.user_open_to;
+  const status = userData.user_sexuality;
   const education = userData.user_education;
   const heart = userData.user_body_composition;
   const job = userData.user_job;
@@ -160,9 +160,9 @@ const Profile = () => {
         </IconButton>
       </Grid>
       <Grid size={12}>
-        <Typography sx={{ fontSize: "30px", textAlign: { xs: "left", sm: "center" } }}>About You</Typography>
+        <Typography sx={{ fontSize: "30px", textAlign: "center" }}>About You</Typography>
       </Grid>
-      <Grid container size={{ xs: 12, sm: 8, md: 5, lg: 4, xl: 3 }} justifyContent={'center'}>
+      <Grid container  justifyContent={'center'}>
         <Grid size={6}>
           {/* {imageList ? imageList.map((imgSrc) => {
             <Grid size={12} key={imgSrc}>

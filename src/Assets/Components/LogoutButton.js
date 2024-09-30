@@ -21,7 +21,7 @@ const LogoutButton = ({onClick}) => {
         <Grid container size={12} justifyContent="center" >
             <Button 
             onClick={handleNavigate}
-            sx={{width:"130px",backgroundColor:"#E4423F", borderRadius:"25px", height:"45px", color:"white", mb:"5px", textTransform:"none", fontFamily:"Segoe UI", fontSize:"18px", fontWeight:"regular"}}>Logout</Button>   
+            sx={{width:"150px",backgroundColor:"#E4423F", borderRadius:"25px", height:"45px", color:"white", mb:"5px", textTransform:"none", fontFamily:"Segoe UI", fontSize:"18px", fontWeight:"regular"}}>Logout</Button>   
         </Grid>
     );
 }

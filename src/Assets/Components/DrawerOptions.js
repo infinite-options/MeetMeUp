@@ -15,6 +15,7 @@ import { TextField } from '@mui/material';
 import DrawerContext from './DrawerContext';
 import { useState, useEffect } from 'react';
 import AccountContext from '../../AccountSetup/AccountContext';
+import axios from 'axios';
 const drawerBleeding = 56;
 const CustomRedButton = styled(Button)({
     backgroundColor: 'rgba(228, 66, 63, 1)',
@@ -73,6 +74,18 @@ function DrawerOptions() {
   const [nationalityValue, setNationalityValue] = useState("");
   const [jobValue, setJobValue] = useState("");
 
+  const userId=localStorage.getItem("user_uid")
+
+  useEffect(()=> {
+    axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/${userId}`)
+      .then(res=> {
+        const user = res.data.result[0]
+        setJobValue(user.user_job)
+        setNationalityValue(user.user_nationality)
+        setReligionValue(user.user_religion)
+      })
+  },[])
+
   
   const TitleBox = ({title, subtitle}) => (
     <div>
@@ -96,7 +109,6 @@ function DrawerOptions() {
     )
   const ContentBox = ({content}) => {
     // const []
-    
     return (
       <Box 
           mt={3}
@@ -105,7 +117,7 @@ function DrawerOptions() {
               flexDirection: 'column',
               alignItems: 'center',
           }}>
-          <Box sx={{overflow:"auto", height:"150px"}}>
+          <Box sx={{ height:"150px"}}>
           {content}
           </Box>
           <CustomRedButton onClick={() => {

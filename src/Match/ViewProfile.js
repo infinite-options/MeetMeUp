@@ -32,7 +32,7 @@ const ViewProfile = ({ setIsFlipped, liked, onClick, isLiked, showPopup, user, A
     const height = userData.user_height
     const religion = userData.user_religion;
     const sign = userData.user_star_sign;
-    const status = userData.user_open_to
+    const status = userData.user_sexuality
     const education = userData.user_education;
     const heart = userData.user_body_composition;
     const job = userData.user_job;
@@ -70,22 +70,20 @@ const ViewProfile = ({ setIsFlipped, liked, onClick, isLiked, showPopup, user, A
                     )}
             <Grid size={11} container justifyContent="flex-end" sx={{margin:"20px"}}>
                 {isLiked && <img src={redliked} style={{position:"absolute", left:"5%", top:"1%"}}></img>}
-                <img src={liked ? redliked : redlike} style={{position:"absolute", right:"5%", top:"1%"}} onClick={() => {
-                    onClick();
-                    console.log('profile liked')}}></img>
-                 <img src={theyliked ? redliked : redlike} style={{position:"absolute", left:"5%", top:"1%"}}></img>
+                <img src={liked ? redliked : redlike} style={{position:"absolute", right:"5%", top:"1%"}} onClick={onClick}></img>
+                <img src={theyliked ? redliked : redlike} style={{position:"absolute", left:"5%", top:"1%"}}></img>
             </Grid>
-            <Grid size={6}>
+            <Grid size={6} >
                 <Grid size={12}>
-                    <img src={img1Img} alt="img1" />
+                    <img src={userData.user_photo_url?JSON.parse(userData.user_photo_url)[0]: ''} alt="img1" style={{maxWidth:"200px"}} />
                 </Grid>
                 <Grid size={12}>
-                    <img src={img3Img} alt="img3" />
+                    <img src={userData.user_photo_url?JSON.parse(userData.user_photo_url)[1]: ''} alt="img2" style={{maxWidth:"200px"}} />
                 </Grid>
             </Grid>
             <Grid size={6}>
                 <Grid size={12}>
-                    <img src={img2Img} alt="img2" />
+                    <img src={userData.user_photo_url?JSON.parse(userData.user_photo_url)[2]: ''} alt="img3" style={{maxWidth:"200px"}} />
                 </Grid>
             </Grid>
             <Grid size={12} container justifyContent="center">

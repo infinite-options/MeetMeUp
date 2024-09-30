@@ -38,6 +38,7 @@ import { useNavigate } from 'react-router-dom';
 import ShowTermsAndConditions from './Policies/showTermsAndConditions';
 import ShowPrivacyPolicy from './Policies/showPrivacyPolicy';
 import AccountContext from './AccountSetup/AccountContext';
+import Message from './Match/Message';
 function Main() {
   const theme = createTheme({
     typography: {
@@ -85,6 +86,7 @@ function Main() {
         <Route path="/grid" element={<GridLayout/>}/>
         <Route path="/selectionResults" element={<SelectionResults/>}/>
         <Route path="/user-details/:name" element={<UserDetails />} />
+        <Route path="/messages" element={<Message />} />
         <Route path="/begin" element={<MatchBegin />} />
         <Route path="/nextPlace" element={<SelectPlace/>}/>
         <Route path='/nextLocation' element={<SelectLocation/>}/>
