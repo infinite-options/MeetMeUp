@@ -68,15 +68,15 @@ const Profile = () => {
   // }));
 
   const handleUpdate = () => {
-    navigation.navigate('AccountSetup4Create');
+    navigation.navigate('AccountSetup3Create');
   };
 
   const handlePreferences = () => {
-    navigation.navigate('Matching1PreferencesPage');
+    navigation.navigate('MatchPreferences');
   };
 
   const handleSelections = () => {
-    navigation.navigate('SelectionResults');
+    navigation.navigate('AccountSetup3Create');
   };
 
   // Extract specifics
@@ -185,6 +185,7 @@ const Profile = () => {
       <AccountInfo img={genderImg} info={userInfo.user_gender} />
       <AccountInfo img={faith} info={userInfo.user_religion} />
       <AccountInfo img={star} info={userInfo.user_star_sign} />
+      <AccountInfo img={multi} info={userInfo.user_sexuality}/>
       <AccountInfo img={multi} info={userInfo.user_open_to} />
       <AccountInfo img={hat} info={userInfo.user_education} />
       <AccountInfo img={heartImg} info={userInfo.user_body_composition} />
@@ -193,12 +194,13 @@ const Profile = () => {
       <AccountInfo img={smokeImg} info={userInfo.user_smoking} />
       <AccountInfo img={flagImg} info={userInfo.user_nationality} />
 
+
       <View style={styles.footer}>
         <TouchableOpacity onPress={handleUpdate} style={styles.updateButton}>
           <Text style={styles.updateButtonText}>Update Profile</Text>
         </TouchableOpacity>
         <View style={styles.footerIcons}>
-          <TouchableOpacity onPress={() => navigation.navigate('Settings')} style={styles.footerIconButton}>
+          <TouchableOpacity onPress={() => navigation.navigate('AccountDetails')} style={styles.footerIconButton}>
             <Image source={setting} style={styles.footerIcon} />
           </TouchableOpacity>
           <TouchableOpacity style={styles.footerIconButton}>
@@ -211,7 +213,7 @@ const Profile = () => {
             <Image source={time} style={styles.footerIcon} />
           </TouchableOpacity>
         </View>
-        <TouchableOpacity onPress={() => navigation.navigate('Matching1PreferencesPage')} style={styles.nextButton}>
+        <TouchableOpacity onPress={handlePreferences} style={styles.nextButton}>
           <Text style={styles.nextButtonText}>Next</Text>
         </TouchableOpacity>
       </View>
@@ -282,7 +284,7 @@ const styles = StyleSheet.create({
   },
   interestsContainer: {
     flexDirection: 'row',
-    flexWrap: 'wrap',  // Allows interests to wrap to the next line if they don't fit
+    flexWrap: 'wrap',  
     justifyContent: 'flex-start',
     marginVertical: 16,
   },
@@ -296,7 +298,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
-    elevation: 2,  // for Android shadow
+    elevation: 2,  
   },
   interestText: {
     fontSize: 16,

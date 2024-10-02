@@ -1,152 +1,148 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { useNavigation } from '@react-navigation/native'; // React Navigation for navigation
+import { useNavigation } from '@react-navigation/native';
 import { postUserData } from "../Api.js";
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const LocationPage2 = () => {
-  console.log("On location page2");
   const navigation = useNavigation();
 
-
   const handleUpdate = async (choice) => {
-
     const formData = new FormData();
     formData.append('user_uid', '100-000001');
     formData.append('user_email_id', 'bobhawk@gmail.com');
     formData.append('user_notification_preference', choice);
-  
-    await postUserData(formData);
-  
-  }
 
+    await postUserData(formData);
+  };
 
   const handleYesClick = () => {
     handleUpdate('True');
-    navigation.navigate('AccountSetup7Summary'); // Replace with your target screen name
+    navigation.replace('AccountSetup7Summary');
   };
 
   const handleLaterClick = () => {
     handleUpdate('False');
-    navigation.navigate('AccountSetup7Summary'); // Replace with your target screen name
+    navigation.replace('AccountSetup7Summary');
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      {/* Top Bar */}
-      <View style={styles.topBar}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+    <SafeAreaView style={styles.safeArea}>
+      <ScrollView contentContainerStyle={styles.container}>
+        {/* Top Bar */}
+        <View style={styles.topBar}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Image
+              source={require('../assets/arrow.png')}
+              style={styles.arrowIcon}
+            />
+          </TouchableOpacity>
+          <Text style={styles.headerText}>Profile Creation</Text>
+        </View>
+
+        {/* Content */}
+        <View style={styles.contentContainer}>
           <Image
-            source={require('../assets/arrow.png')}
-            style={styles.arrowIcon}
+            source={require('../assets/icon2.png')}
+            style={styles.icon}
           />
-        </TouchableOpacity>
-        <Text style={styles.headerText}>Profile Creation</Text>
-      </View>
+          <Text style={styles.mainTitle}>
+            Would you like to receive notifications from Meet Me Up?
+          </Text>
+          <Text style={styles.bodyText}>
+            Notifications will be sent to your device to help you coordinate and plan dates! It will also let you know when you have received a message from a potential date!
+          </Text>
+        </View>
 
-      {/* Content */}
-      <View style={styles.contentContainer}>
-        <Image
-          source={require('../assets/icon2.png')}
-          style={styles.icon}
-        />
-        <Text style={styles.mainTitle}>
-          Would you like to{'\n'}receive notifications{'\n'}from Meet Me Up?
-        </Text>
-        <Text style={styles.bodyText}>
-          Notifications will be sent to your device to{'\n'}
-          help you coordinate and plan dates! It will{'\n'}
-          also let you know when you have received a{'\n'}
-          message from a potential date!
-        </Text>
-      </View>
-
-      {/* Buttons */}
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.yesButton} onPress={handleYesClick}>
-          <Text style={styles.buttonText}>Yes</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.laterButton} onPress={handleLaterClick}>
-          <Text style={styles.buttonText}>Maybe Later</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+        {/* Buttons */}
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.yesButton} onPress={handleYesClick}>
+            <Text style={styles.buttonText}>Yes</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.laterButton} onPress={handleLaterClick}>
+            <Text style={styles.laterButtonText}>Maybe Later</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#E4423F',
+  },
   container: {
     flexGrow: 1,
     backgroundColor: '#E4423F',
-    padding: 0,
-    margin: 0,
-    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 20,
   },
   topBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 32,
-    backgroundColor: '#E4423F',
     width: '100%',
+    paddingVertical: 20,
+    paddingHorizontal: 10,
   },
   arrowIcon: {
     width: 30,
     height: 30,
-    marginRight: 8,
+    marginRight: 10,
   },
   headerText: {
-    color: '#FFFFFF',
-    fontFamily: 'Segoe UI',
     fontSize: 22,
+    color: '#FFFFFF',
     fontWeight: 'normal',
   },
   contentContainer: {
-    flex: 1,
-    alignItems: 'flex-start',
-    paddingHorizontal: 20,
-    paddingBottom: 32,
+    alignItems: 'center',
+    marginTop: 20,
   },
   icon: {
-    width: 73,
-    height: 73,
-    marginBottom: 8,
+    width: 70,
+    height: 70,
+    marginBottom: 16,
   },
   mainTitle: {
-    fontFamily: 'Segoe UI',
-    fontSize: 30,
-    fontWeight: '200',
+    fontSize: 22,
+    fontWeight: '600',
+    textAlign: 'center',
     color: '#FFFFFF',
-    marginBottom: 8,
+    marginBottom: 16,
   },
   bodyText: {
-    fontFamily: 'Segoe UI',
-    fontSize: 14,
-    fontWeight: '200',
+    fontSize: 16,
+    textAlign: 'center',
     color: '#FFFFFF',
+    marginBottom: 32,
   },
   buttonContainer: {
     width: '100%',
-    paddingHorizontal: 20,
-    paddingBottom: 20,
+    alignItems: 'center',
   },
   yesButton: {
     backgroundColor: '#FFFFFF',
-    borderRadius: 20,
-    width: 130,
+    borderRadius: 25,
+    width: 150,
     height: 45,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 16,
   },
   laterButton: {
-    justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 16,
+    justifyContent: 'center',
   },
   buttonText: {
-    fontFamily: 'Segoe UI',
     fontSize: 18,
     color: '#000000',
+  },
+  laterButtonText: {
+    fontSize: 18,
+    color: '#FFFFFF',
   },
 });
 

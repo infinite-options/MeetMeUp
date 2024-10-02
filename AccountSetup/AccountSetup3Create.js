@@ -8,6 +8,28 @@ import MapView, { Marker } from 'react-native-maps';
 const GOOGLE_API_KEY = 'YOUR_GOOGLE_API_KEY';
 
 export default function AccountSetup3Create({ navigation }) {
+  
+  const genders = [
+    { label: "Male", value: "Male" },
+    { label: "Female", value: "Female" },
+    { label: "Nonbinary", value: "Nonbinary" },
+  ];
+
+  const sexualityOptions = [
+    { key: "sexualityStraight", label: "Straight" },
+    { key: "sexualityBisexual", label: "Bi-Sexual" },
+    { key: "sexualityTransgender", label: "Trans-gender" },
+    { key: "sexualityLGBTQ", label: "LGBTQ" },
+    { key: "sexualityHomosexual", label: "Homosexual" },
+  ];
+
+  const openTo = [
+    { key: "openToStraight", label: "Straight" },
+    { key: "openToBisexual", label: "Bi-Sexual" },
+    { key: "openToTransgender", label: "Trans-gender" },
+    { key: "openToLGBTQ", label: "LGBTQ" },
+    { key: "openToHomosexual", label: "Homosexual" },
+  ];
   const [userData, setUserData] = useState({});
   const [savedAddress, setSavedAddress] = useState("");
   const [center, setCenter] = useState({ lat: -32.015001263602, lng: 115.83650856893345 });
@@ -18,16 +40,13 @@ export default function AccountSetup3Create({ navigation }) {
     profileBio: "",
     suburb: "",
     country: "",
-    sexuality: "",
+    sexuality:"",
     openTo: [],
   });
   const [isChanged, setIsChanged] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const userId = useRef(null); // UseRef to store userId instead of localStorage
-  const genders = ["Male", "Female", "Nonbinary"];
-  const sexuality = ["Straight", "Bisexual", "Transgender", "LGBTQ", "Homosexual"];
-  const openTo = ["Straight", "Bisexual", "Transgender", "LGBTQ", "Homosexual"];
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -37,6 +56,7 @@ export default function AccountSetup3Create({ navigation }) {
 
         if (userIdValue) {
           const response = await axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/${userIdValue}`);
+          console.log(response.data.result[0]);
           const fetchedData = response.data.result[0];
           setUserData(fetchedData);
           setFormData({
@@ -89,17 +109,38 @@ export default function AccountSetup3Create({ navigation }) {
       [name]: value,
     });
   };
-
   const handleButton = (id, type) => {
     setIsChanged(true);
-    if (formData[type].includes(id)) {
-      const newArray = formData[type].filter((item) => item !== id);
-      setFormData({ ...formData, [type]: newArray });
-    } else {
-      setFormData({ ...formData, [type]: [...formData[type], id] });
+  
+    if (type === 'sexuality') {
+      setFormData({
+        ...formData,
+        sexuality: id, // Set the selected value directly
+      });
+    }
+  
+    else if (type === 'openTo') {
+      // Ensure formData[type] is an array before using includes
+      const selectedOptions = formData[type] || []; // Initialize as an empty array if undefined
+  
+      if (selectedOptions.includes(id)) {
+        // Remove the option if it's already selected
+        const newArray = selectedOptions.filter((item) => item !== id);
+        setFormData({
+          ...formData,
+          [type]: newArray,
+        });
+      } else {
+        // Add the option if it's not selected
+        setFormData({
+          ...formData,
+          [type]: [...selectedOptions, id],
+        });
+      }
     }
   };
-
+  
+  
   const handleNext = async () => {
     const url = "https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo";
     const fd = new FormData();
@@ -201,16 +242,72 @@ export default function AccountSetup3Create({ navigation }) {
       >
         <Marker coordinate={{ latitude: center.lat, longitude: center.lng }} />
       </MapView>
+         {/* Your Sexuality Section */}
+    <View style={styles.optionContainer}>
+  <Text style={styles.header}>Your Sexuality</Text>
+  <Text style={styles.subHeader}>Select the field that best describes your sexuality</Text>
+  {sexualityOptions.map((option) => (
+    <TouchableOpacity
+      key={option.key}
+      onPress={() => handleButton(option.label, 'sexuality')} 
+      style={[
+        styles.option,
+        {
+          backgroundColor: formData['sexuality'] === option.label ? 'red' : 'white', 
+        },
+      ]}
+    >
+      <Text
+        style={[
+          styles.optionText,
+          {
+            color: formData['sexuality'] === option.label ? 'white' : 'black', // Set text color to white if selected
+          },
+        ]}
+      >
+        {option.label}
+      </Text>
+    </TouchableOpacity>
+  ))}
+</View>
 
-    
+      {/* Open To Section */}
+      <View style={styles.optionContainer}>
+          <Text style={styles.header}>Open To...</Text>
+          <Text style={styles.subHeader}>Select the fields that best describe what you are open to in a partner</Text>
+          {openTo.map((option) => (
+            <TouchableOpacity
+              key={option.key}
+              onPress={() => handleButton(option.label, 'openTo')} 
+              style={[
+                styles.option,
+                {
+                  backgroundColor: formData['openTo'].includes(option.label) ? 'red' : 'white', 
+                },
+              ]}
+            >
+       <Text
+        style={[
+          styles.optionText,
+          {
+            color: formData['openTo'].includes(option.label) ? 'white' : 'black', // Set text color to white if selected
+          },
+        ]}
+      >
+        {option.label}
+      </Text>
+            </TouchableOpacity>
+          ))}
+      </View>
 
-      <Text style={styles.headerText}>Your Sexuality</Text>
 
-      <Text style={styles.headerText}>Open To...</Text>
-
-  
-
-      <Pressable onPress={handleNext}><Text>Next</Text></Pressable>
+        <View style = {styles.buttonContainer}>
+             <Pressable style= {styles.button}onPress={handleNext}>
+              <Text style={styles.buttonText}>
+                Next
+              </Text>
+             </Pressable>
+             </View>
     </ScrollView>
   );
 }
@@ -249,6 +346,47 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 15,
+  },
+  optionContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "left",
+  },
+  buttonContainer: {
+    marginTop: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: 40,
+},
+button: {
+  width: 130,
+  backgroundColor: '#E4423F',
+  borderRadius: 25,
+  height: 45,
+  justifyContent: 'center',
+  alignItems: 'center',
+},
+buttonText: {
+  color: 'white',
+  fontSize: 18,
+},
+  option: {
+    backgroundColor: "#ffffff",
+    borderRadius: 41,
+    marginVertical: 10,
+    paddingHorizontal: 5,
+    paddingVertical: 10,
+    width: "30%",
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "#ccc",
+    marginRight: 10,
+  },
+  optionText: {
+    color: "#000000",
+    fontSize: 12,
+    fontFamily: "sans-serif",
   },
   map: {
     width: "100%",

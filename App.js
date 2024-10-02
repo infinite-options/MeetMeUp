@@ -6,7 +6,7 @@ import AccountSetup2Create from "./AccountSetup/AccountSetup2Create";
 import AccountSetup3Create from "./AccountSetup/AccountSetup3Create";
 import AccountSetup4Create from "./AccountSetup/AccountSetup4Create";
 import AccountSetup7Summary from "./AccountSetup/AccountSetup7Summary";
-
+import AccountDetails3 from "./AccountDetails/AccountDetails3";
 import * as Font from "expo-font";
 // import { createStackNavigator } from '@react-navigation/stack';
 import LandingPage from "./Intro/LandingPage";
@@ -19,6 +19,9 @@ import Location from "./Profile/Location";
 import Location2 from "./Profile/Location2";
 import AccountDetails from "./AccountDetails/AccountDetails";
 import AccountSetup1Login from './AccountSetup/AccountSetup1Login';  // Imported the newly created Login
+import MatchPreferences from "./Preferences/Preferences";
+import AccountSetup6Available from "./AccountSetup/AccountSetup6Available";
+import SelectionResults from "./Match/SelectionResults";
 
 const Stack = createNativeStackNavigator();
 // const Stack = createStackNavigator();
@@ -47,7 +50,11 @@ export default function App() {
         <Stack.Screen name='Location' component={Location} />
         <Stack.Screen name='Location2' component={Location2} />
         <Stack.Screen name='AccountDetails' component={AccountDetails} />
+        <Stack.Screen name = "AccountDetails3" component={AccountDetails3}/>
         <Stack.Screen name='AccountSetup7Summary' component={AccountSetup7Summary} />
+        <Stack.Screen name='MatchPreferences' component={MatchPreferences}/>
+        <Stack.Screen name = "AccountSetup6Available" component={AccountSetup6Available}/>
+        <Stack.Screen name ="SelectionResults" component={SelectionResults}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

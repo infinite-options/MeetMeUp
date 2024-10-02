@@ -110,7 +110,7 @@ export default function AccountSetup4Create() {
     } catch (err) {
       console.log('Error:', err);
     }
-      navigation.replace("AccountSetup7Summary")
+      navigation.replace("Location2")
   };
   const populateFormData = () => {
     const specificsForm = new FormData();

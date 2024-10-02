@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, Switch, Button, ScrollView } from 'react-native';
-
+import { useNavigation } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import AccountSetup1Login from '../AccountSetup/AccountSetup1Login';
 const Settings = () => {
+  const navigation = useNavigation();
   const [locationServices, setLocationServices] = useState(false);
   const [notifications, setNotifications] = useState(false);
 
@@ -13,14 +16,23 @@ const Settings = () => {
     setNotifications(!notifications);
   };
 
+  const AccountDetails3=()=>{
+    navigation.navigate('AccountDetails3');
+  }
+
   const handleLogout = () => {
-    console.log('Logged out');
+    navigation.navigate('AccountSetup1Login');
   };
+  const handleBack = () =>
+  {
+    navigation.navigate("AccountSetup7Summary");
+  }
 
   return (
+    <SafeAreaView style={styles.safeArea}>
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.headerContainer}>
-        <TouchableOpacity onPress={() => console.log('Back clicked')} style={styles.backButton}>
+        <TouchableOpacity onPress={handleBack} style={styles.backButton}>
           <Image source={require('../assets/arrow.png')} style={styles.arrowIcon} />
         </TouchableOpacity>
         <Text style={styles.headerText}>Settings</Text>
@@ -28,7 +40,7 @@ const Settings = () => {
 
       <View style={styles.settingContainer}>
         <Image source={require('../assets/account.png')} style={styles.icon} />
-        <Text style={styles.settingText}>Account Details</Text>
+        <Text onPress={AccountDetails3} style={styles.settingText}>Account Details</Text>
         <Text style={styles.arrowText}>&gt;</Text>
       </View>
 
@@ -71,10 +83,15 @@ const Settings = () => {
         <Text style={styles.logoutText}>Log Out</Text>
       </TouchableOpacity>
     </ScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+  },
   container: {
     padding: 32,
     backgroundColor: '#FFFFFF',

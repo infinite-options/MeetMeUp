@@ -3,9 +3,9 @@ import { View, Text, StyleSheet, TouchableOpacity, Modal } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import DrawerContext from './DrawerContext';
 
-function BodyScroll({ options }) {
+function BodyScroll({ options, title }) {
   const [pickerValue, setPickerValue] = useState(null);
-  const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState(true); // Make the modal visible immediately
 
   const { setPassData, setComplete, passData, complete, setOption, option, handleSetSpecifics } = useContext(DrawerContext);
 
@@ -20,13 +20,6 @@ function BodyScroll({ options }) {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        style={styles.selectButton}
-        onPress={() => setModalVisible(true)}
-      >
-        <Text style={styles.selectButtonText}>Select Option</Text>
-      </TouchableOpacity>
-
       {/* Modal to display the Picker */}
       <Modal
         visible={modalVisible}
@@ -36,7 +29,8 @@ function BodyScroll({ options }) {
       >
         <View style={styles.modalContainer}>
           <View style={styles.pickerContainer}>
-            <Text style={styles.pickerTitle}>Select an Option</Text>
+            {/* Dynamic Title */}
+            <Text style={styles.pickerTitle}>{title}</Text>
 
             {/* Picker for selecting options */}
             <Picker
@@ -71,15 +65,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  selectButton: {
-    backgroundColor: '#E4423F',
-    padding: 10,
-    borderRadius: 5,
-  },
-  selectButtonText: {
-    color: '#fff',
-    fontSize: 16,
   },
   modalContainer: {
     flex: 1,
