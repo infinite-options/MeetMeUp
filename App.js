@@ -22,7 +22,9 @@ import AccountSetup1Login from './AccountSetup/AccountSetup1Login';  // Imported
 import MatchPreferences from "./Preferences/Preferences";
 import AccountSetup6Available from "./AccountSetup/AccountSetup6Available";
 import SelectionResults from "./Match/SelectionResults";
-
+import ViewProfile from "./Match/ViewProfile";
+import Match from "./Match/Match";
+import MatchDetails from "./Match/MatchDetails";
 const Stack = createNativeStackNavigator();
 // const Stack = createStackNavigator();
 
@@ -55,6 +57,9 @@ export default function App() {
         <Stack.Screen name='MatchPreferences' component={MatchPreferences}/>
         <Stack.Screen name = "AccountSetup6Available" component={AccountSetup6Available}/>
         <Stack.Screen name ="SelectionResults" component={SelectionResults}/>
+        <Stack.Screen name="ViewProfile" component={ViewProfile}/>
+        <Stack.Screen name="Match" component={Match}/>
+        <Stack.Screen name="user-details" component={MatchDetails}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

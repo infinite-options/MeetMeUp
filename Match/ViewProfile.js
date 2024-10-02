@@ -1,7 +1,6 @@
 import React, { useRef } from 'react';
 import { View, Text, Image, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import MatchPopUp from './MatchPopUp';
-import Type from '../Assets/Components/Type';
 import Info from './Info';
 import profile from '../src/Assets/Images/profile.png';
 import searchImg from '../src/Assets/Images/search.png';
@@ -24,21 +23,26 @@ import redlike from '../src/Assets/Images/redlike.png';
 import redliked from '../src/Assets/Images/redliked.png';
 
 const ViewProfile = ({ setIsFlipped, liked, onClick, isLiked, showPopup, user, AccountUser, userData }) => {
-    const name = `${userData.user_first_name} ${userData.user_last_name}`;
-    const age = userData.user_age;
-    const gender = userData.user_gender;
-    const where = userData.user_suburb;
-    const height = userData.user_height;
-    const religion = userData.user_religion;
-    const sign = userData.user_star_sign;
-    const status = userData.user_open_to;
-    const education = userData.user_education;
-    const heart = userData.user_body_composition;
-    const job = userData.user_job;
-    const drink = userData.user_drinking;
-    const smoke = userData.user_smoking;
-    const flag = userData.user_nationality;
+    // Check if userData exists and fallback to default values if not.
+    const name = userData?.user_first_name && userData?.user_last_name
+        ? `${userData.user_first_name} ${userData.user_last_name}`
+        : 'Unknown Name';
+    const age = userData?.user_age || 'Unknown Age';
+    const gender = userData?.user_gender || 'Unknown Gender';
+    const where = userData?.user_suburb || 'Unknown Location';
+    const height = userData?.user_height || 'Unknown Height';
+    const religion = userData?.user_religion || 'Unknown Religion';
+    const sign = userData?.user_star_sign || 'Unknown Sign';
+    const status = userData?.user_open_to || 'Unknown Status';
+    const education = userData?.user_education || 'Unknown Education';
+    const heart = userData?.user_body_composition || 'Unknown Body Composition';
+    const job = userData?.user_job || 'Unknown Job';
+    const drink = userData?.user_drinking || 'Unknown Drinking';
+    const smoke = userData?.user_smoking || 'Unknown Smoking';
+    const flag = userData?.user_nationality || 'Unknown Nationality';
     const popupRef = useRef(null);
+
+    console.log("HELLO HERE IS THE DATA", userData);
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
@@ -72,10 +76,10 @@ const ViewProfile = ({ setIsFlipped, liked, onClick, isLiked, showPopup, user, A
             <View style={styles.interestsSection}>
                 <Text style={styles.sectionTitle}>Interests</Text>
                 <View style={styles.interestsContainer}>
-                    <Type type="Cooking" />
+                    {/* <Type type="Cooking" />
                     <Type type="Eating Out" />
                     <Type type="Bike Rides" />
-                    <Type type="Travelling" />
+                    <Type type="Travelling" /> */}
                 </View>
                 <Text style={styles.sectionTitle}>...</Text>
                 <Text style={styles.descriptionText}>

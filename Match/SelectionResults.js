@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { View, Text, TouchableOpacity, Image, ScrollView, ActivityIndicator } from 'react-native';
+import { SafeAreaView,View, Text, TouchableOpacity, Image, ScrollView, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -32,7 +32,8 @@ const SelectionResults = () => {
   const { selections, setSelections } = useState();
   const loadUserId = async () => {
     try {
-      const storedUserId = await AsyncStorage.getItem('user_uid');
+      const storedUserId = await AsyncStorage.getItem('user_uid'); 
+      console.log("THIS IS THE USER IDDDD", storedUserId)
       if (storedUserId) {
         // Fetch user data
         fetchUserData(storedUserId);
@@ -66,8 +67,12 @@ const SelectionResults = () => {
   };
 
   const handleUserClick = (user, source) => {
-    navigation.navigate('UserDetailsScreen', { user, source });
-  };
+    // If user.name is NaN or undefined, use a fallback value
+    const userName = user && user.name ? encodeURIComponent(user.name) : 'Unknown';
+    
+    navigation.navigate('user-details', { user, source });
+};
+
 
   const UserBox = ({ user, type }) => (
     <TouchableOpacity onPress={() => handleUserClick(user, type)} style={styles.userBox}>
@@ -97,9 +102,9 @@ const SelectionResults = () => {
   let tempArray = selections ? selections.concat(usersWhoYouSelected) : usersWhoYouSelected;
 
   return (
+    <SafeAreaView style={styles.safeArea}>
     <ScrollView contentContainerStyle={styles.container}>
-
-      <Text style={styles.sectionTitle}>Matched Results</Text>
+      <Text style={styles.pageTitle}>Matched Results</Text>
       {userData.matchedResults && userData.matchedResults.map((user, index) => (
         <UserBox key={index} user={user} type="matchedResults" />
       ))}
@@ -118,13 +123,24 @@ const SelectionResults = () => {
         <Text style={styles.editButtonText}>Edit Preferences</Text>
       </TouchableOpacity>
     </ScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = {
+  safeArea:{
+  },
   container: {
     paddingHorizontal: 20,
     paddingVertical: 30,
+  },
+  pageTitle:{
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 80,
+    fontSize: 24,
+    color: 'black',
+    fontWeight: 'bold',
   },
   loadingContainer: {
     flex: 1,
