@@ -8,25 +8,54 @@ import AccountUserImg from '../src/Assets/Images/accountUser.jpg'; // Update the
 import profileImg from '../src/Assets/Images/profileimg.png'; // Update the path if necessary
 import like from '../src/Assets/Images/like.png'; // Update the path if necessary
 import likedImg from '../src/Assets/Images/filledheart.png'; // Update the path if necessary
-
 const MatchDetails = () => {
-    const navigation = useNavigation();
     const route = useRoute();
+    const navigation = useNavigation();
     const { user, source } = route.params || {};
-    const [isRightHeartFilled, setIsRightHeartFilled] = useState(source === 'usersWhoYouSelected');
+    const [isRightHeartFilled, setIsRightHeartFilled] = useState(source === 'usersWhoYouSelected' || source === 'matchedResults');
     const [showPopup, setShowPopup] = useState(false);
-    const [isFlipped, setIsFlipped] = useState(false);
     const [liked, setLiked] = useState(like);
+    const [isFlipped, setIsFlipped] = useState(false);
+    const [AccountUser, setAccountUser] = useState([]);
+    const userId = 'your_user_id'; // Replace with logic to get the userId (local storage or async storage)
     const popupRef = useRef(null);
-    const isLeftHeartVisible = source === 'usersWhoSelectedYou';
+    const isLeftHeartVisible = source === 'usersWhoSelectedYou' || source === 'matchedResults';
 
-    const handleRightHeartClick = () => {
+    useEffect(() => {
+        const fetchAccountUserInfo = async () => {
+            try {
+                const res = await axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/${userId}`);
+                const userData = res.data.result[0];
+                console.log("MATCHING DETAILS",userData)
+                setAccountUser([{
+                    name: userData.user_first_name,
+                    age: userData.user_age,
+                    gender: userData.user_gender,
+                    where: userData.suburb,
+                    source: 'Account user',
+                }]);
+            } catch (error) {
+                console.error('Error fetching account user data', error);
+            }
+        };
+        fetchAccountUserInfo();
+    }, [userId]);
+
+    const handleRightHeartClick = async () => {
         const newHeartState = !isRightHeartFilled;
-        setIsRightHeartFilled(newHeartState);
-        if (isLeftHeartVisible && newHeartState) {
-            setShowPopup(true);
-        } else {
-            setShowPopup(false);
+        const formData = new FormData();
+        formData.append('liker_user_id', userId);
+        formData.append('liked_user_id', user.user_uid);
+
+        try {
+            if (newHeartState) {
+                await axios.post('https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/likes', formData);
+            } else {
+                await axios.delete('https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/likes', { data: formData });
+            }
+            setIsRightHeartFilled(newHeartState);
+        } catch (error) {
+            console.error('Error handling like action', error);
         }
     };
 
@@ -35,77 +64,42 @@ const MatchDetails = () => {
         handleRightHeartClick();
     };
 
-    const handleClosePopup = () => {
-        setShowPopup(false);
-    };
-
     const handleNavigate = () => {
-        navigation.navigate('GridScreen');
+        // Pass the selected user's details to the ViewProfile screen
+        navigation.navigate('ViewProfile', { user: user });
+    };
+    
+    const handleFlip = () => {
+        setIsFlipped(!isFlipped);
     };
 
-    const AccountUser = [
-        { name: 'Hawk Tuah Tey', age: 40, gender: 'female', where: 'Mandurah', src: AccountUserImg, source: 'Account user' }
-    ];
-
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (popupRef.current && !popupRef.current.contains(event.target)) {
-                handleClosePopup();
-            }
-        };
-        if (showPopup) {
-            document.addEventListener('mousedown', handleClickOutside);
-        }
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, [showPopup]);
+    if (!user) {
+        return <ActivityIndicator size="large" color="#E4423F" />;
+    }
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
-            <View style={styles.cardContainer}>
+            <View style={styles.card}>
+                <Image source={user.user_photo_url ? { uri: JSON.parse(user.user_photo_url)[0] } : profileImg} style={styles.profileImage} />
                 {isLeftHeartVisible && isRightHeartFilled && showPopup && (
                     <View style={styles.popup}>
-                        <View style={styles.popupContent} ref={popupRef}>
-                            <MatchPopUp user={user} AccountUser={AccountUser} />
-                        </View>
+                        <MatchPopUp user={user} AccountUser={AccountUser} />
                     </View>
                 )}
-                <View style={styles.card}>
-                    <Image source={user.src ? { uri: user.src } : profileImg} style={styles.profileImage} />
-                    <Text style={styles.userName}>
-                        {user.user_first_name + ' ' + user.user_last_name}
-                    </Text>
-                    <Text style={styles.userDetails}>
-                        {user.user_age} - {user.user_gender} - {user.user_country}
-                    </Text>
-                    <TouchableOpacity onPress={() => setIsFlipped(true)}>
-                        <Text style={styles.flipText}>Tap to See Profile</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={handleSetLiked}>
-                        <Image source={liked ? like : likedImg} style={styles.likeIcon} />
-                    </TouchableOpacity>
-                    {isLeftHeartVisible && (
-                        <Image source={likedImg} style={styles.leftHeartIcon} />
-                    )}
-                </View>
-
-                <TouchableOpacity onPress={handleNavigate} style={styles.button}>
-                    <Text style={styles.buttonText}>Continue</Text>
+                <Text style={styles.userName}>{user.user_first_name + ' ' + user.user_last_name}</Text>
+                <Text style={styles.userDetails}>{user.user_age} - {user.user_gender} - {user.user_country}</Text>
+                <TouchableOpacity onPress={handleFlip}>
+                    <Text style={styles.flipText}>Tap to See Profile</Text>
                 </TouchableOpacity>
+                <TouchableOpacity onPress={handleSetLiked}>
+                    <Image source={isRightHeartFilled ? likedImg : like} style={styles.likeIcon} />
+                </TouchableOpacity>
+                {isLeftHeartVisible && <Image source={likedImg} style={styles.leftHeartIcon} />}
             </View>
 
-            <ViewProfile
-                setIsFlipped={setIsFlipped}
-                liked={liked}
-                onClick={handleSetLiked}
-                showPopup={showPopup}
-                isLiked={isLeftHeartVisible}
-                user={user}
-                AccountUser={AccountUser}
-                setShowPopup={setShowPopup}
-                userData={user}
-            />
+            <TouchableOpacity onPress={handleNavigate} style={styles.button}>
+                <Text style={styles.buttonText}>Continue</Text>
+            </TouchableOpacity>
         </ScrollView>
     );
 };
@@ -115,67 +109,54 @@ const styles = StyleSheet.create({
         padding: 20,
         backgroundColor: '#f5f5f5',
     },
-    cardContainer: {
-        marginBottom: 20,
-    },
     card: {
         backgroundColor: '#E4423F',
-        paddingTop: 30,
-        paddingBottom: 50,
+        padding: 30,
         borderRadius: 10,
-        display: 'flex',
         justifyContent: 'center',
         position: 'relative',
         minHeight: 600,
-        maxWidth: 414,
-        margin: '0 auto',
-        marginTop: 20,
+        marginBottom: 20,
     },
     profileImage: {
         width: '100%',
         height: 400,
+        borderRadius: 10,
     },
     userName: {
-        position: 'absolute',
-        zIndex: 10,
-        top: '10%',
         color: 'white',
         fontSize: 20,
+        marginTop: 10,
     },
     userDetails: {
-        position: 'absolute',
-        zIndex: 10,
-        top: '14%',
         color: 'white',
-        fontSize: 10,
+        fontSize: 14,
+        marginTop: 5,
     },
     flipText: {
-        position: 'absolute',
-        zIndex: 10,
-        bottom: '2%',
         color: 'white',
         fontSize: 18,
+        marginTop: 15,
     },
     likeIcon: {
-        position: 'absolute',
-        right: '2%',
-        top: '1%',
         width: 30,
         height: 30,
+        position: 'absolute',
+        right: 20,
+        top: 20,
     },
     leftHeartIcon: {
-        position: 'absolute',
-        left: '2%',
-        top: '1%',
         width: 30,
         height: 30,
+        position: 'absolute',
+        left: 20,
+        top: 20,
     },
     button: {
         backgroundColor: '#E4423F',
         paddingVertical: 15,
         paddingHorizontal: 40,
         borderRadius: 25,
-        marginTop: 20,
         alignSelf: 'center',
     },
     buttonText: {
@@ -184,18 +165,10 @@ const styles = StyleSheet.create({
     },
     popup: {
         position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    },
-    popupContent: {
-        backgroundColor: '#fff',
-        padding: 20,
-        borderRadius: 10,
+        bottom: '10%',
+        backgroundColor: 'white',
+        borderRadius: 30,
+        padding: 5,
     },
 });
 

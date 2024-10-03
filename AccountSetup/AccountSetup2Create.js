@@ -68,8 +68,8 @@ export default function AccountSetup2Create() {
             }
 
             await AsyncStorage.setItem('user_uid', result.result[0].user_uid);
-            await AsyncStorage.setItem('user_email', formData['email']);
-            await AsyncStorage.setItem('phone_number', formData['phone_number']);
+            await AsyncStorage.setItem('user_email_id', formData['email']);
+            await AsyncStorage.setItem('user_phone_number', formData['phone_number']);
             navigation.navigate('AccountSetup3Create');
         } catch (error) {
             console.error("Error occurred:", error);

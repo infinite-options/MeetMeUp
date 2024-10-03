@@ -1,10 +1,9 @@
 import React, { useRef } from 'react';
+import { useRoute,useNavigation } from '@react-navigation/native';
 import { View, Text, Image, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import MatchPopUp from './MatchPopUp';
 import Info from './Info';
 import profile from '../src/Assets/Images/profile.png';
-import searchImg from '../src/Assets/Images/search.png';
-import groupImg from '../src/Assets/Images/group.png';
 import img1Img from '../src/Assets/Images/img1.png';
 import img2Img from '../src/Assets/Images/img2.png';
 import img3Img from '../src/Assets/Images/img3.png';
@@ -21,28 +20,29 @@ import smokeImg from '../src/Assets/Images/smoke.png';
 import flagImg from '../src/Assets/Images/flag.png';
 import redlike from '../src/Assets/Images/redlike.png';
 import redliked from '../src/Assets/Images/redliked.png';
-
-const ViewProfile = ({ setIsFlipped, liked, onClick, isLiked, showPopup, user, AccountUser, userData }) => {
-    // Check if userData exists and fallback to default values if not.
-    const name = userData?.user_first_name && userData?.user_last_name
-        ? `${userData.user_first_name} ${userData.user_last_name}`
+const ViewProfile = ({ setIsFlipped, liked, onClick, isLiked, showPopup, AccountUser }) => {
+    const route = useRoute();
+    const { user } = route.params || {};  // Fetch user passed via navigation
+    // Check if user data exists and fallback to default values if not.
+    const name = user?.user_first_name && user?.user_last_name
+        ? `${user.user_first_name} ${user.user_last_name}`
         : 'Unknown Name';
-    const age = userData?.user_age || 'Unknown Age';
-    const gender = userData?.user_gender || 'Unknown Gender';
-    const where = userData?.user_suburb || 'Unknown Location';
-    const height = userData?.user_height || 'Unknown Height';
-    const religion = userData?.user_religion || 'Unknown Religion';
-    const sign = userData?.user_star_sign || 'Unknown Sign';
-    const status = userData?.user_open_to || 'Unknown Status';
-    const education = userData?.user_education || 'Unknown Education';
-    const heart = userData?.user_body_composition || 'Unknown Body Composition';
-    const job = userData?.user_job || 'Unknown Job';
-    const drink = userData?.user_drinking || 'Unknown Drinking';
-    const smoke = userData?.user_smoking || 'Unknown Smoking';
-    const flag = userData?.user_nationality || 'Unknown Nationality';
+    const age = user?.user_age || 'Unknown Age';
+    const gender = user?.user_gender || 'Unknown Gender';
+    const where = user?.user_suburb || 'Unknown Location';
+    const height = user?.user_height || 'Unknown Height';
+    const religion = user?.user_religion || 'Unknown Religion';
+    const sign = user?.user_star_sign || 'Unknown Sign';
+    const status = user?.user_open_to || 'Unknown Status';
+    const education = user?.user_education || 'Unknown Education';
+    const heart = user?.user_body_composition || 'Unknown Body Composition';
+    const job = user?.user_job || 'Unknown Job';
+    const drink = user?.user_drinking || 'Unknown Drinking';
+    const smoke = user?.user_smoking || 'Unknown Smoking';
+    const flag = user?.user_nationality || 'Unknown Nationality';
     const popupRef = useRef(null);
-
-    console.log("HELLO HERE IS THE DATA", userData);
+    const navigation = useNavigation();
+    console.log("User Data:", user);  // Log the user data to debug
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
@@ -76,10 +76,7 @@ const ViewProfile = ({ setIsFlipped, liked, onClick, isLiked, showPopup, user, A
             <View style={styles.interestsSection}>
                 <Text style={styles.sectionTitle}>Interests</Text>
                 <View style={styles.interestsContainer}>
-                    {/* <Type type="Cooking" />
-                    <Type type="Eating Out" />
-                    <Type type="Bike Rides" />
-                    <Type type="Travelling" /> */}
+                    {/* Add user interests here */}
                 </View>
                 <Text style={styles.sectionTitle}>...</Text>
                 <Text style={styles.descriptionText}>
@@ -101,7 +98,11 @@ const ViewProfile = ({ setIsFlipped, liked, onClick, isLiked, showPopup, user, A
                 <Info img={smokeImg} info={smoke} />
                 <Info img={flagImg} info={flag} />
             </View>
-
+            <View style={styles.buttonsContainer}>
+                <TouchableOpacity onPress={() => navigation.navigate('Match')}>
+                    <Text style={styles.button}>Match Me</Text>
+                </TouchableOpacity>
+            </View>
             <View style={styles.videoSection}>
                 <TouchableOpacity onPress={() => setIsFlipped(false)}>
                     <Text style={styles.videoText}>Tap To See Video</Text>
@@ -196,6 +197,19 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontFamily: 'Lexend',
         marginTop: 10,
+    },
+    button: {
+        width: 130,
+        backgroundColor: '#E4423F',
+        borderRadius: 25,
+        height: 45,
+        color: 'white',
+        textAlign: 'center',
+        lineHeight: 45, // Centers text vertically
+        marginBottom: 20,
+        fontSize: 18,
+        fontFamily: 'Segoe UI',
+        
     },
 });
 

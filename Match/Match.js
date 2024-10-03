@@ -1,108 +1,106 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { View, Text, ScrollView, Image, TouchableOpacity, ActivityIndicator, StyleSheet, Alert } from 'react-native';
+import { View, Text, ScrollView, Image, TouchableOpacity, ActivityIndicator, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
-import ViewProfile from './ViewProfile'; // Assuming this is correctly set up
 import AccountContext from '../AccountSetup/AccountContext';
-
-import profileImg from '../src/Assets/Images/profileimg.png'; // Correct the path if necessary
-import like from '../src/Assets/Images/like.png'; // Correct the path if necessary
-import likedImg from '../src/Assets/Images/filledheart.png'; // Correct the path if necessary
+import profileImg from '../src/Assets/Images/profileimg.png';
+import like from '../src/Assets/Images/like.png';
+import likedImg from '../src/Assets/Images/filledheart.png';
 
 const Match = () => {
     const navigation = useNavigation();
     const [userData, setUserData] = useState([]);
     const [userStates, setUserStates] = useState([]);
-    const [userSelections, setUserSelections] = useState([]);
-    const [isLoading, setIsLoading] = useState(true); // Loading state to handle async requests
-    const { selections, setSelections } = useContext(AccountContext);
+    const [isLoading, setIsLoading] = useState(true);
+    const { selections, setSelections } = useState();
+    const [userId, setUserId] = useState(null);
 
-    const loadUserId = async () => {
-        try {
-            const userId = await AsyncStorage.getItem('user_uid');
-            console.log("FOR MATCH PAGE", userId);
-            return userId;
-        } catch (error) {
-            console.error("Error loading user ID from AsyncStorage:", error);
-        }
-    };
-
-    const handleNavigate = async () => {
-        // Save the final data
-        let selectArray = [];
-        for (let i = 0; i < userStates.length; i++) {
-            if (userStates[i].liked === true) {
-                selectArray.push(userData[i]);
+    // Load userId once
+    useEffect(() => {
+        const loadUserId = async () => {
+            try {
+                const storedUserId = await AsyncStorage.getItem('user_uid');
+                console.log("FOR MATCH PAGE", storedUserId);
+                setUserId(storedUserId);
+            } catch (error) {
+                console.error("Error loading user ID from AsyncStorage:", error);
             }
-        }
-        setSelections(selectArray);
-        console.log('final userSelections:', selectArray);
-        navigation.navigate('GridScreen');
-    };
+        };
+        loadUserId();
+    }, []);
 
     useEffect(() => {
         const fetchMatches = async () => {
-            const userId = await loadUserId();
             if (userId) {
-                axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/matches/${userId}`)
-                    .then(res => {
-                        console.log("Full API Response:", res.data);
-                        if (res.data.result && Array.isArray(res.data.result)) {
-                            setUserData(res.data.result);
-                            const initialUserStates = res.data.result.map(() => ({
-                                isFlipped: false,
-                                liked: false
-                            }));
-                            setUserStates(initialUserStates);
-                            setIsLoading(false);
-                        } else {
-                            console.log('API did not return expected data structure:', res.data);
-                            setIsLoading(false);
-                        }
-                    })
-                    .catch(error => {
-                        console.log('Error fetching data:', error);
-                        setIsLoading(false);
-                    });
+                try {
+                    const res = await axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/matches/${userId}`);
+                    console.log("Full API Response:", res.data);
+                    if (res.data.result && Array.isArray(res.data.result)) {
+                        setUserData(res.data.result);
+                        const initialUserStates = res.data.result.map(() => ({
+                            isFlipped: false,
+                            liked: false,
+                        }));
+                        setUserStates(initialUserStates);
+                    } else {
+                        console.log('API did not return expected data structure:', res.data);
+                    }
+                } catch (error) {
+                    console.log('Error fetching data:', error);
+                } finally {
+                    setIsLoading(false);
+                }
             } else {
                 console.log("No userId found.");
                 setIsLoading(false);
             }
         };
         fetchMatches();
-    }, []);
+    }, [userId]);
 
-    const handleFlip = (index) => {
-        const updatedStates = [...userStates];
-        updatedStates[index].isFlipped = !updatedStates[index].isFlipped;
-        setUserStates(updatedStates);
+    const handleNavigate = () => {
+        const selectedUsers = userData.filter((_, index) => userStates[index]?.liked);
+        setSelections(selectedUsers);
+        console.log('final userSelections:', selectedUsers);
+        navigation.navigate('GridScreen');
     };
 
+    const handleFlip = (index) => {
+        setUserStates(prevStates => prevStates.map((state, i) =>
+            i === index ? { ...state, isFlipped: !state.isFlipped } : state
+        ));
+    };
+
+    const handleProfile = (user) => {
+        // Navigate to ViewProfile and pass the user data
+        navigation.navigate("ViewProfile", { user });
+    };
+    
+
     const handleLike = (index, user) => {
-        const updatedStates = [...userStates];
-        updatedStates[index].liked = !updatedStates[index].liked;
-        setUserStates(updatedStates);
+        setUserStates(prevStates => prevStates.map((state, i) =>
+            i === index ? { ...state, liked: !state.liked } : state
+        ));
 
-        const fd = new FormData();
-        AsyncStorage.getItem('user_uid').then(userId => {
-            fd.append('liker_user_id', userId);
-            fd.append('liked_user_id', user.user_uid);
+        const formData = new FormData();
+        formData.append('liker_user_id', userId);
+        console.log(userId);
+        formData.append('liked_user_id', user.user_uid);
 
-            if (updatedStates[index].liked === true) {
-                axios.post('https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/likes', fd)
-                    .then(res => {
-                        console.log(res);
-                    })
-                    .catch(err => console.log(err));
-            } else {
-                axios.delete('https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/likes', { data: fd })
-                    .then(res => {
-                        console.log(res);
-                    })
-                    .catch(err => console.log(err));
-            }
-        });
+        if (userStates[index]?.liked === false) {
+            axios.post('https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/likes', formData)
+                .then(res => {
+                    console.log(res);
+                })
+                .catch(err => console.log(err));
+        } else {
+            axios.delete('https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/likes', { data: formData })
+                .then(res => {
+                    console.log(res);
+                })
+                .catch(err => console.log(err));
+        }
     };
 
     if (isLoading) {
@@ -117,33 +115,26 @@ const Match = () => {
     return (
         <ScrollView>
             <View style={styles.container}>
-                {userData && userData.map((user, index) => (
+                {userData.length === 0 && (
+                    <Text>No matches found.</Text>
+                )}
+                {userData.map((user, index) => (
                     <View key={user.user_id || index} style={styles.cardContainer}>
                         <View style={styles.card}>
-                            <Image source={profileImg} style={styles.profileImage} />
-
+                            <Image source={user.user_photo_url ? { uri: user.user_photo_url } : profileImg} style={styles.profileImage} />
                             <Text style={styles.userName}>
                                 {user?.user_first_name || 'Unknown'} {user?.user_last_name || 'User'}
                             </Text>
                             <Text style={styles.userDetails}>
                                 {user?.user_age || 'N/A'} - {user?.user_gender || 'N/A'} - {user?.user_suburb || 'N/A'}
                             </Text>
-                            <TouchableOpacity onPress={() => handleFlip(index)}>
+                            <TouchableOpacity onPress={() => handleProfile(user)}>
                                 <Text style={styles.flipText}>Tap to See Profile</Text>
                             </TouchableOpacity>
                             <TouchableOpacity onPress={() => handleLike(index, user)}>
                                 <Image source={userStates[index]?.liked ? likedImg : like} style={styles.likeIcon} />
                             </TouchableOpacity>
                         </View>
-
-                        {userStates[index]?.isFlipped && (
-                            <ViewProfile
-                                setIsFlipped={() => handleFlip(index)}
-                                liked={userStates[index]?.liked}
-                                onClick={() => handleLike(index, user)}
-                                userData={user}
-                            />
-                        )}
                     </View>
                 ))}
 

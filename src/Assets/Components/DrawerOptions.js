@@ -103,12 +103,13 @@ export default DrawerOptions;
 const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   textInputContainer: {
     backgroundColor: '#fff',
+    justifyContent: 'flex-end',
     padding: 20,
     borderRadius: 10,
     width: '80%',

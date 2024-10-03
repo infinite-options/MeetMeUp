@@ -14,14 +14,14 @@ import ArrowForwardIcon from '../src/Assets/Images/arrow2.png'; // Replace with 
 import AccountContext from '../AccountSetup/AccountContext.js';
 
 const usersWhoSelectedYou = [
-  { name: 'Hawk Tuah Tey', age: 40, where: 'Mandurah', gender: 'female', src: HawkImg, source: 'usersWhoSelectedYou' },
-  { name: 'Cherrywood', age: 23, gender: 'female', where: 'Mandurah', src: CherryImg, source: 'usersWhoSelectedYou' },
+  { name: 'Hawk Tuah Tey', age: 40, where: 'Mandurah', gender: 'female', imgSrc: HawkImg, source: 'usersWhoSelectedYou' },
+  { name: 'Cherrywood', age: 23, gender: 'female', where: 'Mandurah', imgSrc: CherryImg, source: 'usersWhoSelectedYou' },
 ];
 
 const usersWhoYouSelected = [
-  { name: 'Tiffany', age: 31, gender: 'female', where: 'Mandurah', src: TiffanyImg, source: 'usersWhoYouSelected' },
-  { name: 'Bob Hawk', age: 43, gender: 'male', where: 'Mandurah', src: BobImg, source: 'usersWhoYouSelected' },
-  { name: 'Esmeralda Butterfly', age: 29, where: 'Mandurah', gender: 'female', src: ButterflyImg, source: 'usersWhoYouSelected' },
+  { name: 'Tiffany', age: 31, gender: 'female', where: 'Mandurah', imgSrc: TiffanyImg, source: 'usersWhoYouSelected' },
+  { name: 'Bob Hawk', age: 43, gender: 'male', where: 'Mandurah', imgSrc: BobImg, source: 'usersWhoYouSelected' },
+  { name: 'Esmeralda Butterfly', age: 29, where: 'Mandurah', gender: 'female', imgSrc: ButterflyImg, source: 'usersWhoYouSelected' },
 ];
 
 const SelectionResults = () => {
@@ -69,20 +69,20 @@ const SelectionResults = () => {
   const handleUserClick = (user, source) => {
     // If user.name is NaN or undefined, use a fallback value
     const userName = user && user.name ? encodeURIComponent(user.name) : 'Unknown';
-    
+    console.log("SOURCE",user.imgSrc)
     navigation.navigate('user-details', { user, source });
 };
 
 
   const UserBox = ({ user, type }) => (
     <TouchableOpacity onPress={() => handleUserClick(user, type)} style={styles.userBox}>
-      <Image source={user.src} style={styles.avatar} />
-      <View style={styles.userInfo}>
-        <Text style={styles.userName}>{`${user.name}, ${user.age}`}</Text>
-        <Text style={styles.userDetails}>{user.where}</Text>
-      </View>
-      <Image source={ArrowForwardIcon} style={styles.arrowIcon} />
-    </TouchableOpacity>
+    <Image source={user.imgSrc} style={styles.avatar} />
+    <View style={styles.userInfo}>
+      <Text style={styles.userName}>{`${user.name}, ${user.age}`}</Text>
+      <Text style={styles.userDetails}>{user.where}</Text>
+    </View>
+    <Image source={ArrowForwardIcon} style={styles.arrowIcon} />
+  </TouchableOpacity>
   );
 
   if (loading) {

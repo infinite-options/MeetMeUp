@@ -149,7 +149,7 @@ export default function AccountSetup3Create({ navigation }) {
     const lastName = nameArray.length > 1 ? nameArray[nameArray.length - 1] : "";
 
     fd.append("user_uid", userId.current);
-    fd.append("user_email_id", await AsyncStorage.getItem("user_email"));
+    fd.append("user_email_id", await AsyncStorage.getItem("user_email_id"));
     fd.append("user_first_name", firstName);
     fd.append("user_last_name", lastName);
     fd.append("user_age", formData.age);

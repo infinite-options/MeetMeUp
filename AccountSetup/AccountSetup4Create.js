@@ -105,12 +105,12 @@ export default function AccountSetup4Create() {
         specificsForm
       );
       if (response.status === 200) {
-        console.log(response.data);
+        console.log("HELLO",response.data);
       }
     } catch (err) {
       console.log('Error:', err);
     }
-      navigation.replace("Location2")
+    navigation.navigate("Location2")
   };
   const populateFormData = () => {
     const specificsForm = new FormData();
