@@ -7,6 +7,23 @@ import axios from 'axios';
 const PreferenceSlider = ({ preference, measurement, start, min, max }) => {
     const [value, setValue] = useState(start);
     const [debouncedValue, setDebouncedValue] = useState(value);
+    const [userUID, setUserUID] = useState('');
+    const [userEmail, setUserEmail] = useState('');
+    
+    // Extra state for handling age range (min and max)
+    const [ageRange, setAgeRange] = useState({ minAge: 20, maxAge: 60 });
+
+    // Function to load user data from AsyncStorage
+    const loadUserData = async () => {
+        try {
+            const uid = await AsyncStorage.getItem('user_uid');
+            const email = await AsyncStorage.getItem('user_email_id');
+            setUserUID(uid || '');
+            setUserEmail(email || '');
+        } catch (error) {
+            console.error('Error loading user data:', error);
+        }
+    };
 
     // Function to load saved preferences from AsyncStorage
     const loadStoredValue = async () => {
@@ -30,14 +47,23 @@ const PreferenceSlider = ({ preference, measurement, start, min, max }) => {
     };
 
     useEffect(() => {
-        // Load stored value on component mount
+        // Load user data and stored value on component mount
+        loadUserData();
         loadStoredValue();
     }, []);
 
     const handleChange = (newValue) => {
-        const roundedValue = Math.round(newValue); // Round to nearest integer
+        const roundedValue = Math.round(newValue); // For single value sliders
         setValue(roundedValue);
         saveValue(roundedValue); // Save the rounded value to AsyncStorage
+    };
+
+    const handleAgeChange = (ageType, newValue) => {
+        const roundedValue = Math.round(newValue); 
+        setAgeRange((prevRange) => ({
+            ...prevRange,
+            [ageType]: roundedValue,
+        }));
     };
 
     const displayValue = (value) => {
@@ -58,24 +84,29 @@ const PreferenceSlider = ({ preference, measurement, start, min, max }) => {
     }, [value]);
 
     useEffect(() => {
-        if (debouncedValue !== value) return; // Prevent unnecessary API calls
-        const formData = new FormData();
-        formData.append('user_uid', '100-000172');
-        formData.append('user_email_id', 'dd43@gmail.com');
+        if (!userUID || !userEmail) return; // Prevent unnecessary API calls until user data is loaded
 
+        const formData = new FormData();
+        formData.append('user_uid', userUID);
+        formData.append('user_email_id', userEmail);
+
+        // Handle different preferences based on the type
         if (preference === 'Height in centimetres') {
-            formData.append('user_prefer_height_min', debouncedValue);
+            formData.append('user_prefer_height_min', debouncedValue.toString());
         } else if (preference === 'Maximum distance') {
             formData.append('user_prefer_distance', debouncedValue);
         } else if (preference === 'Age range') {
-            formData.append('user_prefer_age_min', debouncedValue[0]);
-            formData.append('user_prefer_age_max', debouncedValue[1]);
+            // Send age range values
+            formData.append('user_prefer_age_min', ageRange.minAge);
+            formData.append('user_prefer_age_max', ageRange.maxAge);
         }
+        
+        formData.append('user_prefer_gender', "Female");
 
         axios.put('https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo', formData)
             .then(response => console.log('Slider value updated:', response))
             .catch(error => console.error('Error updating slider value:', error));
-    }, [debouncedValue]);
+    }, [debouncedValue, ageRange, userUID, userEmail]);
 
     return (
         <View style={styles.container}>
@@ -83,17 +114,46 @@ const PreferenceSlider = ({ preference, measurement, start, min, max }) => {
                 <Text style={styles.label}>{preference}</Text>
                 <Text>{displayValue(value)} {measurement}</Text>
             </View>
-            <Slider
-                style={styles.slider}
-                value={Array.isArray(value) ? value[0] : value}
-                minimumValue={min}
-                maximumValue={max}
-                onValueChange={handleChange}
-                step={1}
-                minimumTrackTintColor="#E4423F"
-                maximumTrackTintColor="#CECECE"
-                thumbTintColor="#ffffff"
-            />
+            {preference === 'Age range' ? (
+                <View>
+                    <Text>Min Age: {ageRange.minAge}</Text>
+                    <Slider
+                        style={styles.slider}
+                        value={ageRange.minAge}
+                        minimumValue={min}
+                        maximumValue={max}
+                        onValueChange={(newValue) => handleAgeChange('minAge', newValue)}
+                        step={1}
+                        minimumTrackTintColor="#E4423F"
+                        maximumTrackTintColor="#CECECE"
+                        thumbTintColor="#ffffff"
+                    />
+                    <Text>Max Age: {ageRange.maxAge}</Text>
+                    <Slider
+                        style={styles.slider}
+                        value={ageRange.maxAge}
+                        minimumValue={min}
+                        maximumValue={max}
+                        onValueChange={(newValue) => handleAgeChange('maxAge', newValue)}
+                        step={1}
+                        minimumTrackTintColor="#E4423F"
+                        maximumTrackTintColor="#CECECE"
+                        thumbTintColor="#ffffff"
+                    />
+                </View>
+            ) : (
+                <Slider
+                    style={styles.slider}
+                    value={Array.isArray(value) ? value[0] : value} // Display the first value if it's an array (for range)
+                    minimumValue={min}
+                    maximumValue={max}
+                    onValueChange={handleChange}
+                    step={1}
+                    minimumTrackTintColor="#E4423F"
+                    maximumTrackTintColor="#CECECE"
+                    thumbTintColor="#ffffff"
+                />
+            )}
         </View>
     );
 };

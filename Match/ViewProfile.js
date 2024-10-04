@@ -33,7 +33,8 @@ const ViewProfile = ({ setIsFlipped, liked, onClick, isLiked, showPopup, Account
     const height = user?.user_height || 'Unknown Height';
     const religion = user?.user_religion || 'Unknown Religion';
     const sign = user?.user_star_sign || 'Unknown Sign';
-    const status = user?.user_open_to || 'Unknown Status';
+    const sexuality = user?.user_sexuality || 'Unknown Sexuality';
+    const openTo = user?.user_open_to || 'Unknown Status';
     const education = user?.user_education || 'Unknown Education';
     const heart = user?.user_body_composition || 'Unknown Body Composition';
     const job = user?.user_job || 'Unknown Job';
@@ -90,7 +91,8 @@ const ViewProfile = ({ setIsFlipped, liked, onClick, isLiked, showPopup, Account
                 <Info img={genderImg} info={gender} />
                 <Info img={faithImg} info={religion} />
                 <Info img={starImg} info={sign} />
-                <Info img={multiImg} info={status} />
+                <Info img={multiImg} info={sexuality}/>
+                {/* <Info img={multiImg} info={openTo} /> */}
                 <Info img={hatImg} info={education} />
                 <Info img={heartImg} info={heart} />
                 <Info img={jobImg} info={job} />

@@ -3,9 +3,10 @@ import { View, Text, TextInput, StyleSheet, ScrollView, TouchableOpacity, Alert,
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from "axios";
 import MapView, { Marker } from 'react-native-maps';
-
+import 'react-native-get-random-values';
+import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 // Replace this with your Google Maps API key
-const GOOGLE_API_KEY = 'YOUR_GOOGLE_API_KEY';
+const GOOGLE_API_KEY = process.env.REACT_APP_GOOGLE_API_KEY;
 
 export default function AccountSetup3Create({ navigation }) {
   
@@ -17,22 +18,31 @@ export default function AccountSetup3Create({ navigation }) {
 
   const sexualityOptions = [
     { key: "sexualityStraight", label: "Straight" },
-    { key: "sexualityBisexual", label: "Bi-Sexual" },
-    { key: "sexualityTransgender", label: "Trans-gender" },
+    { key: "sexualityBisexual", label: "Bi-sexual" },
+    { key: "sexualityTransgender", label: "Transgender" },
     { key: "sexualityLGBTQ", label: "LGBTQ" },
     { key: "sexualityHomosexual", label: "Homosexual" },
   ];
 
   const openTo = [
     { key: "openToStraight", label: "Straight" },
-    { key: "openToBisexual", label: "Bi-Sexual" },
-    { key: "openToTransgender", label: "Trans-gender" },
+    { key: "openToBisexual", label: "Bi-sexual" },
+    { key: "openToTransgender", label: "Transgender" },
     { key: "openToLGBTQ", label: "LGBTQ" },
     { key: "openToHomosexual", label: "Homosexual" },
   ];
   const [userData, setUserData] = useState({});
   const [savedAddress, setSavedAddress] = useState("");
-  const [center, setCenter] = useState({ lat: -32.015001263602, lng: 115.83650856893345 });
+  const [center, setCenter] = useState({ lat: 37.3541079, lng: -121.9552356 });
+
+  const handleAddressSelection = (data, details) => {
+    const selectedAddress = details.formatted_address;
+    const lat = details.geometry.location.lat;
+    const lng = details.geometry.location.lng;
+
+    setSavedAddress(selectedAddress);
+    setCenter({ lat, lng });
+  };
   const [formData, setFormData] = useState({
     name: "",
     age: "",
@@ -58,6 +68,8 @@ export default function AccountSetup3Create({ navigation }) {
           const response = await axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/${userIdValue}`);
           console.log(response.data.result[0]);
           const fetchedData = response.data.result[0];
+          const openToArray = fetchedData.user_open_to ? fetchedData.user_open_to.split(",") : [];
+          console.log("openToArray", openToArray)
           setUserData(fetchedData);
           setFormData({
             ...formData,
@@ -67,7 +79,7 @@ export default function AccountSetup3Create({ navigation }) {
             profileBio: fetchedData.user_profile_bio || "",
             suburb: fetchedData.user_suburb || "",
             sexuality: fetchedData.user_sexuality || "",
-            openTo: fetchedData.user_open_to ? fetchedData.user_open_to.split(",") : [],
+            openTo: openToArray || [],
           });
           if (fetchedData.user_latitude && fetchedData.user_longitude) {
             setCenter({
@@ -157,10 +169,10 @@ export default function AccountSetup3Create({ navigation }) {
     fd.append("user_suburb", formData.suburb);
     fd.append("user_profile_bio", formData.profileBio);
     fd.append("user_country", formData.country);
-    fd.append("user_latitude", center.lat);
-    fd.append("user_longitude", center.lng);
+    fd.append("user_latitude", center["lat"]);
+    fd.append("user_longitude", center["lng"]);
     fd.append("user_sexuality", formData.sexuality);
-    fd.append("user_open_to", formData.openTo.join(","));
+    fd.append("user_open_to", JSON.stringify(formData["openTo"]))
 
     if (isChanged) {
       try {
@@ -225,11 +237,24 @@ export default function AccountSetup3Create({ navigation }) {
 
       <Text style={styles.headerText}>Location</Text>
       <Text style={styles.subHeaderText}>Your location helps us pin point where you are to provide better matches to you.</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Location"
-        value={savedAddress}
-        editable={false}
+      <GooglePlacesAutocomplete
+        placeholder="Search for a location"
+        fetchDetails={true}  // This enables fetching more detailed location data
+        onPress={handleAddressSelection}
+        query={{
+          key: GOOGLE_API_KEY,
+          language: 'en',  // Language of the search results
+        }}
+        styles={{
+          textInput: {
+            height: 50,
+            borderColor: "#ddd",
+            borderWidth: 1,
+            borderRadius: 5,
+            paddingHorizontal: 10,
+            marginBottom: 15,
+          },
+        }}
       />
       <MapView
         style={styles.map}
