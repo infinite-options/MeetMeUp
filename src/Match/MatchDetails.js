@@ -21,9 +21,10 @@ import axios from 'axios';
 
 const MatchDetails = () => {
     const location = useLocation();
-    const { user, source } = location.state || {};
+    const { user, source, accountUserData } = location.state || {};
     console.log("User:", user);
     console.log("Source:", source);
+    console.log("account userData in match details:", accountUserData)
     const [isRightHeartFilled, setIsRightHeartFilled] = useState(source === 'usersWhoYouSelected' || source ==='matchedResults');
     const [showPopup, setShowPopup] = useState(false);
     const [isFlipped, setIsFlipped] = useState(false);
@@ -32,19 +33,6 @@ const MatchDetails = () => {
     const isLeftHeartVisible = source === 'usersWhoSelectedYou' || source === 'matchedResults';
     const userId = localStorage.getItem("user_uid");
 
-    // NOTE: user is being saved as a different object make a new object
-    // TEMP FOR NOW
-
-// const nameArray = user.name ? user.name.split(" ") : [];
-//     const lastName = nameArray.length > 1 ? nameArray[nameArray.length - 1] : '';
-//     const firstName = nameArray.length > 0 ? nameArray[0] : '';
-//     const userData = {
-//         user_first_name: firstName,
-//         user_last_name: lastName,
-//         user_age: user.age,
-//         user_gender: user.gender,
-//         // user_height: 
-//     }
 
 
     // LEFT WILL ONLY SHOW IF THEY SELECTED YOU
@@ -86,7 +74,12 @@ const MatchDetails = () => {
     };
 
 
+
+
     const [AccountUser, setAccountUser] = useState([])
+
+    console.log("matched user data in match details:", user)
+    console.log("account user data in match details:", AccountUser)
 
     useEffect(()=> {
         axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/${userId}`)
@@ -94,10 +87,41 @@ const MatchDetails = () => {
             const userData = res.data.result[0]
             setAccountUser([{
                 name: userData.user_first_name,
+                lastName: userData.user_last_name,
                 age: userData.user_age,
                 gender: userData.user_gender,
-                where: userData.suburb,
-                source: 'Account user'
+                where: userData.user_suburb,
+                photo: userData.user_photo_url,
+                email: userData.user_email_id,
+                phoneNumber: userData.user_phone_number,
+                availableTime: JSON.parse(userData.user_available_time),
+                bodyComposition: userData.user_body_composition,
+                country: userData.user_country,
+                dateInterests: userData.user_date_interests.split(','),
+                drinking: userData.user_drinking,
+                education: userData.user_education,
+                favoritePhoto: userData.user_favorite_photo,
+                generalInterests: userData.user_general_interests.split(','),
+                height: userData.user_height,
+                job: userData.user_job,
+                kids: userData.user_kids,
+                latitude: userData.user_latitude,
+                longitude: userData.user_longitude,
+                nationality: userData.user_nationality,
+                openTo: JSON.parse(userData.user_open_to),
+                preferAgeMax: userData.user_prefer_age_max,
+                preferAgeMin: userData.user_prefer_age_min,
+                preferDistance: userData.user_prefer_distance,
+                preferGender: userData.user_prefer_gender,
+                preferHeightMin: userData.user_prefer_height_min,
+                preferKids: userData.user_prefer_kids,
+                profileBio: userData.user_profile_bio,
+                religion: userData.user_religion,
+                sexuality: userData.user_sexuality,
+                smoking: userData.user_smoking,
+                starSign: userData.user_star_sign,
+                uid: userData.user_uid,
+                videoUrl: JSON.parse(userData.user_video_url)
             }])
           })
           .catch(err=> {
@@ -127,10 +151,9 @@ const MatchDetails = () => {
             <Box >
                 <Box sx={{backgroundColor:"#E4423F", paddingTop:"30px", paddingBottom:"50px", borderRadius:"10px", display:"flex",justifyContent:"center", position:"relative", minHeight: '600px' , maxWidth:"414px", margin:"0 auto", marginTop:"20px"}}>
                     <img src={user.user_photo_url?JSON.parse(user.user_photo_url)[0]: profileImg} style={{width:"100%"}}></img>
-{/* FIX THE SRC  */}
                     {isLeftHeartVisible && isRightHeartFilled && (
                     <Box sx={{position:"absolute", bottom:"10%", backgroundColor:"white", borderRadius:"30px", padding:"5px"}}>
-                        <MatchPopUp user={user} AccountUser={AccountUser}/>
+                        <MatchPopUp user={user} AccountUser={AccountUser} accountUserData={accountUserData}/>
                     </Box>
                     )}
 

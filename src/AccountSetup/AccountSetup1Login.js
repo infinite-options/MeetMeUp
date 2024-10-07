@@ -110,6 +110,57 @@ export default function AccountSetup1Login() {
     console.log(e);
   };
 
+  const [showEmailInput, setShowEmailInput] = useState(false);
+  const [retrieveEmail, setRetrieveEmail] = useState('');
+
+  const handleRetrieveClick = () => {
+    console.log('Retrieve clicked, showing email input');
+    setShowEmailInput(true);
+  };
+
+  const handleEmailChange = (e) => {
+    console.log('Email changed:', e.target.value);
+    setRetrieveEmail(e.target.value);
+  };
+
+  const handleRetrieveSubmit = async (e) => {
+    console.log('handleRetrieveSubmit called - event:', e);
+    e.preventDefault();
+    console.log('Email submitted for retrieval:', retrieveEmail);
+    try {
+      const response = await axios.post(
+        "https://mrle52rri4.execute-api.us-west-1.amazonaws.com/dev/api/v2/SetTempPassword/MMU",
+        { email: retrieveEmail }
+      );
+      console.log('API Response:', response.data);
+  
+      if (response.data.message === "A temporary password has been sent") {
+        alert('Password reset instructions have been sent to your email.');
+      } else if (response.data.message === "No such email exists") {
+        alert('No account found with this email address. Please check and try again.');
+      } else {
+        alert('Unable to process your request. Please try again later.');
+      }
+    } catch (error) {
+      console.error('Error during password reset:', error);
+      if (error.response) {
+        console.error('Error response:', error.response.data);
+        alert(`An error occurred: ${error.response.data.message || 'Please try again later.'}`);
+      } else if (error.request) {
+        console.error('No response received:', error.request);
+        alert('No response received from the server. Please check your internet connection and try again.');
+      } else {
+        console.error('Error setting up request:', error.message);
+        alert('An error occurred while setting up the request. Please try again later.');
+      }
+    }
+  
+    setShowEmailInput(false);
+    setRetrieveEmail('');
+  };
+
+  console.log('showEmailInput:', showEmailInput);
+
   return (
     <div className='App'>
       <div className='red-overlay' />
@@ -161,9 +212,50 @@ export default function AccountSetup1Login() {
               >
                 Google Login
               </Button>
+
               <div className='sub-header-text'>
-                Forgot password? <div className='red-text'>Retrieve here</div>
+                Forgot password?
+                <Box sx={{ mt: 2, textAlign: 'center' }}>
+                  {!showEmailInput && (
+                    <div className='red-text' onClick={handleRetrieveClick} style={{ cursor: 'pointer' }}>Retrieve here</div>
+                  )}
+                  
+
+                  {showEmailInput && (
+                    <form onSubmit={handleRetrieveSubmit} onClick={() => console.log('Form clicked')}>
+                      <TextField
+                        type="email"
+                        value={retrieveEmail}
+                        onChange={handleEmailChange}
+                        placeholder="Enter your email"
+                        required
+                        sx={{
+                          mr: 1,
+                          '& .MuiOutlinedInput-root': {
+                            '&.Mui-focused fieldset': {
+                              borderColor: '#E4423F',
+                            },
+                          },
+                        }}
+                      />
+                      <Button
+                        type="submit"
+                        variant="contained"
+                        style={{ backgroundColor: '#E4423F' }}
+                        onClick={(e) => {
+                          console.log('Submit button clicked');
+                          handleRetrieveSubmit(e);
+                        }}
+                      >
+                        Submit
+                      </Button>
+                    </form>
+                  )}
+                </Box>
+                
               </div>
+
+
               <Grid container justifyContent='center' size={12}>
                 <hr style={{ width: "90%", borderStyle: "solid", borderColor: "#CECECE" }} />
               </Grid>

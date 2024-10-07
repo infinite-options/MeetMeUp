@@ -37,26 +37,26 @@ const Profile = () => {
   const [userData, setUserData] = useState({});
   const userId = localStorage.getItem('user_uid');
   console.log(userId);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
   const [noId, setNoId] = useState(false); // if any of the info has been changed then PUT
 
   useEffect(() => {
     const fetchUserData = async () => {
-        try {
-            const response = await axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/${userId}`);
-            const fetchedData = response.data.result[0];
-            await setUserData(fetchedData);
-            setLoading(false);
-            const openToArray = fetchedData.user_open_to.split(',');
-            } catch (error) {
-            console.log("Error fetching data", error);
-            };
+      try {
+        const response = await axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/${userId}`);
+        const fetchedData = response.data.result[0];
+        await setUserData(fetchedData);
+        setLoading(false);
+        const openToArray = fetchedData.user_open_to.split(',');
+      } catch (error) {
+        console.log("Error fetching data", error);
+      };
     }
     if (userId) {
       fetchUserData();
     } else {
-        setLoading(false);
-        setNoId(true);
+      setLoading(false);
+      setNoId(true);
     }
   }, [userId]);
   // useEffect(() => {
@@ -86,8 +86,8 @@ const Profile = () => {
   const handleSelections = () => {
     navigate(`/selectionResults`);
   };
-  
-  const handleUpload = () =>{
+
+  const handleUpload = () => {
     navigate(`/accountSetup5Create`) //CHANGED THIS
   }
   // default values
@@ -103,10 +103,12 @@ const Profile = () => {
   }, userData)
   console.log('saved gender: ', gender);
   const where = userData.user_suburb;
+  const dateInterests = userData.user_date_interests ? userData.user_date_interests.split(',') : [];
   const height = userData.user_height;
   const religion = userData.user_religion;
   const sign = userData.user_star_sign;
   const status = userData.user_sexuality;
+  const openTo = userData.user_open_to ? JSON.parse(userData.user_open_to) : [];
   const education = userData.user_education;
   const heart = userData.user_body_composition;
   const job = userData.user_job;
@@ -121,7 +123,7 @@ const Profile = () => {
   const videoSource = userData.user_video_url;
 
   var imageList = [];
-  if(images) {
+  if (images) {
     try {
       imageList = JSON.parse(images);
       images = imageList[0];
@@ -133,11 +135,11 @@ const Profile = () => {
 
   console.log("imageList:", imageList);
   if (loading) {
-    return <div>Loading specifics</div>; 
+    return <div>Loading specifics</div>;
   }
 
   if (noId) {
-    // return <div>No User Found</div>;
+    
     navigate('/accountSetup1Login')
 
   }
@@ -162,7 +164,7 @@ const Profile = () => {
       <Grid size={12}>
         <Typography sx={{ fontSize: "30px", textAlign: "center" }}>About You</Typography>
       </Grid>
-      <Grid container  justifyContent={'center'}>
+      <Grid container justifyContent={'center'}>
         <Grid size={6}>
           {/* {imageList ? imageList.map((imgSrc) => {
             <Grid size={12} key={imgSrc}>
@@ -171,21 +173,22 @@ const Profile = () => {
             </Grid>
           }) : null} */}
           <Grid size={12}>
-            {imageList[0] ? <img src={imageList[0]} height='200' width='200' alt={imageList[0]} /> : null}
+            {imageList[0] ? <img src={imageList[0]} style={{ height: '220px', width: '100%', objectFit: 'cover' }} alt={imageList[0]} /> : null}
           </Grid>
           <Grid size={12}>
-            {imageList[1] ? <img src={imageList[1]} height='200' width='200' alt={imageList[1]} /> : null}
+            {imageList[1] ? <img src={imageList[1]} style={{ height: '220px', width: '100%', objectFit: 'cover' }} alt={imageList[1]} /> : null}
           </Grid>
           <Grid size={12}>
-            {imageList[2] ? <img src={imageList[2]} height='200' width='200' alt={imageList[2]} /> : null}
+            {imageList[2] ? <img src={imageList[2]} style={{ height: '220px', width: '100%', objectFit: 'cover' }} alt={imageList[2]} /> : null}
           </Grid>
+
           {/* <Grid size={12} container>
             <img src={img3} alt='img3' />
           </Grid> */}
         </Grid>
         <Grid size={6}>
           <Grid size={12}>
-            {videoSource ? <video src={videoSource.replaceAll("\"", "")} height="400" width="200" controls autoPlay muted/> : null}
+            {videoSource ? <video src={videoSource.replaceAll("\"", "")} height="400" width="200" controls autoPlay muted /> : null}
           </Grid>
         </Grid>
       </Grid>
@@ -223,7 +226,7 @@ const Profile = () => {
           <Typography sx={{ fontSize: "18px" }}>Interests</Typography>
         </Grid>
         <Grid container size={12}>
-          {int ? int.split(",").map((interest) => (
+          {dateInterests.length > 0 ? dateInterests.map((interest) => (
             <Grid item xs={4} key={interest}>
               <Type type={interest} />
             </Grid>
@@ -244,6 +247,7 @@ const Profile = () => {
         <AccountInfo img={faith} info={religion} />
         <AccountInfo img={star} info={sign} />
         <AccountInfo img={multi} info={status} />
+        <AccountInfo img={multi} info={openTo.join(', ')} />
         <AccountInfo img={hat} info={education} />
         <AccountInfo img={heartImg} info={heart} />
         <AccountInfo img={jobImg} info={job} />

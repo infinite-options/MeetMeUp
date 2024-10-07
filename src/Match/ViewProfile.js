@@ -25,7 +25,9 @@ import MatchPopUp from "./MatchPopUp";
 import { useRef } from "react";
 
 const ViewProfile = ({ setIsFlipped, liked, onClick, isLiked, showPopup, user, AccountUser, userData, theyliked }) => {
-    const name = userData.user_first_name + " " + userData.user_last_name
+    console.log("Data passed to ViewProfile:", userData);
+    const name = userData.user_first_name + " " + userData.user_last_name;
+    const dateInterests = userData.user_date_interests ? userData.user_date_interests.split(',') : [];
     const age = userData.user_age;
     const gender = userData.user_gender
     const where = userData.user_suburb
@@ -33,6 +35,7 @@ const ViewProfile = ({ setIsFlipped, liked, onClick, isLiked, showPopup, user, A
     const religion = userData.user_religion;
     const sign = userData.user_star_sign;
     const status = userData.user_sexuality
+    const openTo = userData.user_open_to ? JSON.parse(userData.user_open_to) : [];
     const education = userData.user_education;
     const heart = userData.user_body_composition;
     const job = userData.user_job;
@@ -42,50 +45,52 @@ const ViewProfile = ({ setIsFlipped, liked, onClick, isLiked, showPopup, user, A
     const popupRef = useRef(null);
     console.log('userData: ', userData);
 
-    // const name = "Lachlan Collis";
-    // const age = "21";
-    // const gender = "Male";
-    // const where = "Brisbane";
-    // const height = "170cm Tall";
-    // const religion = "Atheist";
-    // const sign = "Cancer";
-    // const status = "None Currently";
-    // const education = "Associates Degree in UI & UX design";
-    // const heart = "Plus Size";
-    // const job = "UI + UX Designer";
-    // const drink = "Socially";
-    // const smoke = "I Dont Smoke";
-    // const flag = "Australian";
-    // const popupRef = useRef(null);
-    
-
     return (
-        <Grid container sx={{ maxWidth: "414px", margin: "0 auto", position:"relative" }}>
+        <Grid container sx={{ maxWidth: "414px", margin: "0 auto", position: "relative" }}>
             {showPopup && (
                 <div className='popup'>
                     <div className='popup-content' ref={popupRef}>
-                        <MatchPopUp user={user} AccountUser={AccountUser}/>
-                            </div>
-                        </div>
-                    )}
-            <Grid size={11} container justifyContent="flex-end" sx={{margin:"20px"}}>
-                {isLiked && <img src={redliked} style={{position:"absolute", left:"5%", top:"1%"}}></img>}
-                <img src={liked ? redliked : redlike} style={{position:"absolute", right:"5%", top:"1%"}} onClick={onClick}></img>
-                <img src={theyliked ? redliked : redlike} style={{position:"absolute", left:"5%", top:"1%"}}></img>
+                        <MatchPopUp user={user} AccountUser={AccountUser} />
+                    </div>
+                </div>
+            )}
+            <Grid size={11} container justifyContent="flex-end" sx={{ margin: "20px" }}>
+                {isLiked && <img src={redliked} style={{ position: "absolute", left: "5%", top: "1%" }}></img>}
+                <img src={liked ? redliked : redlike} style={{ position: "absolute", right: "5%", top: "1%" }} onClick={onClick}></img>
+                <img src={theyliked ? redliked : redlike} style={{ position: "absolute", left: "5%", top: "1%" }}></img>
             </Grid>
-            <Grid size={6} >
+            <Grid size={6}>
                 <Grid size={12}>
-                    <img src={userData.user_photo_url?JSON.parse(userData.user_photo_url)[0]: ''} alt="img1" style={{maxWidth:"200px"}} />
+                    {userData.user_photo_url && JSON.parse(userData.user_photo_url)[0] && (
+                        <img
+                            src={JSON.parse(userData.user_photo_url)[0]}
+                            alt="img1"
+                            style={{ maxWidth: "200px" }}
+                        />
+                    )}
                 </Grid>
                 <Grid size={12}>
-                    <img src={userData.user_photo_url?JSON.parse(userData.user_photo_url)[1]: ''} alt="img2" style={{maxWidth:"200px"}} />
+                    {userData.user_photo_url && JSON.parse(userData.user_photo_url)[1] && (
+                        <img
+                            src={JSON.parse(userData.user_photo_url)[1]}
+                            alt="img2"
+                            style={{ maxWidth: "200px" }}
+                        />
+                    )}
                 </Grid>
             </Grid>
             <Grid size={6}>
                 <Grid size={12}>
-                    <img src={userData.user_photo_url?JSON.parse(userData.user_photo_url)[2]: ''} alt="img3" style={{maxWidth:"200px"}} />
+                    {userData.user_photo_url && JSON.parse(userData.user_photo_url)[2] && (
+                        <img
+                            src={JSON.parse(userData.user_photo_url)[2]}
+                            alt="img3"
+                            style={{ maxWidth: "200px" }}
+                        />
+                    )}
                 </Grid>
             </Grid>
+
             <Grid size={12} container justifyContent="center">
                 <Typography sx={{ fontFamily: "Lexend", fontSize: "30px" }}>{name}</Typography>
             </Grid>
@@ -93,22 +98,23 @@ const ViewProfile = ({ setIsFlipped, liked, onClick, isLiked, showPopup, user, A
                 <Typography sx={{ fontSize: "20px" }}>{age} - {gender} - {where}</Typography>
             </Grid>
             <Container>
-                <Grid size={12}>
-                    <Typography sx={{ fontSize: '18px' }}>Interests</Typography>
+                <Grid item xs={12}>
+                    <Typography sx={{ fontSize: '18px' }}>
+                        Interests
+                    </Typography>
                 </Grid>
-                <Grid container size={12}>
-                    <Grid size={4}>
-                        <Type type="Cooking" />
-                    </Grid>
-                    <Grid size={4}>
-                        <Type type="Eating Out" />
-                    </Grid>
-                    <Grid size={4}>
-                        <Type type="Bike Rides" />
-                    </Grid>
-                    <Grid size={4}>
-                        <Type type="Travelling" />
-                    </Grid>
+                <Grid container spacing={2} sx={{ mt: 2 }}>
+                    {dateInterests.length > 0 ? (
+                        dateInterests.map((interest, index) => (
+                            <Grid item xs={4} key={index}>
+                                <Type type={interest} />
+                            </Grid>
+                        ))
+                    ) : (
+                        <Grid item xs={12}>
+                            <Typography>No interests available.</Typography>
+                        </Grid>
+                    )}
                 </Grid>
                 <Grid size={12}>
                     <Typography sx={{ fontSize: "18px" }}> ...</Typography>
@@ -128,6 +134,7 @@ const ViewProfile = ({ setIsFlipped, liked, onClick, isLiked, showPopup, user, A
                 <Info img={faithImg} info={religion} />
                 <Info img={starImg} info={sign} />
                 <Info img={multiImg} info={status} />
+                <Info img={multiImg} info={openTo.join(', ')} />
                 <Info img={hatImg} info={education} />
                 <Info img={heartImg} info={heart} />
                 <Info img={jobImg} info={job} />

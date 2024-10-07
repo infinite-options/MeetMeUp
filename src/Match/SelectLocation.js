@@ -18,11 +18,11 @@ export default function SelectLocation() {
 
     const handleNextButton = async (user) => {
         try {
-            await sendDataToAPI(selectedDateIdea, formattedAddress,'-32.015001263602', '115.83650856893345', '200-0000011');
+            await sendDataToAPI(selectedDateIdea, formattedAddress, '-32.015001263602', '115.83650856893345', '200-0000011');
             navigate('/nextSummary', { state: { user, selectedDay, selectedTime, selectedDateIdea, AccountUser, formattedAddress } });
-        } catch (error) {    
+        } catch (error) {
             console.error('Error:', error);
-           
+
         }
     };
 
@@ -45,27 +45,27 @@ export default function SelectLocation() {
         //     meet_longitude: longitude,
         //     meet_uid:uid
         // };
-    
+
         try {
             const response = await fetch('https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/meet', {
                 method: 'PUT',
                 body: formData
             });
-    
+
             if (!response.ok) {
                 const errorText = await response.text();
                 throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
             }
-    
+
             const result = await response.json();
             console.log("Success:", result);
             return result;
         } catch (error) {
             console.error('API Error:', error);
-            throw error; 
+            throw error;
         }
     };
-    
+
 
 
 
@@ -115,7 +115,8 @@ export default function SelectLocation() {
                 <Box sx={{ mr: { xs: 5, md: 10 } }}><TopTitle /></Box>
                 <Box sx={{ position: 'relative', display: 'flex', alignItems: 'center', mr: { xs: 4, md: 20 } }}>
                     <Avatar
-                        src={AccountUser[0].photo?JSON.parse(AccountUser[0].photo):''}
+                        //src={AccountUser[0].photo?JSON.parse(AccountUser[0].photo):''}
+                        src={AccountUser.length > 0 && AccountUser[0].photo ? JSON.parse(AccountUser[0].photo)[0] : ''}
                         alt='Account User'
                         sx={{
                             width: { xs: 40, sm: 50 },
@@ -125,7 +126,7 @@ export default function SelectLocation() {
                         }}
                     />
                     <Avatar
-                        src={user.user_photo_url?JSON.parse(user.user_photo_url):''}
+                        src={user.user_photo_url ? JSON.parse(user.user_photo_url)[0] : ''}
                         alt='Matched User'
                         sx={{
                             width: { xs: 40, sm: 50 },
@@ -135,15 +136,15 @@ export default function SelectLocation() {
                             zIndex: 0
                         }}
                     />
-                    <Typography variant="h6" sx={{ mt: 1, fontFamily: 'Lexend', fontSize: { xs: '16px', md: '20px' }, ml: { xs: 1, md: 2 } }}>{user.name}</Typography>
+                    <Typography variant="h6" sx={{ mt: 1, fontFamily: 'Lexend', fontSize: { xs: '16px', md: '20px' }, ml: { xs: 1, md: 2 } }}>{user.user_first_name}</Typography>
                 </Box>
             </Box>
 
 
             <Box sx={{ mt: 3, textAlign: 'center', mx: { xs: 1, sm: 5 } }}>
-                <Typography variant="body1" sx={{ padding: '5px', fontFamily: 'Lexend', fontSize: { xs: '18px', md: '23px' }, textAlign: 'center', mt: { xs: 4, md: '100px' }, mx: { xs: '5%', sm: '10%' } }}>
+                {/* <Typography variant="body1" sx={{ padding: '5px', fontFamily: 'Lexend', fontSize: { xs: '18px', md: '23px' }, textAlign: 'center', mt: { xs: 4, md: '100px' }, mx: { xs: '5%', sm: '10%' } }}>
                     This is when <Box component="span" sx={{ fontWeight: 'bold' }}>{user.name}</Box> is available and these are the <Box component="span" sx={{ fontWeight: 'bold' }}>activities</Box> they enjoy:
-                </Typography>
+                </Typography> 
                 <Box sx={{ mt: 1 }}>
                     {activities.map((activity, index) => (
                         <Button
@@ -170,7 +171,10 @@ export default function SelectLocation() {
                             {activity.name}
                         </Button>
                     ))}
-                </Box>
+                </Box>*/}
+                <Typography variant="body1" sx={{ padding: '25px', fontFamily: 'Lexend', fontSize: { xs: '18px', md: '23px' }, textAlign: 'center', mt: { xs: 4, md: '110px' }, mx: { xs: '5%', sm: '10%' } }}>
+                    Let's meet up on <span style={{ color: '#E4423F' }}>{selectedDay} {selectedTime},</span> and go to <span style={{ color: '#E4423F' }}>{selectedDateIdea}</span> at the <span style={{ color: '#E4423F' }}>_</span>
+                </Typography>
             </Box>
 
 

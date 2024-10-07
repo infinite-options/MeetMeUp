@@ -46,19 +46,21 @@ export default function AccountSetup3Create() {
   function onLoad(autocomplete) {
     setSearchResult(autocomplete);
   }
-
   // console.log("openTo formData: ", formData.openTo);   // need to figure out where data is coming from
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/${userId}`);
         const fetchedData = response.data.result[0];
-        console.log("openTo: ", fetchedData.user_open_to);
+        console.log("fetched openTo: ", fetchedData.user_open_to);
         console.log("fetchedData: ", fetchedData);
-        const openToArray = fetchedData.user_open_to ? fetchedData.user_open_to.split(",") : [];
-        console.log("openToArray", openToArray)
-        console.log(fetchedData.user_latitude);
-        console.log(fetchedData.user_longitude);
+
+        //const openToArray = fetchedData.user_open_to ? fetchedData.user_open_to.split(",") : [];
+        const openToArray = JSON.parse(fetchedData.user_open_to);
+        console.log("openToArray after parsing: ", openToArray);
+      
+        //console.log(fetchedData.user_latitude);
+        //console.log(fetchedData.user_longitude);
         if (fetchedData.user_latitude && fetchedData.user_longitude) {
           setCenter({ lat: Number(fetchedData.user_latitude), lng: Number(fetchedData.user_longitude) });
           await handleAddress(fetchedData.user_latitude, fetchedData.user_longitude);
@@ -93,8 +95,8 @@ export default function AccountSetup3Create() {
     if (userId) {
       fetchUserData();
     } else {
-        setLoading(false);
-        setNoId(true);
+      setLoading(false);
+      setNoId(true);
     }
   }, [userId, savedAddress]);
 
@@ -122,14 +124,14 @@ export default function AccountSetup3Create() {
     }
   };
 
-  console.log("userData: ", userData);
-  console.log("userData Age: ", userData.user_age);
+  //console.log("userData: ", userData);
+  //console.log("userData Age: ", userData.user_age);
 
   const genders = ["Male", "Female", "Nonbinary"];
 
-  const sexuality = ["Straight", "Bisexual", "Transgender", "LGBTQ", "Homosexual"];
+  const sexuality = ["Straight", "Bi-sexual", "Transgender", "LGBTQ", "Homosexual"];
 
-  const openTo = ["Straight", "Bi-sexual", "Transgender", "LGBTQ", "Homosexual","Victor"];
+  const openTo = ["Straight", "Bi-sexual", "Transgender", "LGBTQ", "Homosexual","Manu"];
 
   console.log("openTo", openTo)
 
@@ -201,69 +203,42 @@ export default function AccountSetup3Create() {
 
   const handleNext = async () => {
     const url = "https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo";
-    let fd = new FormData();
+    
+    // Split the name into first and last names
     const nameArray = formData["name"] ? formData["name"].split(" ") : [];
+    const firstName = nameArray[0] || "";
     const lastName = nameArray.length > 1 ? nameArray[nameArray.length - 1] : "";
-    const firstName = nameArray.length > 0 ? nameArray[0] : "";
-
-    console.log("user_uid local: ", localStorage.getItem("user_uid"));
-    fd.append("user_uid", localStorage.getItem("user_uid"));
-    fd.append("user_email_id", localStorage.getItem("user_email_id"));
-
-    // const dataToAppend = {'user_first_name': firstName, 'user_last_name': lastName,
-    // 'user_gender': formData['gender'], 'user_age': formData['age'],
-    // 'user_suburb': formData['suburb'], 'user_profile_bio': formData['profileBio'],
-    // 'user_country': formData['country'], 'user_latitude': formData['lat'],
-    // 'user_longitude': formData['lng'], 'user_sexuality': formData['sexuality'],
-    // 'user_open_to': formData['openTo']}
-
-    // for (const [key, value] of Object.entries(dataToAppend)) {
-    //     fd.append(key, value);
-    // }
-    fd.append("user_first_name", firstName);
-    fd.append("user_last_name", lastName);
-    fd.append("user_age", formData["age"]);
-    fd.append("user_gender", formData["gender"]);
-    fd.append("user_suburb", formData["suburb"]);
-    fd.append("user_profile_bio", formData["profileBio"]);
-    fd.append("user_country", formData["country"]);
-    fd.append("user_latitude", center["lat"]);
-    fd.append("user_longitude", center["lng"]);
-    fd.append("user_sexuality", formData["sexuality"]);
-    
-
-
-    // Object.keys(receiverPropertyMapping).forEach((receiver) => {
-    //   announcement_receivers.push(receiver);
-    // });
-    
-    // const openTo=formData["openTo"].map(item => `"${item}"`);
-    // let openToObject = {}
-    // openToObject.keys(formData["openTo"]).forEach((item) => {
-    //   console.log("item",item)
-    // });
-    // console.log("openTo", openToObject)
-    fd.append("user_open_to", JSON.stringify(formData["openTo"]))
-    console.log("append user_open_to", JSON.stringify(formData["openTo"]))
-
-    if (isChanged) {
-      try {
-        const response = await fetch(url, {
-          method: "PUT",
-          body: fd,
-        });
-
-        if (response.ok) {
-          const result = await response.json();
-          console.log("response: ", result.data);
-        } else {
-          console.error("Response Err:", response.statusText);
-        }
-      } catch (err) {
-        console.log("Try Catch Err:", err);
-      }
+  
+    // Create an object with the updated data
+    const updatedData = {
+      user_uid: localStorage.getItem("user_uid"),
+      user_email_id: localStorage.getItem("user_email_id"),
+      user_first_name: firstName,
+      user_last_name: lastName,
+      user_age: formData["age"],
+      user_gender: formData["gender"],
+      user_suburb: formData["suburb"],
+      user_profile_bio: formData["profileBio"],
+      user_country: formData["country"],
+      user_latitude: center["lat"],
+      user_longitude: center["lng"],
+      user_sexuality: formData["sexuality"],
+      user_open_to: JSON.stringify(formData["openTo"]),
+    };
+  
+    // Create FormData and append fields in one step
+    const fd = new FormData();
+    Object.entries(updatedData).forEach(([key, value]) => fd.append(key, value));
+  
+    // Send the data using axios
+    try {
+      const response = await axios.put(url, fd); // Changed to PUT as per your original context
+      console.log("Successfully submitted data:", response.data);
+    } catch (error) {
+      console.error("Error submitting data:", error);
     }
   };
+  
 
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: GOOGLE_API_KEY,
@@ -383,7 +358,7 @@ export default function AccountSetup3Create() {
           <GoogleMap mapContainerStyle={mapContainerStyle} zoom={15} center={center} mapId='map_id'>
             <MarkerF position={center} />
           </GoogleMap>
-          <HelperTextBox text='Why do we need your location?' title={'Why Location?'} subtitle={'By sharing your location on the Meet Me up app, you can discover matches within your preferred distance and tailor your date locations based on your preferences.'}/>
+          <HelperTextBox text='Why do we need your location?' title={'Why Location?'} subtitle={'By sharing your location on the Meet Me up app, you can discover matches within your preferred distance and tailor your date locations based on your preferences.'} />
           <div className='pc-header-text'>Your Sexuality</div>
           <div className='pc-sub-header-text'>Select the fields that best describe your sexuality</div>
           <Grid2 container spacing={1} sx={{ marginTop: 3 }}>
@@ -403,7 +378,7 @@ export default function AccountSetup3Create() {
               </Grid2>
             ))}
           </Grid2>
-          <HelperTextBox text='Why do we need this information?' title={'Your Open To'} subtitle={'Specifying your identity and expressing your openness creates connections with individuals who share similar perspectives and values.'}/>
+          <HelperTextBox text='Why do we need this information?' title={'Your Open To'} subtitle={'Specifying your identity and expressing your openness creates connections with individuals who share similar perspectives and values.'} />
           <div className='form-button-container'>
             <NextButton onClick={handleNext} next={"/accountSetup4Create"}></NextButton>
           </div>

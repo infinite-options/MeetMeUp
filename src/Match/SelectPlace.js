@@ -5,7 +5,7 @@ import { Box, Button, Grid, Avatar, Typography } from '@mui/material';
 
 export default function SelectPlace() {
     const location = useLocation();
-    const { user, selectedDay, selectedTime, AccountUser = [] } = location.state || {};
+    const { user, selectedDay, selectedTime, AccountUser = [], accountUserData=[] } = location.state || {};
     const navigate = useNavigate();
 
     const [selectedButton, setSelectedButton] = useState("");
@@ -29,37 +29,40 @@ export default function SelectPlace() {
             }
         });
     };
+    const userInterests = user.user_date_interests ? user.user_date_interests.split(',') : [];
 
     const renderDateIdeaButtons = () => {
-        return dateIdeas.map((idea, index) => (
-            <Grid item xs={6} key={index}>
-                <Button
-                    onClick={() => handleButtonClick(idea)}
-                    fullWidth
-                    variant={selectedButton === idea ? "contained" : "outlined"}
-                    sx={{
-                        backgroundColor: selectedButton === idea ? '#E4423F' : '#FFFFFF',
-                        color: selectedButton === idea ? '#FFFFFF' : '#000000',
-                        height: '60px',
-                        borderRadius: '20px',
-                        fontFamily: 'Lexend, sans-serif',
-                        fontSize: { xs: '14px', sm: '16px', md: '18px' }, 
-                        boxShadow: '4px 4px 8px rgba(0, 0, 0, 0.2)',
-                        border: 'none',
-                        textTransform: 'none',
-                        padding: { xs: '10px', sm: '12px', md: '15px' }, 
-                        margin: { xs: '8px 0', sm: '10px 0', md: '12px 0' }, 
-                        '&:hover': {
-                            backgroundColor: selectedButton === idea ? '#d13c39' : '#f5f5f5',
-                        },
-                    }}
-                >
-                    {idea}
-                </Button>
-            </Grid>
-        ));
+        return dateIdeas.map((idea, index) => {
+            const isUserInterest = userInterests.includes(idea);
+            return (
+                <Grid item xs={6} key={index}>
+                    <Button
+                        onClick={() => handleButtonClick(idea)}
+                        fullWidth
+                        variant={selectedButton === idea ? "contained" : "outlined"}
+                        sx={{
+                            backgroundColor: selectedButton === idea ? '#E4423F' : '#FFFFFF',
+                            color: selectedButton === idea ? '#FFFFFF' : '#000000',
+                            height: '60px',
+                            borderRadius: '20px',
+                            fontFamily: 'Lexend, sans-serif',
+                            fontSize: { xs: '14px', sm: '16px', md: '18px' }, 
+                            boxShadow: '4px 4px 8px rgba(0, 0, 0, 0.2)',
+                            border: isUserInterest ? '2px solid #E4423F' : 'none',
+                            textTransform: 'none',
+                            padding: { xs: '10px', sm: '12px', md: '15px' }, 
+                            margin: { xs: '8px 0', sm: '10px 0', md: '12px 0' }, 
+                            '&:hover': {
+                                backgroundColor: selectedButton === idea ? '#d13c39' : (isUserInterest ? '#FFD1D1' : '#f5f5f5'),
+                            },
+                        }}
+                    >
+                        {idea}
+                    </Button>
+                </Grid>
+            );
+        });
     };
-
     return (
         <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", padding: '20px' }}>
             
@@ -67,7 +70,8 @@ export default function SelectPlace() {
                 <Box sx={{ mr: { xs: 5, md: 10 } }}><TopTitle /></Box>
                 <Box sx={{ position: 'relative', display: 'flex', alignItems: 'center', mr: { xs: 4, md: 20 } }}>
                     <Avatar
-                        src={AccountUser[0].photo?JSON.parse(AccountUser[0].photo):''}
+                        //src={AccountUser[0].photo?JSON.parse(AccountUser[0].photo):''}
+                        src={AccountUser.length > 0 && AccountUser[0].photo ? JSON.parse(AccountUser[0].photo)[0] : ''}
                         alt='Account User'
                         sx={{
                             width: { xs: 40, sm: 50 },
@@ -77,7 +81,7 @@ export default function SelectPlace() {
                         }}
                     />
                     <Avatar
-                        src={user.user_photo_url?JSON.parse(user.user_photo_url):''}
+                        src={user.user_photo_url?JSON.parse(user.user_photo_url)[0]:''}
                         alt='Matched User'
                         sx={{
                             width: { xs: 40, sm: 50 },
@@ -87,7 +91,8 @@ export default function SelectPlace() {
                             zIndex: 0
                         }}
                     />
-                    <Typography variant="h6" sx={{ mt: 1, fontFamily: 'Lexend', fontSize: { xs: '16px', md: '20px' }, ml: { xs: 1, md: 2 } }}>{user.name}</Typography>
+                    <Typography variant="h6" sx={{ mt: 1, fontFamily: 'Lexend', fontSize: { xs: '16px', md: '20px' }, ml: { xs: 1, md: 2 } }}>{user.user_first_name}</Typography>
+                    
                 </Box>
             </Box>
             

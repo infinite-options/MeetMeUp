@@ -2,13 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Stack, Typography, Avatar, Box, Grid } from '@mui/material';
 import axios from 'axios';
+import profileUserIcon from "../Assets/Images/profileUserIcon.webp"
 
-export default function MatchPopUp({ user,userStates, setUserStates,index }) {
+export default function MatchPopUp({ user,userStates, setUserStates,index,accountUserData }) {
     const navigate = useNavigate();
     const userId = localStorage.getItem('user_uid');
     const handleBegin = (user) => {
-        navigate('/begin', { state: { user, AccountUser } });
+        navigate('/begin', { state: { user, AccountUser,accountUserData } });
     }
+    
+    console.log("account user data details in match pop up:", accountUserData) //account user
+    console.log("USER DATA IN MATCH POP UP:", user) //matched user
+    console.log("matched user url:",JSON.parse(user.user_photo_url)[0])
 
     const handleContinue = () => {
         if (userStates) {
@@ -29,18 +34,51 @@ export default function MatchPopUp({ user,userStates, setUserStates,index }) {
     }
 
     const [AccountUser, setAccountUser] = useState([])
+    console.log("Account User Details:", AccountUser)
 
     useEffect(()=> {
         axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/${userId}`)
           .then(res=> {
             const userData = res.data.result[0]
+            //console.log("USER DATA:", userData)
             setAccountUser([{
                 name: userData.user_first_name,
+                lastName: userData.user_last_name,
                 age: userData.user_age,
                 gender: userData.user_gender,
-                where: userData.suburb,
-                photo: userData.user_photo_url
-            }])
+                where: userData.user_suburb,
+                photo: userData.user_photo_url,
+                email: userData.user_email_id,
+                phoneNumber: userData.user_phone_number,
+                availableTime: JSON.parse(userData.user_available_time),
+                bodyComposition: userData.user_body_composition,
+                country: userData.user_country,
+                dateInterests: userData.user_date_interests.split(','),
+                drinking: userData.user_drinking,
+                education: userData.user_education,
+                favoritePhoto: userData.user_favorite_photo,
+                generalInterests: userData.user_general_interests.split(','),
+                height: userData.user_height,
+                job: userData.user_job,
+                kids: userData.user_kids,
+                latitude: userData.user_latitude,
+                longitude: userData.user_longitude,
+                nationality: userData.user_nationality,
+                openTo: JSON.parse(userData.user_open_to),
+                preferAgeMax: userData.user_prefer_age_max,
+                preferAgeMin: userData.user_prefer_age_min,
+                preferDistance: userData.user_prefer_distance,
+                preferGender: userData.user_prefer_gender,
+                preferHeightMin: userData.user_prefer_height_min,
+                preferKids: userData.user_prefer_kids,
+                profileBio: userData.user_profile_bio,
+                religion: userData.user_religion,
+                sexuality: userData.user_sexuality,
+                smoking: userData.user_smoking,
+                starSign: userData.user_star_sign,
+                uid: userData.user_uid,
+                videoUrl: JSON.parse(userData.user_video_url)
+              }]);
           })
           .catch(err=> {
             console.log(err)
@@ -63,7 +101,7 @@ export default function MatchPopUp({ user,userStates, setUserStates,index }) {
                     }}
                 />
                 <Avatar
-                    src={user.user_photo_url?JSON.parse(user.user_photo_url):''}
+                    src={user.user_photo_url?JSON.parse(user.user_photo_url)[0]:''}
                     alt='Matched User'
                     sx={{
                         width: 100,

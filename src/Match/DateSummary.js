@@ -92,7 +92,8 @@ export default function DateSummary() {
                 <Box sx={{ mr: { xs: 5, md: 10 } }}><TopTitle /></Box>
                 <Box sx={{ position: 'relative', display: 'flex', alignItems: 'center', mr: { xs: 4, md: 20 } }}>
                     <Avatar
-                        src={AccountUser[0].photo?JSON.parse(AccountUser[0].photo):''}
+                        //src={AccountUser[0].photo?JSON.parse(AccountUser[0].photo):''}
+                        src={AccountUser.length > 0 && AccountUser[0].photo ? JSON.parse(AccountUser[0].photo)[0] : ''}
                         alt='Account User'
                         sx={{
                             width: { xs: 40, sm: 50 },
@@ -102,7 +103,7 @@ export default function DateSummary() {
                         }}
                     />
                     <Avatar
-                        src={user.user_photo_url?JSON.parse(user.user_photo_url):''}
+                        src={user.user_photo_url?JSON.parse(user.user_photo_url)[0]:''}
                         alt='Matched User'
                         sx={{
                             width: { xs: 40, sm: 50 },
@@ -112,7 +113,7 @@ export default function DateSummary() {
                             zIndex: 0
                         }}
                     />
-                    <Typography variant="h6" sx={{ mt: 1, fontFamily: 'Lexend', fontSize: { xs: '16px', md: '20px' }, ml: { xs: 1, md: 2 } }}>{user.name}</Typography>
+                    <Typography variant="h6" sx={{ mt: 1, fontFamily: 'Lexend', fontSize: { xs: '16px', md: '20px' }, ml: { xs: 1, md: 2 } }}>{user.user_first_name}</Typography>
                 </Box>
             </Box>
             <Typography variant="body1" sx={{ padding: '25px', fontFamily: 'Lexend', fontSize: { xs: '18px', md: '23px' }, textAlign: 'center', mt: { xs: 4, md: '110px' }, mx: { xs: '5%', sm: '10%' } }}>

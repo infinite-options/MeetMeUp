@@ -6,12 +6,74 @@ import TopTitle from '../Assets/Components/TopTitle';
 export default function Begin() {
     const location = useLocation();
     const navigate = useNavigate();
-    const { user, AccountUser = [] } = location.state || {};
+    const { user, AccountUser = [], accountUserData = [] } = location.state || {};
+    console.log("matched user details in MatchBegin:", user);
+    console.log("Account user details in MatchBegin (limited):", AccountUser);
+    console.log("Account user details in MatchBegin :", accountUserData);
+
+    const parseAvailableTimes = (data) => {
+        try {
+            const parsed = JSON.parse(data);
+            if (Array.isArray(parsed)) {
+                return parsed.map(slot => [slot.day, slot.start_time, slot.end_time]);
+            } else {
+                console.warn("Unexpected data format:", parsed);
+                return [];
+            }
+        } catch (error) {
+            console.error("Error parsing available times:", error);
+            return [];
+        }
+    };
+
+    const userTimes = user?.user_available_time ? parseAvailableTimes(user.user_available_time) : [];
+    const accountUserTimes = accountUserData?.user_available_time ? parseAvailableTimes(accountUserData.user_available_time) : [];
+    //const accountUserTimes = AccountUser?.availableTime ? parseAvailableTimes(AccountUser.availableTime) : [];
+    console.log("Parsed userTimes:", userTimes);
+    console.log("Parsed accountUserTimes:", accountUserTimes);
+
+    const getCommonAvailability = (userTimes, accountUserTimes) => {
+        const commonTimes = {};
+
+        userTimes.forEach(([userDay, userStart, userEnd]) => {
+            accountUserTimes.forEach(([accountDay, accountStart, accountEnd]) => {
+                if (userDay === accountDay) {
+                    const start = new Date(`2000-01-01 ${userStart}`);
+                    const end = new Date(`2000-01-01 ${userEnd}`);
+                    const accountStartTime = new Date(`2000-01-01 ${accountStart}`);
+                    const accountEndTime = new Date(`2000-01-01 ${accountEnd}`);
+
+                    const overlapStart = new Date(Math.max(start, accountStartTime));
+                    const overlapEnd = new Date(Math.min(end, accountEndTime));
+
+                    if (overlapStart < overlapEnd) {
+                        if (!commonTimes[userDay]) commonTimes[userDay] = [];
+                        let current = new Date(overlapStart);
+                        while (current < overlapEnd) {
+                            commonTimes[userDay].push(current.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }));
+                            current.setHours(current.getHours() + 1);
+                        }
+                        if (current.getTime() === overlapEnd.getTime()) {
+                            commonTimes[userDay].push(current.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }));
+                        }
+                    }
+                }
+            });
+        });
+
+        return commonTimes;
+    };
+
+    const commonAvailability = getCommonAvailability(userTimes, accountUserTimes);
+    console.log("Common Availability:", commonAvailability);
+
+
+
 
     const [selectedDay, setSelectedDay] = useState("");
     const [selectedTime, setSelectedTime] = useState("");
 
-    
+
 
     const handleDayChange = (event) => {
         setSelectedDay(event.target.value);
@@ -24,16 +86,16 @@ export default function Begin() {
     const handleNextButton = async (user) => {
         try {
             await sendDataToAPI(selectedDay, selectedTime);
-            navigate('/nextPlace', { state: { user, selectedDay, selectedTime, AccountUser } });
-        } catch (error) {    
+            navigate('/nextPlace', { state: { user, selectedDay, selectedTime, AccountUser, accountUserData } });
+        } catch (error) {
             console.error('Error:', error);
         }
     };
-    const sendDataToAPI = async(day, time)=>{
-       
+    const sendDataToAPI = async (day, time) => {
+
         const formData = new FormData();
-        formData.append('meet_user_id', ' ');
-        formData.append('meet_date_user_id', ' ');
+        formData.append('meet_user_id', user.user_uid);
+        formData.append('meet_date_user_id', AccountUser[0].uid);
         formData.append('meet_day', day);
         formData.append('meet_time', time);
         // const data ={
@@ -41,8 +103,8 @@ export default function Begin() {
         //     meet_date_user_id:'',
         //     day,
         //     time};
-        try{
-            const response= await fetch('https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/meet',{
+        try {
+            const response = await fetch('https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/meet', {
                 method: 'POST',
                 // headers:{
                 //     'Content-Type': 'application/json',
@@ -51,13 +113,13 @@ export default function Begin() {
                 body: formData
             });
 
-            if(!response.ok){
+            if (!response.ok) {
                 throw new Error('Network response not okay');
             }
 
             const result = await response.json();
             console.log("success:", result)
-        } catch (error){
+        } catch (error) {
             console.error('Error:', error);
         }
     }
@@ -68,7 +130,8 @@ export default function Begin() {
                 <Box sx={{ mr: { xs: 5, md: 10 } }}><TopTitle /></Box>
                 <Box sx={{ position: 'relative', display: 'flex', alignItems: 'center', mr: { xs: 4, md: 20 } }}>
                     <Avatar
-                        src={AccountUser[0].photo?JSON.parse(AccountUser[0].photo):''}
+                        //src={AccountUser[0].photo?JSON.parse(AccountUser[0].photo):''}
+                        src={AccountUser.length > 0 && AccountUser[0].photo ? JSON.parse(AccountUser[0].photo)[0] : ''}
                         alt='Account User'
                         sx={{
                             width: { xs: 40, sm: 50 },
@@ -78,7 +141,7 @@ export default function Begin() {
                         }}
                     />
                     <Avatar
-                        src={user.user_photo_url?JSON.parse(user.user_photo_url):''}
+                        src={user.user_photo_url ? JSON.parse(user.user_photo_url)[0] : ''}
                         alt='Matched User'
                         sx={{
                             width: { xs: 40, sm: 50 },
@@ -106,7 +169,10 @@ export default function Begin() {
                     <Select value={selectedDay} onChange={handleDayChange} label="Date day">
                         <MenuItem value="">Select Day</MenuItem>
                         {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day) => (
-                            <MenuItem key={day} value={day}>{day}</MenuItem>
+                            <MenuItem key={day} value={day}
+                                sx={commonAvailability[day] ? { fontWeight: 'bold', color: '#E4423F' } : {}}>
+                                {day}
+                            </MenuItem>
                         ))}
                     </Select>
                 </FormControl>
@@ -115,8 +181,11 @@ export default function Begin() {
                     <InputLabel>Date time</InputLabel>
                     <Select value={selectedTime} onChange={handleTimeChange} label="Date time">
                         <MenuItem value="">Select Time</MenuItem>
-                        {['7:00 AM', '9:00 AM', '12:00 PM', '3:00 PM', '5:00 PM', '7:30 PM', '9:00 PM'].map((time) => (
-                            <MenuItem key={time} value={time}>{time}</MenuItem>
+                        {['12:00 AM', '1:00 AM', '2:00 AM', '3:00 AM', '4:00 AM', '5:00 AM', '6:00 AM', '7:00 AM', '8:00 AM', '9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM', '6:00 PM', '7:00 PM', '8:00 PM', '9:00 PM', '10:00 PM', '11:00 PM'].map((time) => (
+                            <MenuItem key={time} value={time}
+                                sx={commonAvailability[selectedDay]?.includes(time) ? { fontWeight: 'bold', color: '#E4423F' } : {}}>
+                                {time}
+                            </MenuItem>
                         ))}
                     </Select>
                 </FormControl>
