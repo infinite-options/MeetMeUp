@@ -16,6 +16,10 @@ export default function SelectLocation() {
     const [center, setCenter] = useState({ lat: -32.015001263602, lng: 115.83650856893345 });
     const [searchResult, setSearchResult] = useState('');
 
+    const [markerPosition, setMarkerPosition] = useState(null);
+    const [zoom, setZoom] = useState(15); // Default zoom level
+    const [errorMessage, setErrorMessage] = useState('');
+
     const handleNextButton = async (user) => {
         try {
             await sendDataToAPI(selectedDateIdea, formattedAddress, '-32.015001263602', '115.83650856893345', '200-0000011');
@@ -97,15 +101,65 @@ export default function SelectLocation() {
         setSearchResult(autocomplete);
     }
 
+    // function onPlaceChanged() {
+    //     if (searchResult !== '') {
+    //         const place = searchResult.getPlace();
+    //         const formattedAddress = place.formatted_address;
+    //         console.log("formatted address:", formattedAddress);
+    //         setCenter({ lat: place.geometry.location.lat(), lng: place.geometry.location.lng() });
+    //         setFormattedAddress(formattedAddress);
+    //     } else {
+    //         alert('Enter in a new location');
+    //     }
+    // }
+
     function onPlaceChanged() {
-        if (searchResult !== '') {
+        if (searchResult && searchResult.getPlace) {
             const place = searchResult.getPlace();
-            const formattedAddress = place.formatted_address;
-            console.log("formatted address:", formattedAddress);
-            setCenter({ lat: place.geometry.location.lat(), lng: place.geometry.location.lng() });
+            
+            if (!place.geometry) {
+                console.error("No geometry information available for this place.");
+                return;
+            }
+    
+            const fullAddress = place.formatted_address;
+            console.log("Full address:", fullAddress);
+    
+            // Format the address
+            const addressParts = fullAddress.split(',');
+            let formattedAddress = '';
+    
+            if (addressParts.length >= 3) {
+                const street = addressParts[0].trim();
+                const city = addressParts[1].trim();
+                const stateZip = addressParts[2].trim();
+    
+                formattedAddress = `${street},\n${city}, ${stateZip}`;
+            } else {
+                formattedAddress = fullAddress; 
+            }
+    
+            console.log("Formatted address:", formattedAddress);
+    
+            // Update map center
+            const newCenter = {
+                lat: place.geometry.location.lat(),
+                lng: place.geometry.location.lng()
+            };
+            setCenter(newCenter);
+    
+            // Set formatted address
             setFormattedAddress(formattedAddress);
+    
+            // You might want to update a marker position as well
+            setMarkerPosition(newCenter);
+    
+            // Optionally zoom the map
+            setZoom(15);  // Assuming you have a setZoom function
+    
         } else {
-            alert('Enter in a new location');
+            console.warn("No valid place selected");
+            setErrorMessage("Please enter a valid location");
         }
     }
 
@@ -172,7 +226,7 @@ export default function SelectLocation() {
                         </Button>
                     ))}
                 </Box>*/}
-                <Typography variant="body1" sx={{ padding: '25px', fontFamily: 'Lexend', fontSize: { xs: '18px', md: '23px' }, textAlign: 'center', mt: { xs: 4, md: '110px' }, mx: { xs: '5%', sm: '10%' } }}>
+                <Typography variant="body1" sx={{ padding: '25px', fontFamily: 'Lexend', fontSize: { xs: '18px', md: '23px' }, textAlign: 'center', mt: { xs: 4, md: '60px' }, mx: { xs: '5%', sm: '10%' } }}>
                     Let's meet up on <span style={{ color: '#E4423F' }}>{selectedDay} {selectedTime},</span> and go to <span style={{ color: '#E4423F' }}>{selectedDateIdea}</span> at the <span style={{ color: '#E4423F' }}>_</span>
                 </Typography>
             </Box>

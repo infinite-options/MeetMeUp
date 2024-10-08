@@ -28,7 +28,7 @@ const Match = () => {
 
     const location = useLocation();
     const accountUserData = location.state?.userData;
-    console.log("account user data details in match:", accountUserData)
+    //console.log("account user data details in match:", accountUserData)
 
     const handleNavigate = () => {
         navigate(`/selectionResults`);
@@ -52,34 +52,33 @@ const Match = () => {
 
 
 
-    console.log('userSelections: ', userSelections);
+    //console.log('userSelections: ', userSelections);
 
     useEffect(() => {
         axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/likes/${userId}`)
             .then(res => {
-                const peopleLiked = (res.data.people_whom_you_selected.map(user => user.user_uid)).concat(res.data.matched_results.map(user => user.user_uid));
-                const peopleWhoLiked = (res.data.people_who_selected_you.map(user => user.user_uid)).concat(res.data.matched_results.map(user => user.user_uid));
+                // Check if the required properties exist before accessing them
+                const peopleLiked = (res.data.people_whom_you_selected?.map(user => user.user_uid) || [])
+                    .concat(res.data.matched_results?.map(user => user.user_uid) || []);
+                const peopleWhoLiked = (res.data.people_who_selected_you?.map(user => user.user_uid) || [])
+                    .concat(res.data.matched_results?.map(user => user.user_uid) || []);
                 return [peopleLiked, peopleWhoLiked];
             })
             .then(peopleLiked => {
                 axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/matches/${userId}`)
                     .then(res => {
                         console.log("Match me user details", res.data.result);
-                        if (res.data.result.length > 0) {
-
-                            if (res.data.result[2] && res.data.result[2].user_photo_url) {
-                                console.log("matched user 2 Image url:", JSON.parse(res.data.result[1].user_photo_url)[0]);
-                            }
-                            if (res.data.result[3] && res.data.result[3].user_photo_url) {
-                                console.log("matched user 3 Image url:", JSON.parse(res.data.result[2].user_photo_url)[0]);
-                            }
+                        if (res.data.result && res.data.result.length > 0) {
+                            // Your existing code for logging image URLs
                         } else {
                             console.log("No matches found for this user");
                         }
-
-                        setUserData(res.data.result);
-
-                        const initialUserStates = res.data.result.map((user) => ({
+    
+                        // Ensure res.data.result is an array, even if empty
+                        const userData = Array.isArray(res.data.result) ? res.data.result : [];
+                        setUserData(userData);
+    
+                        const initialUserStates = userData.map((user) => ({
                             isFlipped: false,
                             liked: peopleLiked[0].includes(user.user_uid),
                             theyliked: peopleLiked[1].includes(user.user_uid),
@@ -144,8 +143,21 @@ const Match = () => {
                     key={user.user_id} // assuming user has a unique ID
                 >
                     <Box>
-                        <Box sx={{ backgroundColor: "#E4423F", paddingTop: "30px", paddingBottom: "50px", borderRadius: "10px", display: "flex", justifyContent: "center", position: "relative", minHeight: '600px', maxWidth: "414px", maxHeight: "680px", margin: "0 auto", marginTop: "20px" }}>
-                            <img src={user.user_photo_url ? JSON.parse(user.user_photo_url)[0] : defaultImg} style={{ width: "100%" }} alt="Profile" />
+                    {/*minHeight: '600px',
+                    maxWidth: "414px"*/}
+
+                        <Box sx={{ backgroundColor: "#E4423F", paddingTop: "30px", paddingBottom: "50px", borderRadius: "10px", display: "flex", justifyContent: "center", position: "relative", minHeight: '700px', maxWidth: "550px", maxHeight: "680px", margin: "0 auto", marginTop: "20px" }}>
+                           <img src={user.user_photo_url ? JSON.parse(user.user_photo_url)[0] : defaultImg} style={{ width: "100%" }} alt="Profile" />
+                            {/*<img
+                                src={user.user_photo_url ? JSON.parse(user.user_photo_url)[0] : defaultImg}
+                                style={{
+                                    maxWidth: "100%",
+                                    maxHeight: "100%",
+                                    objectFit: "contain",
+                                    objectPosition: "center"
+                                }}
+                                alt="Profile"
+                            />*/}
                             <Typography sx={{ position: "absolute", zIndex: '10', top: "10%", color: "white", fontSize: '2  0px' }}>
                                 {user.user_first_name + " " + user.user_last_name}
                             </Typography>
@@ -165,7 +177,7 @@ const Match = () => {
                         </Box>
 
                     </Box>
-                    
+
                     <ViewProfile
                         setIsFlipped={() => handleFlip(index)}
                         liked={userStates[index]?.liked}

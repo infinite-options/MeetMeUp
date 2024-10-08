@@ -104,6 +104,7 @@ const Profile = () => {
   console.log('saved gender: ', gender);
   const where = userData.user_suburb;
   const dateInterests = userData.user_date_interests ? userData.user_date_interests.split(',') : [];
+  const generalInterests = userData.user_general_interests ? userData.user_general_interests.split(',') : [];
   const height = userData.user_height;
   const religion = userData.user_religion;
   const sign = userData.user_star_sign;
@@ -139,7 +140,7 @@ const Profile = () => {
   }
 
   if (noId) {
-    
+
     navigate('/accountSetup1Login')
 
   }
@@ -165,33 +166,25 @@ const Profile = () => {
         <Typography sx={{ fontSize: "30px", textAlign: "center" }}>About You</Typography>
       </Grid>
       <Grid container justifyContent={'center'}>
-        <Grid size={6}>
-          {/* {imageList ? imageList.map((imgSrc) => {
-            <Grid size={12} key={imgSrc}>
-              {console.log(imgSrc)}
-              {imgSrc ? <img src={imgSrc} height='200' width='200' alt={imgSrc} /> : null}
-            </Grid>
-          }) : null} */}
-          <Grid size={12}>
-            {imageList[0] ? <img src={imageList[0]} style={{ height: '220px', width: '100%', objectFit: 'cover' }} alt={imageList[0]} /> : null}
+        <Grid item xs={6} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' , marginRight:'10px'}}>
+          <Grid item xs={12}>
+            {imageList[0] && <img src={imageList[0]} style={{ height: '150px', width: '100%', objectFit: 'cover', marginBottom: '10px' }} alt={imageList[0]} />}
           </Grid>
-          <Grid size={12}>
-            {imageList[1] ? <img src={imageList[1]} style={{ height: '220px', width: '100%', objectFit: 'cover' }} alt={imageList[1]} /> : null}
+          <Grid item xs={12}>
+            {imageList[1] && <img src={imageList[1]} style={{ height: '150px', width: '100%', objectFit: 'cover', marginBottom: '10px' }} alt={imageList[1]} />}
           </Grid>
-          <Grid size={12}>
-            {imageList[2] ? <img src={imageList[2]} style={{ height: '220px', width: '100%', objectFit: 'cover' }} alt={imageList[2]} /> : null}
+          <Grid item xs={12}>
+            {imageList[2] && <img src={imageList[2]} style={{ height: '150px', width: '100%', objectFit: 'cover' }} alt={imageList[2]} />}
           </Grid>
-
-          {/* <Grid size={12} container>
-            <img src={img3} alt='img3' />
-          </Grid> */}
         </Grid>
-        <Grid size={6}>
-          <Grid size={12}>
-            {videoSource ? <video src={videoSource.replaceAll("\"", "")} height="400" width="200" controls autoPlay muted /> : null}
+
+        <Grid item xs={6} style={{ display: 'flex', alignItems: 'center' }}>
+          <Grid item xs={12}>
+            {videoSource && <video src={videoSource.replaceAll("\"", "")} style={{ height: '460px', width: '100%' }} controls autoPlay muted />}
           </Grid>
         </Grid>
       </Grid>
+
       <Grid container size={12} justifyContent='center'>
         <Button onClick={handleUpload}
           sx={{
@@ -226,7 +219,7 @@ const Profile = () => {
           <Typography sx={{ fontSize: "18px" }}>Interests</Typography>
         </Grid>
         <Grid container size={12}>
-          {dateInterests.length > 0 ? dateInterests.map((interest) => (
+          {generalInterests.length > 0 ? generalInterests.map((interest) => (
             <Grid item xs={4} key={interest}>
               <Type type={interest} />
             </Grid>

@@ -11,9 +11,9 @@ export default function MatchPopUp({ user,userStates, setUserStates,index,accoun
         navigate('/begin', { state: { user, AccountUser,accountUserData } });
     }
     
-    console.log("account user data details in match pop up:", accountUserData) //account user
-    console.log("USER DATA IN MATCH POP UP:", user) //matched user
-    console.log("matched user url:",JSON.parse(user.user_photo_url)[0])
+    //console.log("account user data details in match pop up:", accountUserData) //account user
+    //console.log("USER DATA IN MATCH POP UP:", user) //matched user
+    //console.log("matched user url:",JSON.parse(user.user_photo_url)[0])
 
     const handleContinue = () => {
         if (userStates) {
@@ -34,7 +34,7 @@ export default function MatchPopUp({ user,userStates, setUserStates,index,accoun
     }
 
     const [AccountUser, setAccountUser] = useState([])
-    console.log("Account User Details:", AccountUser)
+    //console.log("Account User Details:", AccountUser)
 
     useEffect(()=> {
         axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/${userId}`)

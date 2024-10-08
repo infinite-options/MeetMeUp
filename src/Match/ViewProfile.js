@@ -43,10 +43,11 @@ const ViewProfile = ({ setIsFlipped, liked, onClick, isLiked, showPopup, user, A
     const smoke = userData.user_smoking;
     const flag = userData.user_nationality;
     const popupRef = useRef(null);
+    //const videoSource = userData.user_video_url;
     console.log('userData: ', userData);
 
     return (
-        <Grid container sx={{ maxWidth: "414px", margin: "0 auto", position: "relative" }}>
+        <Grid container sx={{ maxWidth: "550px", margin: "0 auto", position: "relative" }}>
             {showPopup && (
                 <div className='popup'>
                     <div className='popup-content' ref={popupRef}>
@@ -59,51 +60,75 @@ const ViewProfile = ({ setIsFlipped, liked, onClick, isLiked, showPopup, user, A
                 <img src={liked ? redliked : redlike} style={{ position: "absolute", right: "5%", top: "1%" }} onClick={onClick}></img>
                 <img src={theyliked ? redliked : redlike} style={{ position: "absolute", left: "5%", top: "1%" }}></img>
             </Grid>
-            <Grid size={6}>
-                <Grid size={12}>
-                    {userData.user_photo_url && JSON.parse(userData.user_photo_url)[0] && (
-                        <img
-                            src={JSON.parse(userData.user_photo_url)[0]}
-                            alt="img1"
-                            style={{ maxWidth: "200px" }}
-                        />
-                    )}
+
+
+            <Grid container justifyContent={'center'}>
+                
+                <Grid item xs={6} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' , marginRight:'20px', marginLeft:'70px'}}>
+                    <Grid item xs={12}>
+                        {userData.user_photo_url && JSON.parse(userData.user_photo_url)[0] && (
+                            <img
+                                src={JSON.parse(userData.user_photo_url)[0]}
+                                alt="img1"
+                                style={{ maxWidth: '200px', height: '150px', objectFit: 'cover', marginBottom: '10px' }}
+                            />
+                        )}
+                    </Grid>
+                    <Grid item xs={12}>
+                        {userData.user_photo_url && JSON.parse(userData.user_photo_url)[1] && (
+                            <img
+                                src={JSON.parse(userData.user_photo_url)[1]}
+                                alt="img2"
+                                style={{ maxWidth: '200px', height: '150px', objectFit: 'cover', marginBottom: '10px' }}
+                            />
+                        )}
+                    </Grid>
+                    <Grid item xs={12}>
+                        {userData.user_photo_url && JSON.parse(userData.user_photo_url)[2] && (
+                            <img
+                                src={JSON.parse(userData.user_photo_url)[2]}
+                                alt="img3"
+                                style={{ maxWidth: '200px', height: '150px', objectFit: 'cover' }}
+                            />
+                        )}
+                    </Grid>
                 </Grid>
-                <Grid size={12}>
-                    {userData.user_photo_url && JSON.parse(userData.user_photo_url)[1] && (
-                        <img
-                            src={JSON.parse(userData.user_photo_url)[1]}
-                            alt="img2"
-                            style={{ maxWidth: "200px" }}
-                        />
-                    )}
+
+                
+                <Grid item xs={6} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', justifyContent:'center' }}>
+                    <Grid item xs={12}>
+                        {userData.user_video_url && (
+                            <video
+                                src={userData.user_video_url.replaceAll("\"", "")}
+                                style={{
+                                    maxWidth: '200px',
+                                    height: '470px',
+                                    objectFit: 'cover',
+                                }}
+                                controls
+                                autoPlay
+                                muted
+                            />
+                        )}
+                    </Grid>
                 </Grid>
             </Grid>
-            <Grid size={6}>
-                <Grid size={12}>
-                    {userData.user_photo_url && JSON.parse(userData.user_photo_url)[2] && (
-                        <img
-                            src={JSON.parse(userData.user_photo_url)[2]}
-                            alt="img3"
-                            style={{ maxWidth: "200px" }}
-                        />
-                    )}
-                </Grid>
-            </Grid>
+
+
 
             <Grid size={12} container justifyContent="center">
                 <Typography sx={{ fontFamily: "Lexend", fontSize: "30px" }}>{name}</Typography>
             </Grid>
-            <Grid size={12} container justifyContent="center" sx={{ mb: "20px" }}>
+            <Grid size={12} container justifyContent="center" sx={{ mb: "20px",ml:'25px'}}>
                 <Typography sx={{ fontSize: "20px" }}>{age} - {gender} - {where}</Typography>
             </Grid>
             <Container>
                 <Grid item xs={12}>
-                    <Typography sx={{ fontSize: '18px' }}>
+                    <Typography sx={{ fontSize: '18px',marginLeft:'40px' }}>
                         Interests
                     </Typography>
                 </Grid>
-                <Grid container spacing={2} sx={{ mt: 2 }}>
+                <Grid container spacing={2} sx={{ mt: 2,marginLeft:'40px' }}>
                     {dateInterests.length > 0 ? (
                         dateInterests.map((interest, index) => (
                             <Grid item xs={4} key={index}>
@@ -117,9 +142,9 @@ const ViewProfile = ({ setIsFlipped, liked, onClick, isLiked, showPopup, user, A
                     )}
                 </Grid>
                 <Grid size={12}>
-                    <Typography sx={{ fontSize: "18px" }}> ...</Typography>
+                    <Typography sx={{ fontSize: "18px",marginLeft:'40px' }}> ...</Typography>
                 </Grid>
-                <Grid size={12} sx={{ mb: "20px" }}>
+                <Grid size={12} sx={{ mb: "20px",marginLeft:'40px' }}>
                     <Grid>
                         <Typography sx={{ fontSize: "14px" }}>
                             Lorem ipsum dolor sit amet, consetetur sadipscing elitr,

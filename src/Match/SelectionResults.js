@@ -18,7 +18,7 @@ const SelectionResults = () => {
 
   const location = useLocation();
   const accountUserData = location.state?.userData;
-  console.log("account user data details in selection results:", accountUserData)
+  //console.log("account user data details in selection results:", accountUserData)
 
   useEffect(() => {
     const fetchData = async () => {

@@ -7,9 +7,9 @@ export default function Begin() {
     const location = useLocation();
     const navigate = useNavigate();
     const { user, AccountUser = [], accountUserData = [] } = location.state || {};
-    console.log("matched user details in MatchBegin:", user);
-    console.log("Account user details in MatchBegin (limited):", AccountUser);
-    console.log("Account user details in MatchBegin :", accountUserData);
+    //console.log("matched user details in MatchBegin:", user);
+    //console.log("Account user details in MatchBegin (limited):", AccountUser);
+    //console.log("Account user details in MatchBegin :", accountUserData);
 
     const parseAvailableTimes = (data) => {
         try {
@@ -98,18 +98,10 @@ export default function Begin() {
         formData.append('meet_date_user_id', AccountUser[0].uid);
         formData.append('meet_day', day);
         formData.append('meet_time', time);
-        // const data ={
-        //     meet_user_id:'',
-        //     meet_date_user_id:'',
-        //     day,
-        //     time};
+
         try {
             const response = await fetch('https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/meet', {
                 method: 'POST',
-                // headers:{
-                //     'Content-Type': 'application/json',
-                // },
-                // body: JSON.stringify(data)
                 body: formData
             });
 
@@ -130,7 +122,6 @@ export default function Begin() {
                 <Box sx={{ mr: { xs: 5, md: 10 } }}><TopTitle /></Box>
                 <Box sx={{ position: 'relative', display: 'flex', alignItems: 'center', mr: { xs: 4, md: 20 } }}>
                     <Avatar
-                        //src={AccountUser[0].photo?JSON.parse(AccountUser[0].photo):''}
                         src={AccountUser.length > 0 && AccountUser[0].photo ? JSON.parse(AccountUser[0].photo)[0] : ''}
                         alt='Account User'
                         sx={{

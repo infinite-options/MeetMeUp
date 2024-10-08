@@ -98,7 +98,8 @@ const LandingPage = () => {
               textTransform:'none',
               fontFamily: 'Lexend', 
               fontSize: '18px', 
-            fontWeight: 'normal' 
+              fontWeight: 'normal',
+              marginTop:'30px' 
             }}
           >
             Let's Start

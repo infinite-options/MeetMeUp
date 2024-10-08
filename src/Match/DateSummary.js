@@ -13,6 +13,8 @@ export default function DateSummary() {
     const navigate = useNavigate();
     const userId = localStorage.getItem('user_uid');
 
+    console.log("formatted Address after:", formattedAddress)
+
     const handleSelectionResults = () => {
         navigate('/selectionResults', { state: { user } })
     }
@@ -22,25 +24,34 @@ export default function DateSummary() {
         <Paper elevation={3} sx={{
             display: 'flex',
             justifyContent: 'space-between',
-            alignItems: 'center',
+            alignItems: 'flex-start', 
             backgroundColor: '#f8f8f8',
             borderRadius: '20px',
             padding: { xs: '8px 12px', md: '10px 15px' },
             boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
         }}>
-            <Typography variant="body1" sx={{ fontFamily: 'Lexend', fontSize: { xs: '12px', md: '14px' } }}>
+            <Typography variant="body1" sx={{ fontFamily: 'Lexend',alignItems: 'center', fontSize: { xs: '12px', md: '14px' } }}>
                 {label}
             </Typography>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                <Typography variant="body1" sx={{ fontFamily: 'Lexend', fontSize: { xs: '12px', md: '14px' }, color: '#555' }}>
+            <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: '5px' }}> 
+                <Typography 
+                    variant="body1" 
+                    sx={{ 
+                        fontFamily: 'Lexend', 
+                        fontSize: { xs: '12px', md: '14px' }, 
+                        color: '#555',
+                        whiteSpace: 'pre-line', 
+                        textAlign: 'right' 
+                    }}
+                >
                     {value}
                 </Typography>
-                <IconButton size="small">
+                <IconButton size="small" sx={{ marginTop: '5px' }}> 
                     <img src={EditIcon} alt="Edit" style={{ width: '14px', height: '14px' }} />
                 </IconButton>
             </Box>
         </Paper>
-    );
+    )
 
     const [sliderValue, setSliderValue] = useState(0);
     const handleSliderChange = (event, newValue) => {
