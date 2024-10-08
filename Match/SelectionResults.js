@@ -1,165 +1,178 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { SafeAreaView,View, Text, TouchableOpacity, Image, ScrollView, ActivityIndicator } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, Image, TouchableOpacity, FlatList, Button, StyleSheet, ActivityIndicator, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-// import AccountContext from '../AccountSetup/AccountContext';
-// import TopTitle from '../Assets/Components/TopTitle';
-import HawkImg from '../src/Assets/Images/Hawk.jpg'
-import TiffanyImg from '../src/Assets/Images/Tiffany.jpeg';
-import ButterflyImg from '../src/Assets/Images/Butterfly.jpg';
-import CherryImg from '../src/Assets/Images/Cherry.jpg';
-import BobImg from '../src/Assets/Images/Bob.jpg'
-import ArrowForwardIcon from '../src/Assets/Images/arrow2.png'; // Replace with your actual icon
-import AccountContext from '../AccountSetup/AccountContext.js';
-
-const usersWhoSelectedYou = [
-  { name: 'Hawk Tuah Tey', age: 40, where: 'Mandurah', gender: 'female', imgSrc: HawkImg, source: 'usersWhoSelectedYou' },
-  { name: 'Cherrywood', age: 23, gender: 'female', where: 'Mandurah', imgSrc: CherryImg, source: 'usersWhoSelectedYou' },
-];
-
-const usersWhoYouSelected = [
-  { name: 'Tiffany', age: 31, gender: 'female', where: 'Mandurah', imgSrc: TiffanyImg, source: 'usersWhoYouSelected' },
-  { name: 'Bob Hawk', age: 43, gender: 'male', where: 'Mandurah', imgSrc: BobImg, source: 'usersWhoYouSelected' },
-  { name: 'Esmeralda Butterfly', age: 29, where: 'Mandurah', gender: 'female', imgSrc: ButterflyImg, source: 'usersWhoYouSelected' },
-];
+import axios from 'axios';
 
 const SelectionResults = () => {
   const navigation = useNavigation();
-  const [loading, setLoading] = useState(false);
+  const [userId, setUserId] = useState(null);
+  const [userData, setUserData] = useState([]);
+  const [peopleYouSelected, setPeopleYouSelected] = useState([]);
+  const [peopleSelectedYou, setPeopleSelectedYou] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [noId, setNoId] = useState(false);
-  const [userData, setUserData] = useState({});
-  const { selections, setSelections } = useState();
-  const loadUserId = async () => {
-    try {
-      const storedUserId = await AsyncStorage.getItem('user_uid'); 
-      console.log("THIS IS THE USER IDDDD", storedUserId)
-      if (storedUserId) {
-        // Fetch user data
-        fetchUserData(storedUserId);
-      } else {
-        setNoId(true);
-      }
-    } catch (error) {
-      console.log("Error fetching user ID", error);
-      setNoId(true);
-    }
-  };
 
-  const fetchUserData = async (userId) => {
-    try {
-      const res = await axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/likes/${userId}`);
-      setUserData(res.data);
-      setLoading(false);
-    } catch (error) {
-      console.log('Error fetching user data', error);
-      setLoading(false);
-    }
-  };
-
+  // Load the user ID from AsyncStorage
   useEffect(() => {
-    setLoading(true);
+    const loadUserId = async () => {
+      try {
+        const id = await AsyncStorage.getItem('user_uid');
+        if (id) {
+          setUserId(id);
+        } else {
+          setNoId(true);
+          setLoading(false);
+        }
+      } catch (error) {
+        console.error('Error loading user ID', error);
+      }
+    };
+
     loadUserId();
   }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [likesResponse, matchesResponse] = await Promise.all([
+          axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/likes/${userId}`),
+          axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/matches/${userId}`)
+        ]);
+
+        const { matched_results, people_whom_you_selected, people_who_selected_you } = likesResponse.data;
+        const matchesData = matchesResponse.data.result;
+
+        const enrichUserData = (users) => users.map(user => {
+          const matchData = matchesData.find(match => match.user_uid === user.user_uid);
+          return { ...user, ...matchData };
+        });
+
+        const enrichedMatched = enrichUserData(matched_results);
+        const enrichedYouSelected = enrichUserData(people_whom_you_selected);
+        const enrichedSelectedYou = enrichUserData(people_who_selected_you);
+
+        setUserData(enrichedMatched);
+        setPeopleYouSelected(enrichedYouSelected);
+        setPeopleSelectedYou(enrichedSelectedYou);
+
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching data', error);
+        setLoading(false);
+      }
+    };
+
+    if (userId) {
+      fetchData();
+    }
+  }, [userId]);
 
   const handleEditPreferences = () => {
     navigation.navigate('MatchPreferences');
   };
 
+  const handleMatchList = () => {
+    navigation.navigate('MatchList');
+  };
+
   const handleUserClick = (user, source) => {
-    // If user.name is NaN or undefined, use a fallback value
-    const userName = user && user.name ? encodeURIComponent(user.name) : 'Unknown';
-    console.log("SOURCE",user.imgSrc)
-    navigation.navigate('user-details', { user, source });
-};
+    navigation.navigate('UserDetails', { user, source });
+  };
 
+  const handleNext = (user) => {
+    navigation.navigate('Messages', { user });
+  };
 
-  const UserBox = ({ user, type }) => (
-    <TouchableOpacity onPress={() => handleUserClick(user, type)} style={styles.userBox}>
-    <Image source={user.imgSrc} style={styles.avatar} />
-    <View style={styles.userInfo}>
-      <Text style={styles.userName}>{`${user.name}, ${user.age}`}</Text>
-      <Text style={styles.userDetails}>{user.where}</Text>
+  const renderUserBox = ({ item, type }) => (
+    <View style={styles.userBox}>
+      <TouchableOpacity onPress={() => handleUserClick(item, type)} style={styles.userButton}>
+        <Image source={{ uri: item.user_photo_url ? JSON.parse(item.user_photo_url)[0] : '' }} style={styles.avatar} />
+        <View style={styles.userInfo}>
+          <Text style={styles.userName}>{item.user_first_name} {item.user_last_name}</Text>
+          <Text style={styles.userDetails}>{item.user_age} {item.user_gender} {item.user_suburb}</Text>
+        </View>
+      </TouchableOpacity>
+      <Button title="Message" onPress={() => handleNext(item)} />
     </View>
-    <Image source={ArrowForwardIcon} style={styles.arrowIcon} />
-  </TouchableOpacity>
   );
 
   if (loading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#E4423F" />
-        <Text>Loading...</Text>
-      </View>
-    );
+    return <ActivityIndicator size="large" color="#0000ff" />;
   }
 
   if (noId) {
-    navigation.navigate('AccountSetupLogin');
+    Alert.alert("Error", "User ID not found, redirecting...");
+    navigation.navigate('AccountSetup1Login');
     return null;
   }
 
-  let tempArray = selections ? selections.concat(usersWhoYouSelected) : usersWhoYouSelected;
-
   return (
-    <SafeAreaView style={styles.safeArea}>
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.pageTitle}>Matched Results</Text>
-      {userData.matchedResults && userData.matchedResults.map((user, index) => (
-        <UserBox key={index} user={user} type="matchedResults" />
-      ))}
+    <View style={styles.container}>
+      <Text style={styles.title}>Selection Results</Text>
 
-      <Text style={styles.sectionTitle}>People who selected you</Text>
-      {tempArray.map((user, index) => (
-        <UserBox key={index} user={user} type="usersWhoSelectedYou" />
-      ))}
+      <Text style={styles.sectionTitle}>Matched Results</Text>
+      <FlatList
+        data={userData}
+        renderItem={({ item }) => renderUserBox({ item, type: 'matchedResults' })}
+        keyExtractor={(item, index) => index.toString()}
+      />
 
-      <Text style={styles.sectionTitle}>People you selected</Text>
-      {usersWhoYouSelected.map((user, index) => (
-        <UserBox key={index} user={user} type="usersWhoYouSelected" />
-      ))}
+      <Text style={styles.sectionTitle}>People Who Selected You</Text>
+      <FlatList
+        data={peopleSelectedYou}
+        renderItem={({ item }) => renderUserBox({ item, type: 'usersWhoSelectedYou' })}
+        keyExtractor={(item, index) => index.toString()}
+      />
 
-      <TouchableOpacity style={styles.editButton} onPress={handleEditPreferences}>
-        <Text style={styles.editButtonText}>Edit Preferences</Text>
-      </TouchableOpacity>
-    </ScrollView>
-    </SafeAreaView>
+      <Text style={styles.sectionTitle}>People You Selected</Text>
+      <FlatList
+        data={peopleYouSelected}
+        renderItem={({ item }) => renderUserBox({ item, type: 'usersWhoYouSelected' })}
+        keyExtractor={(item, index) => index.toString()}
+      />
+
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity onPress={handleEditPreferences} style={styles.actionButton}>
+          <Text style={styles.buttonText}>Edit Preferences</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={handleMatchList} style={styles.actionButton}>
+          <Text style={styles.buttonText}>Match List</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
   );
 };
 
-const styles = {
-  safeArea:{
-  },
+const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 20,
-    paddingVertical: 30,
-  },
-  pageTitle:{
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginLeft: 80,
-    fontSize: 24,
-    color: 'black',
-    fontWeight: 'bold',
-  },
-  loadingContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    paddingHorizontal: 20,
+    backgroundColor: '#fff',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginVertical: 10,
   },
   sectionTitle: {
     fontSize: 18,
     color: 'grey',
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginVertical: 10,
   },
   userBox: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 15,
-    backgroundColor: '#E0E3E6',
+    marginVertical: 10,
+    padding: 10,
+    backgroundColor: '#f9f9f9',
     borderRadius: 10,
-    marginBottom: 15,
+  },
+  userButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
   },
   avatar: {
     width: 50,
@@ -167,7 +180,6 @@ const styles = {
     borderRadius: 25,
   },
   userInfo: {
-    flex: 1,
     marginLeft: 15,
   },
   userName: {
@@ -176,24 +188,25 @@ const styles = {
   },
   userDetails: {
     fontSize: 14,
-    color: 'grey',
+    color: '#555',
   },
-  arrowIcon: {
-    width: 24,
-    height: 24,
-  },
-  editButton: {
-    backgroundColor: '#E4423F',
-    paddingVertical: 15,
-    borderRadius: 25,
-    alignItems: 'center',
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     marginVertical: 20,
   },
-  editButtonText: {
+  actionButton: {
+    width: '40%',
+    backgroundColor: '#E4423F',
+    paddingVertical: 10,
+    borderRadius: 25,
+    alignItems: 'center',
+  },
+  buttonText: {
     color: 'white',
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
   },
-};
+});
 
 export default SelectionResults;

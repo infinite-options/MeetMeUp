@@ -132,7 +132,7 @@ const Profile = () => {
   if (loading) {
     return <Text>Loading...</Text>; 
   }
-
+ const openTo = userInfo.user_open_to ? JSON.parse(userInfo.user_open_to) : [];
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.header}>
@@ -186,7 +186,7 @@ const Profile = () => {
       <AccountInfo img={faith} info={userInfo.user_religion} />
       <AccountInfo img={star} info={userInfo.user_star_sign} />
       <AccountInfo img={multi} info={userInfo.user_sexuality}/>
-      <AccountInfo img={multi} info={userInfo.user_open_to} />
+      <AccountInfo img={multi} info={openTo.join(', ')} />
       <AccountInfo img={hat} info={userInfo.user_education} />
       <AccountInfo img={heartImg} info={userInfo.user_body_composition} />
       <AccountInfo img={jobImg} info={userInfo.user_job} />

@@ -48,10 +48,10 @@ const MatchPreferences = ({ prev }) => {
             <View style={styles.separator} />
 
             <View style={styles.buttonsContainer}>
-                <TouchableOpacity onPress={() => navigation.navigate('Match')}>
+                <TouchableOpacity onPress={() => navigation.navigate('SelectionResults')}>
                     <Text style={styles.button}>Match Me</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => navigation.navigate('Grid')}>
+                <TouchableOpacity onPress={() => navigation.navigate('Match')}>
                     <Text style={styles.button}>Grid</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => navigation.navigate('SelectionResults')}>
