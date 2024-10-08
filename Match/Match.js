@@ -6,7 +6,7 @@ import axios from 'axios';
 import profileImg from '../src/Assets/Images/profileimg.png';
 import like from '../src/Assets/Images/like.png';
 import likedImg from '../src/Assets/Images/filledheart.png';
-import MatchPopUp from "./MatchPopUp";
+
 const Match = () => {
     const navigation = useNavigation();
     const [userData, setUserData] = useState([]);
@@ -14,18 +14,24 @@ const Match = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [userId, setUserId] = useState(null);
 
-    // Load userId once from AsyncStorage
+    // Load userId and liked users on initial load
     useEffect(() => {
-        const loadUserId = async () => {
+        const initialize = async () => {
             try {
                 const storedUserId = await AsyncStorage.getItem('user_uid');
-                console.log("FOR MATCH PAGE", storedUserId);
                 setUserId(storedUserId);
+
+                if (storedUserId) {
+                    // Fetch liked users from the backend
+                    const likedResponse = await axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/likes/${storedUserId}`);
+                    const likedUserIds = likedResponse.data.people_whom_you_selected.map(user => user.user_uid);
+                    await AsyncStorage.setItem('liked_user_ids', JSON.stringify(likedUserIds));
+                }
             } catch (error) {
-                console.error("Error loading user ID from AsyncStorage:", error);
+                console.error("Error initializing data:", error);
             }
         };
-        loadUserId();
+        initialize();
     }, []);
 
     // Fetch match data and initialize the liked state
@@ -34,17 +40,17 @@ const Match = () => {
             if (userId) {
                 try {
                     const res = await axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/matches/${userId}`);
-                    console.log("Full API Response:", res.data);
                     if (res.data.result && Array.isArray(res.data.result)) {
                         setUserData(res.data.result);
 
-                        // Initialize user states based on AsyncStorage liked status
-                        const initialUserStates = await Promise.all(
-                            res.data.result.map(async (user) => {
-                                const isLiked = await AsyncStorage.getItem(`liked_${user.user_uid}`);
-                                return { isFlipped: false, liked: isLiked === 'true' };
-                            })
-                        );
+                        // Initialize user states based on stored liked status
+                        const storedLikes = await AsyncStorage.getItem('liked_user_ids');
+                        const likedUserIds = storedLikes ? JSON.parse(storedLikes) : [];
+
+                        const initialUserStates = res.data.result.map(user => ({
+                            isFlipped: false,
+                            liked: likedUserIds.includes(user.user_uid),
+                        }));
                         setUserStates(initialUserStates);
                     } else {
                         console.log('API did not return expected data structure:', res.data);
@@ -54,9 +60,6 @@ const Match = () => {
                 } finally {
                     setIsLoading(false);
                 }
-            } else {
-                console.log("No userId found.");
-                setIsLoading(false);
             }
         };
         fetchMatches();
@@ -81,10 +84,14 @@ const Match = () => {
         try {
             if (updatedLikedStatus) {
                 await axios.post('https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/likes', formData);
-                await AsyncStorage.setItem(`liked_${user.user_uid}`, 'true');
+                const likedUserIds = await AsyncStorage.getItem('liked_user_ids');
+                const updatedLikedUserIds = likedUserIds ? JSON.parse(likedUserIds).concat(user.user_uid) : [user.user_uid];
+                await AsyncStorage.setItem('liked_user_ids', JSON.stringify(updatedLikedUserIds));
             } else {
                 await axios.delete('https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/likes', { data: formData });
-                await AsyncStorage.removeItem(`liked_${user.user_uid}`);
+                const likedUserIds = await AsyncStorage.getItem('liked_user_ids');
+                const updatedLikedUserIds = likedUserIds ? JSON.parse(likedUserIds).filter(id => id !== user.user_uid) : [];
+                await AsyncStorage.setItem('liked_user_ids', JSON.stringify(updatedLikedUserIds));
             }
         } catch (error) {
             console.error('Error handling like action', error);

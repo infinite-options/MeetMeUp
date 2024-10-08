@@ -73,7 +73,7 @@ const SelectionResults = () => {
   };
 
   const handleMatchList = () => {
-    navigation.navigate('MatchList');
+    navigation.navigate('Match');
   };
 
   const handleUserClick = (user, source) => {
