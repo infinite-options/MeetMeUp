@@ -81,13 +81,13 @@ const SelectionResults = () => {
   };
 
   const handleNext = (user) => {
-    navigation.navigate('Messages', { user });
+    navigation.navigate('Message', { user });
   };
 
   const renderUserBox = ({ item, type }) => (
     <View style={styles.userBox}>
       <TouchableOpacity onPress={() => handleUserClick(item, type)} style={styles.userButton}>
-        <Image source={{ uri: item.user_photo_url ? JSON.parse(item.user_photo_url)[0] : '' }} style={styles.avatar} />
+        <Image source={{ uri: item.user_photo_url ? JSON.parse(item.user_photo_url)[0] : 'No photo' }} style={styles.avatar} />
         <View style={styles.userInfo}>
           <Text style={styles.userName}>{item.user_first_name} {item.user_last_name}</Text>
           <Text style={styles.userDetails}>{item.user_age} {item.user_gender} {item.user_suburb}</Text>

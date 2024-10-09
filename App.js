@@ -26,6 +26,7 @@ import ViewProfile from "./Match/ViewProfile";
 import Match from "./Match/Match";
 import MatchDetails from "./Match/MatchDetails";
 import AccountSetup5Create from "./AccountSetup/AccountSetup5Create";
+import Message from "./Match/Message";
 const Stack = createNativeStackNavigator();
 // const Stack = createStackNavigator();
 
@@ -62,6 +63,7 @@ export default function App() {
         <Stack.Screen name="Match" component={Match}/>
         <Stack.Screen name="user-details" component={MatchDetails}/>
         <Stack.Screen name="AccountSetup5Create" component={AccountSetup5Create} />
+        <Stack.Screen name="Message" component={Message}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

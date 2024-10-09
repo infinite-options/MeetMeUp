@@ -1,105 +1,151 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet, Alert } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import MatchPopUp from './MatchPopUp';
-import ViewProfile from './ViewProfile';
+import React, { useEffect, useState } from 'react';
+import { View, Text, ScrollView, Image, TouchableOpacity, ActivityIndicator, StyleSheet } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
+import profileImg from '../src/Assets/Images/profileimg.png';
+import like from '../src/Assets/Images/like.png';
+import likedImg from '../src/Assets/Images/filledheart.png';
 
-import AccountUserImg from '../src/Assets/Images/accountUser.jpg'; // Update the path if necessary
-import profileImg from '../src/Assets/Images/profileimg.png'; // Update the path if necessary
-import like from '../src/Assets/Images/like.png'; // Update the path if necessary
-import likedImg from '../src/Assets/Images/filledheart.png'; // Update the path if necessary
-const MatchDetails = () => {
-    const route = useRoute();
+const Match = () => {
     const navigation = useNavigation();
-    const { user, source } = route.params || {};
-    const [isRightHeartFilled, setIsRightHeartFilled] = useState(source === 'usersWhoYouSelected' || source === 'matchedResults');
-    const [showPopup, setShowPopup] = useState(false);
-    const [liked, setLiked] = useState(like);
-    const [isFlipped, setIsFlipped] = useState(false);
-    const [AccountUser, setAccountUser] = useState([]);
-    const userId = 'your_user_id'; // Replace with logic to get the userId (local storage or async storage)
-    const popupRef = useRef(null);
-    const isLeftHeartVisible = source === 'usersWhoSelectedYou' || source === 'matchedResults';
+    const [userData, setUserData] = useState([]);
+    const [userStates, setUserStates] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [userId, setUserId] = useState(null);
 
+    // Load userId and liked users on initial load
     useEffect(() => {
-        const fetchAccountUserInfo = async () => {
+        const initialize = async () => {
             try {
-                const res = await axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/${userId}`);
-                const userData = res.data.result[0];
-                console.log("MATCHING DETAILS",userData)
-                setAccountUser([{
-                    name: userData.user_first_name,
-                    age: userData.user_age,
-                    gender: userData.user_gender,
-                    where: userData.suburb,
-                    source: 'Account user',
-                }]);
+                const storedUserId = await AsyncStorage.getItem('user_uid');
+                setUserId(storedUserId);
+
+                if (storedUserId) {
+                    // Fetch liked users from the backend
+                    const likedResponse = await axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/likes/${storedUserId}`);
+                    const likedUserIds = likedResponse.data.people_whom_you_selected.map(user => user.user_uid);
+                    await AsyncStorage.setItem('liked_user_ids', JSON.stringify(likedUserIds));
+                }
             } catch (error) {
-                console.error('Error fetching account user data', error);
+                console.error("Error initializing data:", error);
             }
         };
-        fetchAccountUserInfo();
+        initialize();
+    }, []);
+
+    // Fetch match data and initialize the liked state
+    useEffect(() => {
+        const fetchMatches = async () => {
+            if (userId) {
+                try {
+                    const res = await axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/matches/${userId}`);
+                    if (res.data.result && Array.isArray(res.data.result)) {
+                        setUserData(res.data.result);
+
+                        // Initialize user states based on stored liked status
+                        const storedLikes = await AsyncStorage.getItem('liked_user_ids');
+                        const likedUserIds = storedLikes ? JSON.parse(storedLikes) : [];
+
+                        const initialUserStates = res.data.result.map(user => ({
+                            isFlipped: false,
+                            liked: likedUserIds.includes(user.user_uid),
+                        }));
+                        setUserStates(initialUserStates);
+                    } else {
+                        console.log('API did not return expected data structure:', res.data);
+                    }
+                } catch (error) {
+                    console.log('Error fetching data:', error);
+                } finally {
+                    setIsLoading(false);
+                }
+            }
+        };
+        fetchMatches();
     }, [userId]);
 
-    const handleRightHeartClick = async () => {
-        const newHeartState = !isRightHeartFilled;
+    // Handle navigation to the profile view
+    const handleProfile = (user) => {
+        navigation.navigate("ViewProfile", { user });
+    };
+
+    // Handle like/unlike functionality and update AsyncStorage
+    const handleLike = async (index, user) => {
+        const updatedLikedStatus = !userStates[index]?.liked;
+        setUserStates(prevStates => 
+            prevStates.map((state, i) => i === index ? { ...state, liked: updatedLikedStatus } : state)
+        );
+
         const formData = new FormData();
         formData.append('liker_user_id', userId);
         formData.append('liked_user_id', user.user_uid);
 
         try {
-            if (newHeartState) {
+            if (updatedLikedStatus) {
                 await axios.post('https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/likes', formData);
+                const likedUserIds = await AsyncStorage.getItem('liked_user_ids');
+                const updatedLikedUserIds = likedUserIds ? JSON.parse(likedUserIds).concat(user.user_uid) : [user.user_uid];
+                await AsyncStorage.setItem('liked_user_ids', JSON.stringify(updatedLikedUserIds));
             } else {
                 await axios.delete('https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/likes', { data: formData });
+                const likedUserIds = await AsyncStorage.getItem('liked_user_ids');
+                const updatedLikedUserIds = likedUserIds ? JSON.parse(likedUserIds).filter(id => id !== user.user_uid) : [];
+                await AsyncStorage.setItem('liked_user_ids', JSON.stringify(updatedLikedUserIds));
             }
-            setIsRightHeartFilled(newHeartState);
         } catch (error) {
             console.error('Error handling like action', error);
         }
     };
 
-    const handleSetLiked = () => {
-        setLiked(prevState => !prevState);
-        handleRightHeartClick();
-    };
-
-    const handleNavigate = () => {
-        // Pass the selected user's details to the ViewProfile screen
-        navigation.navigate('ViewProfile', { user: user });
-    };
-    
-    const handleFlip = () => {
-        setIsFlipped(!isFlipped);
-    };
-
-    if (!user) {
-        return <ActivityIndicator size="large" color="#E4423F" />;
+    if (isLoading) {
+        return (
+            <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color="#E4423F" />
+                <Text>Loading Matches...</Text>
+            </View>
+        );
     }
 
     return (
-        <ScrollView contentContainerStyle={styles.container}>
-            <View style={styles.card}>
-                <Image source={user.user_photo_url ? { uri: JSON.parse(user.user_photo_url)[0] } : profileImg} style={styles.profileImage} />
-                {isLeftHeartVisible && isRightHeartFilled && showPopup && (
-                    <View style={styles.popup}>
-                        <MatchPopUp user={user} AccountUser={AccountUser} />
-                    </View>
+        <ScrollView>
+            <View style={styles.container}>
+                {userData.length === 0 ? (
+                    <Text>No matches found.</Text>
+                ) : (
+                    userData.map((user, index) => (
+                        <View key={user.user_uid || index} style={styles.cardContainer}>
+                            <View style={styles.card}>
+                                <TouchableOpacity onPress={() => handleLike(index, user)} style={styles.likeButton}>
+                                    <Image source={userStates[index]?.liked ? likedImg : like} style={styles.likeIcon} />
+                                </TouchableOpacity>
+                                <Image source={user.user_photo_url ? { uri: user.user_photo_url } : profileImg} style={styles.profileImage} />
+                                <Text style={styles.userName}>
+                                    {user.user_first_name || 'Unknown'} {user.user_last_name || 'User'}
+                                </Text>
+                                <Text style={styles.userDetails}>
+                                    {user.user_age || 'N/A'} - {user.user_gender || 'N/A'} - {user.user_suburb || 'N/A'}
+                                </Text>
+                                <TouchableOpacity onPress={() => handleProfile(user)} style={styles.profileButton}>
+                                    <Text style={styles.flipText}>Tap to See Profile</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    ))
                 )}
-                <Text style={styles.userName}>{user.user_first_name + ' ' + user.user_last_name}</Text>
-                <Text style={styles.userDetails}>{user.user_age} - {user.user_gender} - {user.user_country}</Text>
-                <TouchableOpacity onPress={handleFlip}>
-                    <Text style={styles.flipText}>Tap to See Profile</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={handleSetLiked}>
-                    <Image source={isRightHeartFilled ? likedImg : like} style={styles.likeIcon} />
-                </TouchableOpacity>
-                {isLeftHeartVisible && <Image source={likedImg} style={styles.leftHeartIcon} />}
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity onPress={() => navigation.navigate('MatchPreferences')}>
+                        <View style={styles.button}>
+                            <Text style={styles.buttonText}>Back</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate('SelectionResults')}>
+                        <View style={styles.button}>
+                            <Text style={styles.buttonText}>Continue</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
             </View>
-
-            <TouchableOpacity onPress={handleNavigate} style={styles.button}>
-                <Text style={styles.buttonText}>Continue</Text>
-            </TouchableOpacity>
         </ScrollView>
     );
 };
@@ -109,67 +155,74 @@ const styles = StyleSheet.create({
         padding: 20,
         backgroundColor: '#f5f5f5',
     },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    cardContainer: {
+        marginBottom: 20,
+    },
     card: {
         backgroundColor: '#E4423F',
-        padding: 30,
+        padding: 15,
         borderRadius: 10,
-        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+        height: 400,
+        justifyContent: 'space-between',
         position: 'relative',
-        minHeight: 600,
-        marginBottom: 20,
     },
     profileImage: {
         width: '100%',
-        height: 400,
+        height: '75%',
         borderRadius: 10,
     },
     userName: {
-        color: 'white',
         fontSize: 20,
+        color: 'white',
         marginTop: 10,
     },
     userDetails: {
+        fontSize: 12,
         color: 'white',
-        fontSize: 14,
-        marginTop: 5,
     },
     flipText: {
         color: 'white',
         fontSize: 18,
-        marginTop: 15,
+    },
+    likeButton: {
+        position: 'absolute',
+        top: 10,
+        right: 10,
+        zIndex: 1,
     },
     likeIcon: {
         width: 30,
         height: 30,
-        position: 'absolute',
-        right: 20,
-        top: 20,
     },
-    leftHeartIcon: {
-        width: 30,
-        height: 30,
-        position: 'absolute',
-        left: 20,
-        top: 20,
+    profileButton: {
+        backgroundColor: '#E4423F',
+        borderRadius: 10,
+        width: '100%',
+        alignItems: 'center',
+        paddingVertical: 10,
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 20,
     },
     button: {
         backgroundColor: '#E4423F',
         paddingVertical: 15,
         paddingHorizontal: 40,
         borderRadius: 25,
-        alignSelf: 'center',
     },
     buttonText: {
         color: 'white',
         fontSize: 18,
     },
-    popup: {
-        position: 'absolute',
-        bottom: '10%',
-        backgroundColor: 'white',
-        borderRadius: 30,
-        padding: 5,
-    },
 });
 
-export default MatchDetails;
+export default Match;

@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import profileImg from '../src/Assets/Images/profileimg.png';
+import noImg from '../src/Assets/Images/account.png';
 import like from '../src/Assets/Images/like.png';
 import likedImg from '../src/Assets/Images/filledheart.png';
 
@@ -14,7 +15,6 @@ const Match = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [userId, setUserId] = useState(null);
 
-    // Load userId and liked users on initial load
     useEffect(() => {
         const initialize = async () => {
             try {
@@ -22,10 +22,13 @@ const Match = () => {
                 setUserId(storedUserId);
 
                 if (storedUserId) {
-                    // Fetch liked users from the backend
                     const likedResponse = await axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/likes/${storedUserId}`);
                     const likedUserIds = likedResponse.data.people_whom_you_selected.map(user => user.user_uid);
+                    const likedByUserIds = likedResponse.data.people_who_selected_you.map(user => user.user_uid);
+                    console.log("LIKED BY",likedByUserIds);
+
                     await AsyncStorage.setItem('liked_user_ids', JSON.stringify(likedUserIds));
+                    await AsyncStorage.setItem('liked_by_user_ids', JSON.stringify(likedByUserIds));
                 }
             } catch (error) {
                 console.error("Error initializing data:", error);
@@ -34,24 +37,26 @@ const Match = () => {
         initialize();
     }, []);
 
-    // Fetch match data and initialize the liked state
     useEffect(() => {
         const fetchMatches = async () => {
             if (userId) {
                 try {
                     const res = await axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/matches/${userId}`);
+                    console.log("MATCHING LIKE",res.data.result);
                     if (res.data.result && Array.isArray(res.data.result)) {
                         setUserData(res.data.result);
-
-                        // Initialize user states based on stored liked status
                         const storedLikes = await AsyncStorage.getItem('liked_user_ids');
+                        const storedLikedBy = await AsyncStorage.getItem('liked_by_user_ids');
                         const likedUserIds = storedLikes ? JSON.parse(storedLikes) : [];
-
+                        const likedByUserIds = storedLikedBy ? JSON.parse(storedLikedBy) : [];
+                        console.log("SECOND LIKED BY", likedByUserIds);
                         const initialUserStates = res.data.result.map(user => ({
                             isFlipped: false,
                             liked: likedUserIds.includes(user.user_uid),
+                            likedBy: likedByUserIds.includes(user.user_uid),
                         }));
                         setUserStates(initialUserStates);
+                        console.log("User States Initialized:", initialUserStates);
                     } else {
                         console.log('API did not return expected data structure:', res.data);
                     }
@@ -65,12 +70,10 @@ const Match = () => {
         fetchMatches();
     }, [userId]);
 
-    // Handle navigation to the profile view
     const handleProfile = (user) => {
         navigation.navigate("ViewProfile", { user });
     };
 
-    // Handle like/unlike functionality and update AsyncStorage
     const handleLike = async (index, user) => {
         const updatedLikedStatus = !userStates[index]?.liked;
         setUserStates(prevStates => 
@@ -78,7 +81,7 @@ const Match = () => {
         );
 
         const formData = new FormData();
-        formData.append('liker_user_id', userId);
+        formData.append('liker_user_id', user.user_uid);
         formData.append('liked_user_id', user.user_uid);
 
         try {
@@ -116,7 +119,13 @@ const Match = () => {
                     userData.map((user, index) => (
                         <View key={user.user_uid || index} style={styles.cardContainer}>
                             <View style={styles.card}>
-                                <TouchableOpacity onPress={() => handleLike(index, user)} style={styles.likeButton}>
+                                {/* Check likedBy status explicitly */}
+                                {userStates[index].likedBy ? (
+                                    <Image source={likedImg} style={styles.likeButtonLeft} />
+                                ) : (
+                                    <Image source={like} style={styles.likeButtonLeft} />
+                                )}
+                                <TouchableOpacity onPress={() => handleLike(index, user)} style={styles.likeButtonRight}>
                                     <Image source={userStates[index]?.liked ? likedImg : like} style={styles.likeIcon} />
                                 </TouchableOpacity>
                                 <Image source={user.user_photo_url ? { uri: user.user_photo_url } : profileImg} style={styles.profileImage} />
@@ -191,11 +200,19 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 18,
     },
-    likeButton: {
+    likeButtonRight: {
         position: 'absolute',
         top: 10,
         right: 10,
         zIndex: 1,
+    },
+    likeButtonLeft: {
+        position: 'absolute',
+        top: 10,
+        left: 10,
+        zIndex: 1,
+        width: 30,
+        height: 30,
     },
     likeIcon: {
         width: 30,
