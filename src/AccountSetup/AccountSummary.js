@@ -166,7 +166,7 @@ const Profile = () => {
         <Typography sx={{ fontSize: "30px", textAlign: "center" }}>About You</Typography>
       </Grid>
       <Grid container justifyContent={'center'}>
-        <Grid item xs={6} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' , marginRight:'10px'}}>
+        <Grid item xs={6} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginRight: '10px' }}>
           <Grid item xs={12}>
             {imageList[0] && <img src={imageList[0]} style={{ height: '150px', width: '100%', objectFit: 'cover', marginBottom: '10px' }} alt={imageList[0]} />}
           </Grid>
@@ -178,9 +178,22 @@ const Profile = () => {
           </Grid>
         </Grid>
 
-        <Grid item xs={6} style={{ display: 'flex', alignItems: 'center' }}>
-          <Grid item xs={12}>
-            {videoSource && <video src={videoSource.replaceAll("\"", "")} style={{ height: '460px', width: '100%' }} controls autoPlay muted />}
+        <Grid item xs={6} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Grid item xs={12} style={{ maxWidth: '260px' }}>
+            {videoSource && (
+              <video
+                src={videoSource.replaceAll("\"", "")}
+                style={{
+                  height: '480px',
+                  width: '100%',
+                  objectFit: 'cover',
+                  aspectRatio: '9/ 16' 
+                }}
+                controls
+                autoPlay
+                muted
+              />
+            )}
           </Grid>
         </Grid>
       </Grid>

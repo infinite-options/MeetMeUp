@@ -260,61 +260,6 @@ export default function AccountSetup5Create() {
         }));
     };
 
-    // const handleImageUpload = async (e) => {
-    //     const img = e.target.files[0];
-    //     console.log("img:", img);
-    //     setNewImage(true);
-    //     if(!img) {
-    //         return;
-    //     }
-
-    //     const imgURL = URL.createObjectURL(img);
-    //     if(formData['image'].split(',').length > 3) {
-    //         alert('Only 3 images allowed!');
-    //     }
-    //     else {
-    //         setFormData({
-    //             ...formData,
-    //             'image': imgURL + ',' + formData['image']
-    //         });
-    //     }
-    // };
-
-    // const handleDelete = (e) => {
-    //     setNewImage(true);
-    //     var imageArray = formData['image'].split(',');
-    //     var imageString = "";
-    //     for (var i = imageArray.length - 2; i >= 0; i--) {
-    //         if (imageArray[i] !== e) {
-    //             imageString = imageArray[i] + ',' + imageString;
-    //         }
-    //     }
-
-    //     setFormData({
-    //         ...formData,
-    //         'image': imageString
-    //     });
-
-    //     if (formData['imgFav'] === e) {
-    //         formData['imgFav'] = '';
-    //     }
-    // };
-
-    // const handleFavorite = (e) => {
-    //     if (formData['imgFav'] === e) {
-    //         setFormData({
-    //             ...formData,
-    //             ['imgFav']: '',
-    //         });
-    //     }
-    //     else {
-    //         setFormData({
-    //             ...formData,
-    //             ['imgFav']: e,
-    //         });
-    //     }
-    // };
-
     const handleVideoDownload = () => {
         const link = document.createElement('a');
         link.href = videoSrc;
@@ -356,8 +301,17 @@ export default function AccountSetup5Create() {
         }
 
         // Append favorite image information if any
+        // if (formData['imgFav']) {
+        //     fd.append('favorite_image', formData['imgFav']);
+        // }
+
         if (formData['imgFav']) {
-            fd.append('favorite_image', formData['imgFav']);
+            try {
+                let imgBlob = await fetch(formData['imgFav']).then(r => r.blob());
+                fd.append('favorite_image', imgBlob, 'favorite_image.jpg');
+            } catch (error) {
+                console.error("Error fetching favorite image:", error);
+            }
         }
 
         try {

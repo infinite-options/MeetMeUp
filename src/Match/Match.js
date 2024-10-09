@@ -143,21 +143,23 @@ const Match = () => {
                     key={user.user_id} // assuming user has a unique ID
                 >
                     <Box>
-                    {/*minHeight: '600px',
-                    maxWidth: "414px"*/}
+                    {/*minHeight: '700px',
+                    maxWidth: "680px"*/}
 
-                        <Box sx={{ backgroundColor: "#E4423F", paddingTop: "30px", paddingBottom: "50px", borderRadius: "10px", display: "flex", justifyContent: "center", position: "relative", minHeight: '700px', maxWidth: "550px", maxHeight: "680px", margin: "0 auto", marginTop: "20px" }}>
-                           <img src={user.user_photo_url ? JSON.parse(user.user_photo_url)[0] : defaultImg} style={{ width: "100%" }} alt="Profile" />
-                            {/*<img
+                        <Box sx={{ backgroundColor: "#E4423F", paddingTop: "30px", paddingBottom: "50px", borderRadius: "10px", display: "flex", justifyContent: "center", position: "relative", minHeight: '600px', maxWidth: "550px", maxHeight: "414px", margin: "0 auto", marginTop: "20px" }}>
+                           {/*<img src={user.user_photo_url ? JSON.parse(user.user_photo_url)[0] : defaultImg} style={{ width: "100%" }} alt="Profile" />*/}
+                            <img
                                 src={user.user_photo_url ? JSON.parse(user.user_photo_url)[0] : defaultImg}
                                 style={{
-                                    maxWidth: "100%",
+                                    marginTop:'10px',
+                                    borderRadius:'5px',
+                                    maxWidth: "95%",
                                     maxHeight: "100%",
-                                    objectFit: "contain",
+                                    objectFit: "cover",
                                     objectPosition: "center"
                                 }}
                                 alt="Profile"
-                            />*/}
+                            />
                             <Typography sx={{ position: "absolute", zIndex: '10', top: "10%", color: "white", fontSize: '2  0px' }}>
                                 {user.user_first_name + " " + user.user_last_name}
                             </Typography>
