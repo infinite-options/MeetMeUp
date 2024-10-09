@@ -133,6 +133,18 @@ const Profile = () => {
     return <Text>Loading...</Text>; 
   }
  const openTo = userInfo.user_open_to ? JSON.parse(userInfo.user_open_to) : [];
+ var images = userInfo.user_photo_url;
+ var imageList = [];
+  if (images) {
+    try {
+      imageList = JSON.parse(images);
+      images = imageList[0];
+    }
+    catch (err) {
+      console.log("imageList = JSON.parse(images) err:", err);
+    }
+  }
+  console.log("imageList:", imageList);
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.header}>
@@ -150,12 +162,12 @@ const Profile = () => {
       <Text style={styles.title}>About You</Text>
 
       <View style={styles.imageContainer}>
-        <Image source={img1} style={styles.image} />
-        <Image source={img3} style={styles.image} />
+      <Image source={{ uri: imageList[0] }} style={styles.image} />
+      <Image source={{ uri: imageList[1] }} style={styles.image} />
       </View>
 
       <View style={styles.imageContainer}>
-        <Image source={img2} style={styles.image} />
+      <Image source={{ uri: imageList[2] }} style={styles.image} />
       </View>
 
       <TouchableOpacity style={styles.uploadButton}>

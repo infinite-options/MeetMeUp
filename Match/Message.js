@@ -8,9 +8,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 const Message = () => {
     const route = useRoute();
     const navigation = useNavigation();
-    const { user } = route.params || {};  // Destructure with a fallback
+    const { user } = route.params || {};  
 
-    const [messages, setMessages] = useState([]);  // Initialize with an empty array
+    const [messages, setMessages] = useState([]);  
     const [newMessage, setNewMessage] = useState("");
     const [userId, setUserId] = useState("");
     const handleBack=()=>{
@@ -34,11 +34,11 @@ const Message = () => {
         axios.get('https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/messages', {
             params: {
                 sender_id: storedUserId,
-                receiver_id: user?.user_uid,  // Use optional chaining to handle undefined user
+                receiver_id: user?.user_uid,  
             },
         })
         .then(res => {
-            setMessages(res.data.result || []);  // Fallback to empty array if result is undefined
+            setMessages(res.data.result || []); 
         })
         .catch(error => {
             console.error("Error fetching messages:", error);
@@ -50,7 +50,7 @@ const Message = () => {
 
         axios.post('https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/messages', {
             sender_id: userId,
-            receiver_id: user?.user_uid,  // Use optional chaining
+            receiver_id: user?.user_uid, 
             message_content: newMessage,
         }, {
             headers: {

@@ -74,35 +74,30 @@ export default function AccountSetup5Create() {
             const formData = new FormData();
             const uri = Platform.OS === 'ios' ? imageUri.replace('file://', '') : imageUri;
             
-            formData.append('file', {
+            formData.append('user_photo_url', {
                 uri: uri,
                 name: filename,
                 type: 'image/jpeg'
             });
-
+    
             const response = await axios.put(
                 'https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo',
                 formData,
                 { headers: { 'Content-Type': 'multipart/form-data' } }
             );
-
-            if (response.status === 200 && response.data.s3_url) {
-                const s3Url = response.data.s3_url;
-                setFormData(prevData => ({
-                    ...prevData,
-                    image: prevData.image.replace(filename, s3Url),
-                }));
-                console.log("Image uploaded and S3 URL received:", s3Url);
+    
+            if (response.status === 200) {
+                console.log("Image uploaded successfully.");
             } else {
-                console.error("Failed to upload image and receive S3 URL.");
-                Alert.alert("Error", "Failed to upload image to S3. Please try again.");
+                console.error("Failed to upload image.");
+                Alert.alert("Error", "Failed to upload image to the server. Please try again.");
             }
         } catch (error) {
             console.error("Error uploading image:", error);
             Alert.alert("Error", "There was an error uploading the image. Please try again.");
         }
     };
-
+    
     const handleDelete = (imgUri) => {
         const updatedImages = formData.image
             .split(',')
