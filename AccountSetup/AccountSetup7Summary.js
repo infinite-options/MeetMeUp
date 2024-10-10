@@ -82,7 +82,9 @@ const Profile = () => {
   // Extract specifics
  // const { name,age,gender, where, height, religion, star: sign, status, education, body: heart, job, drinking: drink, smoking: smoke, nationality: flag } = specifics;
 
-
+  const handleUpl=()=>{
+    navigation.navigate("AccountSetup5Create")
+  }
   useEffect(() => {
     let isMounted = true; 
     const fetchData = async () => {
@@ -170,7 +172,7 @@ const Profile = () => {
       <Image source={{ uri: imageList[2] }} style={styles.image} />
       </View>
 
-      <TouchableOpacity style={styles.uploadButton}>
+      <TouchableOpacity onPress={handleUpl}style={styles.uploadButton}>
         <Text style={styles.uploadButtonText}>Upload</Text>
         <Image source={upload} style={styles.uploadButtonImage} />
       </TouchableOpacity>
