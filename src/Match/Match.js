@@ -73,11 +73,11 @@ const Match = () => {
                         } else {
                             console.log("No matches found for this user");
                         }
-    
+
                         // Ensure res.data.result is an array, even if empty
                         const userData = Array.isArray(res.data.result) ? res.data.result : [];
                         setUserData(userData);
-    
+
                         const initialUserStates = userData.map((user) => ({
                             isFlipped: false,
                             liked: peopleLiked[0].includes(user.user_uid),
@@ -134,6 +134,9 @@ const Match = () => {
     };
 
 
+
+    // console.log("Video at the front", userData.user_video_url.replaceAll("\"", ""))
+
     return (
         <Box>
             {userData && userData.map((user, index) => (
@@ -143,12 +146,12 @@ const Match = () => {
                     key={user.user_id} // assuming user has a unique ID
                 >
                     <Box>
-                    {/*minHeight: '700px',
+                        {/*minHeight: '700px',
                     maxWidth: "680px"*/}
 
                         <Box sx={{ backgroundColor: "#E4423F", paddingTop: "30px", paddingBottom: "50px", borderRadius: "10px", display: "flex", justifyContent: "center", position: "relative", minHeight: '600px', maxWidth: "550px", maxHeight: "414px", margin: "0 auto", marginTop: "20px" }}>
-                           {/*<img src={user.user_photo_url ? JSON.parse(user.user_photo_url)[0] : defaultImg} style={{ width: "100%" }} alt="Profile" />*/}
-                            <img
+                            {/*<img src={user.user_photo_url ? JSON.parse(user.user_photo_url)[0] : defaultImg} style={{ width: "100%" }} alt="Profile" />*/}
+                            {/* <img
                                 src={user.user_photo_url ? JSON.parse(user.user_photo_url)[0] : defaultImg}
                                 style={{
                                     marginTop:'10px',
@@ -159,7 +162,25 @@ const Match = () => {
                                     objectPosition: "center"
                                 }}
                                 alt="Profile"
-                            />
+                            /> */}
+
+                            <Grid item xs={12}>
+                                {user.user_video_url && (
+                                    <video
+                                        src={JSON.parse(user.user_video_url)}
+                                        style={{
+                                            width: '100%',
+                                            maxHeight: '450px',
+                                            objectFit: 'cover',
+                                            borderRadius: '5px',
+                                        }}
+                                        controls
+                                        playsInline
+                                        preload="metadata"
+                                    />
+                                )}
+                            </Grid>
+
                             <Typography sx={{ position: "absolute", zIndex: '10', top: "10%", color: "white", fontSize: '2  0px' }}>
                                 {user.user_first_name + " " + user.user_last_name}
                             </Typography>
