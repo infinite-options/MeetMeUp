@@ -25,6 +25,7 @@ export default function AccountSetup5Create() {
                 if (storedUserId && storedUserEmail) {
                     setUserId(storedUserId);
                     setUserEmail(storedUserEmail);
+                    fetchUserData(storedUserId);
                 } else {
                     Alert.alert("User data not found", "Please log in again.");
                     navigation.navigate('Login');
@@ -36,6 +37,28 @@ export default function AccountSetup5Create() {
         requestPermissionsAndFetchUserData();
     }, []);
 
+    const fetchUserData = async (userId) => {
+        try {
+            const res = await axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/${userId}`);
+            const fetchedData = res.data.result[0];
+
+            if (fetchedData.user_photo_url) {
+                try {
+                    const imageArray = JSON.parse(fetchedData.user_photo_url);
+                    const joinedImages = imageArray.join(',');
+                    setFormData(prevData => ({
+                        ...prevData,
+                        image: joinedImages,
+                    }));
+                } catch (error) {
+                    console.log("Error parsing user_photo_url", error);
+                }
+            }
+        } catch (error) {
+            console.error("Error fetching user data", error);
+        }
+    };
+
     const handleImageUpload = async () => {
         try {
             const result = await ImagePicker.launchImageLibraryAsync({
@@ -44,22 +67,13 @@ export default function AccountSetup5Create() {
                 quality: 0.5,
             });
 
-            // Check if result contains assets array (newer ImagePicker format)
             const imageUri = result.assets ? result.assets[0].uri : result.uri;
 
             if (!result.cancelled && imageUri) {
-                console.log("Selected image URI:", imageUri);
-
-                // Append new image to formData
                 setFormData(prevData => ({
                     ...prevData,
                     image: prevData.image ? `${prevData.image},${imageUri}` : imageUri,
                 }));
-                
-                // Log formData to verify it updates correctly
-                console.log("Updated formData:", formData);
-            } else {
-                console.log("Image picker was cancelled or returned no URI.");
             }
         } catch (error) {
             console.error("Error selecting or uploading image:", error);
@@ -108,15 +122,43 @@ export default function AccountSetup5Create() {
         }
     };
 
-    const handleDelete = (imgUri) => {
-        const updatedImages = formData.image.split(',').filter((img) => img !== imgUri).join(',');
+    const handleDelete = async (imgUri) => {
+        // Remove the selected image URI from the local state
+        const imageArray = formData.image.split(',').filter(img => img && img !== imgUri);
+        const imageString = imageArray.join(',');
+    
+        // Update the formData state to reflect the deletion
         setFormData(prevData => ({
             ...prevData,
-            image: updatedImages,
+            image: imageString,
             imgFav: prevData.imgFav === imgUri ? '' : prevData.imgFav,
         }));
+    
+        // Update the server with the new image data
+        try {
+            const url = "https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo";
+            const fd = new FormData();
+            fd.append("user_uid", userId);
+            fd.append("user_email_id", userEmail);
+            fd.append("user_photo_url", JSON.stringify(imageArray));
+    
+            const response = await fetch(url, {
+                method: 'PUT',
+                body: fd,
+            });
+    
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+    
+            console.log("Image deleted and server updated successfully");
+            Alert.alert("Success", "Image has been deleted successfully.");
+        } catch (error) {
+            console.error("Error updating server after image deletion:", error);
+            Alert.alert("Error", "There was an issue deleting the image. Please try again.");
+        }
     };
-
+    
     const handleNext = async () => {
         await uploadImageToBackend();
         navigation.replace("AccountSetup7Summary");
