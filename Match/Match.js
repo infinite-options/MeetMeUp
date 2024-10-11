@@ -7,7 +7,7 @@ import profileImg from '../src/Assets/Images/profileimg.png';
 import noImg from '../src/Assets/Images/account.png';
 import like from '../src/Assets/Images/like.png';
 import likedImg from '../src/Assets/Images/filledheart.png';
-
+import { Video } from 'expo-av';
 const Match = () => {
     const navigation = useNavigation();
     const [userData, setUserData] = useState([]);
@@ -128,7 +128,14 @@ const Match = () => {
                                 <TouchableOpacity onPress={() => handleLike(index, user)} style={styles.likeButtonRight}>
                                     <Image source={userStates[index]?.liked ? likedImg : like} style={styles.likeIcon} />
                                 </TouchableOpacity>
-                                <Image source={user.user_photo_url ? { uri: user.user_photo_url } : profileImg} style={styles.profileImage} />
+                                    <Video
+                                        source={{ uri: JSON.parse(user.user_video_url) }} // Remove extra quotes
+                                        style={styles.video}
+                                        useNativeControls
+                                        resizeMode="cover"
+                                        isLooping = "true"
+                                    />
+                      
                                 <Text style={styles.userName}>
                                     {user.user_first_name || 'Unknown'} {user.user_last_name || 'User'}
                                 </Text>
@@ -192,6 +199,10 @@ const styles = StyleSheet.create({
         color: 'white',
         marginTop: 10,
     },
+    video: {
+        width: '100%',
+        height: 300,
+      },
     userDetails: {
         fontSize: 12,
         color: 'white',

@@ -1,20 +1,15 @@
-import React,{ useEffect, useState }  from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
-import { useNavigation } from '@react-navigation/native'; // For navigation
-import { useContext } from 'react';
-//import AccountContext from '../AccountSetup/AccountContext'; 
-import { fetchUserInfo } from "../Api.js";
+import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { fetchUserInfo } from "../Api.js";
+import { Video } from 'expo-av';
 // Import images
 const profile = require('../src/Assets/Images/profile.png');
 const setting = require('../src/Assets/Images/setting.png');
 const card = require('../src/Assets/Images/card.png');
 const search = require('../src/Assets/Images/search.png');
 const group = require('../src/Assets/Images/group.png');
-const img1 = require('../src/Assets/Images/img1.png');
-const img2 = require('../src/Assets/Images/img2.png');
-const img3 = require('../src/Assets/Images/img3.png');
 const upload = require('../src/Assets/Images/upload.png');
 const heightImg = require('../src/Assets/Images/height.png');
 const genderImg = require('../src/Assets/Images/gender.png');
@@ -38,35 +33,45 @@ const AccountInfo = ({ img, info }) => (
 );
 
 const Profile = () => {
-  console.log("HIIII",AsyncStorage.getItem('user_uid'))
   const navigation = useNavigation();
-  const { details } = '';//useContext(AccountContext);
   const [userInfo, setUserInfo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
- 
 
-
-  const separateInterests = (obj) => {
-    const interests = {};
-    const specifics = {};
-    
-    for (const key in obj) {
-      if (key.startsWith('interests') && obj[key] === 'true') {
-        interests[key] = obj[key];
-      } else {
-        specifics[key] = obj[key];
+  useEffect(() => {
+    let isMounted = true;
+    const fetchData = async () => {
+      try {
+        const uid = await AsyncStorage.getItem('user_uid');
+        const data = await fetchUserInfo(uid);
+        if (isMounted) {
+          setUserInfo(data);
+        }
+      } catch (error) {
+        if (isMounted) {
+          setError(error.message);
+          console.error('Error fetching userInfo:', error);
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
       }
-    }
-    
-    return { interests, specifics };
-  };
+    };
 
-  const { specifics } = separateInterests(details);
-  // const interestArray = Object.keys(interests).map(key => ({
-  //   key: key.replace('interests', ''),
-  // }));
+    fetchData();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
+  if (loading) {
+    return <Text>Loading...</Text>;
+  }
+
+  const handleSetting = () =>{
+    navigation .navigate ("AccountDetails")
+  }
   const handleUpdate = () => {
     navigation.navigate('AccountSetup3Create');
   };
@@ -79,74 +84,17 @@ const Profile = () => {
     navigation.navigate('AccountSetup3Create');
   };
 
-  // Extract specifics
- // const { name,age,gender, where, height, religion, star: sign, status, education, body: heart, job, drinking: drink, smoking: smoke, nationality: flag } = specifics;
+  const handleUpl = () => {
+    navigation.navigate("AccountSetup5Create");
+  };
 
-  const handleUpl=()=>{
-    navigation.navigate("AccountSetup5Create")
+  const interestArray = userInfo?.user_general_interests?.split(',').map(item => item.trim()) || [];
+  const openTo = userInfo?.user_open_to ? JSON.parse(userInfo.user_open_to) : [];
+  const images = userInfo?.user_photo_url ? JSON.parse(userInfo.user_photo_url) : [];
+  let videoUrl = userInfo?.user_video_url;
+  if (videoUrl) {
+    videoUrl = JSON.parse(videoUrl); // Remove escaped quotes from the URL string
   }
-  useEffect(() => {
-    let isMounted = true; 
-    const fetchData = async () => {
-    try {
-       const uid = await AsyncStorage.getItem('user_uid'); //Changed this
-        const data = await fetchUserInfo(uid); //Added this
-        if (isMounted) { 
-            setUserInfo(data);
-          }          
-      } catch (error) {
-        if (isMounted) {
-          setError(error.message);
-          console.error('Error fetching userInfo:', error); 
-        }
-      } finally {
-        if (isMounted) {
-          setLoading(false);
-        }
-      }
-    }
-
-    fetchData(); 
-    return () => {
-      isMounted = false; 
-    };
-  }, []);
-
-
-  let interestArray = [];
-  if (userInfo && userInfo.user_general_interests) {
-    if (typeof userInfo.user_general_interests === 'string') {
-      try {
-        interestArray = userInfo.user_general_interests.split(',').map(item => item.trim());
-      } catch (error) {
-        console.error('Error parsing JSON:', error);
-      }
-    } else {
-      // If it's already an object, no need to parse
-      interestArray = userInfo.user_general_interests.split(',').map(item => item.trim());
-    }
-  }
-  
-  // if (userInfo && typeof userInfo.user_general_interests === 'string') {
-  //   interestArray = userInfo.user_general_interests.split(',').map(item => item.trim());
-  // }
-
-  if (loading) {
-    return <Text>Loading...</Text>; 
-  }
- const openTo = userInfo.user_open_to ? JSON.parse(userInfo.user_open_to) : [];
- var images = userInfo.user_photo_url;
- var imageList = [];
-  if (images) {
-    try {
-      imageList = JSON.parse(images);
-      images = imageList[0];
-    }
-    catch (err) {
-      console.log("imageList = JSON.parse(images) err:", err);
-    }
-  }
-  console.log("imageList:", imageList);
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.header}>
@@ -164,15 +112,22 @@ const Profile = () => {
       <Text style={styles.title}>About You</Text>
 
       <View style={styles.imageContainer}>
-      <Image source={{ uri: imageList[0] }} style={styles.image} />
-      <Image source={{ uri: imageList[1] }} style={styles.image} />
+        {images.slice(0, 3).map((imgUrl, index) => (
+          <Image key={index} source={{ uri: imgUrl }} style={styles.image} />
+        ))}
+        
       </View>
-
-      <View style={styles.imageContainer}>
-      <Image source={{ uri: imageList[2] }} style={styles.image} />
-      </View>
-
-      <TouchableOpacity onPress={handleUpl}style={styles.uploadButton}>
+      {videoUrl ? (
+        <Video
+          source={{ uri: videoUrl }}
+          style={styles.video}
+          useNativeControls
+          resizeMode="contain"
+        />
+      ) : (
+        <Text style={styles.noVideoText}>No video available</Text>
+      )}
+      <TouchableOpacity onPress={handleUpl} style={styles.uploadButton}>
         <Text style={styles.uploadButtonText}>Upload</Text>
         <Image source={upload} style={styles.uploadButtonImage} />
       </TouchableOpacity>
@@ -182,24 +137,21 @@ const Profile = () => {
 
       <Text style={styles.subtitle}>Interests</Text>
       <View style={styles.interestsContainer}>
-       {interestArray.map((interest, index) => (
-           <View key={index} style={styles.interestItem}>
-             <Text style={styles.interestText}>{interest}</Text>
+        {interestArray.map((interest, index) => (
+          <View key={index} style={styles.interestItem}>
+            <Text style={styles.interestText}>{interest}</Text>
           </View>
         ))}
-      </View> 
-
+      </View>
 
       <Text style={styles.subtitle}>A Little About Me ...</Text>
-      <Text style={styles.description}>
-        <AccountInfo info = {userInfo.user_profile_bio}/>
-      </Text>
+      <Text style={styles.description}>{userInfo.user_profile_bio}</Text>
 
       <AccountInfo img={heightImg} info={userInfo.user_height} />
       <AccountInfo img={genderImg} info={userInfo.user_gender} />
       <AccountInfo img={faith} info={userInfo.user_religion} />
       <AccountInfo img={star} info={userInfo.user_star_sign} />
-      <AccountInfo img={multi} info={userInfo.user_sexuality}/>
+      <AccountInfo img={multi} info={userInfo.user_sexuality} />
       <AccountInfo img={multi} info={openTo.join(', ')} />
       <AccountInfo img={hat} info={userInfo.user_education} />
       <AccountInfo img={heartImg} info={userInfo.user_body_composition} />
@@ -208,13 +160,12 @@ const Profile = () => {
       <AccountInfo img={smokeImg} info={userInfo.user_smoking} />
       <AccountInfo img={flagImg} info={userInfo.user_nationality} />
 
-
       <View style={styles.footer}>
         <TouchableOpacity onPress={handleUpdate} style={styles.updateButton}>
           <Text style={styles.updateButtonText}>Update Profile</Text>
         </TouchableOpacity>
         <View style={styles.footerIcons}>
-          <TouchableOpacity onPress={() => navigation.navigate('AccountDetails')} style={styles.footerIconButton}>
+          <TouchableOpacity  onPress = {handleSetting} style={styles.footerIconButton}>
             <Image source={setting} style={styles.footerIcon} />
           </TouchableOpacity>
           <TouchableOpacity style={styles.footerIconButton}>
@@ -298,7 +249,7 @@ const styles = StyleSheet.create({
   },
   interestsContainer: {
     flexDirection: 'row',
-    flexWrap: 'wrap',  
+    flexWrap: 'wrap',
     justifyContent: 'flex-start',
     marginVertical: 16,
   },
@@ -312,7 +263,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
-    elevation: 2,  
+    elevation: 2,
   },
   interestText: {
     fontSize: 16,
@@ -332,8 +283,17 @@ const styles = StyleSheet.create({
     height: 24,
     marginRight: 8,
   },
+  video: {
+    width: '100%',
+    height: 300,
+  },
   accountInfoText: {
     fontSize: 16,
+  },
+  videoPlayer: {
+    width: '100%',
+    height: 200,
+    marginVertical: 16,
   },
   footer: {
     marginTop: 20,
