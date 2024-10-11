@@ -135,7 +135,6 @@ const Match = () => {
 
 
 
-    // console.log("Video at the front", userData.user_video_url.replaceAll("\"", ""))
 
     return (
         <Box>
@@ -146,8 +145,6 @@ const Match = () => {
                     key={user.user_id} // assuming user has a unique ID
                 >
                     <Box>
-                        {/*minHeight: '700px',
-                    maxWidth: "680px"*/}
 
                         <Box sx={{ backgroundColor: "#E4423F", paddingTop: "30px", paddingBottom: "50px", borderRadius: "10px", display: "flex", justifyContent: "center", position: "relative", minHeight: '600px', maxWidth: "550px", maxHeight: "414px", margin: "0 auto", marginTop: "20px" }}>
                             {/*<img src={user.user_photo_url ? JSON.parse(user.user_photo_url)[0] : defaultImg} style={{ width: "100%" }} alt="Profile" />*/}
@@ -170,9 +167,10 @@ const Match = () => {
                                         src={JSON.parse(user.user_video_url)}
                                         style={{
                                             width: '100%',
-                                            maxHeight: '450px',
+                                            maxHeight: '520px',
                                             objectFit: 'cover',
                                             borderRadius: '5px',
+                                            marginTop:'20px',                       
                                         }}
                                         controls
                                         playsInline

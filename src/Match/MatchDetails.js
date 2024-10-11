@@ -25,7 +25,7 @@ const MatchDetails = () => {
     console.log("User:", user);
     console.log("Source:", source);
     console.log("account userData in match details:", accountUserData)
-    const [isRightHeartFilled, setIsRightHeartFilled] = useState(source === 'usersWhoYouSelected' || source ==='matchedResults');
+    const [isRightHeartFilled, setIsRightHeartFilled] = useState(source === 'usersWhoYouSelected' || source === 'matchedResults');
     const [showPopup, setShowPopup] = useState(false);
     const [isFlipped, setIsFlipped] = useState(false);
     const [liked, setLiked] = useState(like)
@@ -40,20 +40,21 @@ const MatchDetails = () => {
         console.log('handling heart click');
         const newHeartState = !isRightHeartFilled;
         const fd = new FormData();
-        fd.append('liker_user_id',userId)
-        fd.append('liked_user_id',user.user_uid)
+        fd.append('liker_user_id', userId)
+        fd.append('liked_user_id', user.user_uid)
         if (newHeartState) {
-            axios.post('https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/likes',fd)
+            axios.post('https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/likes', fd)
         }
         else {
             console.log("DELETE")
             axios.delete('https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/likes', {
-                data:fd})
+                data: fd
+            })
         }
         setIsRightHeartFilled(newHeartState);
     };
     const handleSetLiked = () => {
-        setLiked(prevState=>!prevState)
+        setLiked(prevState => !prevState)
         handleRightHeartClick();
     }
 
@@ -63,7 +64,7 @@ const MatchDetails = () => {
     const navigate = useNavigate();
     const handleEditPreferences = () => {
         navigate('/matchPreferences');
-      }
+    }
     const handleBackClick = () => {
         window.history.back();
     };
@@ -81,53 +82,53 @@ const MatchDetails = () => {
     console.log("matched user data in match details:", user)
     console.log("account user data in match details:", AccountUser)
 
-    useEffect(()=> {
+    useEffect(() => {
         axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/${userId}`)
-          .then(res=> {
-            const userData = res.data.result[0]
-            setAccountUser([{
-                name: userData.user_first_name,
-                lastName: userData.user_last_name,
-                age: userData.user_age,
-                gender: userData.user_gender,
-                where: userData.user_suburb,
-                photo: userData.user_photo_url,
-                email: userData.user_email_id,
-                phoneNumber: userData.user_phone_number,
-                availableTime: JSON.parse(userData.user_available_time),
-                bodyComposition: userData.user_body_composition,
-                country: userData.user_country,
-                dateInterests: userData.user_date_interests.split(','),
-                drinking: userData.user_drinking,
-                education: userData.user_education,
-                favoritePhoto: userData.user_favorite_photo,
-                generalInterests: userData.user_general_interests.split(','),
-                height: userData.user_height,
-                job: userData.user_job,
-                kids: userData.user_kids,
-                latitude: userData.user_latitude,
-                longitude: userData.user_longitude,
-                nationality: userData.user_nationality,
-                openTo: JSON.parse(userData.user_open_to),
-                preferAgeMax: userData.user_prefer_age_max,
-                preferAgeMin: userData.user_prefer_age_min,
-                preferDistance: userData.user_prefer_distance,
-                preferGender: userData.user_prefer_gender,
-                preferHeightMin: userData.user_prefer_height_min,
-                preferKids: userData.user_prefer_kids,
-                profileBio: userData.user_profile_bio,
-                religion: userData.user_religion,
-                sexuality: userData.user_sexuality,
-                smoking: userData.user_smoking,
-                starSign: userData.user_star_sign,
-                uid: userData.user_uid,
-                videoUrl: JSON.parse(userData.user_video_url)
-            }])
-          })
-          .catch(err=> {
-            console.log(err)
-          })
-      },[])
+            .then(res => {
+                const userData = res.data.result[0]
+                setAccountUser([{
+                    name: userData.user_first_name,
+                    lastName: userData.user_last_name,
+                    age: userData.user_age,
+                    gender: userData.user_gender,
+                    where: userData.user_suburb,
+                    photo: userData.user_photo_url,
+                    email: userData.user_email_id,
+                    phoneNumber: userData.user_phone_number,
+                    availableTime: JSON.parse(userData.user_available_time),
+                    bodyComposition: userData.user_body_composition,
+                    country: userData.user_country,
+                    dateInterests: userData.user_date_interests.split(','),
+                    drinking: userData.user_drinking,
+                    education: userData.user_education,
+                    favoritePhoto: userData.user_favorite_photo,
+                    generalInterests: userData.user_general_interests.split(','),
+                    height: userData.user_height,
+                    job: userData.user_job,
+                    kids: userData.user_kids,
+                    latitude: userData.user_latitude,
+                    longitude: userData.user_longitude,
+                    nationality: userData.user_nationality,
+                    openTo: JSON.parse(userData.user_open_to),
+                    preferAgeMax: userData.user_prefer_age_max,
+                    preferAgeMin: userData.user_prefer_age_min,
+                    preferDistance: userData.user_prefer_distance,
+                    preferGender: userData.user_prefer_gender,
+                    preferHeightMin: userData.user_prefer_height_min,
+                    preferKids: userData.user_prefer_kids,
+                    profileBio: userData.user_profile_bio,
+                    religion: userData.user_religion,
+                    sexuality: userData.user_sexuality,
+                    smoking: userData.user_smoking,
+                    starSign: userData.user_star_sign,
+                    uid: userData.user_uid,
+                    videoUrl: JSON.parse(userData.user_video_url)
+                }])
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }, [])
 
 
     useEffect(() => {
@@ -135,7 +136,7 @@ const MatchDetails = () => {
             if (popupRef.current && !popupRef.current.contains(event.target)) {
                 handleClosePopup();
             }
-        };  
+        };
         if (showPopup) {
             document.addEventListener('mousedown', handleClickOutside);
         }
@@ -147,48 +148,65 @@ const MatchDetails = () => {
 
     return (
         <Box>
-        <ReactCardFlip isFlipped={isFlipped} flipDirection="horizontal">
-            <Box >
-                <Box sx={{backgroundColor:"#E4423F", paddingTop:"30px", paddingBottom:"50px", borderRadius:"10px", display:"flex",justifyContent:"center", position:"relative", minHeight: '600px' , maxWidth:"414px", margin:"0 auto", marginTop:"20px"}}>
-                    <img src={user.user_photo_url?JSON.parse(user.user_photo_url)[0]: profileImg} style={{width:"100%"}}></img>
-                    {isLeftHeartVisible && isRightHeartFilled && (
-                    <Box sx={{position:"absolute", bottom:"10%", backgroundColor:"white", borderRadius:"30px", padding:"5px"}}>
-                        <MatchPopUp user={user} AccountUser={AccountUser} accountUserData={accountUserData}/>
+            <ReactCardFlip isFlipped={isFlipped} flipDirection="horizontal">
+                <Box >
+                    <Box sx={{ backgroundColor: "#E4423F", paddingTop: "30px", paddingBottom: "50px", borderRadius: "10px", display: "flex", justifyContent: "center", position: "relative", minHeight: '600px', maxWidth: "550px", maxHeight: "414px", margin: "0 auto", marginTop: "20px" }}>
+                        <Grid item xs={12}>
+                            {user.user_video_url && (
+                                <video
+                                    src={JSON.parse(user.user_video_url)}
+                                    style={{
+                                        width: '100%',
+                                        maxHeight: '520px',
+                                        objectFit: 'cover',
+                                        borderRadius: '5px',
+                                        marginTop: '20px',
+                                    }}
+                                    controls
+                                    playsInline
+                                    preload="metadata"
+                                />
+                            )}
+                        </Grid>
+
+                        {isLeftHeartVisible && isRightHeartFilled && (
+                            <Box sx={{ position: "absolute", bottom: "10%", backgroundColor: "white", borderRadius: "30px", padding: "5px" }}>
+                                <MatchPopUp user={user} AccountUser={AccountUser} accountUserData={accountUserData} />
+                            </Box>
+                        )}
+
+                        {/* <img src="profileimg.png" style={{width:"100%", height:"90%"}}></img> */}
+                        <Typography sx={{ position: "absolute", zIndex: '10', top: "10%", color: "white", fontSize: '20px' }}>{user.user_first_name + ' ' + user.user_last_name}</Typography>
+                        <Typography sx={{ position: "absolute", zIndex: '10', top: "14%", color: "white", fontSize: "10px" }}>{user.user_age} - {user.user_gender} - {user.user_country}</Typography>
+                        <Typography sx={{ position: "absolute", zIndex: '10', bottom: "2%", color: "white", fontSize: "18px" }} onClick={() => setIsFlipped(true)}>Tap to See Profile</Typography>
+                        {/* <img src="like.png" style={{position:"absolute", right:"2%", top:"2%"}}></img> */}
+                        <img src={isRightHeartFilled ? likedImg : like} style={{ position: "absolute", right: "2%", top: "1%" }}
+                            onClick={handleRightHeartClick}></img>
+                        {isLeftHeartVisible && (
+                            <img src={likedImg} style={{ position: "absolute", left: "2%", top: "1%" }} ></img>
+                        )}
+
+
                     </Box>
-                    )}
-
-                    {/* <img src="profileimg.png" style={{width:"100%", height:"90%"}}></img> */}
-                    <Typography sx={{position:"absolute", zIndex: '10', top:"10%", color:"white", fontSize:'20px'}}>{user.user_first_name + ' ' + user.user_last_name}</Typography>
-                    <Typography sx={{position:"absolute", zIndex: '10',top:"14%", color:"white", fontSize:"10px"}}>{user.user_age} - {user.user_gender} - {user.user_country}</Typography>
-                    <Typography sx={{position:"absolute", zIndex: '10', bottom:"2%", color:"white", fontSize:"18px"}} onClick={()=>setIsFlipped(true)}>Tap to See Profile</Typography>
-                    {/* <img src="like.png" style={{position:"absolute", right:"2%", top:"2%"}}></img> */}
-                    <img src={isRightHeartFilled ? likedImg : like} style={{position:"absolute", right:"2%", top:"1%"}}
-                    onClick={handleRightHeartClick}></img>
-                    {isLeftHeartVisible && (
-                        <img src={likedImg} style={{position:"absolute", left:"2%", top:"1%"}} ></img>
-                    )}
-
-
                 </Box>
-        </Box>
-       
-        <ViewProfile setIsFlipped={setIsFlipped} liked={isRightHeartFilled} onClick={handleSetLiked} isLiked={isLeftHeartVisible} user={user} AccountUser={AccountUser} userData={user} />
-       
-        {/* <ViewProfile setIsFlipped={setIsFlipped} liked={liked} onClick={handleSetLiked} showPopup={showPopup} isLiked={isLeftHeartVisible} user={user} AccountUser={AccountUser} setShowPopup={setShowPopup} /> */}
-    </ReactCardFlip>
-    <Grid container size={12} justifyContent="center" >
-            <Link to="/matching1PreferencesPage">
-                    <Button sx={{width:"150px",backgroundColor:"#E4423F", borderRadius:"25px", height:"45px", color:"white", marginTop:"20px", mb:"20px", textTransform:"none", fontFamily:"Segoe UI", fontSize:"18px", fontWeight:"regular"}}>Back</Button>
+
+                <ViewProfile setIsFlipped={setIsFlipped} liked={isRightHeartFilled} onClick={handleSetLiked} isLiked={isLeftHeartVisible} user={user} AccountUser={AccountUser} userData={user} />
+
+                {/* <ViewProfile setIsFlipped={setIsFlipped} liked={liked} onClick={handleSetLiked} showPopup={showPopup} isLiked={isLeftHeartVisible} user={user} AccountUser={AccountUser} setShowPopup={setShowPopup} /> */}
+            </ReactCardFlip>
+            <Grid container size={12} justifyContent="center" >
+                <Link to="/matching1PreferencesPage">
+                    <Button sx={{ width: "150px", backgroundColor: "#E4423F", borderRadius: "25px", height: "45px", color: "white", marginTop: "20px", mb: "20px", textTransform: "none", fontFamily: "Segoe UI", fontSize: "18px", fontWeight: "regular" }}>Back</Button>
                 </Link>
             </Grid>
             <Grid container size={12} justifyContent="center" >
-                <Button onClick={handleNavigate} sx={{width:"150px",backgroundColor:"#E4423F", borderRadius:"25px", height:"45px", color:"white", mb:"20px", textTransform:"none", fontFamily:"Segoe UI", fontSize:"18px", fontWeight:"regular"}}>Continue</Button>
+                <Button onClick={handleNavigate} sx={{ width: "150px", backgroundColor: "#E4423F", borderRadius: "25px", height: "45px", color: "white", mb: "20px", textTransform: "none", fontFamily: "Segoe UI", fontSize: "18px", fontWeight: "regular" }}>Continue</Button>
             </Grid>
             <Grid container size={12} justifyContent="center" >
                 <LogoutButton></LogoutButton>
             </Grid>
-    </Box>
-    
+        </Box>
+
     );
 };
 

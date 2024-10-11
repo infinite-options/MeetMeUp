@@ -186,7 +186,7 @@ export default function AccountSetup1Login() {
                 type='submit'
                 sx={{
                   backgroundColor: "#E4423F",
-                  maxWidth: "131px",
+                  maxWidth: "121px",
                   borderRadius: "41px",
                   boxShadow: "none",
                   textTransform: "none",
@@ -202,7 +202,7 @@ export default function AccountSetup1Login() {
                 type='submit'
                 sx={{
                   backgroundColor: "#E4423F",
-                  maxWidth: "131px",
+                  maxWidth: "161px",
                   borderRadius: "41px",
                   boxShadow: "none",
                   textTransform: "none",
@@ -272,7 +272,7 @@ export default function AccountSetup1Login() {
                 type='submit'
                 sx={{
                   backgroundColor: "#E4423F",
-                  maxWidth: "202px",
+                  maxWidth: "180px",
                   borderRadius: "41px",
                   marginTop: "20px",
                   boxShadow: "none",
@@ -290,7 +290,7 @@ export default function AccountSetup1Login() {
                 type='submit'
                 sx={{
                   backgroundColor: "#E4423F",
-                  maxWidth: "202px",
+                  maxWidth: "180px",
                   borderRadius: "41px",
                   marginTop: "20px",
                   boxShadow: "none",

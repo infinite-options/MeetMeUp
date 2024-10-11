@@ -113,13 +113,10 @@ const ViewProfile = ({ setIsFlipped, liked, onClick, isLiked, showPopup, user, A
                     </Grid>
                 </Grid>
             </Grid>
-
-
-
             <Grid size={12} container justifyContent="center">
                 <Typography sx={{ fontFamily: "Lexend", fontSize: "30px" }}>{name}</Typography>
             </Grid>
-            <Grid size={12} container justifyContent="center" sx={{ mb: "20px",ml:'25px'}}>
+            <Grid size={12} container justifyContent="center" sx={{ mb: "20px"}}>
                 <Typography sx={{ fontSize: "20px" }}>{age} - {gender} - {where}</Typography>
             </Grid>
             <Container>

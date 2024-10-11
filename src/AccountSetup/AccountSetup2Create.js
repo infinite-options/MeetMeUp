@@ -105,12 +105,12 @@ export default function AccountSetup2Create() {
                         <TextField onChange={handleChange} name='email' label='Email' type='email' variant='outlined'/>
                         <TextField onChange={handleChange} name='phone_number' label='Phone Number' type='tel' variant='outlined'/>
                     </Grid2>
-                    <div className='pc-sub-header-text'>
+                    <div className='pc-sub-header-text' >
                         Already have an account? <span onClick={() => {
                             navigate('/accountSetup1Login');
-                        }}> <div className='red-text'>Click here</div></span>
+                        }}> <div className='red-text' style={{cursor:'pointer'}}>Click here</div></span>
                     </div>
-                    <div className='pc-header-text'>
+                    <div className='pc-header-text' style={{marginTop:'20px'}}>
                         Security
                     </div>
                     <div className='pc-sub-header-text'>

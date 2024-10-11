@@ -18,7 +18,7 @@ const TopTitle = ({title, weight, page}) => {
             top: '10px',
             justifyContent: 'center'
             }}>
-            <Typography sx={{ fontSize: '22px', fontWeight: `${weight}` }}>
+            <Typography sx={{ fontSize: '22px', fontWeight: `${weight}`,fontFamily: 'Lexend' }}>
                 {title}
             </Typography>
          </Box>
