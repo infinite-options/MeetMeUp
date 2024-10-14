@@ -35,5 +35,11 @@
   "web": {
     "favicon": "./assets/favicon.png"
   },
-  "plugins": ["expo-font"]
-}
+ "plugins": [
+    [
+      "expo-camera",
+      {
+        "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera."
+      }
+    ]
+  ]}

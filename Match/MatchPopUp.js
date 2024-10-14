@@ -21,7 +21,7 @@ export default function MatchPopUp({ user, userStates, setUserStates, index }) {
             const fd = new FormData();
             fd.append('liker_user_id', userId);
             fd.append('liked_user_id', user.user_uid);
-
+            console.log("JISNE LIKE KIYA",user.user_uid);
             try {
                 await axios.delete('https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/likes', { data: fd });
                 console.log('User unliked successfully');
@@ -58,10 +58,10 @@ export default function MatchPopUp({ user, userStates, setUserStates, index }) {
                         source={{ uri: accountUser.photo }}
                         style={[styles.avatar, { zIndex: 1 }]}
                     />
-                    <Image
-                        source={{ uri: user.user_photo_url ? JSON.parse(user.user_photo_url) : '' }}
-                        style={[styles.avatar, styles.overlappingAvatar]}
-                    />
+                   <Image
+    source={{ uri: user.user_photo_url ? JSON.parse(user.user_photo_url)[0] : '' }}
+    style={[styles.avatar, styles.overlappingAvatar]}
+/>
                 </View>
                 <View style={styles.textContainer}>
                     <Text style={styles.matchText}>It's A Match!</Text>
