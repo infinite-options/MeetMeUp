@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, Modal } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, Modal, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import PreferenceSlider from './PreferencesSlider';
 import arrow2 from '../src/Assets/Images/arrow2.png';
@@ -8,9 +8,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const MatchPreferences = () => {
-    const [gender, setGender] = useState('Male'); // Default value
+    const [gender, setGender] = useState('Male');
     const [genderModalVisible, setGenderModalVisible] = useState(false);
+    const [maxDistance, setMaxDistance] = useState(80);
+    const [ageRange, setAgeRange] = useState({ min: 20, max: 40 });
+    const [height, setHeight] = useState(150);
+    
     const navigation = useNavigation();
+    const prefer_gender = ["Male", "Female", "Non-binary"];
 
     const handleBack = () => {
         navigation.replace('AccountSetup7Summary');
@@ -46,7 +51,14 @@ const MatchPreferences = () => {
                     </View>
                     <View style={styles.separator} />
 
-                    <PreferenceSlider preference="Maximum distance" measurement="km." start={80} min={1} max={160} />
+                    <PreferenceSlider 
+                        preference="Maximum distance" 
+                        measurement="km." 
+                        start={maxDistance} 
+                        min={1} 
+                        max={160}
+                        onChange={(value) => setMaxDistance(value)} 
+                    />
                     <View style={styles.separator} />
 
                     <View style={styles.row}>
@@ -60,14 +72,26 @@ const MatchPreferences = () => {
                     </View>
                     <View style={styles.separator} />
 
-                    <PreferenceSlider preference="Age range" start={[20, 40]} min={18} max={80} />
+                    <PreferenceSlider 
+                        preference="Age range" 
+                        start={[ageRange.min, ageRange.max]} 
+                        min={18} 
+                        max={80}
+                        onChange={(value) => setAgeRange({ min: value[0], max: value[1] })} 
+                    />
                     <View style={styles.separator} />
 
-                    <PreferenceSlider preference="Height in centimetres" start={150} min={75} max={225} />
+                    <PreferenceSlider 
+                        preference="Height in centimetres" 
+                        start={height} 
+                        min={75} 
+                        max={225}
+                        onChange={(value) => setHeight(value)} 
+                    />
                     <View style={styles.separator} />
 
                     <View style={styles.buttonsContainer}>
-                        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Match')}>
+                        <TouchableOpacity style={styles.button} onPress={() => navigation.replace('Match', { gender, maxDistance, ageRange, height })}>
                             <Text style={styles.buttonText}>Match Me</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('SelectionResults')}>
@@ -88,15 +112,15 @@ const MatchPreferences = () => {
                         <View style={styles.modalContainer}>
                             <View style={styles.modalContent}>
                                 <Text style={styles.modalTitle}>Select Gender</Text>
-                                <TouchableOpacity onPress={() => handleGenderSelect('Male')} style={styles.modalOption}>
-                                    <Text style={styles.modalOptionText}>Male</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => handleGenderSelect('Female')} style={styles.modalOption}>
-                                    <Text style={styles.modalOptionText}>Female</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => handleGenderSelect('Nonbinary')} style={styles.modalOption}>
-                                    <Text style={styles.modalOptionText}>Nonbinary</Text>
-                                </TouchableOpacity>
+                                <FlatList
+                                    data={prefer_gender}
+                                    keyExtractor={(item) => item}
+                                    renderItem={({ item }) => (
+                                        <TouchableOpacity onPress={() => handleGenderSelect(item)} style={styles.modalOption}>
+                                            <Text style={styles.modalOptionText}>{item}</Text>
+                                        </TouchableOpacity>
+                                    )}
+                                />
                                 <TouchableOpacity onPress={() => setGenderModalVisible(false)} style={styles.modalCloseButton}>
                                     <Text style={styles.modalCloseButtonText}>Cancel</Text>
                                 </TouchableOpacity>
@@ -110,95 +134,43 @@ const MatchPreferences = () => {
 };
 
 const styles = StyleSheet.create({
-    safeArea: {
-        flex: 1,
-        backgroundColor: '#FFFFFF',
+    safeArea: { 
+        flex: 1, 
+        backgroundColor: '#FFFFFF' 
     },
     container: {
-        marginHorizontal: '5%',
-        paddingHorizontal: '10%',
+         marginHorizontal: '5%', 
+         paddingHorizontal: '10%' 
     },
-    title: {
-        textAlign: 'center',
-        marginTop: 20,
-        fontSize: 24,
-        fontFamily: 'Lexend', // Define custom fonts if needed
+    title: { 
+        textAlign: 'center', 
+        marginTop: 20, 
+        fontSize: 24, 
+        fontFamily: 'Lexend' 
     },
-    row: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginTop: 20,
+    row: { 
+        flexDirection: 'row', 
+        justifyContent: 'space-between', 
+        alignItems: 'center', 
+        marginTop: 20 
     },
-    label: {
-        fontSize: 18,
-        fontFamily: 'Lexend',
+    label: { 
+        fontSize: 18, 
+        fontFamily: 'Lexend' 
     },
-    option: {
-        fontSize: 18,
-    },
-    arrow: {
-        width: 20,
-        height: 20,
-    },
-    separator: {
-        borderBottomWidth: 1,
-        borderBottomColor: '#CECECE',
-        marginVertical: 10,
-    },
-    buttonsContainer: {
-        flexDirection: 'column',
-        alignItems: 'center',
-        marginTop: 40,
-    },
-    button: {
-        width: 180,
-        backgroundColor: '#E4423F',
-        borderRadius: 25,
-        height: 45,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginBottom: 20,
-    },
-    buttonText: {
-        color: 'white',
-        fontSize: 18,
-        fontFamily: 'Segoe UI',
-        textAlign: 'center',
-    },
-    modalContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    },
-    modalContent: {
-        width: 300,
-        backgroundColor: 'white',
-        padding: 20,
-        borderRadius: 10,
-        alignItems: 'center',
-    },
-    modalTitle: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginBottom: 15,
-    },
-    modalOption: {
-        paddingVertical: 10,
-        width: '100%',
-        alignItems: 'center',
-    },
-    modalOptionText: {
-        fontSize: 18,
-    },
-    modalCloseButton: {
-        marginTop: 10,
-    },
-    modalCloseButtonText: {
-        fontSize: 16,
-        color: 'red',
-    },
+    option: { fontSize: 18 },
+    arrow: { width: 20, height: 20 },
+    separator: { borderBottomWidth: 1, borderBottomColor: '#CECECE', marginVertical: 10 },
+    buttonsContainer: { flexDirection: 'column', alignItems: 'center', marginTop: 40 },
+    button: { width: 180, backgroundColor: '#E4423F', borderRadius: 25, height: 45, justifyContent: 'center', alignItems: 'center', marginBottom: 20 },
+    buttonText: { color: 'white', fontSize: 18, fontFamily: 'Segoe UI', textAlign: 'center' },
+    modalContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' },
+    modalContent: { width: 300, backgroundColor: 'white', padding: 20, borderRadius: 10, alignItems: 'center' },
+    modalTitle: { fontSize: 20, fontWeight: 'bold', marginBottom: 15 },
+    modalOption: { paddingVertical: 10, width: '100%', alignItems: 'center' },
+    modalOptionText: { fontSize: 18 },
+    modalCloseButton: { marginTop: 10 },
+    modalCloseButtonText: { fontSize: 16, color: 'red' },
 });
 
 export default MatchPreferences;

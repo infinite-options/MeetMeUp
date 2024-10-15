@@ -3,6 +3,7 @@ import { View, Text, Image, TouchableOpacity, FlatList, Button, StyleSheet, Acti
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const SelectionResults = () => {
   const navigation = useNavigation();
@@ -108,6 +109,7 @@ const SelectionResults = () => {
   }
 
   return (
+    <SafeAreaView style={styles.safeArea}>
     <View style={styles.container}>
       <Text style={styles.title}>Selection Results</Text>
 
@@ -141,10 +143,14 @@ const SelectionResults = () => {
         </TouchableOpacity>
       </View>
     </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeArea:{
+    flex: 1,
+  },
   container: {
     flex: 1,
     paddingHorizontal: 20,
@@ -157,7 +163,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 18,
-    color: 'grey',
+    color: '#E4423F',
     fontWeight: 'bold',
     marginVertical: 10,
   },

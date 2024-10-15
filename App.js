@@ -30,6 +30,7 @@ import Message from "./Match/Message";
 import MatchBegin from "./Match/MatchBegin";
 import SelectPlace from "./Match/SelectPlace";
 import SelectLocation from "./Match/SelectLocation";
+import DateSummary from "./Match/DateSummary";
 const Stack = createNativeStackNavigator();
 // const Stack = createStackNavigator();
 
@@ -70,6 +71,7 @@ export default function App() {
         <Stack.Screen name="Begin" component={MatchBegin}/>
         <Stack.Screen name="SelectPlace" component={SelectPlace}/>
         <Stack.Screen name="SelectLocation" component={SelectLocation}/>
+        <Stack.Screen name="NextSummary" component={DateSummary}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
