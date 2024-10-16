@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, Image, TouchableOpacity, ActivityIndicator, StyleSheet, Alert } from 'react-native';
+import { View, Text, ScrollView, Image, TouchableOpacity, ActivityIndicator, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
+import profileImg from '../src/Assets/Images/profileimg.png';
 import MatchPopUp from './MatchPopUp';
 import like from '../src/Assets/Images/like.png';
 import likedImg from '../src/Assets/Images/filledheart.png';
@@ -15,14 +16,6 @@ const Match = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [userId, setUserId] = useState(null);
 
-    // Helper function to format dynamic alert messages
-    const formatMessage = (response) => {
-        return Object.entries(response)
-            .map(([key, value]) => `${key}: ${value}`)
-            .join('\n');
-    };
-
-    // Initialize user data on component mount
     useEffect(() => {
         const initialize = async () => {
             try {
@@ -44,16 +37,13 @@ const Match = () => {
         initialize();
     }, []);
 
-    // Fetch matches for the user
     useEffect(() => {
         const fetchMatches = async () => {
             if (userId) {
                 try {
                     const res = await axios.get(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/matches/${userId}`);
-                    
                     if (res.data.result && Array.isArray(res.data.result)) {
                         setUserData(res.data.result);
-
                         const storedLikes = await AsyncStorage.getItem('liked_user_ids');
                         const storedLikedBy = await AsyncStorage.getItem('liked_by_user_ids');
                         const likedUserIds = storedLikes ? JSON.parse(storedLikes) : [];
@@ -67,16 +57,10 @@ const Match = () => {
                         }));
                         setUserStates(initialUserStates);
                     } else {
-                        const alertMessage = formatMessage(res.data);
-                        Alert.alert("No Matches Found", alertMessage, [{ text: "OK" }]);
+                        console.log('API did not return expected data structure:', res.data);
                     }
                 } catch (error) {
-                    console.error('Error fetching data:', error);
-                    Alert.alert(
-                        "Error",
-                        "An error occurred while fetching data. Please try again later.",
-                        [{ text: "OK" }]
-                    );
+                    console.log('Error fetching data:', error);
                 } finally {
                     setIsLoading(false);
                 }
@@ -85,15 +69,18 @@ const Match = () => {
         fetchMatches();
     }, [userId]);
 
-    // Handle like/unlike actions
     const handleLike = async (index, user) => {
         const updatedLikedStatus = !userStates[index]?.liked;
-        setUserStates(prevStates => {
-            const updatedStates = [...prevStates];
-            updatedStates[index].liked = updatedLikedStatus;
-            updatedStates[index].showPopup = updatedLikedStatus && updatedStates[index]?.likedBy;
-            return updatedStates;
-        });
+        const updatedStates = [...userStates];
+        updatedStates[index].liked = updatedLikedStatus;
+
+        if (updatedLikedStatus && userStates[index]?.likedBy) {
+            updatedStates[index].showPopup = true;
+        } else {
+            updatedStates[index].showPopup = false;
+        }
+
+        setUserStates(updatedStates);
 
         const formData = new FormData();
         formData.append('liker_user_id', userId);
@@ -110,7 +97,6 @@ const Match = () => {
         }
     };
 
-    // Loading state
     if (isLoading) {
         return (
             <View style={styles.loadingContainer}>
@@ -120,7 +106,6 @@ const Match = () => {
         );
     }
 
-    // Main component rendering
     return (
         <ScrollView>
             <View style={styles.container}>
@@ -145,13 +130,17 @@ const Match = () => {
                                 <TouchableOpacity onPress={() => handleLike(index, user)} style={styles.likeButtonRight}>
                                     <Image source={userStates[index]?.liked ? likedImg : like} style={styles.likeIcon} />
                                 </TouchableOpacity>
-                                <Video
-                                    source={{ uri: JSON.parse(user.user_video_url) }}
-                                    style={styles.video}
-                                    useNativeControls
-                                    resizeMode="cover"
-                                    isLooping={true}
-                                />
+                                {user.user_video_url ? (
+                                    <Video
+                                        source={{ uri: user.user_video_url.replace(/^"(.*)"$/, '$1') }}
+                                        style={styles.profileVideo}
+                                        useNativeControls
+                                        resizeMode="cover"
+                                        onError={(error) => console.log('Video loading error:', error)}
+                                    />
+                                ) : (
+                                    <Image source={profileImg} style={styles.profileImage} />
+                                )}
                                 <Text style={styles.userName}>{user.user_first_name} {user.user_last_name}</Text>
                                 <Text style={styles.userDetails}>{user.user_age} - {user.user_gender} - {user.user_suburb}</Text>
                                 <TouchableOpacity onPress={() => navigation.navigate("ViewProfile", { user })} style={styles.profileButton}>
@@ -161,23 +150,23 @@ const Match = () => {
                         </View>
                     ))
                 )}
-                <View style={styles.buttonContainer}>
-                    <TouchableOpacity onPress={() => navigation.navigate('MatchPreferences')}>
-                        <View style={styles.button}>
-                            <Text style={styles.buttonText}>Edit Preferences</Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => navigation.navigate('SelectionResults')}>
-                        <View style={styles.button}>
-                            <Text style={styles.buttonText}>My Matches</Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => navigation.navigate('AccountSetup1Login')}>
-                        <View style={styles.button}>
-                            <Text style={styles.buttonText}>Logout</Text>
-                        </View>
-                    </TouchableOpacity>
-                </View>
+                     <View style={styles.buttonContainer}>
+                                <TouchableOpacity onPress={() => navigation.navigate('MatchPreferences')}>
+                                    <View style={styles.button}>
+                                        <Text style={styles.buttonText}>Edit Preferences</Text>
+                                    </View>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => navigation.navigate('SelectionResults')}>
+                                    <View style={styles.button}>
+                                        <Text style={styles.buttonText}>My Matches</Text>
+                                    </View>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => navigation.navigate('AccountSetup1Login')}>
+                                    <View style={styles.button}>
+                                        <Text style={styles.buttonText}>Logout</Text>
+                                    </View>
+                                </TouchableOpacity>
+                                </View>
             </View>
         </ScrollView>
     );
@@ -206,9 +195,16 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         position: 'relative',
     },
-    video: {
+    profileImage: {
         width: '100%',
-        height: 300,
+        height: '75%',
+        borderRadius: 10,
+    },
+    profileVideo: {
+        width: '100%',
+        height: '75%',
+        borderRadius: 10,
+        backgroundColor: 'black',
     },
     userName: {
         fontSize: 20,
@@ -251,22 +247,23 @@ const styles = StyleSheet.create({
     buttonContainer: {
         flexDirection: 'column',
         marginTop: 20,
-        alignItems: 'center',
+        alignItems: 'center', // Center align buttons horizontally
     },
     button: {
-        backgroundColor: '#E4423F',
-        paddingVertical: 15,
-        paddingHorizontal: 60,
-        borderRadius: 25,
-        marginBottom: 10,
-        width: 300,
-        alignItems: 'center',
+        backgroundColor: '#E4423F', // Set button color to match the example
+        paddingVertical: 15, // Vertical padding for button height
+        paddingHorizontal: 60, // Horizontal padding for button width
+        borderRadius: 25, // Rounded button corners
+        marginBottom: 10, // Space between buttons
+        width: 300, // Set width to a fixed size
+        alignItems: 'center', // Center text horizontally within the button
     },
     buttonText: {
-        color: 'white',
-        fontSize: 18,
-        fontWeight: 'bold',
+        color: 'white', // White text color
+        fontSize: 18, // Font size for text
+        fontWeight: 'bold', // Bold text for emphasis
     },
+    
 });
 
 export default Match;
