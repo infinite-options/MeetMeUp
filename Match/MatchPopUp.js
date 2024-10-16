@@ -42,7 +42,7 @@ export default function MatchPopUp({ user, userStates, setUserStates, index }) {
                 setAccountUser({
                     name: userData.user_first_name,
                     photo: userData.user_photo_url ? JSON.parse(userData.user_photo_url)[0] : ''
-                });
+                });w
             } catch (error) {
                 console.error('Error fetching account user data:', error);
             }

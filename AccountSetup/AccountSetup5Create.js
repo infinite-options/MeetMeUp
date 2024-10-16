@@ -4,11 +4,10 @@ import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import HelperTextBox from '../src/Assets/Components/helperTextBox';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function AccountSetup5Create() {
-    const [formData, setFormData] = useState({ images: [], video: '' });
+    const [formData, setFormData] = useState({ image: '', imgFav: '', video: '' });
     const [isLoading, setIsLoading] = useState(false);
     const [userId, setUserId] = useState('');
     const [userEmail, setUserEmail] = useState('');
@@ -27,13 +26,13 @@ export default function AccountSetup5Create() {
                 if (storedUserId && storedUserEmail) {
                     setUserId(storedUserId);
                     setUserEmail(storedUserEmail);
-                    fetchUserData(storedUserId);
+                    await fetchUserData(storedUserId); // Fetch already uploaded images and video
                 } else {
                     Alert.alert("User data not found", "Please log in again.");
                     navigation.navigate('Login');
                 }
-            } catch (error) {
-                console.error("Error fetching user data", error);
+            } catch (e) {
+                console.error("Error fetching user data", e);
             }
         };
         requestPermissionsAndFetchUserData();
@@ -46,10 +45,15 @@ export default function AccountSetup5Create() {
 
             if (fetchedData.user_photo_url) {
                 const imageArray = JSON.parse(fetchedData.user_photo_url);
-                setFormData(prevData => ({ ...prevData, images: imageArray }));
+                setFormData(prevData => ({ ...prevData, image: imageArray.join(',') })); // Set images in the state
+            }
+
+            if (fetchedData.user_video_url) {
+                setFormData(prevData => ({ ...prevData, video: fetchedData.user_video_url })); // Set video URL in the state
             }
         } catch (error) {
             console.error("Error fetching user data", error);
+            Alert.alert("Error", "Failed to fetch existing media. Please try again later.");
         }
     };
 
@@ -61,12 +65,15 @@ export default function AccountSetup5Create() {
                 quality: 0.5,
             });
 
-            if (!result.canceled && result.assets) {
-                const selectedImage = result.assets[0].uri;
+            const imageUri = result.assets ? result.assets[0].uri : result.uri;
+
+            if (!result.cancelled && imageUri) {
                 setFormData(prevData => ({
                     ...prevData,
-                    images: [...prevData.images, selectedImage],
+                    image: prevData.image ? `${prevData.image},${imageUri}` : imageUri,
                 }));
+            } else {
+                console.log("Image picker was cancelled or returned no URI.");
             }
         } catch (error) {
             console.error("Error selecting or uploading image:", error);
@@ -82,9 +89,15 @@ export default function AccountSetup5Create() {
                 quality: 0.5,
             });
 
-            if (!result.canceled && result.assets) {
-                const selectedVideo = result.assets[0].uri;
-                setFormData(prevData => ({ ...prevData, video: selectedVideo }));
+            const videoUri = result.assets ? result.assets[0].uri : result.uri;
+
+            if (!result.cancelled && videoUri) {
+                setFormData(prevData => ({
+                    ...prevData,
+                    video: videoUri,
+                }));
+            } else {
+                console.log("Video picker was cancelled or returned no URI.");
             }
         } catch (error) {
             console.error("Error selecting or uploading video:", error);
@@ -99,11 +112,12 @@ export default function AccountSetup5Create() {
         uploadData.append('user_uid', userId);
         uploadData.append('user_email_id', userEmail);
 
-        formData.images.forEach((imageUri, index) => {
-            uploadData.append(`image_${index}`, {
+        const imageArray = formData.image.split(',').filter(img => img);
+        imageArray.forEach((imageUri, index) => {
+            uploadData.append(`img_${index}`, {
                 uri: imageUri,
                 type: 'image/jpeg',
-                name: `image_${index}.jpg`,
+                name: `img_${index}.jpg`
             });
         });
 
@@ -111,7 +125,7 @@ export default function AccountSetup5Create() {
             uploadData.append('user_video', {
                 uri: formData.video,
                 type: 'video/mp4',
-                name: 'video_filename.mp4',
+                name: 'video_filename.mp4'
             });
         }
 
@@ -119,7 +133,11 @@ export default function AccountSetup5Create() {
             const response = await axios.put(
                 'https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo',
                 uploadData,
-                { headers: { 'Content-Type': 'multipart/form-data' } }
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                }
             );
 
             if (response.status === 200) {
@@ -129,11 +147,24 @@ export default function AccountSetup5Create() {
                 Alert.alert("Error", "Failed to upload media to the server. Please try again.");
             }
         } catch (error) {
-            console.error("Upload Error:", error);
+            console.error("Upload Error:", error.message);
             Alert.alert("Error", "There was an error uploading the media. Please try again.");
         } finally {
             setIsLoading(false);
         }
+    };
+
+    const handleDelete = (imgUri) => {
+        const updatedImages = formData.image.split(',').filter((img) => img !== imgUri).join(',');
+        setFormData(prevData => ({
+            ...prevData,
+            image: updatedImages,
+            imgFav: prevData.imgFav === imgUri ? '' : prevData.imgFav,
+        }));
+    };
+
+    const handleDeleteVideo = () => {
+        setFormData(prevData => ({ ...prevData, video: '' }));
     };
 
     const handleNext = async () => {
@@ -157,42 +188,42 @@ export default function AccountSetup5Create() {
                     </View>
                     <Text style={styles.progressText}>80%</Text>
                 </View>
-                
+
                 <Text style={styles.sectionTitle}>Images and Video</Text>
                 <Text style={styles.sectionSubtitle}>Upload media to represent yourself.</Text>
 
                 <View style={styles.imagePreviewContainer}>
-                    {formData.images.map((img, index) => (
+                    {formData.image.split(',').filter(Boolean).map((img, index) => (
                         <View key={index} style={styles.imageContainer}>
                             <Image source={{ uri: img }} style={styles.image} />
+                            <TouchableOpacity onPress={() => handleDelete(img)} style={styles.deleteButton}>
+                                <Text style={styles.deleteButtonText}>✖</Text>
+                            </TouchableOpacity>
                         </View>
                     ))}
                     {formData.video ? (
                         <View style={styles.videoContainer}>
                             <Text>Video Recorded</Text>
+                            <TouchableOpacity onPress={handleDeleteVideo} style={styles.deleteButton}>
+                                <Text style={styles.deleteButtonText}>✖</Text>
+                            </TouchableOpacity>
                         </View>
                     ) : null}
                 </View>
 
-                <HelperTextBox text="Why do I need to upload media?" />
-
-                <View style={{ alignItems: 'center' }}>
-                    <TouchableOpacity onPress={handleImageUpload} style={styles.uploadButton}>
-                        <Text style={styles.uploadText}>Upload Image</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={handleVideoUpload} style={styles.uploadButton}>
-                        <Text style={styles.uploadText}>Record Video</Text>
-                    </TouchableOpacity>
-                </View>
+                <TouchableOpacity onPress={handleImageUpload} style={styles.uploadButton}>
+                    <Text style={styles.uploadText}>Upload Image</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={handleVideoUpload} style={styles.uploadButton}>
+                    <Text style={styles.uploadText}>Record Video</Text>
+                </TouchableOpacity>
 
                 {isLoading ? (
                     <ActivityIndicator size="large" color="#E4423F" />
                 ) : (
-                    <View style={{ alignItems: 'center' }}>
-                        <TouchableOpacity onPress={handleNext} style={styles.nextButton}>
-                            <Text style={styles.nextText}>Next</Text>
-                        </TouchableOpacity>
-                    </View>
+                    <TouchableOpacity onPress={handleNext} style={styles.nextButton}>
+                        <Text style={styles.nextText}>Next</Text>
+                    </TouchableOpacity>
                 )}
             </ScrollView>
         </SafeAreaView>
@@ -213,9 +244,11 @@ const styles = StyleSheet.create({
     sectionTitle: { fontSize: 18, fontWeight: 'bold', color: '#333', marginTop: 20, marginBottom: 5 },
     sectionSubtitle: { fontSize: 14, color: '#666', marginBottom: 10 },
     imagePreviewContainer: { flexDirection: 'row', flexWrap: 'wrap', marginVertical: 10 },
-    imageContainer: { margin: 5 },
+    imageContainer: { position: 'relative', margin: 5 },
     image: { width: 100, height: 150, borderRadius: 5 },
-    videoContainer: { padding: 20, backgroundColor: '#ddd', borderRadius: 5, marginTop: 10 },
+    deleteButton: { position: 'absolute', top: 5, right: 5, backgroundColor: 'rgba(0, 0, 0, 0.5)', borderRadius: 15, padding: 2 },
+    deleteButtonText: { color: '#fff', fontSize: 12 },
+    videoContainer: { position: 'relative', padding: 20, backgroundColor: '#ddd', borderRadius: 5, marginTop: 10, alignItems: 'center' },
     uploadButton: { backgroundColor: '#1A1A1A', width: 200, padding: 15, borderRadius: 45, alignItems: 'center', marginVertical: 10 },
     uploadText: { color: '#fff', fontWeight: 'bold', fontSize: 16 },
     nextButton: { backgroundColor: '#E4423F', padding: 15, width: 200, borderRadius: 45, alignItems: 'center' },
