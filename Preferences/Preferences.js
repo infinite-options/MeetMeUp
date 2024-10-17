@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, Modal, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import PreferenceSlider from './PreferencesSlider';
@@ -6,16 +6,22 @@ import arrow2 from '../src/Assets/Images/arrow2.png';
 import BackButton from '../src/Assets/Images/BackButton.png';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 const MatchPreferences = () => {
     const [gender, setGender] = useState('Male');
     const [genderModalVisible, setGenderModalVisible] = useState(false);
     const [maxDistance, setMaxDistance] = useState(80);
-    const [ageRange, setAgeRange] = useState({ min: 20, max: 40 });
+    const [ageRange, setAgeRange] = useState({ min: 20, max: 50 });
     const [height, setHeight] = useState(150);
     
     const navigation = useNavigation();
-    const prefer_gender = ["Male", "Female", "Non-binary"];
+    const prefer_gender = ["Male", "Female", "Nonbinary"];
+
+    useEffect(() => {
+        // Fetch user data on component mount if needed
+        // similar to the web code
+    }, []);
 
     const handleBack = () => {
         navigation.replace('AccountSetup7Summary');
@@ -31,9 +37,28 @@ const MatchPreferences = () => {
         navigation.navigate('AccountSetup1Login');
     };
 
-    const handleGenderSelect = (selectedGender) => {
+    const handleGenderSelect = async (selectedGender) => {
         setGender(selectedGender);
         setGenderModalVisible(false);
+        
+        // Fetch user data from AsyncStorage (or directly from API if needed)
+        const userId = await AsyncStorage.getItem('user_uid');
+        const userEmail = await AsyncStorage.getItem('user_email_id');
+
+        // Create form data for the PUT request
+        const formData = new FormData();
+        formData.append('user_uid', userId);
+        formData.append('user_email_id', userEmail);
+        formData.append('user_prefer_gender', selectedGender);
+
+        // Make the API call
+        axios.put("https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo", formData)
+            .then(() => {
+                console.log(`Gender preference updated to ${selectedGender}`);
+            })
+            .catch((error) => {
+                console.error('Error updating gender preference:', error);
+            });
     };
 
     return (
@@ -132,6 +157,10 @@ const MatchPreferences = () => {
         </SafeAreaView>
     );
 };
+
+
+
+
 
 const styles = StyleSheet.create({
     safeArea: { 

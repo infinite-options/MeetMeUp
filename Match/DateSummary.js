@@ -27,6 +27,7 @@ export default function DateSummary() {
     const handleSliderChange = (newValue) => {
         if (newValue < 80) {
             setSliderValue(newValue);
+            navigation.navigate('Message', { user });
         } else {
             setSliderValue(100);  // Lock at 100 to simulate completion
         }
@@ -104,8 +105,8 @@ export default function DateSummary() {
                         step={1}
                         value={sliderValue}
                         onValueChange={handleSliderChange}
-                        thumbTintColor='#E4423F'
-                        minimumTrackTintColor='#E4423F'
+                        thumbTintColor='white'
+                        minimumTrackTintColor='white'
                     />
                     <Text style={styles.sliderText}>Slide to send</Text>
                 </View>
@@ -215,6 +216,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     slider: {
+        color: 'white',
         width: '100%',
         height: 50,
     },
