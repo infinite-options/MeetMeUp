@@ -31,7 +31,6 @@
     "js-sha256": "^0.11.0",
     "react": "18.2.0",
     "react-native": "0.74.5",
-    "react-native-beautiful-video-recorder": "^2.0.1",
     "react-native-camera": "^4.2.1",
     "react-native-camera-kit": "^13.0.0",
     "react-native-date-picker": "^5.0.7",
