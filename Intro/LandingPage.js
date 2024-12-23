@@ -1,6 +1,9 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native'; 
+// added for testing age verification comment out if not testing
+// import AsyncStorage from '@react-native-async-storage/async-storage';
+// import { Alert } from 'react-native';
 
 const LandingPage = () => {
   const navigation = useNavigation(); 
@@ -12,6 +15,16 @@ const LandingPage = () => {
   const handleSkipClick = () => {
     navigation.navigate('AccountSetup1Login'); 
   };
+   // TEMP FUNCTION TO CLEAR AsyncStorage KEY comment out if not testing
+  //  const handleClearVerificationKey = async () => {
+  //   try {
+  //     await AsyncStorage.removeItem('userIsVerified');
+  //     console.log('Verification key removed. You can now test age verification again.');
+  //     Alert.alert('Key Removed', 'You can now test age verification again.');
+  //   } catch (error) {
+  //     console.error('Error removing userIsVerified key:', error);
+  //   }
+  // };
 
   return (
     <View style={styles.container}>
@@ -39,6 +52,14 @@ const LandingPage = () => {
       <TouchableOpacity style={styles.skipButton} onPress={handleSkipClick}>
         <Text style={styles.skipButtonText}>Skip &gt;</Text>
       </TouchableOpacity>
+      {/*
+        TEMPORARY BUTTON FOR TESTING:
+        removes the userIsAgeVerified key so you can see the age gate again.
+        comment out if not testing
+      */}
+      {/* <TouchableOpacity style={styles.clearButton} onPress={handleClearVerificationKey}>
+        <Text style={styles.clearButtonText}>Clear Verification Key</Text>
+      </TouchableOpacity> */}
     </View>
   );
 };
@@ -107,6 +128,20 @@ const styles = StyleSheet.create({
     color: '#000000',
     textTransform: 'none',
   },
+   // NEW STYLES FOR THE CLEAR BUTTON comment out if not testing
+  //  clearButton: {
+  //   marginTop: 20,
+  //   paddingVertical: 8,
+  //   paddingHorizontal: 16,
+  //   backgroundColor: '#dddddd',
+  //   borderRadius: 10,
+  // },
+  // clearButtonText: {
+  //   fontFamily: 'Lexend-Regular',
+  //   fontSize: 14,
+  //   color: '#000',
+  //   textTransform: 'none',
+  // },
 });
 
 export default LandingPage;

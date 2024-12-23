@@ -1,19 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
+
 import AccountSetup2Create from "./AccountSetup/AccountSetup2Create";
 import AccountSetup3Create from "./AccountSetup/AccountSetup3Create";
 import AccountSetup4Create from "./AccountSetup/AccountSetup4Create";
 import AccountSetup7Summary from "./AccountSetup/AccountSetup7Summary";
 import AccountDetails3 from "./AccountDetails/AccountDetails3";
-import * as Font from "expo-font";
 // import { createStackNavigator } from '@react-navigation/stack';
 import LandingPage from "./Intro/LandingPage";
 import LandingPage2 from "./Intro/LandingPage2";
 import LandingPage3 from "./Intro/LandingPage3";
 import LandingPage4 from "./Intro/LandingPage4";
 import Start from "./Intro/Start";
+import AgeVerification from './Intro/AgeVerification';
 import TrialAccount from "./Intro/TrialAccount";
 import Location from "./Profile/Location";
 import Location2 from "./Profile/Location2";
@@ -33,8 +36,28 @@ import SelectLocation from "./Match/SelectLocation";
 import DateSummary from "./Match/DateSummary";
 const Stack = createNativeStackNavigator();
 // const Stack = createStackNavigator();
-
+SplashScreen.preventAutoHideAsync();
 export default function App() {
+  const [fontsLoaded] = useFonts({
+    'Inria Sans': require('./assets/fonts/InriaSans-Regular.ttf'),
+    'InriaSans-Bold': require('./assets/fonts/InriaSans-Bold.ttf'),
+    'Lexend': require('./assets/fonts/Lexend-Regular.ttf'),
+    'Lexend-Regular': require('./assets/fonts/Lexend-Regular.ttf'),
+    'Lexend-Bold': require('./assets/fonts/Lexend-Bold.ttf'),
+    'DM Sans': require('./assets/fonts/DMSans-Regular.ttf'),
+  });
+
+  // Once fonts are loaded, hide the splash screen
+  useEffect(() => {
+    if (fontsLoaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  // If fonts aren’t loaded yet, return null or a temporary loading component
+  if (!fontsLoaded) {
+    return null; 
+  }
   return (
     <NavigationContainer>
       {/*
@@ -46,6 +69,7 @@ export default function App() {
   */}
       <Stack.Navigator initialRouteName='Start' screenOptions={{ headerShown: false }}>
         <Stack.Screen name='Start' component={Start} />
+        <Stack.Screen name="AgeVerification" component={AgeVerification} />
         <Stack.Screen name='LandingPage' component={LandingPage} />
         <Stack.Screen name='LandingPage2' component={LandingPage2} />
         <Stack.Screen name='LandingPage3' component={LandingPage3} />

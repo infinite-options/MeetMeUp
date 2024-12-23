@@ -6,7 +6,7 @@ const StartPage = () => {
   const navigation = useNavigation();
 
   const handleNavigateStart = () => {
-    navigation.navigate('LandingPage'); 
+    navigation.navigate('AgeVerification'); 
   };
 
   return (
