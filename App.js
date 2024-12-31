@@ -10,6 +10,10 @@ import AccountSetup3Create from "./AccountSetup/AccountSetup3Create";
 import AccountSetup4Create from "./AccountSetup/AccountSetup4Create";
 import AccountSetup7Summary from "./AccountSetup/AccountSetup7Summary";
 import AccountDetails3 from "./AccountDetails/AccountDetails3";
+
+// new pages 
+import PersonalDetails from "./AccountSetup/PersonalDetails.js";
+import AssignedSex from "./AccountSetup/AssignedSex";
 // import { createStackNavigator } from '@react-navigation/stack';
 import LandingPage from "./Intro/LandingPage";
 import LandingPage2 from "./Intro/LandingPage2";
@@ -34,6 +38,33 @@ import MatchBegin from "./Match/MatchBegin";
 import SelectPlace from "./Match/SelectPlace";
 import SelectLocation from "./Match/SelectLocation";
 import DateSummary from "./Match/DateSummary";
+import NameInput from "./AccountSetup/NameInput.js";
+import BirthdayInput from "./AccountSetup/BirthdayInput.js";
+import HaveChildren from "./AccountSetup/HaveChildren.js";
+import Height from "./AccountSetup/Height.js";
+import GenderIdentity from "./AccountSetup/GenderIdentity.js";
+import OpenToScreen from "./AccountSetup/OpenToScreen.js";
+import SexualOrientationScreen from "./AccountSetup/SexualOrientationScreen.js";
+import InterestsScreen from "./AccountSetup/InterestsScreen.js";
+import AddMediaScreen from "./AccountSetup/AddMediaScreen.js";
+import LocationScreen from "./AccountSetup/LocationScreen.js";
+import EnableLocationScreen from "./AccountSetup/EnableLocationScreen.js";
+import EnableNotificationsScreen from "./AccountSetup/EnableNotificationsScreen.js";
+import MyProfile from "./Profile/MyProfile.js";
+import DateAvailability from "./DatePreferences/DateAvailability.js";
+import TypeOfDate from "./DatePreferences/TypeOfDate.js";
+import AdditionalDetailsOne from "./AdditionalDetails/AdditionalDetailsOne.js";
+import AdditionalDetailsTwo from "./AdditionalDetails/AdditionalDetailsTwo.js";
+import AdditionalDetailsThree from "./AdditionalDetails/AdditionalDetailsThree.js";
+import AdditionalDetailsFour from "./AdditionalDetails/AdditionalDetailsFour.js";
+import AdditionalDetailsFive from "./AdditionalDetails/AdditionalDetailsFive.js";
+import AdditionalDetailsSix from "./AdditionalDetails/AdditionalDetailsSix.js";
+import AdditionalDetailsSeven from "./AdditionalDetails/AdditionalDetailsSeven.js";
+import AdditionalDetailsEight from "./AdditionalDetails/AdditionalDetailsEight.js";
+import ProfileBio from "./ProfileBio/ProfileBio.js";
+import VerifyPhoneNumber1 from "./VerifyYourAccount/VerifyPhoneNumber1.js";
+import VerifyPhoneNumber2 from "./VerifyYourAccount/VerifyPhoneNumber2.js";
+import AddDriversLicense from "./VerifyYourAccount/AddDriversLicense.js";
 const Stack = createNativeStackNavigator();
 // const Stack = createStackNavigator();
 SplashScreen.preventAutoHideAsync();
@@ -77,6 +108,42 @@ export default function App() {
         <Stack.Screen name='TrialAccount' component={TrialAccount} />
         <Stack.Screen name='AccountSetup1Login' component={AccountSetup1Login}/>
         <Stack.Screen name='AccountSetup2Create' component={AccountSetup2Create} />
+        <Stack.Screen name='PersonalDetails' component={PersonalDetails} />
+        {/* Created ui prefered pages for personal details */}
+        <Stack.Screen name='NameInput' component={NameInput} />
+        <Stack.Screen name='BirthdayInput' component={BirthdayInput} />
+        <Stack.Screen name='Height' component={Height} />
+        <Stack.Screen name='HaveChildren' component={HaveChildren} />
+        <Stack.Screen name="AssignedSex" component={AssignedSex} />
+        <Stack.Screen name="GenderIdentity" component={GenderIdentity} />
+        <Stack.Screen name="OpenToScreen" component={OpenToScreen} />
+        <Stack.Screen name="SexualOrientationScreen" component={SexualOrientationScreen} />
+        <Stack.Screen name="InterestsScreen" component={InterestsScreen} />
+        <Stack.Screen name="AddMediaScreen" component={AddMediaScreen} />
+        <Stack.Screen name="LocationScreen" component={LocationScreen} />
+        <Stack.Screen name="EnableLocationScreen" component={EnableLocationScreen} />
+        <Stack.Screen name="EnableNotificationsScreen" component={EnableNotificationsScreen} />
+        <Stack.Screen name="MyProfile" component={MyProfile} />
+        <Stack.Screen name="DateAvailability" component={DateAvailability} />
+        <Stack.Screen name="TypeOfDate" component={TypeOfDate} />
+        <Stack.Screen name="AdditionalDetailsOne" component={AdditionalDetailsOne} />
+        <Stack.Screen name="AdditionalDetailsTwo" component={AdditionalDetailsTwo} />
+        <Stack.Screen name="AdditionalDetailsThree" component={AdditionalDetailsThree} />
+        <Stack.Screen name="AdditionalDetailsFour" component={AdditionalDetailsFour} />
+        <Stack.Screen name="AdditionalDetailsFive" component={AdditionalDetailsFive} />
+        <Stack.Screen name="AdditionalDetailsSix" component={AdditionalDetailsSix} />
+        <Stack.Screen name="AdditionalDetailsSeven" component={AdditionalDetailsSeven} />
+        <Stack.Screen name="AdditionalDetailsEight" component={AdditionalDetailsEight} />
+        <Stack.Screen name="ProfileBio" component={ProfileBio} />
+        <Stack.Screen name="VerifyPhoneNumber1" component={VerifyPhoneNumber1} />
+        <Stack.Screen name="VerifyPhoneNumber2" component={VerifyPhoneNumber2} />
+        <Stack.Screen name="AddDriversLicense" component={AddDriversLicense} />
+        {/* <Stack.Screen name="GenderIdentity" component={GenderIdentity} />
+        <Stack.Screen name="SexualOrientation" component={SexualOrientation} />
+        <Stack.Screen name="OpenTo" component={OpenTo} />
+        <Stack.Screen name="Interests" component={Interests} />
+        <Stack.Screen name="VideoAndPhotos" component={VideoAndPhotos} />
+        <Stack.Screen name="Location" component={LocationScreen} /> */}
         <Stack.Screen name='AccountSetup3Create' component={AccountSetup3Create} />
         <Stack.Screen name='AccountSetup4Create' component={AccountSetup4Create} />
         <Stack.Screen name='Location' component={Location} />

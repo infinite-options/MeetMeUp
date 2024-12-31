@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Pressable, TouchableOpacity, Alert, Image, } from 'react-native';
+import { StatusBar, Platform, SafeAreaView, View, StyleSheet, Pressable, TouchableOpacity, Alert, Image } from 'react-native';
+import { Text, TextInput } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ProgressBar from '../src/Assets/Components/ProgressBar';
 
 export default function AccountSetup2Create() {
     const [formData, setFormData] = useState({
         email: '',
-        phone_number: '',
+        // phone_number: '',
         password: '',
         confirmPassword: '',
     });
@@ -18,11 +20,16 @@ export default function AccountSetup2Create() {
 
     const navigation = useNavigation();
     const [existing, setExisting] = useState(false);
+    const isValidEmail = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
     const handleInputChange = (name, value) => {
         setFormData({ ...formData, [name]: value });
 
         if (name === 'password') {
             updatePasswordStrength(value);
+            setPasswordsMatch(value === formData.confirmPassword || formData.confirmPassword === '');
         }
 
         if (name === 'confirmPassword') {
@@ -46,7 +53,7 @@ export default function AccountSetup2Create() {
 
     const handleContinue = async () => {
         const url = "https://mrle52rri4.execute-api.us-west-1.amazonaws.com/dev/api/v2/CreateAccount/MMU";
-        if (!formData.email || !formData.password || !formData.phone_number) {
+        if (!formData.email || !formData.password || !formData.confirmPassword) {
             Alert.alert('Error', 'Please fill in all fields.');
             return;
         }
@@ -57,30 +64,30 @@ export default function AccountSetup2Create() {
         let data = new FormData();
         data.append("email", formData['email']);
         data.append("password", formData['password']);
-        data.append("phone_number", formData['phone_number']);
+        // data.append("phone_number", formData['phone_number']);
         try {
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    email: formData.email,
-                    phone_number: formData.phone_number,
-                    password: formData.password,
-                }),
-            });
+            // const response = await fetch(url, {
+            //     method: 'POST',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify({
+            //         email: formData.email,
+            //         phone_number: formData.phone_number,
+            //         password: formData.password,
+            //     }),
+            // });
 
-            const result = await response.json();
+            // const result = await response.json();
 
-            if (result.message === "User already exists") {
-                setExisting(true);
-                Alert.alert('User Already Exists');
-                return;
-            }
+            // if (result.message === "User already exists") {
+            //     setExisting(true);
+            //     Alert.alert('User Already Exists');
+            //     return;
+            // }
 
-            await AsyncStorage.setItem('user_uid', result.result[0].user_uid);
+            // await AsyncStorage.setItem('user_uid', result.result[0].user_uid);
             await AsyncStorage.setItem('user_email_id', formData['email']);
-            await AsyncStorage.setItem('user_phone_number', formData['phone_number']);
-            navigation.navigate('AccountSetup3Create');
+            // await AsyncStorage.setItem('user_phone_number', formData['phone_number']);
+            navigation.navigate('NameInput');
         } catch (error) {
             console.error("Error occurred:", error);
             Alert.alert("Error", "There was an issue creating your account. Please try again.");
@@ -119,14 +126,14 @@ export default function AccountSetup2Create() {
     };
 
     const isFormComplete = () =>
-        formData.email !== '' &&
-        formData.phone_number !== '' &&
+        isValidEmail(formData.email) &&
+        // formData.phone_number !== '' &&
         formData.password !== '' &&
         formData.confirmPassword !== '' &&
         passwordsMatch;
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             {/* Back Button */}
             <TouchableOpacity
                 style={styles.backButton}
@@ -135,10 +142,9 @@ export default function AccountSetup2Create() {
                 <Ionicons name="arrow-back" size={28} color="red" />
             </TouchableOpacity>
 
-            {/* Slider below the back button */}
-            <View style={styles.slider}>
-                <View style={[styles.sliderProgress, { width: '10%' }]} />
-            </View>
+
+            <ProgressBar startProgress={0} endProgress={10} />
+
 
 
             {/* Title and Subtitle */}
@@ -148,57 +154,61 @@ export default function AccountSetup2Create() {
             {/* Input Fields */}
             <View style={styles.inputContainer}>
                 <TextInput
-                    style={styles.emailInput}
-                    placeholder="Email"
+                    style={styles.input}
+                    label="Email"
+                    mode='outlined'
                     keyboardType="email-address"
                     value={formData.email}
                     onChangeText={(text) => handleInputChange('email', text)}
+                    outlineStyle={styles.textInputOutline}
+
                 />
-                <TextInput
+                {/* <TextInput
                     style={styles.phoneInput}
                     placeholder="Phone Number"
                     keyboardType="phone-pad"
                     value={formData.phone_number}
                     onChangeText={(text) => handleInputChange('phone_number', text)}
+                /> */}
+                <TextInput
+                    label="Create password"
+                    mode="outlined"
+                    secureTextEntry={!showPassword}
+                    value={formData.password}
+                    onChangeText={(text) => handleInputChange('password', text)}
+                    right={
+                        <TextInput.Icon
+                            icon={showPassword ? 'eye' : 'eye-off'}
+                            onPress={() => setShowPassword(!showPassword)}
+                            size={20}
+                            color="gray"
+                            style={styles.eyeIcon}
+                        />
+                    }
+                    style={styles.input}
+                    outlineStyle={styles.textInputOutline}
+
                 />
-                <View style={styles.passwordContainer}>
-                    <TextInput
-                        style={styles.passwordInput}
-                        placeholder="Password"
-                        secureTextEntry={!showPassword}
-                        value={formData.password}
-                        onChangeText={(text) => handleInputChange('password', text)}
-                    />
-                    <TouchableOpacity
-                        onPress={() => setShowPassword(!showPassword)}
-                        style={styles.eyeIcon}
-                    >
-                        <Ionicons
-                            name={showPassword ? 'eye' : 'eye-off'}
+
+                <TextInput
+                    label="Confirm password"
+                    mode="outlined"
+                    secureTextEntry={!showConfirmPassword}
+                    value={formData.confirmPassword}
+                    onChangeText={(text) => handleInputChange('confirmPassword', text)}
+                    right={
+                        <TextInput.Icon
+                            icon={showConfirmPassword ? 'eye' : 'eye-off'}
+                            onPress={() => setShowConfirmPassword(!showConfirmPassword)}
                             size={20}
                             color="gray"
+                            style={styles.eyeIcon}
                         />
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.passwordContainer}>
-                    <TextInput
-                        style={styles.passwordInput}
-                        placeholder="Confirm password"
-                        secureTextEntry={!showConfirmPassword}
-                        value={formData.confirmPassword}
-                        onChangeText={(text) => handleInputChange('confirmPassword', text)}
-                    />
-                    <TouchableOpacity
-                        onPress={() => setShowConfirmPassword(!showConfirmPassword)}
-                        style={styles.eyeIcon}
-                    >
-                        <Ionicons
-                            name={showConfirmPassword ? 'eye' : 'eye-off'}
-                            size={20}
-                            color="gray"
-                        />
-                    </TouchableOpacity>
-                </View>
+                    }
+                    style={styles.input}
+                    outlineStyle={styles.textInputOutline}
+
+                />
 
                 {/* Password Mismatch Warning */}
                 {!passwordsMatch && formData.confirmPassword !== '' && (
@@ -236,7 +246,11 @@ export default function AccountSetup2Create() {
                     styles.continueButton,
                     { backgroundColor: isFormComplete() ? '#E4423F' : '#ccc' },
                 ]}
-                onPress={isFormComplete() ? handleContinue : null}
+                onPress={() => {
+                    if (isFormComplete()) {
+                        handleContinue();
+                    }
+                }}
                 disabled={!isFormComplete()}
             >
                 <Text style={styles.continueButtonText}>Continue</Text>
@@ -271,7 +285,7 @@ export default function AccountSetup2Create() {
                     Already have an account? <Text style={styles.loginLink}>Log In</Text>
                 </Text>
             </TouchableOpacity>
-        </View>
+        </SafeAreaView>
     );
 }
 
@@ -281,24 +295,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         paddingHorizontal: 20,
         backgroundColor: '#FFF',
-    },
-    backButton: {
-        alignSelf: 'flex-start',
-        backgroundColor: '#F5F5F5',
-        borderRadius: 20,
-        padding: 8,
-        marginBottom: 10,
-    },
-    slider: {
-        height: 5,
-        backgroundColor: '#E0E0E0',
-        borderRadius: 10,
-        marginBottom: 20,
-    },
-    sliderProgress: {
-        height: '100%',
-        backgroundColor: '#000',
-        borderRadius: 10,
+        justifyContent: 'flex-start', // Align content to the top
+        alignItems: 'stretch',
+        paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
     },
     backButton: {
         alignSelf: 'flex-start',
@@ -306,6 +305,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         padding: 8,
         marginBottom: 20,
+        marginTop: 30,
     },
     title: {
         fontSize: 26,
@@ -323,37 +323,8 @@ const styles = StyleSheet.create({
     inputContainer: {
         marginBottom: 30,
     },
-    emailInput: {
-        height: 50,
-        borderRadius: 10,
-        paddingHorizontal: 15,
-        fontSize: 16,
-        backgroundColor: '#F9F9F9',
-        marginBottom: 15,
-    },
-    phoneInput: {
-        height: 50,
-        borderRadius: 10,
-        paddingHorizontal: 15,
-        fontSize: 16,
-        backgroundColor: '#F9F9F9',
-        marginBottom: 15,
-    },
-    passwordContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: '#F9F9F9',
-        borderRadius: 10,
-        paddingHorizontal: 15,
-        marginBottom: 15,
-    },
-    passwordInput: {
-        flex: 1,
-        height: 50,
-        fontSize: 16,
-    },
     eyeIcon: {
-        marginLeft: 'auto',
+        marginTop: 15,
     },
     strengthBarContainer: {
         flexDirection: 'row',
@@ -379,10 +350,12 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     continueButton: {
-        borderRadius: 25,
-        paddingVertical: 15,
-        alignItems: 'center',
-        marginBottom: 25,
+        height: 50,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#E4423F",
+        borderRadius: 30,
+        marginBottom: 20,
     },
     continueButtonText: {
         color: '#FFF',
@@ -433,5 +406,18 @@ const styles = StyleSheet.create({
     appleLogo: {
         width: 45,
         height: 45,
+    },
+    textInputOutline: {
+        borderWidth: 0,
+        borderColor: '#F9F9F9',
+        borderRadius: 10,
+        flex: 1,
+        alignItems: 'center',
+        backgroundColor: '#F9F9F9',
+        paddingHorizontal: 15,
+        height: 50,
+    },
+    input: {
+        marginBottom: 15, // Space between input fields
     },
 });
