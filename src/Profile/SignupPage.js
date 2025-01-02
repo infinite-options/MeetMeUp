@@ -10,16 +10,19 @@ import {
   IconButton,
   LinearProgress,
 } from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import googlesignupIcon from '../Assets/Images/googlesignupIcon.webp';
 import AppleIcon from '@mui/icons-material/Apple';
+import { useNavigate } from 'react-router-dom';
+import ContinueButton from './ContinueButton';
 
 const SignupPage = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
+  const navigate = useNavigate(); 
   const handleTogglePasswordVisibility = () => setShowPassword(!showPassword);
   const handleToggleConfirmPasswordVisibility = () =>
     setShowConfirmPassword(!showConfirmPassword);
@@ -33,6 +36,10 @@ const SignupPage = () => {
 
   const passwordStrength = getPasswordStrength(password);
 
+  const handleLoginClick = () => {
+    navigate('/login'); // Navigate to the /login route
+  };
+
   return (
     <Container
       maxWidth="xs"
@@ -40,12 +47,21 @@ const SignupPage = () => {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         height: '100vh',
         padding: '20px',
-        backgroundColor: '#f9f9f9',
+        backgroundColor: '#ffffff',
       }}
     >
+       <Box
+        style={{
+          position: 'absolute',
+          top: '20px',
+          left: '20px',
+        }}
+      >
+      </Box>
+      
       {/* Progress Indicator */}
       <Box
         style={{
@@ -54,11 +70,12 @@ const SignupPage = () => {
           backgroundColor: '#f2f2f2',
           position: 'relative',
           marginBottom: '20px',
+          marginTop: '60px', 
         }}
       >
         <Box
           style={{
-            width: '20%',
+            width: '10%',
             height: '4px',
             backgroundColor: '#000',
             position: 'absolute',
@@ -203,22 +220,10 @@ const SignupPage = () => {
       </Box>
 
       {/* Continue Button */}
-      <Button
-        variant="contained"
-        fullWidth
-        disabled={!password || !confirmPassword || password !== confirmPassword}
-        style={{
-          backgroundColor: password && confirmPassword && password === confirmPassword ? '#E4423F' : '#e0e0e0',
-          color: '#fff',
-          borderRadius: '24px',
-          padding: '12px 0',
-          fontWeight: 'bold',
-          textTransform: 'none',
-          fontFamily: 'Lexend',
-        }}
-      >
-        Continue
-      </Button>
+      <ContinueButton
+        navigateTo="/fullname"
+        isEnabled={password && confirmPassword && password === confirmPassword}
+      />
 
       {/* Divider */}
       <Divider
@@ -285,7 +290,7 @@ const SignupPage = () => {
         }}
       >
         Already have an account?{' '}
-        <span style={{ color: '#E4423F', fontWeight: 'bold', cursor: 'pointer' }}>
+        <span style={{ color: '#E4423F', fontWeight: 'bold', cursor: 'pointer' }} onClick={handleLoginClick}>
           Log In
         </span>
       </Typography>

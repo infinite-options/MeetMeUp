@@ -40,6 +40,10 @@ import ShowPrivacyPolicy from './Policies/showPrivacyPolicy';
 import AccountContext from './AccountSetup/AccountContext';
 import Message from './Match/Message';
 import SignupPage from './Profile/SignupPage';
+import LoginPage from './Profile/LoginPage';
+import FullNamePage from './Profile/FullNamePage';
+import BirthdayPage from './Profile/BirthdayPage';
+import HeightPage from './Profile/HeightPage';
 
 function Main() {
   const theme = createTheme({
@@ -98,6 +102,10 @@ function Main() {
         <Route path="/privacypolicy" element={<ShowPrivacyPolicy/>}/>
 
         <Route path="/signup" element={<SignupPage/>}/>
+        <Route path="/login" element={<LoginPage/>}/>
+        <Route path="/fullname" element={<FullNamePage/>}/>
+        <Route path="/birthday" element={<BirthdayPage/>}/>
+        <Route path="/height" element={<HeightPage/>}/>
       </Routes>
     </BrowserRouter>
     </AccountContext.Provider>
