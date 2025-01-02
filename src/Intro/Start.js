@@ -1,92 +1,91 @@
 import React from 'react';
-import { Button, Container, Typography } from '@mui/material';
-import { useNavigate } from 'react-router-dom'; 
+import { Button, Container, Typography, Box } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import './Start.css';
 
 const StartPage = () => {
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
 
-    const handleNavigateStart= () => {
-        navigate('/landing-page-1'); 
-      };
+    const handleNavigateStart = () => {
+        navigate('/landing-page-1');
+    };
+
     return (
         <Container
-            maxWidth="false"
+            maxWidth={false}
             style={{
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                justifyContent: 'center',
+                justifyContent: 'space-between', // Space between Typography and Box
                 textAlign: 'center',
-                padding: 0,
                 backgroundColor: '#E4423F',
-                borderRadius: 2,
                 minHeight: '100vh',
+                padding: '40px 20px', // Added padding for some spacing from edges
             }}
-            // onClick={()=> {
-            //     handleNavigateStart();
-            // }}
         >
-            <Button
-                variant="text"
-                onClick={handleNavigateStart}
+            {/* Title Typography - Centered Vertically */}
+            <Typography
                 style={{
                     fontFamily: 'Inria Sans',
                     fontSize: '64px',
                     fontWeight: 'bold',
                     color: '#FFFFFF',
-                    padding: 1,
-                    textTransform: 'none',
+                    marginTop: 'auto', // Automatically adjusts space above
+                    marginBottom: 'auto', // Automatically adjusts space below
+                    whiteSpace: 'nowrap',}}
+            >
+                meet me up
+            </Typography>
+
+            {/* Box containing Button and Log In link - Positioned at the bottom */}
+            <Box
+                style={{
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
-                    padding: '20px', // Added padding for better spacing
+                    gap: '16px', // Space between Button and "Log In"
+                    marginBottom: '20px', // Added margin for some spacing from the bottom
                 }}
-                >
-                <Typography 
-                    style={{ 
-                    fontFamily: 'Inria Sans', 
-                    fontSize: '64px', 
-                    fontWeight: 'bold', 
-                    color: '#FFFFFF',
+            >
+                <Button
+                    variant="contained"
+                    onClick={handleNavigateStart}
+                    style={{
+                        width: '100%',
+                        fontFamily: 'Inria Sans',
+                        fontSize: '20px',
+                        fontWeight: 'bold',
+                        color: '#000000',
+                        backgroundColor: '#FFFFFF',
+                        borderRadius: '24px',
+                        padding: '10px 40px',
+                        textTransform: 'none',
                     }}
                 >
-                    meet me up
-                </Typography>
-
-                <Typography 
-                    style={{ 
-                    fontFamily: 'Inria Sans', 
-                    fontSize: '16px',  
-                    color: '#FFFFFF',
-                    marginTop: '2px',
-                    }}
-                >
-                    optimized for mobile screens. click to begin
-                </Typography>
+                    Get Started!
                 </Button>
-            {/* <Typography 
-                style={{ 
-                    fontFamily: 'Inria Sans', 
-                    fontSize: '64px', 
-                    fontWeight: 'bold', 
-                    color: '#FFFFFF',
-                }}
-                >
-                    meet me up
-                </Typography>
-                <Typography 
-                    style={{ 
-                        fontFamily: 'Inria Sans', 
-                        fontSize: '64px', 
-                        fontWeight: 'bold', 
+                <Typography
+                    style={{
+                        fontFamily: 'Inria Sans',
+                        fontSize: '14px',
                         color: '#FFFFFF',
                     }}
-                    variant='subtitle'
                 >
-                    optimized for mobile screens. click to begin
+                    Already have an account?{' '}
+                    <span
+                        style={{
+                            color: '#000000',
+                            fontWeight: 'bold',
+                            textDecoration: 'underline',
+                            cursor: 'pointer',
+                        }}
+                        onClick={() => navigate('/login')}
+                    >
+                        Log In
+                    </span>
                 </Typography>
-                */}
+            </Box>
         </Container>
     );
 };
