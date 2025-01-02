@@ -44,6 +44,7 @@ import LoginPage from './Profile/LoginPage';
 import FullNamePage from './Profile/FullNamePage';
 import BirthdayPage from './Profile/BirthdayPage';
 import HeightPage from './Profile/HeightPage';
+import ChildrenPage from './Profile/ChildrenPage';
 
 function Main() {
   const theme = createTheme({
@@ -106,6 +107,8 @@ function Main() {
         <Route path="/fullname" element={<FullNamePage/>}/>
         <Route path="/birthday" element={<BirthdayPage/>}/>
         <Route path="/height" element={<HeightPage/>}/>
+        <Route path="/children" element={<ChildrenPage/>}/>
+
       </Routes>
     </BrowserRouter>
     </AccountContext.Provider>

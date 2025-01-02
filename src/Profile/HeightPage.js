@@ -259,7 +259,7 @@ const HeightPage = () => {
 
       {/* Continue Button */}
       <Box style={{ marginTop: 'auto', width: '100%' }}>
-        <ContinueButton navigateTo="/next-page" isEnabled={isContinueEnabled} />
+        <ContinueButton navigateTo="/children" isEnabled={isContinueEnabled} />
       </Box>
     </Container>
   );
