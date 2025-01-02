@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Slider from '@react-native-community/slider';
+// import RangeSlider from 'react-native-range-slider-expo';
+
 import axios from 'axios';
 
 const PreferenceSlider = ({ preference, measurement, start, min, max }) => {
@@ -9,9 +11,14 @@ const PreferenceSlider = ({ preference, measurement, start, min, max }) => {
     const [debouncedValue, setDebouncedValue] = useState(value);
     const [userUID, setUserUID] = useState('');
     const [userEmail, setUserEmail] = useState('');
+
+    const [fromValue, setFromValue] = useState(20);
+    const [toValue, setToValue] = useState(80);
     
     // Extra state for handling age range (min and max)
     const [ageRange, setAgeRange] = useState({ minAge: 20, maxAge: 60 });
+
+
 
     // Function to load user data from AsyncStorage
     const loadUserData = async () => {
@@ -115,8 +122,10 @@ const PreferenceSlider = ({ preference, measurement, start, min, max }) => {
                 <Text>{displayValue(value)} {measurement}</Text>
             </View>
             {preference === 'Age range' ? (
+
                 <View>
-                    <Text>Min Age: {ageRange.minAge}</Text>
+                    {/* <Text>Min Age: {ageRange.minAge}</Text>
+                    <Text>Age Range: {ageRange[0]} - {ageRange[1]}</Text>
                     <Slider
                         style={styles.slider}
                         value={ageRange.minAge}
@@ -139,7 +148,36 @@ const PreferenceSlider = ({ preference, measurement, start, min, max }) => {
                         minimumTrackTintColor="#E4423F"
                         maximumTrackTintColor="#CECECE"
                         thumbTintColor="#ffffff"
+                    /> */}
+
+                    <RangeSlider
+              
+                            style={styles.Rslider}
+                            min={ageRange.minAge}
+                            max={ageRange.maxAge}
+                            fromValue={ageRange.minAge}
+                            toValue={ageRange.maxAge}
+                            fromValueOnChange={(min, max) => setAgeRange({ min, max })}
+                            toValueOnChange={(min, max) => setAgeRange({ min, max })}
+                            step={1}
+                            inRangeBarColor="#CECECE"
+                            outRangeBarColor="#CECECE"
+                            fromKnobColor="#f9f9f9" 
+                            toKnobColor="#f9f9f9" 
+                            barHeight="4"
+                            valueLabelsBackgroundColor="#CECECE"
+                      
+                            
+                          
+                    
+                            // minimumTrackTintColor="#E4423F" // Adjust the color of the minimum filled track
+                            // maximumTrackTintColor="#CECECE" // Adjust the color of the remaining track
+                            // thumbTintColor="#ffffff" // Set the thumb (range ball) color to white
+                            // styleSize="small"
+                            // thumbSize={5}
+                            
                     />
+    
                 </View>
             ) : (
                 <Slider
@@ -175,6 +213,12 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 40,
     },
+
+    Rslider: {
+        width: '100%',
+        height: 40,
+    },
+
 });
 
 export default PreferenceSlider;

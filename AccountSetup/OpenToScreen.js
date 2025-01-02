@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Pressable,
   StyleSheet,
+  ScrollView
 } from 'react-native';
 import ProgressBar from '../src/Assets/Components/ProgressBar';
 import { Ionicons } from '@expo/vector-icons';
@@ -50,6 +51,8 @@ export default function OpenToScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
+     {/* Added ScrollView wrapper */}
+     <ScrollView contentContainerStyle={styles.scrollViewContent}> 
       {/* Back Button */}
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
         <Ionicons name="arrow-back" size={28} color="red" />
@@ -111,6 +114,8 @@ export default function OpenToScreen({ navigation }) {
       >
         <Text style={styles.continueButtonText}>Continue</Text>
       </Pressable>
+      </ScrollView>
+      {/* End of ScrollView wrapper */}
     </SafeAreaView>
   );
 }
@@ -185,5 +190,9 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  scrollViewContent: {
+    paddingHorizontal: 20, 
+    paddingBottom: 20,     
   },
 });

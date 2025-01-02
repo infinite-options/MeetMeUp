@@ -2,21 +2,50 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, Modal, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import PreferenceSlider from './PreferencesSlider';
+import RangeSlider from './PreferencesSlider';
 import arrow2 from '../src/Assets/Images/arrow2.png';
 import BackButton from '../src/Assets/Images/BackButton.png';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import 'react-native-gesture-handler';
+
+import MultiSlider from '@ptomasroos/react-native-multi-slider';
+
 import axios from 'axios';
+// const AgeSlider = () => {
+//     const [minAge, setMinAge] = useState(18);
+//     const [maxAge, setMaxAge] = useState(60);
 
 const MatchPreferences = () => {
     const [gender, setGender] = useState('Male');
     const [genderModalVisible, setGenderModalVisible] = useState(false);
     const [maxDistance, setMaxDistance] = useState(80);
-    const [ageRange, setAgeRange] = useState({ min: 20, max: 50 });
+    // const [ageRange, setAgeRange] = useState({ min: 20, max: 50 });
+    // const [minAge, setMinAge] = useState(18);
+    // const [maxAge, setMaxAge] = useState(60);
+
+    const [ageRange, setAgeRange] = useState([18, 60]);
+
+    const handleValueChange = (values) => {
+      setAgeRange(values);
+    };
+
+
     const [height, setHeight] = useState(150);
+
+    const [fromValue, setFromValue] = useState(20);
+    const [toValue, setToValue] = useState(80);
     
     const navigation = useNavigation();
     const prefer_gender = ["Male", "Female", "Nonbinary"];
+
+    const [smokingHabit, setSmokingHabit] = useState(null);
+    const [drinkingHabit, setDrinkingHabit] = useState(null);
+
+//added for body type
+    const [selectedBodyTypes, setSelectedBodyTypes] = useState([]);
+
+    const bodyTypes = ["Slim", "Athletic", "Curvy", "Plus Size", "Extra Few Pounds"];
 
     useEffect(() => {
         // Fetch user data on component mount if needed
@@ -61,6 +90,18 @@ const MatchPreferences = () => {
             });
     };
 
+    const handleBodyTypeSelect = (bodyType) => {
+        setSelectedBodyTypes((prevSelectedBodyTypes) => {
+            if (prevSelectedBodyTypes.includes(bodyType)) {
+                return prevSelectedBodyTypes.filter(item => item !== bodyType); // Deselect
+            } else {
+                return [...prevSelectedBodyTypes, bodyType]; // Select
+            }
+        });
+    };
+
+
+
     return (
         <SafeAreaView style={styles.safeArea}>
             <ScrollView contentContainerStyle={styles.scrollContent}>
@@ -69,11 +110,26 @@ const MatchPreferences = () => {
                         <Image source={BackButton} style={styles.arrowIcon} />
                     </TouchableOpacity>
                     <Text style={styles.title}>Match Preferences</Text>
+                    <Text style={styles.separator}>preferences.js</Text>
 
                     <View style={styles.row}>
                         <Text style={styles.label}>Location</Text>
                         <Image source={arrow2} style={styles.arrow} />
                     </View>
+
+                    {/* <View style={styles.container}>
+                    <RangeSlider 
+                        min={20} 
+                        max={80} 
+                        fromValueOnChange={setFromValue} 
+                        toValueOnChange={setToValue} 
+                        initialFromValue={ageRange.min}
+                        initialToValue={ageRange.max}
+                    />
+                    <Text>From: {fromValue}</Text>
+                    <Text>To: {toValue}</Text>
+                    </View> */}
+
                     <View style={styles.separator} />
 
                     <PreferenceSlider 
@@ -88,6 +144,7 @@ const MatchPreferences = () => {
 
                     <View style={styles.row}>
                         <Text style={styles.label}>Looking for</Text>
+            
                         <TouchableOpacity onPress={() => setGenderModalVisible(true)}>
                             <View style={styles.row}>
                                 <Text style={styles.option}>{gender}</Text>
@@ -97,14 +154,72 @@ const MatchPreferences = () => {
                     </View>
                     <View style={styles.separator} />
 
-                    <PreferenceSlider 
-                        preference="Age range" 
-                        start={[ageRange.min, ageRange.max]} 
-                        min={18} 
-                        max={80}
-                        onChange={(value) => setAgeRange({ min: value[0], max: value[1] })} 
-                    />
-                    <View style={styles.separator} />
+                    <Text style={styles.label}>Age Range</Text>
+
+                    <View style={styles.container}>
+      <Text style={styles.title}>Set Age Range</Text>
+      <View style={styles.rangeContainer}>
+        <Text style={styles.label}>Minimum Age: {ageRange[0]}</Text>
+        <Text style={styles.label}>Maximum Age: {ageRange[1]}</Text>
+      </View>
+
+      <MultiSlider
+        values={[ageRange[0], ageRange[1]]}
+        sliderLength={300}
+        onValuesChange={handleValueChange}
+        min={18}
+        max={100}
+        step={1}
+        allowOverlap={false}
+        snapped
+        selectedStyle={{ backgroundColor: '#007AFF' }}
+        unselectedStyle={{ backgroundColor: '#E0E0E0' }}
+        markerStyle={{
+          height: 20,
+          width: 20,
+          borderRadius: 10,
+          backgroundColor: '#007AFF',
+        }}
+        pressedMarkerStyle={{
+          height: 25,
+          width: 25,
+          borderRadius: 12.5,
+          backgroundColor: '#005BB5',
+        }}
+      />
+    </View>
+                   
+
+
+
+                     {/* <RangeSlider 
+                      
+                      
+                        
+
+                        // start={ageRange.min}
+                        // end={ageRange.max} 
+                        // min={18} 
+                        // max={80}
+                        // fromValueOnChange={setFromValue} 
+                        // toValueOnChange={setToValue} 
+                        // initialFromValue={ageRange.min}
+                        // initialToValue={ageRange.max}
+                        // onChange={(value) => setAgeRange({ min: value[0], max: value[1] })} 
+                    /> */}
+                    <View style={styles.separator} /> 
+{/* 
+                    <RangeSlider
+                            style={{ width: 300, height: 40 }}
+                            minValue={0}
+                            maxValue={100}
+                            selectedMinimum={low}
+                            selectedMaximum={high}
+                            onChange={({ minimum, maximum }) => {
+                                setLow(minimum);
+                                setHigh(maximum);
+                            }}
+                    /> */}
 
                     <PreferenceSlider 
                         preference="Height in centimetres" 
@@ -114,6 +229,70 @@ const MatchPreferences = () => {
                         onChange={(value) => setHeight(value)} 
                     />
                     <View style={styles.separator} />
+{/* added for body type */}
+<View style={styles.row}>
+    <Text style={styles.label}>Body Type</Text>
+</View>
+<View style={styles.separator} />
+
+<View style={styles.bodyTypeContainer}>
+    {bodyTypes.map((bodyType, index) => (
+        <TouchableOpacity 
+            key={index} 
+            onPress={() => handleBodyTypeSelect(bodyType)} 
+            style={[
+                styles.bodyTypeOption, 
+                selectedBodyTypes.includes(bodyType) && styles.bodyTypeSelected
+            ]}
+        >
+            <Text style={styles.bodyTypeOptionText}>{bodyType}</Text>
+        </TouchableOpacity>
+    ))}
+</View>
+<View style={styles.separator} />
+
+    {/* Smoking Habits Section */}
+    <View style={styles.row}>
+    <Text style={styles.label}>Smoking Habits</Text>
+</View>
+<View style={styles.smokingHabitsContainer}>
+    {["Yes", "No", "Either"].map((option, index) => (
+        <TouchableOpacity 
+            key={index} 
+            onPress={() => setSmokingHabit(option)} 
+            style={[
+                styles.habitOption, 
+                smokingHabit === option && styles.habitSelected
+            ]}
+        >
+            <Text style={styles.habitOptionText}>{option}</Text>
+        </TouchableOpacity>
+    ))}
+</View>
+<View style={styles.separator} />
+
+{/* Drinking Habits Section */}
+<View style={styles.row}>
+    <Text style={styles.label}>Drinking Habits</Text>
+</View>
+<View style={styles.drinkingHabitsContainer}>
+    {["Yes", "No", "Either"].map((option, index) => (
+        <TouchableOpacity 
+            key={index} 
+            onPress={() => setDrinkingHabit(option)} 
+            style={[
+                styles.habitOption, 
+                drinkingHabit === option && styles.habitSelected
+            ]}
+        >
+            <Text style={styles.habitOptionText}>{option}</Text>
+        </TouchableOpacity>
+    ))}
+</View>
+<View style={styles.separator} />
+
+
+
 
                     <View style={styles.buttonsContainer}>
                         <TouchableOpacity style={styles.button} onPress={() => navigation.replace('Match', { gender, maxDistance, ageRange, height })}>
@@ -126,6 +305,8 @@ const MatchPreferences = () => {
                             <Text style={styles.buttonText}>Logout</Text>
                         </TouchableOpacity>
                     </View>
+
+
 
                     {/* Gender Selection Modal */}
                     <Modal
@@ -152,6 +333,10 @@ const MatchPreferences = () => {
                             </View>
                         </View>
                     </Modal>
+
+
+
+
                 </View>
             </ScrollView>
         </SafeAreaView>
@@ -200,6 +385,65 @@ const styles = StyleSheet.create({
     modalOptionText: { fontSize: 18 },
     modalCloseButton: { marginTop: 10 },
     modalCloseButtonText: { fontSize: 16, color: 'red' },
+
+    bodyTypeContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between',
+        marginTop: 10,
+    },
+    bodyTypeOption: {
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+        marginBottom: 10,
+        backgroundColor: '#f0f0f0',
+        borderRadius: 20,
+        borderWidth: 1,
+        borderColor: '#CECECE',
+        marginRight: 10,
+    },
+    bodyTypeSelected: {
+        backgroundColor: '#E4423F',
+        borderColor: '#E4423F',
+    },
+    bodyTypeOptionText: {
+        fontSize: 16,
+        color: '#333',
+    },
+
+    habitOption: {
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+        marginBottom: 10,
+        backgroundColor: '#f0f0f0',
+        borderRadius: 20,
+        borderWidth: 1,
+        borderColor: '#CECECE',
+        marginRight: 10,
+    },
+    habitSelected: {
+        backgroundColor: '#E4423F',
+        borderColor: '#E4423F',
+    },
+    habitOptionText: {
+        fontSize: 16,
+        color: '#333',
+    },
+    smokingHabitsContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between',
+        marginTop: 10,
+    },
+    drinkingHabitsContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between',
+        marginTop: 10,
+    },
+    
+    
 });
 
 export default MatchPreferences;
+

@@ -55,8 +55,15 @@ export default function InterestsScreen({ navigation }) {
   const handleContinue = () => {
     if (isFormComplete) {
       // Navigate to next screen, passing the chosen interests
-      navigation.navigate('AddMediaScreen', { interests: selectedInterests });
+     // navigation.navigate('AddMediaScreen', { interests: selectedInterests });
+      //navigation.navigate('ViewProfile', { interests: selectedInterests }); 
+     
     }
+  };
+
+  const handleTemp = () => {
+    // Navigate to 'ViewProfile' screen
+    navigation.navigate('Preferences', { interests: selectedInterests }); // Added for Temp button
   };
 
   return (
@@ -122,18 +129,32 @@ export default function InterestsScreen({ navigation }) {
       </View>
 
       {/* Continue Button */}
-      <Pressable
-        style={[
-          styles.continueButton,
-          { backgroundColor: isFormComplete ? '#E4423F' : '#ccc' },
-        ]}
-        onPress={handleContinue}
-        disabled={!isFormComplete}
-      >
+   {    <Pressable
+          style={[
+            styles.continueButton,
+            { backgroundColor: isFormComplete ? '#E4423F' : '#ccc' },
+          ]}
+          onPress={handleContinue}
+          disabled={!isFormComplete}
+        >
         <Text style={styles.continueButtonText}>Continue</Text>
-      </Pressable>
-    </SafeAreaView>
+        </Pressable>
+        }
+            {/* Temp Button - Added */}
+        <Pressable
+            style={[
+              styles.tempButton, // New style added
+              { backgroundColor: isFormComplete ? '#E4423F' : '#ccc' },
+            ]}  
+            onPress={handleTemp} // New handler
+          >
+            <Text style={styles.tempButtonText}>Temp</Text> 
+        </Pressable>
+      </SafeAreaView>
+    
   );
+
+
 }
 
 const styles = StyleSheet.create({
@@ -202,6 +223,19 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     marginBottom: 20,
     marginTop: 10, 
+  },
+  tempButton: {
+    height: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 25,
+    marginBottom: 20,
+    marginTop: 10, 
+  },
+  tempButtonText: {
+    color: '#FFF',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
   continueButtonText: {
     color: '#FFF',

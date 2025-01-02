@@ -65,6 +65,7 @@ import ProfileBio from "./ProfileBio/ProfileBio.js";
 import VerifyPhoneNumber1 from "./VerifyYourAccount/VerifyPhoneNumber1.js";
 import VerifyPhoneNumber2 from "./VerifyYourAccount/VerifyPhoneNumber2.js";
 import AddDriversLicense from "./VerifyYourAccount/AddDriversLicense.js";
+import Preferences from "./Preferences/Preferences"
 const Stack = createNativeStackNavigator();
 // const Stack = createStackNavigator();
 SplashScreen.preventAutoHideAsync();
@@ -99,6 +100,7 @@ export default function App() {
       </Stack.Navigator>
   */}
       <Stack.Navigator initialRouteName='Start' screenOptions={{ headerShown: false }}>
+        {/* <Stack.Screen name='Preferences' component={Preferences}/> */}
         <Stack.Screen name='Start' component={Start} />
         <Stack.Screen name="AgeVerification" component={AgeVerification} />
         <Stack.Screen name='LandingPage' component={LandingPage} />
@@ -119,7 +121,8 @@ export default function App() {
         <Stack.Screen name="OpenToScreen" component={OpenToScreen} />
         <Stack.Screen name="SexualOrientationScreen" component={SexualOrientationScreen} />
         <Stack.Screen name="InterestsScreen" component={InterestsScreen} />
-        <Stack.Screen name="AddMediaScreen" component={AddMediaScreen} />
+        <Stack.Screen name='Preferences' component={Preferences}/>
+        {/*<Stack.Screen name="AddMediaScreen" component={AddMediaScreen} />*/}
         <Stack.Screen name="LocationScreen" component={LocationScreen} />
         <Stack.Screen name="EnableLocationScreen" component={EnableLocationScreen} />
         <Stack.Screen name="EnableNotificationsScreen" component={EnableNotificationsScreen} />
@@ -154,6 +157,7 @@ export default function App() {
         <Stack.Screen name='MatchPreferences' component={MatchPreferences}/>
         <Stack.Screen name = "AccountSetup6Available" component={AccountSetup6Available}/>
         <Stack.Screen name ="SelectionResults" component={SelectionResults}/>
+        
         <Stack.Screen name="ViewProfile" component={ViewProfile}/>
         <Stack.Screen name="Match" component={Match}/>
         <Stack.Screen name="user-details" component={MatchDetails}/>
