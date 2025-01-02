@@ -39,6 +39,8 @@ import ShowTermsAndConditions from './Policies/showTermsAndConditions';
 import ShowPrivacyPolicy from './Policies/showPrivacyPolicy';
 import AccountContext from './AccountSetup/AccountContext';
 import Message from './Match/Message';
+import SignupPage from './Profile/SignupPage';
+
 function Main() {
   const theme = createTheme({
     typography: {
@@ -94,6 +96,8 @@ function Main() {
         <Route path='/matchPreferences' element={<Preferences/>}/>
         <Route path="/termsandconditions" element={<ShowTermsAndConditions/>}/>
         <Route path="/privacypolicy" element={<ShowPrivacyPolicy/>}/>
+
+        <Route path="/signup" element={<SignupPage/>}/>
       </Routes>
     </BrowserRouter>
     </AccountContext.Provider>
