@@ -13,15 +13,85 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import googlesignupIcon from '../Assets/Images/googlesignupIcon.webp';
 import AppleIcon from '@mui/icons-material/Apple';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const LoginPage = () => {
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate(); 
+  const [errorMessage, setErrorMessage] = useState('');
+  const [showSpinner, setShowSpinner] = useState(false);
+  const navigate = useNavigate();
+
   const handleTogglePasswordVisibility = () => setShowPassword(!showPassword);
 
   const handleSignupClick = () => {
-    navigate('/signup'); // Navigate to the /signup route
+    navigate('/signup');
+  };
+
+  const handleSubmitLogin = async (e) => {
+    e.preventDefault();
+
+    if (email === '' || password === '') {
+      setErrorMessage('Please fill out all fields');
+      window.alert('Please fill out all the fields');
+      return;
+    }
+
+    const saltUrl = 'https://mrle52rri4.execute-api.us-west-1.amazonaws.com/dev/api/v2/AccountSalt/MMU';
+    const loginUrl = 'https://mrle52rri4.execute-api.us-west-1.amazonaws.com/dev/api/v2/Login/MMU';
+
+    try {
+      setShowSpinner(true);
+      const saltResponse = await axios.post(saltUrl, { email });
+      const saltObject = saltResponse.data;
+
+      if (saltObject.code === 200) {
+        let hashAlg = saltObject.result[0].password_algorithm;
+        const salt = saltObject.result[0].password_salt;
+
+        if (hashAlg && salt) {
+          switch (hashAlg) {
+            case 'SHA256':
+              hashAlg = 'SHA-256';
+              break;
+            default:
+              break;
+          }
+
+          const saltedPassword = password + salt;
+          const encoder = new TextEncoder();
+          const data = encoder.encode(saltedPassword);
+          const hashedBuffer = await crypto.subtle.digest(hashAlg, data);
+          const hashArray = Array.from(new Uint8Array(hashedBuffer));
+          const hashedPassword = hashArray.map((byte) => byte.toString(16).padStart(2, '0')).join('');
+
+          const loginResponse = await axios.post(
+            loginUrl,
+            { email, password: hashedPassword },
+            { headers: { 'Content-Type': 'application/json' } }
+          );
+
+          localStorage.setItem('user_uid', loginResponse.data.result.user_uid);
+          localStorage.setItem('user_email_id', loginResponse.data.result.user_email_id);
+
+          navigate('/accountSetup7Summary');
+        } else {
+          throw new Error('Hash algorithm or salt is missing.');
+        }
+      } else {
+        window.alert('User does not exist.');
+      }
+    } catch (error) {
+      console.error('Error occurred:', error);
+      if (error.response && error.response.status === 401) {
+        window.alert('Invalid credentials. Please try again.');
+      } else {
+        window.alert('An error occurred. Please try again later.');
+      }
+    } finally {
+      setShowSpinner(false);
+    }
   };
 
   return (
@@ -36,8 +106,17 @@ const LoginPage = () => {
         padding: '20px',
         backgroundColor: '#ffffff',
       }}
-    >{/* Welcome Text */}
-      <Box style={{ width: '100%', marginBottom: '24px' }}>
+    >
+      <Box
+        style={{
+          position: 'absolute',
+          top: '20px',
+          left: '20px',
+        }}
+      >
+      </Box>
+      {/* Welcome Text */}
+      <Box style={{ width: '100%', marginBottom: '24px', marginTop: '24px' }}>
         <Typography
           style={{
             fontFamily: 'Lexend',
@@ -47,7 +126,7 @@ const LoginPage = () => {
             letterSpacing: '-0.04em',
             textAlign: 'left',
             color: '#1A1A1A',
-            marginBottom: "20px",
+            marginBottom: '20px',
           }}
         >
           Welcome Back!
@@ -71,6 +150,8 @@ const LoginPage = () => {
           placeholder="Email"
           variant="filled"
           margin="normal"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           InputProps={{
             disableUnderline: true,
             style: {
@@ -90,6 +171,7 @@ const LoginPage = () => {
           variant="filled"
           margin="normal"
           type={showPassword ? 'text' : 'password'}
+          value={password}
           onChange={(e) => setPassword(e.target.value)}
           InputProps={{
             disableUnderline: true,
@@ -115,9 +197,10 @@ const LoginPage = () => {
       <Button
         variant="contained"
         fullWidth
-        disabled={!password}
+        disabled={!email || !password}
+        onClick={handleSubmitLogin}
         style={{
-          backgroundColor: password ? '#E4423F' : '#e0e0e0',
+          backgroundColor: email && password ? '#E4423F' : '#e0e0e0',
           color: '#fff',
           borderRadius: '24px',
           padding: '12px 0',
@@ -126,7 +209,7 @@ const LoginPage = () => {
           fontFamily: 'Lexend',
         }}
       >
-        Continue
+        {showSpinner ? 'Loading...' : 'Continue'}
       </Button>
 
       {/* Divider */}

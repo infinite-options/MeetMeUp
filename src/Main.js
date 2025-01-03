@@ -45,6 +45,11 @@ import FullNamePage from './Profile/FullNamePage';
 import BirthdayPage from './Profile/BirthdayPage';
 import HeightPage from './Profile/HeightPage';
 import ChildrenPage from './Profile/ChildrenPage';
+import SexAssignedPage from './Profile/SexAssignedPage';
+import GenderIdentityPage from './Profile/GenderIdentityPage';
+import OrientationPage from './Profile/OrientationPage';
+import PreferencePage from './Profile/PreferencePage';
+import InterestsPage from './Profile/InterestsPage';
 
 function Main() {
   const theme = createTheme({
@@ -108,7 +113,11 @@ function Main() {
         <Route path="/birthday" element={<BirthdayPage/>}/>
         <Route path="/height" element={<HeightPage/>}/>
         <Route path="/children" element={<ChildrenPage/>}/>
-
+        <Route path="/sexassigned" element={<SexAssignedPage/>}/>
+        <Route path="/genderidentity" element={<GenderIdentityPage/>}/>
+        <Route path="/orientation" element={<OrientationPage/>}/>
+        <Route path="/preference" element={<PreferencePage/>}/>
+        <Route path="/interests" element={<InterestsPage/>}/>
       </Routes>
     </BrowserRouter>
     </AccountContext.Provider>

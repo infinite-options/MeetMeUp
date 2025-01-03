@@ -1,9 +1,11 @@
 import Main from "./Main";
+import { DataProvider } from '../src/ListContext';
 
 function App() {
   return (
     <div className="App">
-        <Main></Main>
+      <DataProvider><Main></Main></DataProvider>
+        
     </div>
   );
 }

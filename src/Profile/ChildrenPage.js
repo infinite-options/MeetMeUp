@@ -143,7 +143,7 @@ const ChildrenPage = () => {
 
       {/* Continue Button */}
       <Box style={{ marginTop: 'auto', width: '100%' }}>
-        <ContinueButton navigateTo="/next-page" isEnabled={true} />
+        <ContinueButton navigateTo="/sexassigned" isEnabled={true} />
       </Box>
     </Container>
   );
