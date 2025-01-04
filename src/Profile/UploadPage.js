@@ -10,11 +10,12 @@ import {
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import AddIcon from "@mui/icons-material/Add";
+import { useNavigate } from "react-router-dom";
 
 const UploadPage = () => {
     const [video, setVideo] = useState(null);
     const [photos, setPhotos] = useState([null, null, null]);
-  
+    const navigate = useNavigate();
     const fileInputRef = useRef(null); // Ref for file input
     const currentPhotoIndex = useRef(null); // Ref to track which photo index is being uploaded
   
@@ -48,7 +49,7 @@ const UploadPage = () => {
     };
   }, [photos]);
 
-  const isFormValid = video && photos.some((photo) => photo !== null);
+  const isFormValid = video || photos.some((photo) => photo !== null);
 
   return (
     <Container
@@ -245,6 +246,7 @@ const UploadPage = () => {
         <Button
           fullWidth
           variant="contained"
+          onClick={() => navigate("/locationpage")}
           disabled={!isFormValid}
           style={{
             backgroundColor: isFormValid ? "#E4423F" : "#e0e0e0",

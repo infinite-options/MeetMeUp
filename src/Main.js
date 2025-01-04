@@ -51,6 +51,8 @@ import OrientationPage from './Profile/OrientationPage';
 import PreferencePage from './Profile/PreferencePage';
 import InterestsPage from './Profile/InterestsPage';
 import UploadPage from './Profile/UploadPage';
+import LocationFormPage from './Profile/LocationFormPage';
+import ProfileSummaryPage from './Summary/ProfileSummaryPage';
 
 function Main() {
   const theme = createTheme({
@@ -120,6 +122,9 @@ function Main() {
         <Route path="/preference" element={<PreferencePage/>}/>
         <Route path="/interests" element={<InterestsPage/>}/>
         <Route path="/uploadmedia" element={<UploadPage/>}/>
+        <Route path="/locationpage" element={<LocationFormPage/>}/>
+        <Route path="/summary" element={<ProfileSummaryPage/>}/>
+
       </Routes>
     </BrowserRouter>
     </AccountContext.Provider>
