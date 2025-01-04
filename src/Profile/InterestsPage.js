@@ -188,7 +188,7 @@ const { data } = useListContext();
         <Button
           fullWidth
           variant="contained"
-          onClick={() => navigate("/summary")}
+          onClick={() => navigate("/uploadmedia")}
           disabled={selectedOptions.length === 0}
           style={{
             backgroundColor: selectedOptions.length > 0 ? "#E4423F" : "#e0e0e0",

@@ -50,6 +50,7 @@ import GenderIdentityPage from './Profile/GenderIdentityPage';
 import OrientationPage from './Profile/OrientationPage';
 import PreferencePage from './Profile/PreferencePage';
 import InterestsPage from './Profile/InterestsPage';
+import UploadPage from './Profile/UploadPage';
 
 function Main() {
   const theme = createTheme({
@@ -118,6 +119,7 @@ function Main() {
         <Route path="/orientation" element={<OrientationPage/>}/>
         <Route path="/preference" element={<PreferencePage/>}/>
         <Route path="/interests" element={<InterestsPage/>}/>
+        <Route path="/uploadmedia" element={<UploadPage/>}/>
       </Routes>
     </BrowserRouter>
     </AccountContext.Provider>
