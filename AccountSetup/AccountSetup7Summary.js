@@ -37,15 +37,21 @@ const Profile = () => {
   const [userInfo, setUserInfo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
 
   useEffect(() => {
     let isMounted = true;
     const fetchData = async () => {
       try {
-        const uid = await AsyncStorage.getItem('user_uid');
+        //const uid = await AsyncStorage.getItem('user_uid');
+        //const uid = await AsyncStorage.getItem('100-000004');
+        const uid = '100-000004'
+        console.log("user_uid: ", uid); 
         const data = await fetchUserInfo(uid);
+        console.log(data);
         if (isMounted) {
           setUserInfo(data);
+          console.log(data);
         }
       } catch (error) {
         if (isMounted) {

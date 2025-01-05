@@ -66,6 +66,8 @@ import VerifyPhoneNumber1 from "./VerifyYourAccount/VerifyPhoneNumber1.js";
 import VerifyPhoneNumber2 from "./VerifyYourAccount/VerifyPhoneNumber2.js";
 import AddDriversLicense from "./VerifyYourAccount/AddDriversLicense.js";
 import Preferences from "./Preferences/Preferences"
+import MatchPopUp from "./Match/MatchPopUp"
+import MatchProfileDisplay from "./Match/MatchProfileDisplay"
 const Stack = createNativeStackNavigator();
 // const Stack = createStackNavigator();
 SplashScreen.preventAutoHideAsync();
@@ -99,8 +101,15 @@ export default function App() {
         <Stack.Screen name='AccountSetup4Create' component={AccountSetup4Create} />
       </Stack.Navigator>
   */}
-      <Stack.Navigator initialRouteName='Start' screenOptions={{ headerShown: false }}>
-        {/* <Stack.Screen name='Preferences' component={Preferences}/> */}
+      <Stack.Navigator initialRouteName='MatchProfileDisplay' screenOptions={{ headerShown: false }}>
+        <Stack.Screen name='Preferences' component={Preferences}/>
+       <Stack.Screen name='MatchProfileDisplay' component={MatchProfileDisplay}/> 
+       {/* <Stack.Screen name='MatchPopUp' component={MatchPopUp}/> */}
+
+
+
+
+
         <Stack.Screen name='Start' component={Start} />
         <Stack.Screen name="AgeVerification" component={AgeVerification} />
         <Stack.Screen name='LandingPage' component={LandingPage} />
@@ -121,7 +130,7 @@ export default function App() {
         <Stack.Screen name="OpenToScreen" component={OpenToScreen} />
         <Stack.Screen name="SexualOrientationScreen" component={SexualOrientationScreen} />
         <Stack.Screen name="InterestsScreen" component={InterestsScreen} />
-        <Stack.Screen name='Preferences' component={Preferences}/>
+        {/* <Stack.Screen name='Preferences' component={Preferences}/> */}
         {/*<Stack.Screen name="AddMediaScreen" component={AddMediaScreen} />*/}
         <Stack.Screen name="LocationScreen" component={LocationScreen} />
         <Stack.Screen name="EnableLocationScreen" component={EnableLocationScreen} />

@@ -12,24 +12,24 @@ import 'react-native-gesture-handler';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 
 import axios from 'axios';
-// const AgeSlider = () => {
-//     const [minAge, setMinAge] = useState(18);
-//     const [maxAge, setMaxAge] = useState(60);
+
 
 const MatchPreferences = () => {
     const [gender, setGender] = useState('Male');
     const [genderModalVisible, setGenderModalVisible] = useState(false);
     const [maxDistance, setMaxDistance] = useState(80);
-    // const [ageRange, setAgeRange] = useState({ min: 20, max: 50 });
-    // const [minAge, setMinAge] = useState(18);
-    // const [maxAge, setMaxAge] = useState(60);
+    const [numChildren, setNumChildren] = useState(0);
+    const [ageRange, setAgeRange] = useState([18, 99]);
 
-    const [ageRange, setAgeRange] = useState([18, 60]);
+    const [heightRange, setHeightRange] = useState([122, 213]);
 
-    const handleValueChange = (values) => {
+    const handleAgeValueChange = (values) => {
       setAgeRange(values);
     };
 
+    const handleHeightValueChange = (values) => {
+        setHeightRange(values);
+    };
 
     const [height, setHeight] = useState(150);
 
@@ -109,192 +109,158 @@ const MatchPreferences = () => {
                     <TouchableOpacity onPress={handleBack} style={styles.backButton}>
                         <Image source={BackButton} style={styles.arrowIcon} />
                     </TouchableOpacity>
-                    <Text style={styles.title}>Match Preferences</Text>
-                    <Text style={styles.separator}>preferences.js</Text>
-
-                    <View style={styles.row}>
-                        <Text style={styles.label}>Location</Text>
-                        <Image source={arrow2} style={styles.arrow} />
+                    <View style={{ marginBottom: 20 }}> 
+                        <Text style={styles.title}>Match Preferences</Text>
                     </View>
-
-                    {/* <View style={styles.container}>
-                    <RangeSlider 
-                        min={20} 
-                        max={80} 
-                        fromValueOnChange={setFromValue} 
-                        toValueOnChange={setToValue} 
-                        initialFromValue={ageRange.min}
-                        initialToValue={ageRange.max}
-                    />
-                    <Text>From: {fromValue}</Text>
-                    <Text>To: {toValue}</Text>
-                    </View> */}
-
-                    <View style={styles.separator} />
-
                     <PreferenceSlider 
-                        preference="Maximum distance" 
+                        preference="Maximum distance from you" 
                         measurement="km." 
                         start={maxDistance} 
                         min={1} 
                         max={160}
                         onChange={(value) => setMaxDistance(value)} 
                     />
-                    <View style={styles.separator} />
-
-                    <View style={styles.row}>
-                        <Text style={styles.label}>Looking for</Text>
-            
-                        <TouchableOpacity onPress={() => setGenderModalVisible(true)}>
-                            <View style={styles.row}>
-                                <Text style={styles.option}>{gender}</Text>
-                                <Image source={arrow2} style={[styles.arrow, styles.arrowSpacing]} />
-                            </View>
-                        </TouchableOpacity>
-                    </View>
-                    <View style={styles.separator} />
-
+                
+                <View style={styles.labelRow}>
                     <Text style={styles.label}>Age Range</Text>
+                    <Text style={styles.value}>{ageRange[0]} - {ageRange[1]}</Text>
+                </View>
+                <MultiSlider
+                    values={[ageRange[0], ageRange[1]]}
+                    sliderLength={275}
+                    onValuesChange={handleAgeValueChange}
+                    min={18}
+                    max={99}
+                    step={1}
+                    allowOverlap={false}
+                    snapped
+                    selectedStyle={{ backgroundColor: '#FF0000' ,height: 4,}}
+                    unselectedStyle={{ backgroundColor: '#E0E0E0' ,height: 4,}}
+                    markerStyle={{
+                        height: 20,
+                        width: 20,
+                        borderRadius: 15,
+                        backgroundColor: '#FF0000',
+                    }}
+                    pressedMarkerStyle={{
+                        height: 20,
+                        width: 20,
+                        borderRadius: 15,
+                        backgroundColor: '#FF0000',
+                    }}
+                />
 
-                    <View style={styles.container}>
-      <Text style={styles.title}>Set Age Range</Text>
-      <View style={styles.rangeContainer}>
-        <Text style={styles.label}>Minimum Age: {ageRange[0]}</Text>
-        <Text style={styles.label}>Maximum Age: {ageRange[1]}</Text>
-      </View>
+                <View style={styles.labelRow}>
+                    <Text style={styles.label}>Height in centimetres</Text>
+                    <Text style={styles.value}>{heightRange[0]} cm - {heightRange[1]} cm</Text>
+                </View>
+                <MultiSlider
+                    values={[heightRange[0], heightRange[1]]}
+                    sliderLength={275}
+                    onValuesChange={handleHeightValueChange}
+                    min={122}
+                    max={213}
+                    step={1}
+                    allowOverlap={false}
+                    snapped
+                    selectedStyle={{ backgroundColor: '#FF0000' ,height: 4,}}
+                    unselectedStyle={{ backgroundColor: '#E0E0E0' ,height: 4,}}
+                    markerStyle={{
+                        height: 20,
+                        width: 20,
+                        borderRadius: 15,
+                        backgroundColor: '#FF0000',
+                    }}
+                    pressedMarkerStyle={{
+                        height: 20,
+                        width: 20,
+                        borderRadius: 15,
+                        backgroundColor: '#FF0000',
+                    }}
+                />
 
-      <MultiSlider
-        values={[ageRange[0], ageRange[1]]}
-        sliderLength={300}
-        onValuesChange={handleValueChange}
-        min={18}
-        max={100}
-        step={1}
-        allowOverlap={false}
-        snapped
-        selectedStyle={{ backgroundColor: '#007AFF' }}
-        unselectedStyle={{ backgroundColor: '#E0E0E0' }}
-        markerStyle={{
-          height: 20,
-          width: 20,
-          borderRadius: 10,
-          backgroundColor: '#007AFF',
-        }}
-        pressedMarkerStyle={{
-          height: 25,
-          width: 25,
-          borderRadius: 12.5,
-          backgroundColor: '#005BB5',
-        }}
-      />
-    </View>
-                   
-
-
-
-                     {/* <RangeSlider 
-                      
-                      
-                        
-
-                        // start={ageRange.min}
-                        // end={ageRange.max} 
-                        // min={18} 
-                        // max={80}
-                        // fromValueOnChange={setFromValue} 
-                        // toValueOnChange={setToValue} 
-                        // initialFromValue={ageRange.min}
-                        // initialToValue={ageRange.max}
-                        // onChange={(value) => setAgeRange({ min: value[0], max: value[1] })} 
-                    /> */}
-                    <View style={styles.separator} /> 
-{/* 
-                    <RangeSlider
-                            style={{ width: 300, height: 40 }}
-                            minValue={0}
-                            maxValue={100}
-                            selectedMinimum={low}
-                            selectedMaximum={high}
-                            onChange={({ minimum, maximum }) => {
-                                setLow(minimum);
-                                setHigh(maximum);
-                            }}
-                    /> */}
-
-                    <PreferenceSlider 
+                {/* <PreferenceSlider 
                         preference="Height in centimetres" 
                         start={height} 
                         min={75} 
                         max={225}
                         onChange={(value) => setHeight(value)} 
-                    />
-                    <View style={styles.separator} />
-{/* added for body type */}
-<View style={styles.row}>
-    <Text style={styles.label}>Body Type</Text>
-</View>
-<View style={styles.separator} />
+                /> */}
 
-<View style={styles.bodyTypeContainer}>
-    {bodyTypes.map((bodyType, index) => (
-        <TouchableOpacity 
-            key={index} 
-            onPress={() => handleBodyTypeSelect(bodyType)} 
-            style={[
-                styles.bodyTypeOption, 
-                selectedBodyTypes.includes(bodyType) && styles.bodyTypeSelected
-            ]}
-        >
-            <Text style={styles.bodyTypeOptionText}>{bodyType}</Text>
-        </TouchableOpacity>
-    ))}
-</View>
-<View style={styles.separator} />
+                <PreferenceSlider 
+                        preference="Maximum # of children" 
+                        start={numChildren}
+                        min={0} 
+                        max={5}
+                        onChange={(value) => setNumChildren(value)} 
+                />
+                {/* added for body type */}
+                <View style={styles.row}>
+                    <Text style={styles.label}>Body Type</Text>
+                </View>
+                {/* <View style={styles.separator} /> */}
 
-    {/* Smoking Habits Section */}
-    <View style={styles.row}>
-    <Text style={styles.label}>Smoking Habits</Text>
-</View>
-<View style={styles.smokingHabitsContainer}>
-    {["Yes", "No", "Either"].map((option, index) => (
-        <TouchableOpacity 
-            key={index} 
-            onPress={() => setSmokingHabit(option)} 
-            style={[
-                styles.habitOption, 
-                smokingHabit === option && styles.habitSelected
-            ]}
-        >
-            <Text style={styles.habitOptionText}>{option}</Text>
-        </TouchableOpacity>
-    ))}
-</View>
-<View style={styles.separator} />
+                <View style={styles.bodyTypeContainer}>
+                    {bodyTypes.map((bodyType, index) => (
+                        <TouchableOpacity 
+                            key={index} 
+                            onPress={() => handleBodyTypeSelect(bodyType)} 
+                            style={[
+                                styles.bodyTypeOption, 
+                                selectedBodyTypes.includes(bodyType) && styles.bodyTypeSelected
+                            ]}
+                        >
+                            <Text style={styles.bodyTypeOptionText}>{bodyType}</Text>
+                        </TouchableOpacity>
+                    ))}
+                </View>
+                    {/* <View style={styles.separator} /> */}
 
-{/* Drinking Habits Section */}
-<View style={styles.row}>
-    <Text style={styles.label}>Drinking Habits</Text>
-</View>
-<View style={styles.drinkingHabitsContainer}>
-    {["Yes", "No", "Either"].map((option, index) => (
-        <TouchableOpacity 
-            key={index} 
-            onPress={() => setDrinkingHabit(option)} 
-            style={[
-                styles.habitOption, 
-                drinkingHabit === option && styles.habitSelected
-            ]}
-        >
-            <Text style={styles.habitOptionText}>{option}</Text>
-        </TouchableOpacity>
-    ))}
-</View>
-<View style={styles.separator} />
+                        {/* Smoking Habits Section */}
+                        <View style={styles.row}>
+                        <Text style={styles.label}>Smoking Habits</Text>
+                    </View>
+                    <View style={styles.smokingHabitsContainer}>
+                        {["Yes", "No", "Either"].map((option, index) => (
+                            <TouchableOpacity 
+                                key={index} 
+                                onPress={() => setSmokingHabit(option)} 
+                                style={[
+                                    styles.habitOption, 
+                                    smokingHabit === option && styles.habitSelected
+                                ]}
+                            >
+                                <Text style={styles.habitOptionText}>{option}</Text>
+                            </TouchableOpacity>
+                        ))}
+                    </View>
+                    {/* <View style={styles.separator} /> */}
 
-
+                    {/* Drinking Habits Section */}
+                    <View style={styles.row}>
+                        <Text style={styles.label}>Drinking Habits</Text>
+                    </View>
+                    <View style={styles.drinkingHabitsContainer}>
+                        {["Yes", "No", "Either"].map((option, index) => (
+                            <TouchableOpacity 
+                                key={index} 
+                                onPress={() => setDrinkingHabit(option)} 
+                                style={[
+                                    styles.habitOption, 
+                                    drinkingHabit === option && styles.habitSelected
+                                ]}
+                            >
+                                <Text style={styles.habitOptionText}>{option}</Text>
+                            </TouchableOpacity>
+                        ))}
+                    </View>
+                    {/* <View style={styles.separator} /> */}
 
 
                     <View style={styles.buttonsContainer}>
+                        <TouchableOpacity style={styles.button} onPress={() => navigation.replace('Match', { gender, maxDistance, ageRange, height })}>
+                            <Text style={styles.buttonText}>Match Video</Text>
+                        </TouchableOpacity>
                         <TouchableOpacity style={styles.button} onPress={() => navigation.replace('Match', { gender, maxDistance, ageRange, height })}>
                             <Text style={styles.buttonText}>Match Me</Text>
                         </TouchableOpacity>
@@ -357,9 +323,9 @@ const styles = StyleSheet.create({
          paddingHorizontal: '10%' 
     },
     title: { 
-        textAlign: 'center', 
+        textAlign: 'left', 
         marginTop: 20, 
-        fontSize: 24, 
+        fontSize: 20, 
         fontFamily: 'Lexend' 
     },
     row: { 
@@ -369,9 +335,21 @@ const styles = StyleSheet.create({
         marginTop: 20 
     },
     label: { 
-        fontSize: 18, 
+        fontSize: 14, 
         fontFamily: 'Lexend' 
     },
+    value: {
+        fontSize: 14,
+        color: '#333',
+    },
+
+    labelRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 10,
+    },
+
     option: { fontSize: 18 },
     arrow: { width: 20, height: 20 },
     separator: { borderBottomWidth: 1, borderBottomColor: '#CECECE', marginVertical: 10 },
@@ -389,7 +367,7 @@ const styles = StyleSheet.create({
     bodyTypeContainer: {
         flexDirection: 'row',
         flexWrap: 'wrap',
-        justifyContent: 'space-between',
+        justifyContent: 'left',
         marginTop: 10,
     },
     bodyTypeOption: {
@@ -401,33 +379,40 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#CECECE',
         marginRight: 10,
+        minWidth: 80,
+        alignItems: 'center',
+        
     },
     bodyTypeSelected: {
         backgroundColor: '#E4423F',
         borderColor: '#E4423F',
     },
     bodyTypeOptionText: {
-        fontSize: 16,
+        fontSize: 12,
         color: '#333',
     },
 
     habitOption: {
         paddingVertical: 10,
-        paddingHorizontal: 15,
+        paddingHorizontal: 20,
         marginBottom: 10,
         backgroundColor: '#f0f0f0',
         borderRadius: 20,
         borderWidth: 1,
         borderColor: '#CECECE',
         marginRight: 10,
+        minWidth: 80,
+        alignItems: 'center',
+        
     },
     habitSelected: {
         backgroundColor: '#E4423F',
         borderColor: '#E4423F',
     },
     habitOptionText: {
-        fontSize: 16,
+        fontSize: 12,
         color: '#333',
+        alignItems: 'center',
     },
     smokingHabitsContainer: {
         flexDirection: 'row',
