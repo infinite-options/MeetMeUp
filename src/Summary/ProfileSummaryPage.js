@@ -1,297 +1,250 @@
 import React from "react";
 import {
   Box,
-  Container,
   Typography,
   Avatar,
-  Button,
-  IconButton,
   Grid,
+  Button,
   LinearProgress,
+  Chip,
+  AppBar,
+  Toolbar,
+  IconButton,
+  Card,
+  CardContent,
 } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import NotificationsIcon from "@mui/icons-material/Notifications";
+import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import AddIcon from "@mui/icons-material/Add";
-import CloseIcon from "@mui/icons-material/Close";
 
-const ProfileSummaryPage = () => {
-  const interests = [
-    "Cooking / Baking",
-    "Gaming",
-    "Sports",
-    "Music",
-    "Animals & Wildlife",
-  ];
+// Icons for the "About Me" section
+import CakeOutlinedIcon from "@mui/icons-material/CakeOutlined";
+import HeightOutlinedIcon from "@mui/icons-material/HeightOutlined";
+import ChildCareOutlinedIcon from "@mui/icons-material/ChildCareOutlined";
+import MaleOutlinedIcon from "@mui/icons-material/MaleOutlined";
+import FingerprintOutlinedIcon from "@mui/icons-material/FingerprintOutlined";
+import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
+import EmojiPeopleOutlinedIcon from "@mui/icons-material/EmojiPeopleOutlined";
+import FlagOutlinedIcon from "@mui/icons-material/FlagOutlined";
+import Diversity1OutlinedIcon from "@mui/icons-material/Diversity1Outlined";
+import AccessibilityOutlinedIcon from "@mui/icons-material/AccessibilityOutlined";
+import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
+import WorkOutlineOutlinedIcon from "@mui/icons-material/WorkOutlineOutlined";
+import SmokingRoomsOutlinedIcon from "@mui/icons-material/SmokingRoomsOutlined";
+import LiquorOutlinedIcon from "@mui/icons-material/LiquorOutlined";
+import GavelOutlinedIcon from "@mui/icons-material/GavelOutlined";
+import StarBorderOutlinedIcon from "@mui/icons-material/StarBorderOutlined";
 
-  const userDetails = [
-    { icon: "📅", label: "Born on April 26, 2001" },
-    { icon: "📏", label: "5'11\"" },
-    { icon: "👶", label: "0 children" },
-    { icon: "⚥", label: "Sex assigned at birth was male" },
-    { icon: "♂️", label: "Identifies as male" },
-    { icon: "🏳️‍🌈", label: "Bisexual" },
-    { icon: "❤️", label: "Open to men & women" },
-  ];
-
-  const placeholderDetails = Array(8).fill("Coming in Live Version");
-
+const ProfileSummary = () => {
   return (
-    <Container
-      maxWidth="xs"
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        padding: "16px",
-        backgroundColor: "#ffffff",
-        height: "100vh",
-        overflowY: "scroll",
-      }}
-    >
-      {/* Header */}
-      <Box
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "16px",
-        }}
-      >
-        <Typography
-          style={{
-            fontFamily: "Lexend",
-            fontSize: "20px",
-            fontWeight: "bold",
-          }}
-        >
-          My Profile
-        </Typography>
-        <Box>
+    <Box sx={{ backgroundColor: "#f8f9fa", minHeight: "100vh" }}>
+      {/* Top Bar */}
+      <AppBar position="static" color="inherit" elevation={0}>
+        <Toolbar>
+          <Typography variant="h6" sx={{ flexGrow: 1, fontWeight: "bold" }}>
+            My Profile
+          </Typography>
           <IconButton>
-            <NotificationsIcon />
+            <NotificationsNoneIcon />
           </IconButton>
           <IconButton>
             <MoreVertIcon />
           </IconButton>
-        </Box>
-      </Box>
+        </Toolbar>
+      </AppBar>
 
-     {/* Profile Video/Image Section */}
-<Box
-  style={{
-    position: "relative",
-    borderRadius: "12px",
-    overflow: "hidden",
-    marginBottom: "16px",
-    backgroundColor: "#f5f5f5",
-  }}
->
-  {/* Video or Image Placeholder */}
-  <img
-    src="https://via.placeholder.com/300x200" // Replace with the user's video thumbnail or image
-    alt="Main Profile"
-    style={{ width: "100%", height: "auto" }}
-  />
-  {/* Play Icon for Video */}
-  <Box
-    style={{
-      position: "absolute",
-      top: "50%",
-      left: "50%",
-      transform: "translate(-50%, -50%)",
-      backgroundColor: "rgba(255, 255, 255, 0.8)",
-      borderRadius: "50%",
-      padding: "12px",
-      cursor: "pointer",
-    }}
-  >
-    <img
-      src="https://via.placeholder.com/24/000000/FFFFFF?text=▶" // Placeholder Play Icon
-      alt="Play"
-      style={{ width: "24px", height: "24px" }}
-    />
-  </Box>
-  <IconButton
-    style={{
-      position: "absolute",
-      top: "8px",
-      right: "8px",
-      backgroundColor: "#fff",
-    }}
-  >
-    <CloseIcon />
-  </IconButton>
-</Box>
-
-{/* Additional Pictures Section */}
-<Box
-  style={{
-    display: "flex",
-    justifyContent: "center",
-    gap: "8px",
-    marginBottom: "16px",
-  }}
->
-  {[...Array(2)].map((_, index) => (
-    <Box
-      key={index}
-      style={{
-        position: "relative",
-        width: "80px",
-        height: "80px",
-        borderRadius: "8px",
-        overflow: "hidden",
-        backgroundColor: "#f5f5f5",
-      }}
-    >
-      <img
-        src="https://via.placeholder.com/80" // Replace with user images
-        alt={`Thumbnail ${index + 1}`}
-        style={{ width: "100%", height: "100%" }}
-      />
-      <IconButton
-        style={{
-          position: "absolute",
-          top: "4px",
-          right: "4px",
-          backgroundColor: "#fff",
+      {/* Profile Content */}
+      <Box
+        sx={{
+          width: "100%",
+          maxWidth: 400,
+          margin: "auto",
+          padding: 2,
+          backgroundColor: "white",
+          borderRadius: 3,
+          boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+          mt: 2,
         }}
       >
-        <CloseIcon />
-      </IconButton>
-    </Box>
-  ))}
-  {/* Add Placeholder */}
-  <Box
-    style={{
-      width: "80px",
-      height: "80px",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      backgroundColor: "#f5f5f5",
-      borderRadius: "8px",
-      border: "1px dashed #ccc",
-    }}
-  >
-    <AddIcon style={{ color: "#757575" }} />
-  </Box>
-</Box>
-{/* User Name */}
-      <Typography
-        style={{
-          fontFamily: "Lexend",
-          fontSize: "18px",
-          fontWeight: "bold",
-          textAlign: "center",
-        }}
-      >
-        Lachlan Collis
-      </Typography>
-      <Typography
-        style={{
-          fontFamily: "Lexend",
-          fontSize: "14px",
-          color: "#757575",
-          textAlign: "center",
-          marginBottom: "16px",
-        }}
-      >
-        lachlan@konnectdigital.io
-      </Typography>
-
-      {/* Profile Completion */}
-      <Box style={{ marginBottom: "16px" }}>
-        <Typography style={{ fontSize: "14px", marginBottom: "8px" }}>
-          Profile: 80% complete
-        </Typography>
-        <LinearProgress variant="determinate" value={80} style={{ height: "8px", borderRadius: "4px" }} />
-      </Box>
-
-      {/* Links */}
-      <Box style={{ marginBottom: "16px" }}>
-        {["your date preferences (2)", "a few more details about you (8)", "profile bio (1)", "verify your account (2)"].map(
-          (link, index) => (
-            <Typography
-              key={index}
-              style={{
-                fontFamily: "Lexend",
-                fontSize: "14px",
-                color: "#E4423F",
-                textDecoration: "underline",
-                cursor: "pointer",
-                marginBottom: "8px",
-              }}
-            >
-              {link}
-            </Typography>
-          )
-        )}
-      </Box>
-
-      {/* Interests */}
-      <Box style={{ marginBottom: "16px" }}>
-        <Typography style={{ fontSize: "14px", fontWeight: "bold", marginBottom: "8px" }}>
-          My interests
-        </Typography>
-        <Grid container spacing={1}>
-          {interests.map((interest, index) => (
-            <Grid item key={index}>
-              <Box
-                style={{
-                  padding: "4px 12px",
-                  borderRadius: "16px",
-                  border: "1px solid #ccc",
-                  fontSize: "12px",
-                  textAlign: "center",
-                }}
-              >
-                {interest}
-              </Box>
-            </Grid>
-          ))}
-        </Grid>
-      </Box>
-
-      {/* User Details */}
-      <Box>
-        <Typography style={{ fontSize: "14px", fontWeight: "bold", marginBottom: "8px" }}>
-          A little bit about me
-        </Typography>
-        {userDetails.concat(placeholderDetails).map((detail, index) => (
-          <Typography
-            key={index}
-            style={{
-              fontSize: "14px",
-              marginBottom: "8px",
+        {/* Media Placeholder */}
+        <Box sx={{ textAlign: "center", marginBottom: 2 }}>
+          <Box
+            sx={{
+              width: "100%",
+              aspectRatio: "1.5",
+              backgroundColor: "#f0f0f0",
               display: "flex",
               alignItems: "center",
+              justifyContent: "center",
+              borderRadius: 2,
+              marginBottom: 1,
             }}
           >
-            <span style={{ marginRight: "8px" }}>{detail.icon || "➖"}</span>
-            {detail.label || detail}
-          </Typography>
-        ))}
-      </Box>
+            <Typography>Video/Image Placeholder</Typography>
+          </Box>
 
-      {/* Call-to-Action Button */}
-      <Box style={{ marginTop: "auto", marginBottom: "16px" }}>
+          {/* Thumbnails */}
+          <Grid container spacing={1} justifyContent="center">
+            <Grid item>
+              <Avatar
+                sx={{ width: 60, height: 60, backgroundColor: "#f0f0f0" }}
+                variant="rounded"
+              />
+            </Grid>
+            <Grid item>
+              <Avatar
+                sx={{ width: 60, height: 60, backgroundColor: "#f0f0f0" }}
+                variant="rounded"
+              />
+            </Grid>
+            <Grid item>
+              <Avatar
+                sx={{
+                  width: 60,
+                  height: 60,
+                  backgroundColor: "#f0f0f0",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  cursor: "pointer",
+                }}
+                variant="rounded"
+              >
+                <AddIcon />
+              </Avatar>
+            </Grid>
+          </Grid>
+        </Box>
+
+        {/* Name and Email */}
+        <Typography variant="h5" textAlign="center" fontWeight="bold">
+          Lachlan Collis
+        </Typography>
+        <Typography
+          variant="body2"
+          textAlign="center"
+          color="text.secondary"
+          sx={{ marginBottom: 2 }}
+        >
+          lachlan@konnectdigital.io
+        </Typography>
+
+        {/* Profile Completion */}
+        <Card
+          sx={{
+            marginBottom: 2,
+            padding: 1,
+            borderRadius: 3,
+            backgroundColor: "#f8f9fa",
+          }}
+        >
+          <CardContent>
+            <Typography variant="body2" fontWeight="bold">
+              Profile: 100% complete
+            </Typography>
+            <LinearProgress
+              variant="determinate"
+              value={100}
+              sx={{
+                height: 10,
+                borderRadius: 5,
+                marginTop: 1,
+                backgroundColor: "#f0f0f0",
+              }}
+            />
+          </CardContent>
+        </Card>
+
+        {/* Interests */}
+        <Typography variant="subtitle1" fontWeight="bold" sx={{ marginBottom: 1 }}>
+          My interests
+        </Typography>
+        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, marginBottom: 2 }}>
+          {["Cooking / Baking", "Gaming", "Sports", "Music", "Animals & Wildlife"].map(
+            (interest) => (
+              <Chip
+                key={interest}
+                label={interest}
+                variant="outlined"
+                sx={{ borderRadius: 3 }}
+              />
+            )
+          )}
+        </Box>
+
+        {/* Kinds of Dates I Enjoy */}
+        <Typography variant="subtitle1" fontWeight="bold" sx={{ marginBottom: 1 }}>
+          Kinds of dates I enjoy
+        </Typography>
+        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, marginBottom: 2 }}>
+          {["Dinner", "Playing video games"].map((date) => (
+            <Chip
+              key={date}
+              label={date}
+              variant="outlined"
+              sx={{ borderRadius: 3 }}
+            />
+          ))}
+        </Box>
+
+        {/* About Me */}
+        <Typography variant="subtitle1" fontWeight="bold" sx={{ marginBottom: 1 }}>
+          A little bit about me
+        </Typography>
+        <Box component="ul" sx={{ marginBottom: 2, paddingLeft: 2 }}>
+          {[
+            { icon: <CakeOutlinedIcon />, text: "Born on April 26, 2001" },
+            { icon: <HeightOutlinedIcon />, text: "5'11\"" },
+            { icon: <ChildCareOutlinedIcon />, text: "0 children" },
+            { icon: <MaleOutlinedIcon />, text: "Sex assigned at birth was male" },
+            { icon: <FingerprintOutlinedIcon />, text: "Identifies as male" },
+            { icon: <FavoriteBorderOutlinedIcon />, text: "Bisexual" },
+            { icon: <EmojiPeopleOutlinedIcon />, text: "Open to men & women" },
+            { icon: <FlagOutlinedIcon />, text: "American" },
+            { icon: <Diversity1OutlinedIcon />, text: "Half-German Half-Irish" },
+            { icon: <AccessibilityOutlinedIcon />, text: "Curvy body type" },
+            { icon: <SchoolOutlinedIcon />, text: "Bachelor's Degree" },
+            { icon: <WorkOutlineOutlinedIcon />, text: "UI/UX designer & Graphic designer" },
+            { icon: <SmokingRoomsOutlinedIcon />, text: "Does not smoke" },
+            { icon: <LiquorOutlinedIcon />, text: "Does not drink" },
+            { icon: <GavelOutlinedIcon />, text: "Does not practice a religion" },
+            { icon: <StarBorderOutlinedIcon />, text: "Taurus" },
+          ].map((item, index) => (
+            <Typography
+              key={index}
+              component="li"
+              variant="body2"
+              color="text.secondary"
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+                marginBottom: 1,
+              }}
+            >
+              {item.icon}
+              {item.text}
+            </Typography>
+          ))}
+        </Box>
+
+        {/* Find Match Button */}
         <Button
-          fullWidth
           variant="contained"
-          style={{
-            backgroundColor: "#E4423F",
-            color: "#fff",
-            borderRadius: "24px",
+          color="error"
+          fullWidth
+          sx={{
+            borderRadius: 5,
             fontWeight: "bold",
-            fontSize: "16px",
-            textTransform: "none",
+            padding: 1.5,
+            fontSize: "1rem",
           }}
         >
           Find my match!
         </Button>
       </Box>
-    </Container>
+    </Box>
   );
 };
 
-export default ProfileSummaryPage;
+export default ProfileSummary;
