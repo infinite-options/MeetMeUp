@@ -1,19 +1,26 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native'; 
+import { useNavigation } from '@react-navigation/native';
 
 const StartPage = () => {
   const navigation = useNavigation();
 
-  const handleNavigateStart = () => {
-    navigation.navigate('AgeVerification'); 
-  };
-
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={handleNavigateStart} style={styles.button}>
-        <Text style={styles.mainText}>meet me up</Text>
-      </TouchableOpacity>
+      {/* App Title */}
+      <Text style={styles.title}>meet me up</Text>
+
+      {/* Get Started Button */}
+      <View style={styles.bottomContainer}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('AgeVerification')}>
+          <Text style={styles.buttonText}>Get Started!</Text>
+        </TouchableOpacity>
+
+        {/* Log In Link */}
+        <Text style={styles.loginText}>
+          Already have an account? <Text style={styles.loginLink} onPress={() => navigation.navigate('Login')}>Log In</Text>
+        </Text>
+      </View>
     </View>
   );
 };
@@ -24,23 +31,43 @@ const styles = StyleSheet.create({
     backgroundColor: '#E4423F',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
+    paddingHorizontal: 20,
   },
-  button: {
-    alignItems: 'center',
-  },
-  mainText: {
-    fontFamily: 'Inria Sans',
-    fontSize: 48, 
+  title: {
+    fontSize: 48,
     fontWeight: 'bold',
     color: '#FFFFFF',
-    textTransform: 'none',
+    textAlign: 'center',
+    position: 'absolute',
+    top: '35%', // Moves the text higher
   },
-  subText: {
-    fontFamily: 'Inria Sans',
-    fontSize: 16, 
-    color: '#FFFFFF',
-    marginTop: 8,
+  bottomContainer: {
+    position: 'absolute',
+    bottom: 50, // Positions the container near the bottom
+    alignItems: 'center',
+    width: '100%',
+  },
+  button: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 30,
+    paddingVertical: 15,
+    alignItems: 'center',
+    width: '100%',
+  },
+  buttonText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#000000',
+  },
+  loginText: {
+    fontSize: 16,
+    color: '#1A1A1A',
+    marginTop: 10,
+  },
+  loginLink: {
+    fontWeight: 'bold',
+    textDecorationLine: 'underline',
+    color: '#F5F5F5',
   },
 });
 

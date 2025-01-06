@@ -8,17 +8,81 @@ import {StatusBar, Platform, SafeAreaView,
 import { Text, TextInput } from "react-native-paper"; // Import TextInput from react-native-paper
 import { Ionicons } from "@expo/vector-icons";
 import ProgressBar from "../src/Assets/Components/ProgressBar";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function NameInput({ navigation }) {
   const [formData, setFormData] = useState({
     fullName: "",
   });
 
-  const isFormComplete = formData.fullName !== "";
-
-  const handleContinue = () => {
+  const isFormComplete = formData.fullName.trim() !== "";
+  const getUserData = async () => {
+    try {
+      const user_uid = await AsyncStorage.getItem('user_uid');
+      const user_email_id = await AsyncStorage.getItem('user_email_id');
+      
+      console.log("🔹 Retrieved User UID:", user_uid);
+      console.log("🔹 Retrieved User Email:", user_email_id);
+  
+      return { user_uid, user_email_id };
+    } catch (error) {
+      console.error("Error retrieving user data", error);
+      return null;
+    }
+  };
+  const saveUserName = async (fullName) => {
+    try {
+      await AsyncStorage.setItem('user_full_name', fullName);
+    } catch (error) {
+      console.error("Error saving name", error);
+    }
+  };
+  const splitName = (fullName) => {
+    const nameArray = fullName.trim().split(" ");
+    const firstName = nameArray[0];
+    const lastName = nameArray.length > 1 ? nameArray.slice(1).join(" ") : "";
+    return { firstName, lastName };
+  };
+  const updateUserName = async (fullName) => {
+    const userData = await getUserData();
+  
+    if (!userData?.user_uid || !userData?.user_email_id) {
+      console.error(" User UID or Email is missing.");
+      return;
+    }
+  
+    console.log("Sending to API:");
+    console.log("User UID:", userData.user_uid);
+    console.log("User Email:", userData.user_email_id);
+  
+    const { firstName, lastName } = splitName(fullName);
+  
+    const formData = new FormData();
+    formData.append("user_uid", userData.user_uid);
+    formData.append("user_email_id", userData.user_email_id);
+    formData.append("user_first_name", firstName);
+    formData.append("user_last_name", lastName);
+  
+    try {
+      const response = await fetch(
+        "https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo",
+        {
+          method: "PUT",
+          body: formData,
+        }
+      );
+      const result = await response.json();
+      console.log("API Response:", result);
+    } catch (error) {
+      console.error("Error updating user name:", error);
+    }
+  };
+  
+  const handleContinue = async () => {
     if (isFormComplete) {
-      navigation.navigate("BirthdayInput"); // Replace "NextPage" with your next screen
+      await updateUserName(formData.fullName);
+      await saveUserName(formData.fullName);
+      navigation.navigate("BirthdayInput"); 
     }
   };
 

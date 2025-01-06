@@ -50,6 +50,23 @@ export default function AccountSetup2Create() {
             setPasswordStrength(3); // strong
         }
     };
+    const saveUserData = async (key, value) => {
+        try {
+          await AsyncStorage.setItem(key, value);
+        } catch (error) {
+          console.error("Error saving user data", error);
+        }
+      };
+    const getUserData = async (key) => {
+    try {
+        const value = await AsyncStorage.getItem(key);
+        return value;
+    } catch (error) {
+        console.error("Error retrieving user data", error);
+        return null;
+    }
+    };
+      
 
     const handleContinue = async () => {
         const url = "https://mrle52rri4.execute-api.us-west-1.amazonaws.com/dev/api/v2/CreateAccount/MMU";
@@ -66,26 +83,29 @@ export default function AccountSetup2Create() {
         data.append("password", formData['password']);
         // data.append("phone_number", formData['phone_number']);
         try {
-            // const response = await fetch(url, {
-            //     method: 'POST',
-            //     headers: { 'Content-Type': 'application/json' },
-            //     body: JSON.stringify({
-            //         email: formData.email,
-            //         phone_number: formData.phone_number,
-            //         password: formData.password,
-            //     }),
-            // });
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: formData.email,
+                    // phone_number: formData.phone_number,
+                    password: formData.password,
+                }),
+            });
 
-            // const result = await response.json();
+            const result = await response.json();
 
-            // if (result.message === "User already exists") {
-            //     setExisting(true);
-            //     Alert.alert('User Already Exists');
-            //     return;
-            // }
-
-            // await AsyncStorage.setItem('user_uid', result.result[0].user_uid);
+            if (result.message === "User already exists") {
+                setExisting(true);
+                Alert.alert('User Already Exists');
+                return;
+            }
+            // await saveUserData('user_email_id', formData.email);
+            // await saveUserData('user_uid', result.result[0].user_uid);
+            await AsyncStorage.setItem('user_uid', result.result[0].user_uid); // Ensure this is correctly stored
             await AsyncStorage.setItem('user_email_id', formData['email']);
+            // await AsyncStorage.setItem('user_uid', result.result[0].user_uid);
+            // await AsyncStorage.setItem('user_email_id', formData['email']);
             // await AsyncStorage.setItem('user_phone_number', formData['phone_number']);
             navigation.navigate('NameInput');
         } catch (error) {
