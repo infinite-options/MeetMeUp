@@ -18,7 +18,8 @@ const SelectionResults = () => {
   useEffect(() => {
     const loadUserId = async () => {
       try {
-        const id = await AsyncStorage.getItem('user_uid');
+        // const id = await AsyncStorage.getItem('user_uid');
+        const id = '100-000004'; 
         if (id) {
           setUserId(id);
         } else {
@@ -85,7 +86,7 @@ const SelectionResults = () => {
     navigation.navigate('Message', { user });
   };
 
-  const renderUserBox = ({ item, type }) => (
+  const renderUserBox = ({ item, type, buttonTitle }) => (
     <View style={styles.userBox}>
       <TouchableOpacity onPress={() => handleUserClick(item, type)} style={styles.userButton}>
         <Image source={{ uri: item.user_photo_url ? JSON.parse(item.user_photo_url)[0] : 'No photo' }} style={styles.avatar} />
@@ -94,7 +95,11 @@ const SelectionResults = () => {
           <Text style={styles.userDetails}>{item.user_age} {item.user_gender} {item.user_suburb}</Text>
         </View>
       </TouchableOpacity>
-      <Button title="Message" onPress={() => handleNext(item)} />
+       {/* <Button  title={buttonTitle}   onPress={() => handleNext(item)} />  */}
+       <TouchableOpacity onPress={() => handleNext(item)} style={styles.actionButton}>
+          <Text style={styles.buttonText}>{buttonTitle}</Text>
+      </TouchableOpacity>   
+      
     </View>
   );
 
@@ -111,26 +116,26 @@ const SelectionResults = () => {
   return (
     <SafeAreaView style={styles.safeArea}>
     <View style={styles.container}>
-      <Text style={styles.title}>Selection Results</Text>
+      <Text style={styles.title}>My Matching Results</Text>
 
-      <Text style={styles.sectionTitle}>Matched Results</Text>
+      <Text style={styles.sectionTitle}>My Matches</Text>
       <FlatList
         data={userData}
-        renderItem={({ item }) => renderUserBox({ item, type: 'matchedResults' })}
+        renderItem={({ item }) => renderUserBox({ item, type: 'matchedResults', buttonTitle: 'Set up date'  })}
         keyExtractor={(item, index) => index.toString()}
       />
 
-      <Text style={styles.sectionTitle}>People Who Selected You</Text>
+      <Text style={styles.sectionTitle}>People interested in me</Text>
       <FlatList
         data={peopleSelectedYou}
-        renderItem={({ item }) => renderUserBox({ item, type: 'usersWhoSelectedYou' })}
+        renderItem={({ item }) => renderUserBox({ item, type: 'usersWhoSelectedYou',buttonTitle: 'Match'  })}
         keyExtractor={(item, index) => index.toString()}
       />
 
-      <Text style={styles.sectionTitle}>People You Selected</Text>
+      <Text style={styles.sectionTitle}>People I'm interested in</Text>
       <FlatList
         data={peopleYouSelected}
-        renderItem={({ item }) => renderUserBox({ item, type: 'usersWhoYouSelected' })}
+        renderItem={({ item }) => renderUserBox({ item, type: 'usersWhoYouSelected',buttonTitle: ' '  })}
         keyExtractor={(item, index) => index.toString()}
       />
 

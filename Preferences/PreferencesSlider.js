@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Slider from '@react-native-community/slider';
+//import Slider from '@react-native-community/slider';
+import { Slider } from 'react-native-elements';
 import axios from 'axios';
 
 const PreferenceSlider = ({ preference, measurement, start, min, max }) => {
@@ -9,9 +10,14 @@ const PreferenceSlider = ({ preference, measurement, start, min, max }) => {
     const [debouncedValue, setDebouncedValue] = useState(value);
     const [userUID, setUserUID] = useState('');
     const [userEmail, setUserEmail] = useState('');
+
+    const [fromValue, setFromValue] = useState(20);
+    const [toValue, setToValue] = useState(80);
     
     // Extra state for handling age range (min and max)
-    const [ageRange, setAgeRange] = useState({ minAge: 20, maxAge: 60 });
+    const [ageRange, setAgeRange] = useState({ minAge: 18, maxAge: 60 });
+
+
 
     // Function to load user data from AsyncStorage
     const loadUserData = async () => {
@@ -115,31 +121,11 @@ const PreferenceSlider = ({ preference, measurement, start, min, max }) => {
                 <Text>{displayValue(value)} {measurement}</Text>
             </View>
             {preference === 'Age range' ? (
+
                 <View>
-                    <Text>Min Age: {ageRange.minAge}</Text>
-                    <Slider
-                        style={styles.slider}
-                        value={ageRange.minAge}
-                        minimumValue={min}
-                        maximumValue={max}
-                        onValueChange={(newValue) => handleAgeChange('minAge', newValue)}
-                        step={1}
-                        minimumTrackTintColor="#E4423F"
-                        maximumTrackTintColor="#CECECE"
-                        thumbTintColor="#ffffff"
-                    />
-                    <Text>Max Age: {ageRange.maxAge}</Text>
-                    <Slider
-                        style={styles.slider}
-                        value={ageRange.maxAge}
-                        minimumValue={min}
-                        maximumValue={max}
-                        onValueChange={(newValue) => handleAgeChange('maxAge', newValue)}
-                        step={1}
-                        minimumTrackTintColor="#E4423F"
-                        maximumTrackTintColor="#CECECE"
-                        thumbTintColor="#ffffff"
-                    />
+                    {   
+                    }
+
                 </View>
             ) : (
                 <Slider
@@ -151,7 +137,11 @@ const PreferenceSlider = ({ preference, measurement, start, min, max }) => {
                     step={1}
                     minimumTrackTintColor="#E4423F"
                     maximumTrackTintColor="#CECECE"
-                    thumbTintColor="#ffffff"
+                    thumbTintColor="#FF0000"
+                    thumbStyle={{
+                        height: 20, // Set height of the thumb
+                        width: 20,  // Set width of the thumb
+                    }}
                 />
             )}
         </View>
@@ -168,13 +158,14 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     label: {
-        fontSize: 18,
+        fontSize: 14,
         fontFamily: 'Lexend',
     },
     slider: {
         width: '100%',
         height: 40,
     },
+
 });
 
 export default PreferenceSlider;

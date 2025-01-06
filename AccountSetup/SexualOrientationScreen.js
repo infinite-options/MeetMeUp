@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Pressable,
   StyleSheet,
+  ScrollView,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import ProgressBar from '../src/Assets/Components/ProgressBar';
@@ -44,6 +45,7 @@ export default function SexualOrientationScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
+       <ScrollView contentContainerStyle={styles.scrollContent}> 
       {/* Back Button */}
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
         <Ionicons name="arrow-back" size={28} color="red" />
@@ -87,6 +89,7 @@ export default function SexualOrientationScreen({ navigation }) {
       >
         <Text style={styles.continueButtonText}>Continue</Text>
       </Pressable>
+      </ScrollView>
     </SafeAreaView>
   );
 }
