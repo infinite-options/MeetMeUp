@@ -1,18 +1,28 @@
-import React from 'react';
+import React, { useState } from "react";
 import {
 	Box,
 	Typography,
 	Avatar,
 	Grid,
 	Button,
-	LinearProgress,
 	Chip,
 	AppBar,
 	Toolbar,
 	IconButton,
 	Card,
 	CardContent,
+  Menu,
+  MenuItem,
+  ListItemIcon,
 } from '@mui/material';
+import EditNoteIcon from '@mui/icons-material/EditNote';
+import SettingsIcon from '@mui/icons-material/Settings';
+import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
+import DeleteIcon from '@mui/icons-material/Delete';
+import LogoutIcon from '@mui/icons-material/Logout';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import DiamondIcon from '@mui/icons-material/Diamond';
+
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import AddIcon from '@mui/icons-material/Add';
@@ -36,6 +46,17 @@ import GavelOutlinedIcon from '@mui/icons-material/GavelOutlined';
 import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
 
 const ProfileSummary = () => {
+  const [anchorEl, setAnchorEl] = useState(null);
+const open = Boolean(anchorEl);
+
+const handleMenuOpen = (event) => {
+  setAnchorEl(event.currentTarget);
+};
+
+const handleMenuClose = () => {
+  setAnchorEl(null);
+};
+
 	return (
 		<Box sx={{ backgroundColor: 'white', minHeight: '100vh' }}>
 			{/* Top Bar */}
@@ -47,9 +68,126 @@ const ProfileSummary = () => {
 					<IconButton>
 						<NotificationsNoneIcon />
 					</IconButton>
-					<IconButton>
-						<MoreVertIcon />
-					</IconButton>
+					<IconButton onClick={handleMenuOpen}>
+  <MoreVertIcon />
+</IconButton>
+<Menu
+  anchorEl={anchorEl}
+  open={open}
+  onClose={handleMenuClose}
+  anchorOrigin={{ vertical: "top", horizontal: "right" }}
+  transformOrigin={{ vertical: "top", horizontal: "right" }}
+  PaperProps={{
+    style: {
+      borderRadius: "12px",
+      boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+      width: "200px",
+      padding: "2px 0",
+    },
+  }}
+>
+  <MenuItem
+    onClick={handleMenuClose}
+    style={{
+      display: "flex",
+      alignItems: "center",
+      gap: "12px",
+      padding: "0px 16px",
+      fontFamily: "Lexend",
+      fontWeight: "400",
+      fontSize: "14px",
+      color: "#1A1A1A",
+    }}
+  >
+    <EditNoteIcon style={{ color: "#000" }} />
+    Edit Profile
+  </MenuItem>
+  <MenuItem
+    onClick={handleMenuClose}
+    style={{
+      display: "flex",
+      alignItems: "center",
+      gap: "12px",
+      padding: "0px 16px",
+      fontFamily: "Lexend",
+      fontWeight: "400",
+      fontSize: "14px",
+      lineHeight: "10px",
+      color: "#1A1A1A",
+    }}
+  >
+    <SettingsIcon style={{ color: "#000" }} />
+    Settings
+  </MenuItem>
+  <MenuItem
+    onClick={handleMenuClose}
+    style={{
+      display: "flex",
+      alignItems: "center",
+      gap: "12px",
+      padding: "10px 16px",
+      fontFamily: "Lexend",
+      fontWeight: "400",
+      fontSize: "14px",
+      lineHeight: "10px",
+      color: "#1A1A1A",
+    }}
+  >
+    <DiamondIcon style={{ color: "#000" }} />
+    Manage Membership
+  </MenuItem>
+  <MenuItem
+    onClick={handleMenuClose}
+    style={{
+      display: "flex",
+      alignItems: "center",
+      gap: "12px",
+      padding: "10px 16px",
+      fontFamily: "Lexend",
+      fontWeight: "400",
+      fontSize: "14px",
+      lineHeight: "10px",
+      color: "#1A1A1A",
+    }}
+  >
+    <VisibilityOffIcon style={{ color: "#000" }} />
+    Hide Profile
+  </MenuItem>
+  <MenuItem
+    onClick={handleMenuClose}
+    style={{
+      display: "flex",
+      alignItems: "center",
+      gap: "12px",
+      padding: "10px 16px",
+      fontFamily: "Lexend",
+      fontWeight: "400",
+      fontSize: "14px",
+      lineHeight: "10px",
+      color: "#1A1A1A",
+    }}
+  >
+    <DeleteIcon style={{ color: "#000" }} />
+    Delete Account
+  </MenuItem>
+  <MenuItem
+    onClick={handleMenuClose}
+    style={{
+      display: "flex",
+      alignItems: "center",
+      gap: "12px",
+      padding: "10px 16px",
+      fontFamily: "Lexend",
+      fontWeight: "400",
+      fontSize: "14px",
+      lineHeight: "20px",
+      color: "#1A1A1A",
+    }}
+  >
+    <LogoutIcon style={{ color: "#000" }} />
+    Logout
+  </MenuItem>
+</Menu>
 				</Toolbar>
 			</AppBar>
 
