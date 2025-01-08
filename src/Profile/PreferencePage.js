@@ -130,14 +130,15 @@ const PreferencePage = () => {
                   onChange={() => handleOptionSelect(option)}
                   style={{
                     color: selectedOptions.includes(option) ? "#000" : "#757575",
+                    
                   }}
                 />
               }
               label={option}
               style={{
                 marginLeft: "8px",
-                fontWeight: "bold",
-                fontFamily: "Lexend",
+                fontFamily: 'Lexend',
+                fontWeight: 'bold',
                 color: "#1A1A1A",
                 flex: 1,
               }}

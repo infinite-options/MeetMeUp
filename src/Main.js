@@ -57,7 +57,7 @@ import ProfileSummaryPage from './Summary/ProfileSummaryPage';
 function Main() {
   const theme = createTheme({
     typography: {
-      fontFamily: 'Segoe UI',
+      fontFamily: 'Lexend',
     }
   });
   const [details, setDetails] = useState('');

@@ -10,6 +10,9 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import AddressAutocompleteInput from "./AdressAutocompleteInput";
 import StaticMap from "./StaticMap";
 import { getLatLongFromAddress } from "../utils/geocode";
+import { useNavigate } from 'react-router-dom';
+import { useUserContext } from '../UserContext';
+import axios from "axios";
 
 const LocationFormPage = () => {
   const [selectedAddress, setSelectedAddress] = useState(null);
@@ -18,11 +21,13 @@ const LocationFormPage = () => {
 	const [city, setCity] = useState('');
 	const [state, setState] = useState('');
 	const [zip, setZip] = useState('');
+  const navigate = useNavigate();
   const [isLocationSelected, setIsLocationSelected] = useState(false);
   const [coordinates, setCoordinates] = useState({
     latitude: null,
     longitude: null,
   });
+  const { userData, updateUserData } = useUserContext(); 
 
   const handleAddressSelect = async (address) => {
     await setSelectedAddress(address);
@@ -39,12 +44,75 @@ const LocationFormPage = () => {
         latitude: geocode_coordinates.latitude,
         longitude: geocode_coordinates.longitude,
       });
+
+
+    updateUserData('user_latitude', geocode_coordinates.latitude);
+    updateUserData('user_longitude', geocode_coordinates.longitude);
     }
   };
 
   const handleBack = () => {
     console.log("Back button clicked");
   };
+
+  const saveUserInfo = async () => {
+    console.log('---userData---', userData);
+    try {
+      const createAccountUrl = "https://mrle52rri4.execute-api.us-west-1.amazonaws.com/dev/api/v2/CreateAccount/MMU";
+  
+      let createAccountData = new FormData();
+      createAccountData.append("email", userData.user_email_id);
+      createAccountData.append("password", userData.password);
+  
+      // First API call
+      const createAccountResponse = await axios.post(createAccountUrl, createAccountData, {
+        headers: { "Content-Type": "application/json" },
+      });
+  
+      if (createAccountResponse.data.message === "User already exists") {
+        window.alert("User Already Exists");
+        return;
+      }
+      localStorage.setItem('user_uid', createAccountResponse.data.result[0].user_uid);
+      localStorage.setItem('user_email_id', userData.user_email_id);
+  
+      const user_uid = createAccountResponse.data.result[0].user_uid;
+  
+      // Prepare data for the second API call
+      const updateUserInfoData = {
+        ...userData, // Include all user data
+        user_uid: user_uid, // Add user_uid
+      };
+      const formData = new FormData();
+      // Loop through the object and append each key-value pair to the FormData
+for (const [key, value] of Object.entries(updateUserInfoData)) {
+  
+  if (key !== "password") { // Skip appending the "password" key
+  formData.append(key, value);
+}
+}
+
+// Log the FormData to ensure everything was appended
+for (let pair of formData.entries()) {
+  console.log(`${pair[0]}: ${pair[1]}`);
+}
+  
+      // Second API call
+      const updateUserInfoUrl = "https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo";
+      const updateUserInfoResponse = await axios.put(updateUserInfoUrl, formData);
+  
+      console.log("Update User Info Response:", updateUserInfoResponse.data);
+  
+      // Navigate to the next step
+      navigate("/summary");
+    } catch (error) {
+      console.error("Error occurred during API calls:", error);
+      if (error.response) {
+        console.error("API Response Error:", error.response);
+      }
+    }
+  };
+  
 
   return (
     <Container
@@ -184,6 +252,7 @@ const LocationFormPage = () => {
         <Button
           fullWidth
           variant="contained"
+          onClick={saveUserInfo}
           disabled={!isLocationSelected}
           style={{
             backgroundColor: isLocationSelected ? "#E4423F" : "#e0e0e0",

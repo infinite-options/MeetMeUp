@@ -4,11 +4,13 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { useNavigate } from 'react-router-dom';
 import ContinueButton from './ContinueButton'; // Import the ContinueButton component
+import { useUserContext } from '../UserContext';
 
 const BirthdayPage = () => {
   const [birthday, setBirthday] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { updateUserData } = useUserContext();
 
   const handleBirthdayChange = (e) => {
     let value = e.target.value;
@@ -61,7 +63,30 @@ const BirthdayPage = () => {
     setError('');
     return true;
   };
+
+  const calculateAge = (birthday) => {
+    const [day, month, year] = birthday.split('/').map((part) => parseInt(part, 10)); // Parse the date parts
+    const today = new Date();
+    const birthDate = new Date(year, month - 1, day); // Create a Date object (month is zero-based)
+    let age = today.getFullYear() - birthDate.getFullYear();
   
+    // Adjust age if the current date is before the birthday this year
+    const isBeforeBirthday =
+      today.getMonth() < birthDate.getMonth() ||
+      (today.getMonth() === birthDate.getMonth() && today.getDate() < birthDate.getDate());
+  
+    if (isBeforeBirthday) {
+      age--;
+    }
+  
+    return age;
+  };
+  const saveBirthday = () => {
+    const age = calculateAge(birthday);
+    updateUserData('user_age', age);
+  };
+  
+    
   return (
     <Container
       maxWidth="xs"
@@ -182,6 +207,7 @@ const BirthdayPage = () => {
         <ContinueButton
           navigateTo="/height"
           isEnabled={birthday.length === 10 && !error}
+          handleClick={saveBirthday}
         />
       </Box>
     </Container>

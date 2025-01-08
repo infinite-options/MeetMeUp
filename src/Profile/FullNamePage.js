@@ -3,10 +3,18 @@ import { Container, Box, TextField, Typography, IconButton } from '@mui/material
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ContinueButton from './ContinueButton'; // Import the ContinueButton component
 import { useNavigate } from 'react-router-dom';
+import { useUserContext } from '../UserContext';
 
 const FullNamePage = () => {
-  const [fullName, setFullName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const { updateUserData } = useUserContext(); 
   const navigate = useNavigate();
+
+  const saveFullName = () => {
+    updateUserData('user_first_name', firstName);
+    updateUserData('user_last_name', lastName); // Save full name to the context
+  };
 
   return (
     <Container
@@ -86,9 +94,31 @@ const FullNamePage = () => {
       <Box style={{ width: '100%', marginBottom: '24px' }}>
         <TextField
           fullWidth
-          placeholder="Full Name"
-          value={fullName}
-          onChange={(e) => setFullName(e.target.value)}
+          placeholder="First Name"
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+          variant="filled"
+          InputProps={{
+            disableUnderline: true,
+            style: {
+              height: '50px',
+              borderRadius: '8px',
+              backgroundColor: '#f2f2f2',
+              display: 'flex',
+              alignItems: 'center',
+              fontFamily: 'Lexend',
+              fontSize: '16px',
+            },
+          }}
+        />
+       
+      </Box>
+      <Box style={{ width: '100%', marginBottom: '24px' }}>
+      <TextField
+          fullWidth
+          placeholder="Last Name"
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
           variant="filled"
           InputProps={{
             disableUnderline: true,
@@ -107,7 +137,7 @@ const FullNamePage = () => {
 
       {/* Continue Button */}
       <Box style={{ width: '100%', marginTop: 'auto' }}> {/* Add marginTop:auto to push the button down */}
-        <ContinueButton navigateTo="/birthday" isEnabled={fullName.length > 0} />
+        <ContinueButton navigateTo="/birthday" isEnabled={firstName.length > 0}  handleClick={saveFullName} />
       </Box>
     </Container>
   );

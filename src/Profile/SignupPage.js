@@ -16,8 +16,11 @@ import googlesignupIcon from '../Assets/Images/googlesignupIcon.webp';
 import AppleIcon from '@mui/icons-material/Apple';
 import { useNavigate } from 'react-router-dom';
 import ContinueButton from './ContinueButton';
+import { useUserContext } from '../UserContext';
 
 const SignupPage = () => {
+  const { updateUserData } = useUserContext();
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -38,6 +41,11 @@ const SignupPage = () => {
 
   const handleLoginClick = () => {
     navigate('/login'); // Navigate to the /login route
+  };
+
+  const saveSignupData = () => {
+    updateUserData('user_email_id', email);
+    updateUserData('password', password);
   };
 
   return (
@@ -119,6 +127,7 @@ const SignupPage = () => {
           placeholder="Email"
           variant="filled"
           margin="normal"
+          onChange={(e) => setEmail(e.target.value)}
           InputProps={{
             disableUnderline: true,
             style: {
@@ -223,6 +232,7 @@ const SignupPage = () => {
       <ContinueButton
         navigateTo="/fullname"
         isEnabled={password && confirmPassword && password === confirmPassword}
+        handleClick={saveSignupData}
       />
 
       {/* Divider */}

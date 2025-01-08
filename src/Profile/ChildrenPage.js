@@ -3,9 +3,11 @@ import { Container, Box, Typography, IconButton, TextField } from '@mui/material
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ContinueButton from './ContinueButton'; // Import your reusable ContinueButton component
 import { useNavigate } from 'react-router-dom';
+import { useUserContext } from '../UserContext';
 
 const ChildrenPage = () => {
   const [childrenCount, setChildrenCount] = useState(0);
+  const { updateUserData } = useUserContext();
   const navigate = useNavigate();
 
   const handleIncrease = () => {
@@ -17,6 +19,9 @@ const ChildrenPage = () => {
       setChildrenCount((prevCount) => prevCount - 1);
     }
   };
+
+  const saveChildrenCount = () => {
+    updateUserData('user_kids', childrenCount);};
 
   return (
     <Container
@@ -143,7 +148,7 @@ const ChildrenPage = () => {
 
       {/* Continue Button */}
       <Box style={{ marginTop: 'auto', width: '100%' }}>
-        <ContinueButton navigateTo="/sexassigned" isEnabled={true} />
+        <ContinueButton navigateTo="/sexassigned" isEnabled={true} handleClick={saveChildrenCount} />
       </Box>
     </Container>
   );

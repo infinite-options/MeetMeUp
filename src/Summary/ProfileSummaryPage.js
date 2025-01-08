@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
 	Box,
 	Typography,
@@ -47,6 +47,7 @@ import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
 
 const ProfileSummary = () => {
   const [anchorEl, setAnchorEl] = useState(null);
+  const [userInfo, setUserInfo] = useState(null);
 const open = Boolean(anchorEl);
 
 const handleMenuOpen = (event) => {
@@ -56,6 +57,31 @@ const handleMenuOpen = (event) => {
 const handleMenuClose = () => {
   setAnchorEl(null);
 };
+
+  // Fetch user info from API using user_uid from localStorage
+  useEffect(() => {
+    const userUid = localStorage.getItem("user_uid");
+
+    if (userUid) {
+      fetch(`https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/${userUid}`)
+        .then((response) => response.json())
+        .then((data) => {
+			const userData = data.result[0];
+        
+			// Convert the comma-separated string into an array of interests
+			const interestsArray = userData.user_general_interests ? userData.user_general_interests.split(',') : [];
+	
+			// Update userInfo with the modified interests
+			setUserInfo({
+			  ...userData,
+			  user_general_interests: interestsArray,
+			})
+		})
+        .catch((error) => {
+          console.error("Error fetching user info:", error);
+        });
+    }
+  }, []);
 
 	return (
 		<Box sx={{ backgroundColor: 'white', minHeight: '100vh' }}>
@@ -262,75 +288,107 @@ const handleMenuClose = () => {
 						marginBottom: '8px',
 					}}
 				>
-					Lachlan Collis
+					{userInfo?.user_first_name} {userInfo?.user_last_name}
 				</Typography>
 				<Typography variant="body2" textAlign="center" color="text.secondary" sx={{ marginBottom: 2 }}>
-					lachlan@konnectdigital.io
+				{userInfo?.user_email_id}
 				</Typography>
 
 				{/* Profile Content */}
 				{/* Profile Progress */}
 				<Card
-					sx={{
-						marginBottom: 2,
-						borderRadius: '16px',
-						padding: '16px',
-						backgroundColor: '#fff',
-						boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
-						fontFamily: 'Lexend',
-					}}
-				>
-					<Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-						<Typography
-							style={{
-								fontFamily: 'Lexend',
-								fontWeight: 500,
-								fontSize: '16px',
-								lineHeight: '20px',
-								color: '#4B4B4B',
-							}}
-						>
-							Profile: <span style={{ color: '#1A1A1A' }}>80% complete</span>
-						</Typography>
-					</Box>
-					<Box
-						style={{
-							width: '100%',
-							height: '4px',
-							backgroundColor: '#f2f2f2',
-							position: 'relative',
-							marginBottom: '20px',
-							marginTop: '20px',
-						}}
-						sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
-					>
-						<Box
-							style={{
-								width: '90%', // Adjust based on progress
-								height: '4px',
-								backgroundColor: '#000',
-								position: 'absolute',
-							}}
-						/>
-					</Box>
-					<Box sx={{ display: 'flex', alignItems: 'right', justifyContent: 'right' }}>
-						<Typography
-							style={{
-								fontFamily: 'Lexend',
-								fontWeight: 500,
-								fontSize: '14px',
-								lineHeight: '16px',
-								color: '#E4423F',
-								cursor: 'pointer',
-							}}
-						>
-							Hide
-						</Typography>
-					</Box>
-				</Card>
+  sx={{
+    marginBottom: 2,
+    borderRadius: '16px',
+    padding: '16px',
+    backgroundColor: '#fff',
+    boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
+    fontFamily: 'Lexend',
+  }}
+>
+  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+    <Typography
+      style={{
+        fontFamily: 'Lexend',
+        fontWeight: 500,
+        fontSize: '16px',
+        lineHeight: '20px',
+        color: '#4B4B4B',
+      }}
+    >
+      Profile: <span style={{ color: '#1A1A1A' }}>80% complete</span>
+    </Typography>
+  </Box>
 
-				{/* Additional Text Section */}
-				<Typography
+  <Box
+    style={{
+      width: '100%',
+      height: '4px',
+      backgroundColor: '#f2f2f2',
+      position: 'relative',
+      marginBottom: '20px',
+      marginTop: '20px',
+    }}
+    sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+  >
+    <Box
+      style={{
+        width: '80%', // Adjust based on progress (80% completion here)
+        height: '4px',
+        backgroundColor: 'black',
+        position: 'absolute',
+      }}
+    />
+  </Box>
+
+  <Box>
+    <Typography
+      style={{
+        fontFamily: 'Lexend',
+        fontWeight: 500,
+        fontSize: '14px',
+        lineHeight: '16px',
+        color: '#E4423F',
+      }}
+    >
+      your date preferences (2)
+    </Typography>
+    <Typography
+      style={{
+        fontFamily: 'Lexend',
+        fontWeight: 500,
+        fontSize: '14px',
+        lineHeight: '16px',
+        color: '#E4423F',
+      }}
+    >
+      a few more details about you (8)
+    </Typography>
+    <Typography
+      style={{
+        fontFamily: 'Lexend',
+        fontWeight: 500,
+        fontSize: '14px',
+        lineHeight: '16px',
+        color: '#E4423F',
+      }}
+    >
+      profile bio (1)
+    </Typography>
+    <Typography
+      style={{
+        fontFamily: 'Lexend',
+        fontWeight: 500,
+        fontSize: '14px',
+        lineHeight: '16px',
+        color: '#E4423F',
+      }}
+    >
+      verify your account (2)
+    </Typography>
+  </Box>
+</Card>{/* Additional Text Section */}
+				{/* <Typography
 					style={{
 						fontFamily: 'Lexend',
 						fontWeight: 400,
@@ -342,14 +400,14 @@ const handleMenuClose = () => {
 				>
 					Hi! I’m Lachlan and I enjoy outdoor activities. I have a pet dog named Cat. I hope we get to know
 					each other!
-				</Typography>
+				</Typography> */}
 
 				{/* Interests */}
 				<Typography variant="subtitle1" fontWeight="bold" sx={{ marginBottom: 1 }}>
 					My interests
 				</Typography>
 				<Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, marginBottom: 2 }}>
-					{['Cooking / Baking', 'Gaming', 'Sports', 'Music', 'Animals & Wildlife'].map((interest) => (
+					{userInfo?.user_general_interests?.map((interest) => (
 						<Chip
 							key={interest}
 							label={interest}
@@ -368,7 +426,7 @@ const handleMenuClose = () => {
 				</Box>
 
 				{/* Kinds of Dates I Enjoy */}
-				<Typography variant="subtitle1" fontWeight="bold" sx={{ marginBottom: 1 }}>
+				{/* <Typography variant="subtitle1" fontWeight="bold" sx={{ marginBottom: 1 }}>
 					Kinds of dates I enjoy
 				</Typography>
 				<Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, marginBottom: 2 }}>
@@ -388,7 +446,7 @@ const handleMenuClose = () => {
 							}}
 						/>
 					))}
-				</Box>
+				</Box> */}
 
 				{/* About Me */}
 				<Typography variant="subtitle1" fontWeight="bold" sx={{ marginBottom: 1 }}>
@@ -396,22 +454,22 @@ const handleMenuClose = () => {
 				</Typography>
 				<Box component="ul" sx={{ marginBottom: 2, paddingLeft: 2 }}>
 					{[
-						{ icon: <CakeOutlinedIcon />, text: 'Born on April 26, 2001' },
-						{ icon: <HeightOutlinedIcon />, text: '5\'11"' },
-						{ icon: <ChildCareOutlinedIcon />, text: '0 children' },
-						{ icon: <MaleOutlinedIcon />, text: 'Sex assigned at birth was male' },
-						{ icon: <FingerprintOutlinedIcon />, text: 'Identifies as male' },
-						{ icon: <FavoriteBorderOutlinedIcon />, text: 'Bisexual' },
+						{ icon: <CakeOutlinedIcon />, text: userInfo?.user_age },
+						{ icon: <HeightOutlinedIcon />, text: userInfo?.user_height },
+						{ icon: <ChildCareOutlinedIcon />, text: userInfo?.user_kids + ' children' },
+						{ icon: <MaleOutlinedIcon />, text: 'Sex assigned at birth was '  + userInfo?.user_gender },
+						{ icon: <FingerprintOutlinedIcon />, text: 'Identifies as '+ userInfo?.user_gender },
+						{ icon: <FavoriteBorderOutlinedIcon />, text: userInfo?.user_sexuality },
 						{ icon: <EmojiPeopleOutlinedIcon />, text: 'Open to men & women' },
-						{ icon: <FlagOutlinedIcon />, text: 'American' },
-						{ icon: <Diversity1OutlinedIcon />, text: 'Half-German Half-Irish' },
-						{ icon: <AccessibilityOutlinedIcon />, text: 'Curvy body type' },
-						{ icon: <SchoolOutlinedIcon />, text: "Bachelor's Degree" },
-						{ icon: <WorkOutlineOutlinedIcon />, text: 'UI/UX designer & Graphic designer' },
-						{ icon: <SmokingRoomsOutlinedIcon />, text: 'Does not smoke' },
-						{ icon: <LiquorOutlinedIcon />, text: 'Does not drink' },
-						{ icon: <GavelOutlinedIcon />, text: 'Does not practice a religion' },
-						{ icon: <StarBorderOutlinedIcon />, text: 'Taurus' },
+						{ icon: <FlagOutlinedIcon />, text: 'Coming in Live Version' },
+						{ icon: <Diversity1OutlinedIcon />, text: 'Coming in Live Version' },
+						{ icon: <AccessibilityOutlinedIcon />, text: 'Coming in Live Version '},
+						{ icon: <SchoolOutlinedIcon />, text: "Coming in Live Version" },
+						{ icon: <WorkOutlineOutlinedIcon />, text: 'Coming in Live Version' },
+						{ icon: <SmokingRoomsOutlinedIcon />, text: 'Coming in Live Version' },
+						{ icon: <LiquorOutlinedIcon />, text: 'Coming in Live Version' },
+						{ icon: <GavelOutlinedIcon />, text: 'Coming in Live Version' },
+						{ icon: <StarBorderOutlinedIcon />, text: 'Coming in Live Version' },
 					].map((item, index) => (
 						<Typography
 							key={index}

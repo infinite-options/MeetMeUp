@@ -13,11 +13,13 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import { useNavigate } from "react-router-dom";
 import { useListContext } from "../ListContext";
+import { useUserContext } from '../UserContext';
+import ContinueButton from './ContinueButton';
 
 const InterestsPage = () => {
   const [selectedOptions, setSelectedOptions] = useState([]);
   const navigate = useNavigate();
-
+  const { updateUserData } = useUserContext(); 
   // Example interests
 //   const interests = [
 //     "Cooking / Baking",
@@ -56,6 +58,19 @@ const { data } = useListContext();
     const padding = 32; // Additional padding for the box
     return `${label.length * charWidth + padding}px`;
   };
+
+  const saveInterests = () => {
+    console.log('---selectedOptions---', selectedOptions);
+  
+    // Ensure selectedOptions is an array (if it is a string, split it into an array)
+    const interestsArray = Array.isArray(selectedOptions)
+      ? selectedOptions
+      : selectedOptions.split(',');
+  
+    // Update the user data with the interests as an array
+    updateUserData('user_general_interests', interestsArray);
+  };
+  
 
   return (
     <Container
@@ -152,7 +167,6 @@ const { data } = useListContext();
               }`,
               display: "flex",
               alignItems: "center",
-              padding: "8px 16px",
               backgroundColor: "#fff",
               transition: "border-color 0.3s",
             }}
@@ -166,7 +180,7 @@ const { data } = useListContext();
                   onChange={() => handleOptionSelect(interest)}
                   style={{
                     color: selectedOptions.includes(interest) ? "#000" : "#757575",
-                    // width: "40%", 
+                    padding: "2px 2px",
                   }}
                 />
               }
@@ -184,24 +198,9 @@ const { data } = useListContext();
       </Box>
 
       {/* Continue Button */}
-      <Box style={{ marginTop: "auto", width: "100%" }}>
-        <Button
-          fullWidth
-          variant="contained"
-          onClick={() => navigate("/uploadmedia")}
-          disabled={selectedOptions.length === 0}
-          style={{
-            backgroundColor: selectedOptions.length > 0 ? "#E4423F" : "#e0e0e0",
-            color: "#fff",
-            borderRadius: "24px",
-            padding: "12px 0",
-            fontWeight: "bold",
-            textTransform: "none",
-            fontFamily: "Lexend",
-          }}
-        >
-          Continue
-        </Button>
+    
+      <Box style={{ width: '100%', marginTop: 'auto' }}> {/* Add marginTop:auto to push the button down */}
+        <ContinueButton navigateTo="/uploadmedia" isEnabled={selectedOptions}  handleClick={saveInterests} />
       </Box>
     </Container>
   );

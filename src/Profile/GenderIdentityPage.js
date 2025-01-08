@@ -3,10 +3,13 @@ import { Container, Box, Typography, Button, IconButton } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
 import { useListContext } from '../ListContext'; 
+import { useUserContext } from '../UserContext';
+import ContinueButton from './ContinueButton';
 
 const GenderIdentityPage = () => {
   const [selectedOption, setSelectedOption] = useState(null);
   const navigate = useNavigate();
+  const { updateUserData } = useUserContext(); 
 // Access data from context
 const { data, loading, error } = useListContext();
 
@@ -16,6 +19,9 @@ const genderOptions = data.identity || []; // Default to an empty array if no ge
 const handleOptionSelect = (option) => {
   setSelectedOption(option);
 };
+
+const saveGender = () => {
+  updateUserData('user_gender', selectedOption);};
 
   return (
     <Container
@@ -116,24 +122,8 @@ const handleOptionSelect = (option) => {
       </Box>
 
       {/* Continue Button */}
-      <Box style={{ marginTop: 'auto', width: '100%' }}>
-        <Button
-          fullWidth
-          variant="contained"
-          onClick={() => navigate('/orientation')}
-          disabled={!selectedOption}
-          style={{
-            backgroundColor: selectedOption ? '#E4423F' : '#e0e0e0',
-            color: '#fff',
-            borderRadius: '24px',
-            padding: '12px 0',
-            fontWeight: 'bold',
-            textTransform: 'none',
-            fontFamily: 'Lexend',
-          }}
-        >
-          Continue
-        </Button>
+      <Box style={{ width: '100%', marginTop: 'auto' }}> {/* Add marginTop:auto to push the button down */}
+        <ContinueButton navigateTo="/orientation" isEnabled={selectedOption}  handleClick={saveGender} />
       </Box>
     </Container>
   );

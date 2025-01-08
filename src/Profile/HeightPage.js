@@ -3,6 +3,7 @@ import { Container, Box, Typography, IconButton } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ContinueButton from './ContinueButton';
 import { useNavigate } from 'react-router-dom';
+import { useUserContext } from '../UserContext';
 
 const HeightPage = () => {
   const [unit, setUnit] = useState('ft-in'); // 'cm' or 'ft-in'
@@ -10,6 +11,7 @@ const HeightPage = () => {
   const [heightIn, setHeightIn] = useState(11);
   const [heightCm, setHeightCm] = useState(175);
   const navigate = useNavigate();
+  const { updateUserData } = useUserContext(); 
 
   const handleIncrease = (setter, value, max) => {
     if (value < max) setter(value + 1);
@@ -21,6 +23,21 @@ const HeightPage = () => {
 
   const isContinueEnabled =
     unit === 'cm' ? heightCm > 0 : heightFt > 0 || heightIn > 0;
+
+  const saveHeight = () => {
+      let height;
+    
+      if (unit === 'ft-in') {
+        // Format height in feet and inches
+        height = `${heightFt}'${heightIn}"`; // Example: 5'11"
+      } else if (unit === 'cm') {
+        // Use height in centimeters
+        height = `${heightCm} cm`;
+      }
+    
+      // Save the formatted height to UserContext
+      updateUserData('user_height', height);
+    };
 
   return (
     <Container
@@ -259,7 +276,7 @@ const HeightPage = () => {
 
       {/* Continue Button */}
       <Box style={{ marginTop: 'auto', width: '100%' }}>
-        <ContinueButton navigateTo="/children" isEnabled={isContinueEnabled} />
+        <ContinueButton navigateTo="/children" isEnabled={isContinueEnabled} handleClick={saveHeight} />
       </Box>
     </Container>
   );

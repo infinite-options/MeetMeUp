@@ -2,10 +2,14 @@ import React from 'react';
 import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
-const ContinueButton = ({ navigateTo, isEnabled }) => {
+const ContinueButton = ({ navigateTo, isEnabled, handleClick }) => {
   const navigate = useNavigate();
 
-  const handleClick = () => {
+ 
+  const handleButtonClick = () => {
+    if (handleClick) {
+      handleClick(); // Execute the custom function before navigation
+    }
     navigate(navigateTo);
   };
 
@@ -13,7 +17,7 @@ const ContinueButton = ({ navigateTo, isEnabled }) => {
     <Button
       variant="contained"
       fullWidth
-      onClick={handleClick}
+      onClick={handleButtonClick}
       disabled={!isEnabled}
       style={{
         backgroundColor: isEnabled ? '#E4423F' : '#e0e0e0',
