@@ -87,8 +87,11 @@ const LocationFormPage = () => {
       // Loop through the object and append each key-value pair to the FormData
 for (const [key, value] of Object.entries(updateUserInfoData)) {
   
-  if (key !== "password") { // Skip appending the "password" key
+  if (key !== "password" && key !== "user_video") { // Skip appending the "password" key
   formData.append(key, value);
+}
+else if (key == "user_video"){
+  formData.append(key,value,"user_video.webm");
 }
 }
 

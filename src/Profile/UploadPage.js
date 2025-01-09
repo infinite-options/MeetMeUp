@@ -1,70 +1,98 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import {
   Container,
   Box,
   Typography,
   IconButton,
   Button,
-  Input,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import AddIcon from "@mui/icons-material/Add";
-import { useNavigate } from "react-router-dom";
-import { useUserContext } from '../UserContext';
-import ContinueButton from './ContinueButton';
+import Webcam from "react-webcam";
+import { useUserContext } from "../UserContext"; // Assuming `updateUserData` comes from this context
+import ContinueButton from "./ContinueButton";
 
 const UploadPage = () => {
-    const [video, setVideo] = useState(null);
-    const [photos, setPhotos] = useState([null, null, null]);
-    const navigate = useNavigate();
-    const fileInputRef = useRef(null); // Ref for file input
-    const currentPhotoIndex = useRef(null); // Ref to track which photo index is being uploaded
-    const { updateUserData } = useUserContext(); 
+  const [video, setVideo] = useState(null);
+  const [photos, setPhotos] = useState([null, null, null]); // Three placeholders for photos
+  const fileInputRef = useRef(null); // Ref for hidden file input
+  const currentPhotoIndex = useRef(null); // Ref to track which photo index is being uploaded
+  const [capturing, setCapturing] = useState(false);
+  const [recordedChunks, setRecordedChunks] = useState([]);
+  const webcamRef = useRef(null);
+  const mediaRecorderRef = useRef(null);
+  const { updateUserData } = useUserContext(); // Context function to update user data
 
+  const isFormValid = video || photos.some((photo) => photo !== null);
+
+  // Handle photo upload
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
-    if (currentPhotoIndex.current === "video") {
-      // Handle video upload
-      setVideo(file);
-    } else if (currentPhotoIndex.current !== null) {
-      // Handle photo upload
-      const updatedPhotos = [...photos];
-      updatedPhotos[currentPhotoIndex.current] = file; // Store file object
-      setPhotos(updatedPhotos);
+    if (!file) return;
+
+    const updatedPhotos = [...photos];
+    updatedPhotos[currentPhotoIndex.current] = file;
+    setPhotos(updatedPhotos);
+
+    // Save photo immediately
+    //updateUserData(`img_${currentPhotoIndex.current}`, file);
+
+    // Reset current photo index
+    currentPhotoIndex.current = null;
+  };
+
+  const triggerPhotoUpload = (index) => {
+    currentPhotoIndex.current = index;
+    fileInputRef.current.click();
+  };
+
+  const handleStartCaptureClick = () => {
+    setCapturing(true);
+    setRecordedChunks([]);
+    mediaRecorderRef.current = new MediaRecorder(webcamRef.current.stream, {
+      mimeType: "video/webm",
+    });
+    mediaRecorderRef.current.ondataavailable = handleDataAvailable;
+    mediaRecorderRef.current.start();
+  };
+
+  const handleDataAvailable = ({ data }) => {
+    if (data.size > 0) {
+      setRecordedChunks((prev) => prev.concat(data));
     }
-    currentPhotoIndex.current = null; // Reset after use
   };
 
-  const triggerFileUpload = (index) => {
-    currentPhotoIndex.current = index; // Set the current index or "video"
-    fileInputRef.current.click(); // Trigger file selection
+  const handleStopCaptureClick = () => {
+    mediaRecorderRef.current.stop();
+    setCapturing(false);
+    
   };
 
-  // Cleanup URLs to avoid memory leaks
-  useEffect(() => {
-    return () => {
-      photos.forEach((photo) => {
-        if (photo) {
-          URL.revokeObjectURL(photo.preview);
-        }
-      });
-    };
-  }, [photos]);
+  const handleSaveVideo = () => {
+    if (recordedChunks.length > 0) {
+      const blob = new Blob(recordedChunks, { type: "video/webm" });
+      setVideo(blob); // Save the video blob
+
+      // Save video immediately
+      //updateUserData("user_video", blob);
+
+      alert("Video recorded and saved successfully!");
+    } else {
+      alert("No video recorded!");
+    }
+  };
 
   const saveMedia = () => {
     let count = 0; // Declare count as a local variable
-    updateUserData('user_video', video);
-  
+    updateUserData("user_video", video);
+
     photos.forEach((photo) => {
       if (photo) {
-        updateUserData('img_' + count, photo); // Make sure count is incremented with each valid photo
+        updateUserData("img_" + count, photo); // Make sure count is incremented with each valid photo
         count += 1;
       }
     });
   };
-
-  const isFormValid = video || photos.some((photo) => photo !== null);
 
   return (
     <Container
@@ -80,13 +108,7 @@ const UploadPage = () => {
       }}
     >
       {/* Back Button */}
-      <Box
-        style={{
-          position: "absolute",
-          top: "20px",
-          left: "20px",
-        }}
-      >
+      <Box style={{ position: "absolute", top: "20px", left: "20px" }}>
         <IconButton>
           <ArrowBackIcon style={{ color: "#E4423F" }} />
         </IconButton>
@@ -176,40 +198,55 @@ const UploadPage = () => {
         </Typography>
       </Box>
 
-      {/* Video Upload */}
+      {/* Webcam and Recording Buttons */}
+      <div style={{ marginBottom: "20px", width: "100%" }}>
+        <Webcam audio ref={webcamRef} style={{ width: "100%" }} />
+      </div>
+      {capturing ? (
+        <Button
+          variant="contained"
+          onClick={handleStopCaptureClick}
+          style={{
+            backgroundColor: "#E4423F",
+            color: "#fff",
+            marginBottom: "16px",
+          }}
+        >
+          Stop Recording
+        </Button>
+      ) : (
+        <Button
+          variant="contained"
+          onClick={handleStartCaptureClick}
+          style={{
+            backgroundColor: "#E4423F",
+            color: "#fff",
+            marginBottom: "16px",
+          }}
+        >
+          Start Recording
+        </Button>
+      )}
       <Button
-        component="label"
         variant="outlined"
-        onClick={() => triggerFileUpload("video")}
+        onClick={handleSaveVideo}
+        disabled={recordedChunks.length === 0}
         style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          borderRadius: "50px",
-          textTransform: "none",
-          border: "2px solid #E4423F",
+          borderColor: "#E4423F",
           color: "#E4423F",
-          fontFamily: "Lexend",
-          fontWeight: "bold",
-          fontSize: "16px",
-          padding: "10px 20px",
           marginBottom: "24px",
-          width: "100%",
-          marginTop: "24px",
         }}
       >
-        <CloudUploadIcon style={{ marginRight: "8px" }} />
-        Upload Video File
+        Save Video
       </Button>
 
-      {/* Photo Upload */}
+      {/* Photo Upload Section */}
       <Box
         style={{
           display: "flex",
           justifyContent: "space-between",
           width: "100%",
           marginBottom: "24px",
-          marginTop: "24px",
         }}
       >
         {photos.map((photo, index) => (
@@ -217,7 +254,7 @@ const UploadPage = () => {
             key={index}
             component="label"
             variant="outlined"
-            onClick={() => triggerFileUpload(index)}
+            onClick={() => triggerPhotoUpload(index)}
             style={{
               width: "100px",
               height: "100px",
@@ -247,18 +284,22 @@ const UploadPage = () => {
         ))}
       </Box>
 
-       {/* Hidden Input */}
-       <input
+      {/* Hidden File Input */}
+      <input
         type="file"
-        accept="video/*,image/*"
+        accept="image/*"
         ref={fileInputRef}
         style={{ display: "none" }}
         onChange={handleFileUpload}
       />
 
       {/* Continue Button */}
-      <Box style={{ width: '100%', marginTop: 'auto' }}> {/* Add marginTop:auto to push the button down */}
-        <ContinueButton navigateTo="/locationpage" isEnabled={isFormValid}  handleClick={saveMedia} />
+      <Box style={{ width: "100%", marginTop: "auto" }}>
+        <ContinueButton
+          navigateTo="/locationpage"
+          isEnabled={isFormValid}
+          handleClick={saveMedia}
+        />
       </Box>
     </Container>
   );

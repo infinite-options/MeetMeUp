@@ -17,7 +17,7 @@ import { useUserContext } from '../UserContext';
 import ContinueButton from './ContinueButton';
 
 const PreferencePage = () => {
-  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [selectedOptions, setSelectedOptions] = useState(['Straight']);
   const navigate = useNavigate();
   const { data } = useListContext();
   const { updateUserData } = useUserContext(); 
