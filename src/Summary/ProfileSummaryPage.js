@@ -14,6 +14,7 @@ import {
   Menu,
   MenuItem,
   ListItemIcon,
+  ImageList, ImageListItem,
 } from '@mui/material';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -22,7 +23,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import LogoutIcon from '@mui/icons-material/Logout';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import DiamondIcon from '@mui/icons-material/Diamond';
-
+import ReactPlayer from 'react-player';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import AddIcon from '@mui/icons-material/Add';
@@ -230,50 +231,86 @@ const handleMenuClose = () => {
 					mt: 2,
 				}}
 			>
-				{/* Media Placeholder */}
+				{/* Media Placeholder - Replace with dynamic content */}
 				<Box sx={{ textAlign: 'center', marginBottom: 2 }}>
-					<Box
-						sx={{
-							width: '100%',
-							aspectRatio: '1.5',
-							backgroundColor: '#f0f0f0',
-							display: 'flex',
-							alignItems: 'center',
-							justifyContent: 'center',
-							borderRadius: 2,
-							marginBottom: 1,
-						}}
-					>
-						<Typography>Video/Image Placeholder</Typography>
-					</Box>
+          {/* Video */}
+          <Box sx={{
+            width: '100%',
+			height: "100%",
+            aspectRatio: '1',
+            backgroundColor: '#f0f0f0',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: 2,
+            marginBottom: 1,
+          }}>
+			  {userInfo?.user_video_url ? ( <ReactPlayer
+      url={userInfo.user_video_url.replace(/"/g, '')} 
+      width="100%"
+      height="100%"
+      controls
+    />
+) : (
+  <Typography>No video available</Typography>
+)}
+          </Box>
+		  <Box sx={{
+            width: '100%',
+			height: "100%",
+            backgroundColor: '#f0f0f0',
+            borderRadius: 2,
+            marginBottom: 1,
+          }}>
+  <ImageList sx={{ display: 'flex', flexWrap: 'wrap' }} cols={3}>
+    {(() => {
+      try {
+        // Parse the JSON string into an array
+        const images = JSON.parse(userInfo?.user_photo_url || '[]');
 
-					{/* Thumbnails */}
-					<Grid container spacing={1} justifyContent="center">
-						<Grid item>
-							<Avatar sx={{ width: 60, height: 60, backgroundColor: '#f0f0f0' }} variant="rounded" />
-						</Grid>
-						<Grid item>
-							<Avatar sx={{ width: 60, height: 60, backgroundColor: '#f0f0f0' }} variant="rounded" />
-						</Grid>
-						<Grid item>
-							<Avatar
-								sx={{
-									width: 60,
-									height: 60,
-									backgroundColor: '#f0f0f0',
-									display: 'flex',
-									alignItems: 'center',
-									justifyContent: 'center',
-									cursor: 'pointer',
-								}}
-								variant="rounded"
-							>
-								<AddIcon />
-							</Avatar>
-						</Grid>
-					</Grid>
-				</Box>
+        // If there are no images, return avatars
+        if (images.length === 0) {
+          return Array.from({ length: 3 }).map((_, index) => (
+            <ImageListItem key={`filler-${index}`}>
+              <Avatar
+                sx={{
+                  width: 120,
+                  height: 120,
+                  backgroundColor: '#f0f0f0',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+              </Avatar>
+            </ImageListItem>
+          ));
+        }
 
+        // Otherwise, render the images
+        return images.map((image, index) => (
+          <ImageListItem key={index}>
+            <img
+              src={image}  // The image URL
+              alt={`user-photo-${index}`}
+              style={{
+                width: '120px', // Set fixed width
+                height: '120px', // Set fixed height
+                objectFit: 'cover',
+                borderRadius: '8px',
+                border: '5px solid #ccc',
+              }}
+            />
+          </ImageListItem>
+        ));
+      } catch (e) {
+        console.error('Error parsing user photo URL:', e);
+        return null;  // Return nothing if parsing fails
+      }
+    })()}
+  </ImageList>
+</Box>
+</Box>
 				{/* Name and Email */}
 				<Typography
 					variant="h5"

@@ -11,6 +11,8 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import AddIcon from "@mui/icons-material/Add";
 import { useNavigate } from "react-router-dom";
+import { useUserContext } from '../UserContext';
+import ContinueButton from './ContinueButton';
 
 const UploadPage = () => {
     const [video, setVideo] = useState(null);
@@ -18,7 +20,8 @@ const UploadPage = () => {
     const navigate = useNavigate();
     const fileInputRef = useRef(null); // Ref for file input
     const currentPhotoIndex = useRef(null); // Ref to track which photo index is being uploaded
-  
+    const { updateUserData } = useUserContext(); 
+
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
     if (currentPhotoIndex.current === "video") {
@@ -48,6 +51,18 @@ const UploadPage = () => {
       });
     };
   }, [photos]);
+
+  const saveMedia = () => {
+    let count = 0; // Declare count as a local variable
+    updateUserData('user_video', video);
+  
+    photos.forEach((photo) => {
+      if (photo) {
+        updateUserData('img_' + count, photo); // Make sure count is incremented with each valid photo
+        count += 1;
+      }
+    });
+  };
 
   const isFormValid = video || photos.some((photo) => photo !== null);
 
@@ -242,24 +257,8 @@ const UploadPage = () => {
       />
 
       {/* Continue Button */}
-      <Box style={{ width: "100%", marginTop: "auto" }}>
-        <Button
-          fullWidth
-          variant="contained"
-          onClick={() => navigate("/locationpage")}
-          disabled={!isFormValid}
-          style={{
-            backgroundColor: isFormValid ? "#E4423F" : "#e0e0e0",
-            color: "#fff",
-            borderRadius: "24px",
-            padding: "12px 0",
-            fontWeight: "bold",
-            fontFamily: "Lexend",
-            textTransform: "none",
-          }}
-        >
-          Continue
-        </Button>
+      <Box style={{ width: '100%', marginTop: 'auto' }}> {/* Add marginTop:auto to push the button down */}
+        <ContinueButton navigateTo="/locationpage" isEnabled={isFormValid}  handleClick={saveMedia} />
       </Box>
     </Container>
   );
