@@ -13,11 +13,14 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import { useNavigate } from "react-router-dom";
 import { useListContext } from "../ListContext";
+import { useUserContext } from '../UserContext';
+import ContinueButton from './ContinueButton';
 
 const PreferencePage = () => {
   const [selectedOptions, setSelectedOptions] = useState([]);
   const navigate = useNavigate();
   const { data } = useListContext();
+  const { updateUserData } = useUserContext(); 
 
   const genderOptions = data.identity || []; // Default to an empty array if no gender data
 
@@ -28,6 +31,9 @@ const PreferencePage = () => {
       setSelectedOptions([...selectedOptions, option]);
     }
   };
+
+  const savePreference = () => {
+    updateUserData('user_open_to', selectedOptions);};
 
   return (
     <Container
@@ -148,24 +154,8 @@ const PreferencePage = () => {
       </Box>
 
       {/* Continue Button */}
-      <Box style={{ marginTop: "auto", width: "100%" }}>
-        <Button
-          fullWidth
-          variant="contained"
-          onClick={() => navigate("/interests")}
-          disabled={selectedOptions.length === 0}
-          style={{
-            backgroundColor: selectedOptions.length > 0 ? "#E4423F" : "#e0e0e0",
-            color: "#fff",
-            borderRadius: "24px",
-            padding: "12px 0",
-            fontWeight: "bold",
-            textTransform: "none",
-            fontFamily: "Lexend",
-          }}
-        >
-          Continue
-        </Button>
+      <Box style={{ width: '100%', marginTop: 'auto' }}> {/* Add marginTop:auto to push the button down */}
+        <ContinueButton navigateTo="/interests" isEnabled={selectedOptions}  handleClick={savePreference} />
       </Box>
     </Container>
   );

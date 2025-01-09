@@ -53,6 +53,7 @@ import InterestsPage from './Profile/InterestsPage';
 import UploadPage from './Profile/UploadPage';
 import LocationFormPage from './Profile/LocationFormPage';
 import ProfileSummaryPage from './Summary/ProfileSummaryPage';
+import MyPreferences from './Profile/MyPreferences';
 
 function Main() {
   const theme = createTheme({
@@ -124,6 +125,7 @@ function Main() {
         <Route path="/uploadmedia" element={<UploadPage/>}/>
         <Route path="/locationpage" element={<LocationFormPage/>}/>
         <Route path="/summary" element={<ProfileSummaryPage/>}/>
+        <Route path="/mypreferences" element={<MyPreferences/>}/>
 
       </Routes>
     </BrowserRouter>

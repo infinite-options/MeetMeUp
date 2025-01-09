@@ -27,7 +27,7 @@ import ReactPlayer from 'react-player';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import AddIcon from '@mui/icons-material/Add';
-
+import { useNavigate } from 'react-router-dom';
 // Icons for the "About Me" section
 import CakeOutlinedIcon from '@mui/icons-material/CakeOutlined';
 import HeightOutlinedIcon from '@mui/icons-material/HeightOutlined';
@@ -50,7 +50,7 @@ const ProfileSummary = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
 const open = Boolean(anchorEl);
-
+const navigate = useNavigate();
 const handleMenuOpen = (event) => {
   setAnchorEl(event.currentTarget);
 };
@@ -83,6 +83,23 @@ const handleMenuClose = () => {
         });
     }
   }, []);
+
+    // Format user_open_to field
+	const userOpenTo = userInfo?.user_open_to;
+
+	const formattedOpenTo = () => {
+	  if (userOpenTo) {
+		const openToArray = userOpenTo.split(',');  // Split string by commas
+  
+		// If there are more than two items, join with commas and 'and' before the last item
+		if (openToArray.length > 1) {
+		  return openToArray.slice(0, -1).join(', ') + ' & ' + openToArray[openToArray.length - 1];
+		}
+		return openToArray[0]; // If only one item, return it directly
+	  }
+  
+	  return 'Not specified'; // Fallback if there's no value
+	};
 
 	return (
 		<Box sx={{ backgroundColor: 'white', minHeight: '100vh' }}>
@@ -497,7 +514,7 @@ const handleMenuClose = () => {
 						{ icon: <MaleOutlinedIcon />, text: 'Sex assigned at birth was '  + userInfo?.user_gender },
 						{ icon: <FingerprintOutlinedIcon />, text: 'Identifies as '+ userInfo?.user_gender },
 						{ icon: <FavoriteBorderOutlinedIcon />, text: userInfo?.user_sexuality },
-						{ icon: <EmojiPeopleOutlinedIcon />, text: 'Open to men & women' },
+						{ icon: <EmojiPeopleOutlinedIcon />, text: 'Open to ' + formattedOpenTo() },
 						{ icon: <FlagOutlinedIcon />, text: 'Coming in Live Version' },
 						{ icon: <Diversity1OutlinedIcon />, text: 'Coming in Live Version' },
 						{ icon: <AccessibilityOutlinedIcon />, text: 'Coming in Live Version '},
@@ -531,6 +548,7 @@ const handleMenuClose = () => {
 					variant="contained"
 					color="error"
 					fullWidth
+					onClick={(e) => navigate('/mypreferences')}
 					style={{
 						backgroundColor: '#E4423F',
 						color: '#fff',
