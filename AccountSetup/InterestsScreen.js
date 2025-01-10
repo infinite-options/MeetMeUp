@@ -8,9 +8,11 @@ import {
   TouchableOpacity,
   Pressable,
   StyleSheet,
+  ScrollView,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import ProgressBar from '../src/Assets/Components/ProgressBar';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function InterestsScreen({ navigation }) {
   // The list of available interests
@@ -52,15 +54,80 @@ export default function InterestsScreen({ navigation }) {
   // Enable the Continue button only if at least one interest is selected
   const isFormComplete = selectedInterests.length > 0;
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
     if (isFormComplete) {
       // Navigate to next screen, passing the chosen interests
+      try {
+        // Store the selected options array in AsyncStorage
+        await AsyncStorage.setItem('user_general_interests', JSON.stringify(selectedInterests));
+        console.log('User Interests stored:', selectedInterests);
+      } catch (error) {
+        console.error('Error storing user_general_interests:', error);
+      }
+      await  updateUserInfoServiceInDB();
       navigation.navigate('AddMediaScreen', { interests: selectedInterests });
+     
+    }
+  };
+  const handleTemp = async () => {
+    if (isFormComplete) {
+      // Navigate to next screen, passing the chosen interests
+      try {
+        // Store the selected options array in AsyncStorage
+        await AsyncStorage.setItem('user_general_interests', JSON.stringify(selectedInterests));
+        console.log('User Interests stored:', selectedInterests);
+      } catch (error) {
+        console.error('Error storing user_general_interests:', error);
+      }
+      // await updateUserInfoServiceInDB();
+      navigation.navigate('MyProfile', { interests: selectedInterests });
+     
+    }
+  };
+  // Helper to store user_location_service in DB
+  const updateUserInfoServiceInDB = async () => {
+    // Build a FormData with user_location_service = True or False
+    const url = "https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo";
+    const formData = new FormData();
+    const uid = await AsyncStorage.getItem('user_uid');
+    const email = await AsyncStorage.getItem('user_email_id');
+    const firstName = await AsyncStorage.getItem('user_first_name');
+    const lastName = await AsyncStorage.getItem('user_last_name');  
+    const age = await AsyncStorage.getItem('user_age');
+    const gender = await AsyncStorage.getItem('user_gender');
+    const height = await AsyncStorage.getItem('user_height_cm');
+    const kids = await AsyncStorage.getItem('user_kids');
+    const sexuality = await AsyncStorage.getItem('user_sexuality');
+    const openTo = await AsyncStorage.getItem('user_open_to');
+    const interests = await AsyncStorage.getItem('user_general_interests');
+    formData.append('user_uid', uid); // Example user ID
+    formData.append('user_email_id', email);
+    formData.append('user_first_name', firstName);
+    formData.append('user_last_name', lastName);
+    formData.append('user_age', age);
+    formData.append('user_gender', gender);
+    formData.append('user_height', height);
+    formData.append('user_kids', kids);
+    formData.append('user_sexuality', sexuality);
+    formData.append('user_open_to', openTo);
+    formData.append('user_general_interests', interests);
+    try {
+      const response = await fetch(url, {
+        method: "PUT",
+        body: formData,
+      });
+      if (response.ok) {
+        const result = await response.json();
+        console.log("Response from server:", result);
+      }
+    } catch (error) {
+      console.log("Error updating user data:", error);
     }
   };
 
   return (
     <SafeAreaView style={styles.container}>
+      <ScrollView> 
       {/* Back Button */}
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
         <Ionicons name="arrow-back" size={28} color="red" />
@@ -70,8 +137,9 @@ export default function InterestsScreen({ navigation }) {
       <ProgressBar startProgress={60} endProgress={70} />
 
       {/* Title / Subtitle */}
-      <Text style={styles.header}>What are your interests?</Text>
-      <Text style={styles.subHeader}>
+      <View style={styles.content}>
+      <Text style={styles.title}>What are your interests?</Text>
+      <Text style={styles.subtitle}>
         Help us better match you with others of similar interests.
       </Text>
 
@@ -120,7 +188,19 @@ export default function InterestsScreen({ navigation }) {
           );
         })}
       </View>
-
+      </View>
+    </ScrollView>
+    {/* Continue Button */}
+    <Pressable
+        style={[
+          styles.continueButton,
+          { backgroundColor: isFormComplete ? '#E4423F' : '#ccc' },
+        ]}
+        onPress={handleTemp}
+        disabled={!isFormComplete}
+      >
+        <Text style={styles.continueButtonText}>Temp Button to Summary</Text>
+      </Pressable>
       {/* Continue Button */}
       <Pressable
         style={[
@@ -156,16 +236,19 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   // Title
-  header: {
+  content: {
+    flex: 1,
+    justifyContent: "flex-start",
+  },
+  title: {
     fontSize: 24,
-    fontWeight: 'bold',
-    color: '#000',
+    fontWeight: "bold",
+    color: "#000",
     marginBottom: 10,
   },
-  // Subtitle
-  subHeader: {
+  subtitle: {
     fontSize: 14,
-    color: 'gray',
+    color: "#888",
     marginBottom: 20,
   },
   // Container for the interests, wrapping them onto multiple lines
@@ -180,7 +263,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderRadius: 25,
+    borderRadius: 30,
     margin: 5,
     paddingVertical: 8,
     paddingHorizontal: 12,
@@ -196,16 +279,16 @@ const styles = StyleSheet.create({
   },
   // Continue button
   continueButton: {
-    height: 60,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 25,
+    height: 50,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#E4423F",
+    borderRadius: 30,
     marginBottom: 20,
-    marginTop: 10, 
   },
   continueButtonText: {
-    color: '#FFF',
+    color: "#FFF",
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 });

@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as Notifications from 'expo-notifications';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function EnableNotificationsScreen({ navigation }) {
   // Store the push token if successfully obtained
   const [expoPushToken, setExpoPushToken] = useState(null);
@@ -22,10 +22,8 @@ export default function EnableNotificationsScreen({ navigation }) {
       // 1. Ask the user for permissions
       const { status } = await Notifications.requestPermissionsAsync();
       if (status !== 'granted') {
-        Alert.alert(
-          'Permission Denied',
-          'Notifications permission is required to stay updated. Please enable in your device settings.'
-        );
+        await updateNotificationServiceInDB("False");
+      navigation.navigate("MyProfile");
         return;
       }
 
@@ -34,20 +32,44 @@ export default function EnableNotificationsScreen({ navigation }) {
       const token = tokenResponse.data;
       setExpoPushToken(token);
 
-      Alert.alert('Notifications Enabled', `Your push token:\n\n${token}`);
-
       // 3. You could send this token to your backend for sending push notifications
       // For now, we'll just navigate away:
+      await updateNotificationServiceInDB("True");
       navigation.navigate("MyProfile");
     } catch (error) {
       console.error('Error enabling notifications:', error);
-      Alert.alert('Error', 'Something went wrong while requesting notifications permission.');
+      await updateNotificationServiceInDB("False");
+      navigation.navigate("MyProfile");
     }
   };
 
-  const handleMaybeLater = () => {
+  const handleMaybeLater = async () => {
     // If user chooses not to enable notifications
+    await updateNotificationServiceInDB("False");
     navigation.navigate("MyProfile");
+  };
+  // Helper to store user_notification_preference in DB
+  const updateNotificationServiceInDB = async (value) => {
+    // Build a FormData with user_notification_preference = True or False
+    const url = "https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo";
+    const formData = new FormData();
+    const uid = await AsyncStorage.getItem('user_uid');
+    const email = await AsyncStorage.getItem('user_email_id');
+    formData.append('user_uid', uid); // Example user ID
+    formData.append('user_email_id', email);
+    formData.append('user_notification_preference', value);
+    try {
+      const response = await fetch(url, {
+        method: "PUT",
+        body: formData,
+      });
+      if (response.ok) {
+        const result = await response.json();
+        console.log("Response from server:", result);
+      }
+    } catch (error) {
+      console.log("Error updating user data:", error);
+    }
   };
 
   return (

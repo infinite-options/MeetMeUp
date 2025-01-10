@@ -27,6 +27,10 @@ import Location2 from "./Profile/Location2";
 import AccountDetails from "./AccountDetails/AccountDetails";
 import AccountSetup1Login from './AccountSetup/AccountSetup1Login';  // Imported the newly created Login
 import MatchPreferences from "./Preferences/Preferences";
+import Preferences from "./Preferences/Preferences"
+import MatchProfileDisplay from "./Match/MatchProfileDisplay"
+import MatchPopUp from "./Match/MatchPopUp"
+import MatchPopUpTemp from "./Match/MatchPopUpTemp"
 import AccountSetup6Available from "./AccountSetup/AccountSetup6Available";
 import SelectionResults from "./Match/SelectionResults";
 import ViewProfile from "./Match/ViewProfile";
@@ -65,6 +69,8 @@ import ProfileBio from "./ProfileBio/ProfileBio.js";
 import VerifyPhoneNumber1 from "./VerifyYourAccount/VerifyPhoneNumber1.js";
 import VerifyPhoneNumber2 from "./VerifyYourAccount/VerifyPhoneNumber2.js";
 import AddDriversLicense from "./VerifyYourAccount/AddDriversLicense.js";
+import Login from "./AccountSetup/Login.js";
+import EditProfile from "./Profile/EditProfile.js";
 const Stack = createNativeStackNavigator();
 // const Stack = createStackNavigator();
 SplashScreen.preventAutoHideAsync();
@@ -98,7 +104,12 @@ export default function App() {
         <Stack.Screen name='AccountSetup4Create' component={AccountSetup4Create} />
       </Stack.Navigator>
   */}
+      {/* <Stack.Navigator initialRouteName='Start' screenOptions={{ headerShown: false }}> */}
       <Stack.Navigator initialRouteName='Start' screenOptions={{ headerShown: false }}>
+        <Stack.Screen name='Preferences' component={Preferences}/>
+       <Stack.Screen name='MatchProfileDisplay' component={MatchProfileDisplay}/> 
+       <Stack.Screen name='MatchPopUp' component={MatchPopUp}/>
+        <Stack.Screen name='MatchPopUpTemp' component={MatchPopUpTemp}/>
         <Stack.Screen name='Start' component={Start} />
         <Stack.Screen name="AgeVerification" component={AgeVerification} />
         <Stack.Screen name='LandingPage' component={LandingPage} />
@@ -108,6 +119,7 @@ export default function App() {
         <Stack.Screen name='TrialAccount' component={TrialAccount} />
         <Stack.Screen name='AccountSetup1Login' component={AccountSetup1Login}/>
         <Stack.Screen name='AccountSetup2Create' component={AccountSetup2Create} />
+        <Stack.Screen name='Login' component={Login} />
         <Stack.Screen name='PersonalDetails' component={PersonalDetails} />
         {/* Created ui prefered pages for personal details */}
         <Stack.Screen name='NameInput' component={NameInput} />
@@ -124,6 +136,7 @@ export default function App() {
         <Stack.Screen name="EnableLocationScreen" component={EnableLocationScreen} />
         <Stack.Screen name="EnableNotificationsScreen" component={EnableNotificationsScreen} />
         <Stack.Screen name="MyProfile" component={MyProfile} />
+        <Stack.Screen name="EditProfile" component={EditProfile} />
         <Stack.Screen name="DateAvailability" component={DateAvailability} />
         <Stack.Screen name="TypeOfDate" component={TypeOfDate} />
         <Stack.Screen name="AdditionalDetailsOne" component={AdditionalDetailsOne} />
@@ -152,6 +165,7 @@ export default function App() {
         <Stack.Screen name = "AccountDetails3" component={AccountDetails3}/>
         <Stack.Screen name='AccountSetup7Summary' component={AccountSetup7Summary} />
         <Stack.Screen name='MatchPreferences' component={MatchPreferences}/>
+        {/* <Stack.Screen name='Preferences' component={Preferences}/> */}
         <Stack.Screen name = "AccountSetup6Available" component={AccountSetup6Available}/>
         <Stack.Screen name ="SelectionResults" component={SelectionResults}/>
         <Stack.Screen name="ViewProfile" component={ViewProfile}/>

@@ -1,95 +1,58 @@
-import React, { useState} from "react";
-import {StatusBar, Platform, SafeAreaView,
+import React, { useState } from "react";
+import {
+  StatusBar,
+  Platform,
+  SafeAreaView,
   View,
   StyleSheet,
   TouchableOpacity,
   Pressable,
 } from "react-native";
-import { Text, TextInput } from "react-native-paper"; // Import TextInput from react-native-paper
+import { Text, TextInput } from "react-native-paper";
 import { Ionicons } from "@expo/vector-icons";
 import ProgressBar from "../src/Assets/Components/ProgressBar";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function NameInput({ navigation }) {
   const [formData, setFormData] = useState({
-    fullName: "",
+    firstName: "",
+    lastName: "",
   });
 
-  const isFormComplete = formData.fullName.trim() !== "";
-  const getUserData = async () => {
+  const isFormComplete = formData.firstName.trim() !== "" && formData.lastName.trim() !== "";
+
+  /**
+   * Store the user's name (firstName, lastName) in AsyncStorage.
+   * This will be retrieved later on the final step of profile completion.
+   */
+  const saveUserName = async (firstName, lastName) => {
     try {
-      const user_uid = await AsyncStorage.getItem('user_uid');
-      const user_email_id = await AsyncStorage.getItem('user_email_id');
-      
-      console.log("🔹 Retrieved User UID:", user_uid);
-      console.log("🔹 Retrieved User Email:", user_email_id);
-  
-      return { user_uid, user_email_id };
-    } catch (error) {
-      console.error("Error retrieving user data", error);
-      return null;
-    }
-  };
-  const saveUserName = async (fullName) => {
-    try {
-      await AsyncStorage.setItem('user_full_name', fullName);
+      await AsyncStorage.setItem("user_first_name", firstName);
+      await AsyncStorage.setItem("user_last_name", lastName);
+      console.log("✅ First Name & Last Name stored successfully");
     } catch (error) {
       console.error("Error saving name", error);
     }
   };
-  const splitName = (fullName) => {
-    const nameArray = fullName.trim().split(" ");
-    const firstName = nameArray[0];
-    const lastName = nameArray.length > 1 ? nameArray.slice(1).join(" ") : "";
-    return { firstName, lastName };
-  };
-  const updateUserName = async (fullName) => {
-    const userData = await getUserData();
-  
-    if (!userData?.user_uid || !userData?.user_email_id) {
-      console.error(" User UID or Email is missing.");
-      return;
-    }
-  
-    console.log("Sending to API:");
-    console.log("User UID:", userData.user_uid);
-    console.log("User Email:", userData.user_email_id);
-  
-    const { firstName, lastName } = splitName(fullName);
-  
-    const formData = new FormData();
-    formData.append("user_uid", userData.user_uid);
-    formData.append("user_email_id", userData.user_email_id);
-    formData.append("user_first_name", firstName);
-    formData.append("user_last_name", lastName);
-  
-    try {
-      const response = await fetch(
-        "https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo",
-        {
-          method: "PUT",
-          body: formData,
-        }
-      );
-      const result = await response.json();
-      console.log("API Response:", result);
-    } catch (error) {
-      console.error("Error updating user name:", error);
-    }
-  };
-  
+
   const handleContinue = async () => {
     if (isFormComplete) {
-      await updateUserName(formData.fullName);
-      await saveUserName(formData.fullName);
-      navigation.navigate("BirthdayInput"); 
+      // 1) Store the data for future usage
+      await saveUserName(formData.firstName, formData.lastName);
+
+      // 2) Navigate to next screen. We'll eventually call the API
+      //    from the final screen once all data is collected.
+      navigation.navigate("BirthdayInput");
     }
   };
 
   return (
     <SafeAreaView style={styles.container}>
       {/* Back Button */}
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+      <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => navigation.goBack()}
+      >
         <Ionicons name="arrow-back" size={28} color="red" />
       </TouchableOpacity>
 
@@ -100,11 +63,21 @@ export default function NameInput({ navigation }) {
       <View style={styles.content}>
         <Text style={styles.title}>What should we call you?</Text>
         <Text style={styles.subtitle}>Your full name will be public.</Text>
+
         <TextInput
-          label="Full Name" // Add floating label
-          mode="outlined" // Optional, choose "flat" or "outlined"
-          value={formData.fullName}
-          onChangeText={(text) => setFormData({ ...formData, fullName: text })}
+          label="First Name"
+          mode="outlined"
+          value={formData.firstName}
+          onChangeText={(text) => setFormData({ ...formData, firstName: text })}
+          style={styles.input}
+          outlineStyle={styles.textInputOutline}
+        />
+
+        <TextInput
+          label="Last Name"
+          mode="outlined"
+          value={formData.lastName}
+          onChangeText={(text) => setFormData({ ...formData, lastName: text })}
           style={styles.input}
           outlineStyle={styles.textInputOutline}
         />
@@ -128,12 +101,11 @@ export default function NameInput({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-        paddingHorizontal: 20,
-        backgroundColor: '#FFF',
-        justifyContent: 'flex-start', // Align content to the top
-    alignItems: 'stretch',
-    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+    paddingHorizontal: 20,
+    backgroundColor: "#FFF",
+    justifyContent: "flex-start",
+    alignItems: "stretch",
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
   backButton: {
     alignSelf: "flex-start",
@@ -144,24 +116,24 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   content: {
-    flex: 1, // Take up remaining space
+    flex: 1,
     justifyContent: "flex-start",
   },
   title: {
     fontSize: 26,
-        fontWeight: 'bold',
-        textAlign: 'left',
-        color: '#000',
-        marginBottom: 10,
+    fontWeight: "bold",
+    textAlign: "left",
+    color: "#000",
+    marginBottom: 10,
   },
   subtitle: {
     fontSize: 14,
-        color: 'gray',
-        textAlign: 'left',
-        marginBottom: 20,
+    color: "gray",
+    textAlign: "left",
+    marginBottom: 20,
   },
   input: {
-    marginBottom: 15, // Space between input fields
+    marginBottom: 15,
   },
   continueButton: {
     height: 50,
@@ -169,7 +141,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#E4423F",
     borderRadius: 30,
-    marginBottom: 20, // Ensure some spacing at the bottom
+    marginBottom: 20,
   },
   continueButtonText: {
     color: "#FFF",
@@ -178,13 +150,13 @@ const styles = StyleSheet.create({
   },
   textInputOutline: {
     borderWidth: 0,
-    borderColor: '#F9F9F9',
-    borderRadius:10,
+    borderColor: "#F9F9F9",
+    borderRadius: 10,
     flex: 1,
-        alignItems: 'center',
-        backgroundColor: '#F9F9F9',
-        paddingHorizontal: 15,
-        marginBottom: 20,
-        height: 50,
-},
+    alignItems: "center",
+    backgroundColor: "#F9F9F9",
+    paddingHorizontal: 15,
+    marginBottom: 20,
+    height: 50,
+  },
 });

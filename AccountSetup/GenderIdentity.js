@@ -11,13 +11,22 @@ import {
 } from 'react-native';
 import ProgressBar from '../src/Assets/Components/ProgressBar';
 import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage'; // <-- Import AsyncStorage
 
 export default function GenderIdentity({ navigation }) {
   const [selectedOption, setSelectedOption] = useState(null);
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
     if (selectedOption) {
-      // Navigate to the next screen or do whatever
+      try {
+        // Store the user's gender identity in AsyncStorage
+        await AsyncStorage.setItem('user_gender_identity', selectedOption);
+        console.log('Gender identity stored:', selectedOption);
+      } catch (error) {
+        console.error('Error storing user_gender_identity:', error);
+      }
+
+      // Navigate to the next screen
       navigation.navigate('SexualOrientationScreen', { selectedGender: selectedOption });
     }
   };
@@ -43,8 +52,9 @@ export default function GenderIdentity({ navigation }) {
       <ProgressBar startProgress={35} endProgress={40} />
 
       {/* Title / Subtitle */}
-      <Text style={styles.header}>What gender do you identify as?</Text>
-      <Text style={styles.subHeader}>Your gender will be public.</Text>
+      <View style={styles.content}>
+      <Text style={styles.title}>What gender do you identify as?</Text>
+      <Text style={styles.subtitle}>Your gender will be public.</Text>
 
       {/* Options List */}
       {genderOptions.map((option) => (
@@ -59,16 +69,12 @@ export default function GenderIdentity({ navigation }) {
           ]}
           onPress={() => setSelectedOption(option)}
         >
-          <Text
-            style={{
-              color: selectedOption === option ? '#FFF' : '#000',
-            }}
-          >
+          <Text style={{ color: selectedOption === option ? '#FFF' : '#000' }}>
             {option}
           </Text>
         </TouchableOpacity>
       ))}
-
+</View>
       {/* Continue Button */}
       <Pressable
         style={[
@@ -87,51 +93,53 @@ export default function GenderIdentity({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
         paddingHorizontal: 20,
         backgroundColor: '#FFF',
         justifyContent: 'flex-start', // Align content to the top
     alignItems: 'stretch',
-    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0, 
-      },
-      backButton: {
-          alignSelf: 'flex-start',
-          backgroundColor: '#F5F5F5',
-          borderRadius: 20,
-          padding: 8,
-          marginBottom: 20,
-      },
-  header: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 10,
-    color: '#000',
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
-  subHeader: {
+  backButton: {
+    alignSelf: 'flex-start',
+    backgroundColor: '#F5F5F5',
+    borderRadius: 20,
+    padding: 8,
+    marginBottom: 20,
+    marginTop: 30,
+  },
+  content: {
+    flex: 1,
+    justifyContent: "flex-start",
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#000",
+    marginBottom: 10,
+  },
+  subtitle: {
     fontSize: 14,
-    color: 'gray',
+    color: "#888",
     marginBottom: 20,
   },
   optionButton: {
     padding: 15,
     borderWidth: 1,
-    borderRadius: 25,
+    borderRadius: 30,
     marginVertical: 10,
     alignItems: 'center',
-    // backgroundColor & borderColor are set dynamically above
   },
   continueButton: {
-    height: 60,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#E4423F',
-    borderRadius: 25,
-    paddingVertical: 15,
-    marginBottom: 25, // Spacing at the bottom
+    height: 50,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#E4423F",
+    borderRadius: 30,
+    marginBottom: 20,
   },
   continueButtonText: {
-    color: '#FFF',
+    color: "#FFF",
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 });

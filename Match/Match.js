@@ -19,7 +19,8 @@ const Match = () => {
     useEffect(() => {
         const initialize = async () => {
             try {
-                const storedUserId = await AsyncStorage.getItem('user_uid');
+                // const storedUserId = await AsyncStorage.getItem('user_uid');
+                const storedUserId = '100-000004';
                 setUserId(storedUserId);
 
                 if (storedUserId) {

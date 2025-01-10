@@ -2,89 +2,84 @@ import React, { useState } from "react";
 import {
   View,
   Text,
-StatusBar, Platform,
-  TextInput,
+  StatusBar,
+  Platform,
   StyleSheet,
   TouchableOpacity,
   Pressable,
   SafeAreaView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import ProgressBar from '../src/Assets/Components/ProgressBar';
+import AsyncStorage from "@react-native-async-storage/async-storage"; // <-- Import AsyncStorage
+import ProgressBar from "../src/Assets/Components/ProgressBar";
+
 export default function HaveChildren({ navigation }) {
-  const [formData, setFormData] = useState({
-    fullName: "",
-    birthdate: "",
-    heightFt: 0,
-    heightIn: 0,
-    numChildren: 0,
-  });
+  // We only need numChildren on this screen
+  const [numChildren, setNumChildren] = useState(0);
 
-  const handleIncrement = (name) => {
-    setFormData({ ...formData, [name]: formData[name] + 1 });
+  // Increment/Decrement logic
+  const handleIncrement = () => setNumChildren((prev) => prev + 1);
+  const handleDecrement = () => setNumChildren((prev) => (prev > 0 ? prev - 1 : 0));
+
+  // Check if form is complete (e.g., if user has chosen a number)
+  const isFormComplete = numChildren !== null; // or numChildren >= 0
+
+  // On Continue, store in AsyncStorage and move on
+  const handleContinue = async () => {
+    if (!isFormComplete) return;
+
+    try {
+      await AsyncStorage.setItem("user_kids", numChildren.toString());
+      console.log("Number of children saved to AsyncStorage:", numChildren);
+    } catch (error) {
+      console.error("Error saving user_kids:", error);
+    }
+
+    // Navigate to the next screen
+    navigation.navigate("AssignedSex");
   };
-
-  const handleDecrement = (name) => {
-    setFormData({
-      ...formData,
-      [name]: formData[name] > 0 ? formData[name] - 1 : 0,
-    });
-  };
-
-  const isFormComplete =
-    formData.numChildren !== "" ;
 
   return (
     <SafeAreaView style={styles.container}>
       {/* Back Button */}
-                  <TouchableOpacity
-                      style={styles.backButton}
-                      onPress={() => navigation.goBack()}
-                  >
-                      <Ionicons name="arrow-back" size={28} color="red" />
-                  </TouchableOpacity>
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+        <Ionicons name="arrow-back" size={28} color="red" />
+      </TouchableOpacity>
 
       {/* Progress Bar */}
-        <ProgressBar startProgress={30} endProgress={30} />
+      <ProgressBar startProgress={30} endProgress={30} />
 
       {/* Title and Subtitle */}
       <View style={styles.content}>
-      <Text style={styles.title}>How many children do you have?</Text>
-      <Text style={styles.subtitle}>
-        The number of children you have will be public.
-      </Text>
+        <Text style={styles.title}>How many children do you have?</Text>
+        <Text style={styles.subtitle}>The number of children you have will be public.</Text>
 
-      {/* Input Fields */}
+        {/* Number of Children Section */}
+        <View style={styles.fieldWrapperFull}>
+          <Text style={styles.fieldLabel}># of Children</Text>
+          <View style={styles.field}>
+            {/* Display the current number of children */}
+            <Text style={styles.fieldValue}>{numChildren}</Text>
 
+            {/* Decrement Button */}
+            <TouchableOpacity onPress={handleDecrement} style={styles.fieldButton}>
+              <Text style={styles.fieldButtonText}>−</Text>
+            </TouchableOpacity>
 
-      {/* Number of Children Section */}
-      <View style={styles.fieldWrapperFull}>
-        <Text style={styles.fieldLabel}># of Children</Text>
-        <View style={styles.field}>
-        <Text style={styles.fieldValue}>{formData.numChildren}</Text>
-          <TouchableOpacity
-            onPress={() => handleDecrement("numChildren")}
-            style={styles.fieldButton}
-          >
-            <Text style={styles.fieldButtonText}>−</Text>
-          </TouchableOpacity>
-          <View style={styles.separator} />
-          <TouchableOpacity
-            onPress={() => handleIncrement("numChildren")}
-            style={styles.fieldButton}
-          >
-            <Text style={styles.fieldButtonText}>+</Text>
-          </TouchableOpacity>
+            <View style={styles.separator} />
+
+            {/* Increment Button */}
+            <TouchableOpacity onPress={handleIncrement} style={styles.fieldButton}>
+              <Text style={styles.fieldButtonText}>+</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
-      </View>
+
       {/* Continue Button */}
       <Pressable
-        style={[
-          styles.continueButton,
-          { backgroundColor: isFormComplete ? "#E4423F" : "#ccc" },
-        ]}
-        onPress={isFormComplete ? () => navigation.navigate("AssignedSex") : null}
+        style={[styles.continueButton, { backgroundColor: isFormComplete ? "#E4423F" : "#ccc" }]}
+        onPress={handleContinue}
         disabled={!isFormComplete}
       >
         <Text style={styles.continueButtonText}>Continue</Text>
@@ -94,25 +89,23 @@ export default function HaveChildren({ navigation }) {
 }
 
 const styles = StyleSheet.create({
- 
   container: {
     flex: 1,
-    justifyContent: 'center',
     paddingHorizontal: 20,
-    backgroundColor: '#FFF',
-    justifyContent: 'flex-start', // Align content to the top
-    alignItems: 'stretch',
-    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
-},
-backButton: {
-    alignSelf: 'flex-start',
-    backgroundColor: '#F5F5F5',
+    backgroundColor: "#FFF",
+    justifyContent: "flex-start",
+    alignItems: "stretch",
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+  },
+  backButton: {
+    alignSelf: "flex-start",
+    backgroundColor: "#F5F5F5",
     borderRadius: 20,
     padding: 8,
     marginBottom: 20,
     marginTop: 30,
-},
-content: {
+  },
+  content: {
     flex: 1,
     justifyContent: "flex-start",
     paddingHorizontal: 20,
@@ -127,22 +120,6 @@ content: {
     fontSize: 14,
     color: "#888",
     marginBottom: 20,
-  },
-  input: {
-    height: 50,
-    borderRadius: 10,
-    paddingHorizontal: 15,
-    backgroundColor: "#F9F9F9",
-    marginBottom: 15,
-  },
-  row: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 20,
-  },
-  fieldWrapper: {
-    flex: 1,
-    marginRight: 10,
   },
   fieldWrapperFull: {
     width: "100%",
@@ -163,8 +140,7 @@ content: {
     height: 50,
   },
   fieldValue: {
-    textAlign: "left",
-    flex:1,
+    flex: 1,
     fontSize: 16,
     fontWeight: "bold",
   },
@@ -181,13 +157,12 @@ content: {
     backgroundColor: "#ccc",
   },
   continueButton: {
-    height: 60,
+    height: 50,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#E4423F",
-    borderRadius: 25,
-    marginHorizontal: 20,
-    marginBottom: 20, // Ensure some spacing at the bottom
+    borderRadius: 30,
+    marginBottom: 20,
   },
   continueButtonText: {
     color: "#FFF",
@@ -195,4 +170,3 @@ content: {
     fontWeight: "bold",
   },
 });
-

@@ -1,294 +1,4 @@
-// import React, { useState } from "react";
-// import {
-//   SafeAreaView,
-//   Platform,
-//   StatusBar,
-//   View,
-//   Text,
-//   TouchableOpacity,
-//   StyleSheet,
-//   Pressable,
-//   Image,
-// } from "react-native";
-// import { Ionicons } from "@expo/vector-icons";
-// import ProgressBar from "../src/Assets/Components/ProgressBar";
-// import * as ImagePicker from "expo-image-picker";
-// import * as DocumentPicker from "expo-document-picker";
-// import { Video } from "expo-av";
-
-// export default function AddMediaScreen({ navigation }) {
-//   const [video, setVideo] = useState(null);
-//   const [photos, setPhotos] = useState([null, null, null]);
-
-//   // Handle video upload
-//   const handleVideoUpload = async () => {
-//     const result = await DocumentPicker.getDocumentAsync({
-//       type: "video/*",
-//     });
-
-//     if (result.type === "success") {
-//       setVideo(result.uri);
-//     }
-//   };
-
-//   // Handle photo upload
-//   const handlePhotoUpload = async (index) => {
-//     const result = await ImagePicker.launchImageLibraryAsync({
-//       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-//       quality: 1,
-//     });
-
-//     if (!result.canceled) {
-//       const updatedPhotos = [...photos];
-//       updatedPhotos[index] = result.assets[0].uri;
-//       setPhotos(updatedPhotos);
-//     }
-//   };
-
-//   // Remove photo
-//   const handleRemovePhoto = (index) => {
-//     const updatedPhotos = [...photos];
-//     updatedPhotos[index] = null;
-//     setPhotos(updatedPhotos);
-//   };
-
-//   // Remove video
-//   const handleRemoveVideo = () => {
-//     setVideo(null);
-//   };
-
-//   const isFormComplete = video && photos.some((photo) => photo !== null);
-
-//   const handleContinue = () => {
-//     if (isFormComplete) {
-//       navigation.navigate("LocationScreen", { video, photos });
-//     }
-//   };
-
-//   return (
-//     <SafeAreaView style={styles.container}>
-//       {/* Back button */}
-//       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-//         <Ionicons name="arrow-back" size={28} color="red" />
-//       </TouchableOpacity>
-
-//       {/* Progress Bar */}
-//       <ProgressBar startProgress={70} endProgress={80} />
-
-//       {/* Title & Subtitle */}
-//       <Text style={styles.title}>Add your video & photos</Text>
-//       <Text style={styles.subtitle}>Please upload a short video introducing yourself.</Text>
-
-//       {/* Trial Notice */}
-//       <View style={styles.trialVersion}>
-//         <Text style={styles.trialHeading}>TRIAL VERSION</Text>
-//         <Text style={styles.trialBody}>
-//           For the testing phase, please keep your video <Text style={styles.bold}>short</Text>.
-//           {"\n"}Example: “Hi! I’m Hannah and I enjoy outdoor activities.”
-//           {"\n\n"}We are also unable to crop your photos for the testing phase, so please use{" "}
-//           <Text style={styles.bold}>centered photos</Text>.
-//         </Text>
-//       </View>
-
-//       {/* Video Section */}
-//       <View style={styles.mediaContainer}>
-//         {video ? (
-//           <View style={styles.uploadedVideoContainer}>
-//             <Video
-//               source={{ uri: video }}
-//               style={styles.video}
-//               useNativeControls
-//               resizeMode="contain"
-//             />
-//             <TouchableOpacity onPress={handleRemoveVideo} style={styles.removeButton}>
-//               <Ionicons name="trash-outline" size={20} color="white" />
-//               <Text style={styles.removeButtonText}>Remove Video</Text>
-//             </TouchableOpacity>
-//           </View>
-//         ) : (
-//           <TouchableOpacity onPress={handleVideoUpload} style={styles.uploadVideoButton}>
-//             <Ionicons name="cloud-upload-outline" size={20} color="#E4423F" />
-//             <Text style={styles.uploadVideoText}>Upload Video File</Text>
-//           </TouchableOpacity>
-//         )}
-//       </View>
-
-//       {/* Photos Section */}
-//       <View style={styles.photoContainer}>
-//         {photos.map((photo, index) => (
-//           <View key={index} style={styles.photoWrapper}>
-//             {photo ? (
-//               <View style={styles.photo}>
-//                 <Image source={{ uri: photo }} style={styles.image} />
-//                 <TouchableOpacity
-//                   onPress={() => handleRemovePhoto(index)}
-//                   style={styles.removePhotoButton}
-//                 >
-//                   <Ionicons name="trash-outline" size={20} color="white" />
-//                 </TouchableOpacity>
-//               </View>
-//             ) : (
-//               <Pressable
-//                 style={styles.photoPlaceholder}
-//                 onPress={() => handlePhotoUpload(index)}
-//               >
-//                 <Ionicons name="add" size={24} color="red" />
-//               </Pressable>
-//             )}
-//           </View>
-//         ))}
-//       </View>
-
-//       {/* Continue Button */}
-//       <Pressable
-//         style={[
-//           styles.continueButton,
-//           { backgroundColor: isFormComplete ? "#E4423F" : "#ccc" },
-//         ]}
-//         onPress={handleContinue}
-//         disabled={!isFormComplete}
-//       >
-//         <Text style={styles.continueButtonText}>Continue</Text>
-//       </Pressable>
-//     </SafeAreaView>
-//   );
-// }
-
-// // STYLES
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: "#FFF",
-//     justifyContent: "flex-start",
-//     alignItems: "stretch",
-//     paddingHorizontal: 20,
-//     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
-//   },
-//   backButton: {
-//     alignSelf: "flex-start",
-//     backgroundColor: "#F5F5F5",
-//     borderRadius: 20,
-//     padding: 8,
-//     marginBottom: 20,
-//     marginTop: 30,
-//   },
-//   title: {
-//     fontSize: 24,
-//     fontWeight: "bold",
-//     color: "#000",
-//     marginBottom: 10,
-//   },
-//   subtitle: {
-//     fontSize: 14,
-//     color: "gray",
-//     marginBottom: 20,
-//   },
-//   trialVersion: {
-//     marginBottom: 20,
-//   },
-//   trialHeading: {
-//     fontSize: 16,
-//     fontWeight: "bold",
-//     marginBottom: 8,
-//     textTransform: "uppercase",
-//   },
-//   trialBody: {
-//     fontSize: 14,
-//     color: "#000",
-//     lineHeight: 20,
-//   },
-//   bold: {
-//     fontWeight: "bold",
-//   },
-//   mediaContainer: {
-//     marginBottom: 20,
-//   },
-//   uploadVideoButton: {
-//     flexDirection: "row",
-//     alignItems: "center",
-//     borderRadius: 25,
-//     borderWidth: 2,
-//     borderColor: "#E4423F",
-//     paddingVertical: 12,
-//     paddingHorizontal: 20,
-//     justifyContent: "center",
-//   },
-//   uploadVideoText: {
-//     color: "#E4423F",
-//     fontWeight: "bold",
-//     fontSize: 16,
-//     marginLeft: 8,
-//   },
-//   uploadedVideoContainer: {
-//     alignItems: "center",
-//     marginBottom: 20,
-//   },
-//   video: {
-//     width: "100%",
-//     height: 200,
-//     marginBottom: 10,
-//   },
-//   removeButton: {
-//     flexDirection: "row",
-//     alignItems: "center",
-//     backgroundColor: "#E4423F",
-//     padding: 10,
-//     borderRadius: 25,
-//   },
-//   removeButtonText: {
-//     color: "white",
-//     fontSize: 14,
-//     marginLeft: 5,
-//   },
-//   photoContainer: {
-//     flexDirection: "row",
-//     justifyContent: "space-between",
-//     marginBottom: 30,
-//   },
-//   photoWrapper: {
-//     flex: 1,
-//     marginHorizontal: 5,
-//   },
-//   photoPlaceholder: {
-//     width: "100%",
-//     aspectRatio: 1,
-//     backgroundColor: "#F5F5F5",
-//     borderRadius: 8,
-//     justifyContent: "center",
-//     alignItems: "center",
-//   },
-//   photo: {
-//     width: "100%",
-//     aspectRatio: 1,
-//     position: "relative",
-//   },
-//   image: {
-//     width: "100%",
-//     height: "100%",
-//     borderRadius: 8,
-//   },
-//   removePhotoButton: {
-//     position: "absolute",
-//     top: 5,
-//     right: 5,
-//     backgroundColor: "#E4423F",
-//     padding: 5,
-//     borderRadius: 15,
-//   },
-//   continueButton: {
-//     height: 60,
-//     borderRadius: 25,
-//     justifyContent: "center",
-//     alignItems: "center",
-//     marginBottom: 20,
-//   },
-//   continueButtonText: {
-//     color: "#FFF",
-//     fontSize: 18,
-//     fontWeight: "bold",
-//   },
-// });
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   SafeAreaView,
   View,
@@ -299,73 +9,288 @@ import {
   Image,
   Platform,
   StatusBar,
+  Alert,
+  ActivityIndicator,
+  ScrollView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import ProgressBar from "../src/Assets/Components/ProgressBar";
 import * as ImagePicker from "expo-image-picker";
 import { Video } from "expo-av";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function AddMediaScreen({ navigation }) {
-  const [video, setVideo] = useState(null);
+  // Basic user info from AsyncStorage
+  const [userId, setUserId] = useState(null);
+  const [userEmail, setUserEmail] = useState(null);
+
+  // Limit to 3 photos. If you already have server data, you can fill these slots.
+  // Example: [null, null, null] by default.
   const [photos, setPhotos] = useState([null, null, null]);
+  const [delphotos,setdelphotos] = useState([null,null,null]);
 
-  // Handle video upload
-  const handleVideoUpload = async () => {
+  // Single video slot
+  const [videoUri, setVideoUri] = useState(null);
+  const [delvideoUri,setdelvideoUri] = useState(null);
+  const videoRef = useRef(null);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+
+  // For showing a loading overlay while uploading
+  const [isLoading, setIsLoading] = useState(false);
+  useFocusEffect(
+    React.useCallback(() => {
+      // Runs on every focus
+      if (videoRef.current) {
+        // Pause & reset the playback to 0 if you want a fresh start
+        videoRef.current.setPositionAsync(0); // optional: jump to start
+        videoRef.current.pauseAsync();
+        setIsVideoPlaying(false);
+      }
+    }, [])
+  );
+
+  // On mount: request permissions & fetch user data from server
+  useEffect(() => {
+    const requestPermissionsAndFetchUserData = async () => {
+      // 1) Ask for photo library permissions
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== "granted") {
+        Alert.alert(
+          "Permission Required",
+          "This app needs permission to access your photo library."
+        );
+      }
+
+      // 2) Get user info from AsyncStorage
+      try {
+        const storedUserId = await AsyncStorage.getItem("user_uid");
+        const storedUserEmail = await AsyncStorage.getItem("user_email_id");
+        console.log("Stored user data:", storedUserId, storedUserEmail);
+        if (storedUserId && storedUserEmail) {
+          setUserId(storedUserId);
+          setUserEmail(storedUserEmail);
+          await fetchUserData(storedUserId);
+        } else {
+          Alert.alert("User data not found", "Please log in again.");
+          navigation.navigate("Login");
+        }
+      } catch (e) {
+        console.error("Error fetching user data from AsyncStorage", e);
+      }
+    };
+
+    requestPermissionsAndFetchUserData();
+  }, []);
+
+  // Fetch existing images/video from your backend
+  const fetchUserData = async (uid) => {
     try {
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Videos,
-        allowsEditing: true,
-        quality: 1,
-      });
-
-      if (!result.canceled && result.assets?.[0].uri) {
-        setVideo(result.assets[0].uri);
-      } else {
-        console.log("Video picker canceled or no URI returned.");
+      const response = await axios.get(
+        `https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo/${uid}`
+      );
+      const fetchedData = response.data.result[0] || {};
+      console.log("Fetched user data:", fetchedData);
+  
+      // ========== Photo handling (unchanged) ==========
+      if (fetchedData.user_photo_url) {
+        const imageArray = JSON.parse(fetchedData.user_photo_url);
+        // We only have 3 slots, fill them from the array
+        const newPhotos = [null, null, null];
+        imageArray.forEach((uri, idx) => {
+          if (idx < 3) newPhotos[idx] = uri;
+        });
+        console.log("fetched photos:", newPhotos);
+        setPhotos(newPhotos);
+      }
+  
+      // ========== Video handling (Option B) ==========
+      if (fetchedData.user_video_url) {
+        let rawVideoUrl = fetchedData.user_video_url;
+  
+        // Attempt to parse if it looks like a JSON string
+        try {
+          rawVideoUrl = JSON.parse(rawVideoUrl); 
+          // e.g. "\"https://s3.us-west-1.amazonaws.com/...\"" -> "https://s3.us-west-1.amazonaws.com/..."
+        } catch (err) {
+          console.warn("Could not JSON-parse user_video_url. Using as-is:", err);
+        }
+  
+        // If there's still extra quotes, you can remove them manually:
+        if (
+          typeof rawVideoUrl === 'string' &&
+          rawVideoUrl.startsWith('"') &&
+          rawVideoUrl.endsWith('"')
+        ) {
+          rawVideoUrl = rawVideoUrl.slice(1, -1);
+        }
+  
+        console.log("Cleaned fetched video url:", rawVideoUrl);
+        setVideoUri(rawVideoUrl);
       }
     } catch (error) {
-      console.error("Error uploading video:", error);
-      alert("There was an issue uploading the video. Please try again.");
+      console.error("Error fetching user data", error);
+      Alert.alert("Error", "Failed to fetch existing media. Please try again later.");
     }
   };
 
-  // Remove video
+  // Handle picking an image for a given slot (0..2)
+  const handlePickImage = async (slotIndex) => {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        quality: 0.5,
+      });
+
+      if (!result.canceled && result.assets?.[0]?.uri) {
+        const newPhotos = [...photos];
+        newPhotos[slotIndex] = result.assets[0].uri;
+        setPhotos(newPhotos);
+      }
+    } catch (error) {
+      console.error("Error picking image:", error);
+      Alert.alert("Error", "There was an issue processing the image.");
+    }
+  };
+
+  // Remove a photo from a given slot
+  const handleRemovePhoto = (slotIndex) => {
+    const newPhotos = [...photos];
+
+    newPhotos[slotIndex] = null;
+    setPhotos(newPhotos);
+
+  };
+
+  // Handle picking a video
+  const handleVideoUpload = async () => {
+    try {
+      // If you want library instead of camera, un-comment below:
+      const result = await ImagePicker.launchImageLibraryAsync({
+      // const result = await ImagePicker.launchCameraAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Videos,
+        allowsEditing: true,
+        quality: 0.5,
+      });
+
+      if (!result.canceled && result.assets?.[0]?.uri) {
+        setVideoUri(result.assets[0].uri);
+        setIsVideoPlaying(false);
+      }
+    } catch (error) {
+      console.error("Error picking video:", error);
+      Alert.alert("Error", "There was an issue processing the video.");
+    }
+  };
+
+  // Remove the video
   const handleRemoveVideo = () => {
-    setVideo(null);
+    setVideoUri(null);
+    setIsVideoPlaying(false);
+
   };
 
-  // Handle photo upload
-  const handlePhotoUpload = async (index) => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      const updatedPhotos = [...photos];
-      updatedPhotos[index] = result.assets[0].uri;
-      setPhotos(updatedPhotos);
+  // Toggle video play/pause
+  const handlePlayPause = async () => {
+    if (!videoRef.current) return;
+    if (isVideoPlaying) {
+      await videoRef.current.pauseAsync();
+      setIsVideoPlaying(false);
+    } else {
+      await videoRef.current.playAsync();
+      setIsVideoPlaying(true);
     }
   };
 
-  // Remove photo
-  const handleRemovePhoto = (index) => {
-    const updatedPhotos = [...photos];
-    updatedPhotos[index] = null;
-    setPhotos(updatedPhotos);
+  // Upload images and video to backend
+  const uploadMediaToBackend = async () => {
+    if (!userId || !userEmail) {
+      Alert.alert("Error", "User ID or email missing. Please log in again.");
+      return;
+    }
+
+    setIsLoading(true);
+
+    const uploadData = new FormData();
+    uploadData.append("user_uid", userId);
+    console.log("User ID:", userId);
+    uploadData.append("user_email_id", userEmail);
+    console.log("User Email:", userEmail);
+
+    // Append each photo if it exists
+    // photos.forEach((uri, index) => {
+    //   if (uri) {
+    //     uploadData.append(`img_${index}`, {
+    //       uri,
+    //       type: "image/jpeg",
+    //       name: `img_${index}.jpg`,
+    //     });
+    //   }
+    //   console.log("Photos:", uri, index);
+    // });
+
+    // Append video if it exists
+    if (videoUri) {
+      uploadData.append("user_video", {
+        uri: videoUri,
+        type: "video/mp4",
+        name: "video_filename.mp4",
+      });
+      console.log("Appending user_video:", videoUri);
+    }
+    
+      // console.log("Payload",uploadData);
+    try {
+      const response = await axios.put(
+        "https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo",
+        uploadData,
+        { headers: { "Content-Type": "multipart/form-data" } }
+      );
+      
+      if (response.status === 200) {
+        console.log("Media uploaded successfully:", response.data);
+        Alert.alert("Success", "Media uploaded successfully!");
+      } else {
+        console.error("Failed to upload media:", response);
+        Alert.alert("Error", "Failed to upload media to the server.");
+      }
+    } catch (error) {
+      console.error("Upload Error:", error);
+      if (error.response) {
+        console.error("Error Response:", error.response);
+        Alert.alert("Error", `Error: ${error.response.status} - ${error.response.statusText}`);
+      } else if (error.request) {
+        console.error("Error Request:", error.request);
+        Alert.alert("Error", "Network error. Please check your internet connection.");
+      } else {
+        console.error("Error Message:", error.message);
+        Alert.alert("Error", "Something went wrong while uploading.");
+      }
+    }
   };
 
-  const isFormComplete = video && photos.some((photo) => photo !== null);
+  const isFormComplete = photos.some((p) => p !== null) || videoUri;
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
     if (isFormComplete) {
-      navigation.navigate("LocationScreen", { video, photos });
+      await uploadMediaToBackend();
+      navigation.navigate('LocationScreen',{photos,videoUri});
     }
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Back button */}
+      <ScrollView style={{ flex: 1 }}>
+      {isLoading && (
+        <View style={styles.loadingOverlay}>
+          <ActivityIndicator size="large" color="#E4423F" />
+          <Text style={{ color: "#E4423F", marginTop: 10 }}>Uploading...</Text>
+        </View>
+      )}
+
+      {/* Back Button */}
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
         <Ionicons name="arrow-back" size={28} color="red" />
       </TouchableOpacity>
@@ -373,69 +298,99 @@ export default function AddMediaScreen({ navigation }) {
       {/* Progress Bar */}
       <ProgressBar startProgress={70} endProgress={80} />
 
-      {/* Title & Subtitle */}
-      <Text style={styles.title}>Add your video & photos</Text>
-      <Text style={styles.subtitle}>Please upload a short video introducing yourself.</Text>
-
-      {/* Trial Notice */}
-      <View style={styles.trialVersion}>
-        <Text style={styles.trialHeading}>TRIAL VERSION</Text>
-        <Text style={styles.trialBody}>
-          For the testing phase, please keep your video <Text style={styles.bold}>short</Text>.
-          {"\n"}Example: “Hi! I’m Hannah and I enjoy outdoor activities.”
-          {"\n\n"}We are also unable to crop your photos for the testing phase, so please use{" "}
-          <Text style={styles.bold}>centered photos</Text>.
+      
+        {/* Title & Subtitle */}
+        <View style={styles.content}>
+        <Text style={styles.title}>Add your video & photos</Text>
+        <Text style={styles.subtitle}>
+          Please upload a short video introducing yourself.
         </Text>
-      </View>
 
-      {/* Video Section */}
-      <View style={styles.mediaContainer}>
-        {video ? (
-          <View style={styles.uploadedVideoContainer}>
-            <Video
-              source={{ uri: video }}
-              style={styles.video}
-              useNativeControls
-              resizeMode="contain"
-            />
-            <TouchableOpacity onPress={handleRemoveVideo} style={styles.removeButton}>
-              <Ionicons name="trash-outline" size={20} color="white" />
-              <Text style={styles.removeButtonText}>Remove Video</Text>
-            </TouchableOpacity>
-          </View>
-        ) : (
-          <TouchableOpacity onPress={handleVideoUpload} style={styles.uploadVideoButton}>
-            <Ionicons name="cloud-upload-outline" size={20} color="#E4423F" />
-            <Text style={styles.uploadVideoText}>Upload Video File</Text>
-          </TouchableOpacity>
-        )}
-      </View>
+        {/* Trial Notice */}
+        <View style={styles.trialVersion}>
+          <Text style={styles.trialHeading}>TRIAL VERSION</Text>
+          <Text style={styles.trialBody}>
+            For the testing phase, please keep your video{" "}
+            <Text style={styles.bold}>short</Text>.
+            {"\n"}Example: “Hi! I’m Hannah and I enjoy outdoor activities.”
+            {"\n\n"}We are also unable to crop your photos for the testing phase,
+            so please use <Text style={styles.bold}>centered photos</Text>.
+          </Text>
+        </View>
 
-      {/* Photos Section */}
-      <View style={styles.photoContainer}>
-        {photos.map((photo, index) => (
-          <View key={index} style={styles.photoWrapper}>
-            {photo ? (
-              <View style={styles.photo}>
-                <Image source={{ uri: photo }} style={styles.image} />
-                <TouchableOpacity
-                  onPress={() => handleRemovePhoto(index)}
-                  style={styles.removePhotoButton}
-                >
-                  <Ionicons name="trash-outline" size={20} color="white" />
+        {/* Video Section */}
+        <View style={styles.mediaContainer}>
+          {videoUri ? (
+            <View style={styles.videoWrapper}>
+              <Video
+                ref={videoRef}
+                source={{ uri: videoUri }}
+                style={styles.video}
+                resizeMode="cover"
+                // Let the video have built-in controls:
+  useNativeControls
+
+  // Attempt to auto-play
+  shouldPlay={false}
+                onPlaybackStatusUpdate={(status) => {
+                  if (!status.isLoaded) return;
+                  setIsVideoPlaying(status.isPlaying);
+                }}
+                // Print errors to console
+  onError={(err) => console.log("VIDEO ERROR:", err)}
+              />
+              {/* Center play overlay if paused */}
+              {!isVideoPlaying && (
+                <TouchableOpacity style={styles.playOverlay} onPress={handlePlayPause}>
+                  <Ionicons name="play" size={48} color="#FFF" />
                 </TouchableOpacity>
-              </View>
-            ) : (
-              <Pressable
-                style={styles.photoPlaceholder}
-                onPress={() => handlePhotoUpload(index)}
-              >
-                <Ionicons name="add" size={24} color="red" />
-              </Pressable>
-            )}
-          </View>
-        ))}
-      </View>
+              )}
+              {/* "X" in top-right */}
+              <TouchableOpacity onPress={handleRemoveVideo} style={styles.removeIconTopRight}>
+                <View style={styles.removeIconBackground}>
+                  <Ionicons name="close" size={20} color="#FFF" />
+                </View>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <TouchableOpacity onPress={handleVideoUpload} style={styles.uploadVideoButton}>
+              <Ionicons name="cloud-upload-outline" size={20} color="#E4423F" />
+              <Text style={styles.uploadVideoText}>Upload Video File</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+
+        {/* Photos Section (3 boxes) */}
+        <View style={styles.photoBoxesRow}>
+          {photos.map((photoUri, idx) => (
+            <View key={idx} style={styles.photoBox}>
+              {photoUri ? (
+                <>
+                  <Image source={{ uri: photoUri }} style={styles.photoImage} />
+                  {/* "X" in top-right */}
+                  <TouchableOpacity
+                    onPress={() => handleRemovePhoto(idx)}
+                    style={styles.removeIconTopRight}
+                  >
+                    <View style={styles.removeIconBackground}>
+                      <Ionicons name="close" size={20} color="#FFF" />
+                    </View>
+                  </TouchableOpacity>
+                </>
+              ) : (
+                <Pressable
+                  style={styles.emptyPhotoBox}
+                  onPress={() => handlePickImage(idx)}
+                >
+                  <Ionicons name="add" size={24} color="red" />
+                </Pressable>
+              )}
+            </View>
+          ))}
+        </View>
+        </View>
+      </ScrollView>
+      
 
       {/* Continue Button */}
       <Pressable
@@ -444,7 +399,7 @@ export default function AddMediaScreen({ navigation }) {
           { backgroundColor: isFormComplete ? "#E4423F" : "#ccc" },
         ]}
         onPress={handleContinue}
-        disabled={!isFormComplete}
+        disabled={!isFormComplete || isLoading}
       >
         <Text style={styles.continueButtonText}>Continue</Text>
       </Pressable>
@@ -462,6 +417,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
+  loadingOverlay: {
+    position: "absolute",
+    zIndex: 999,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(255,255,255,0.7)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
   backButton: {
     alignSelf: "flex-start",
     backgroundColor: "#F5F5F5",
@@ -469,6 +435,10 @@ const styles = StyleSheet.create({
     padding: 8,
     marginBottom: 20,
     marginTop: 30,
+  },
+  content: {
+    flex: 1,
+    justifyContent: "flex-start",
   },
   title: {
     fontSize: 24,
@@ -478,7 +448,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 14,
-    color: "gray",
+    color: "#888",
     marginBottom: 20,
   },
   trialVersion: {
@@ -501,6 +471,39 @@ const styles = StyleSheet.create({
   mediaContainer: {
     marginBottom: 20,
   },
+  // 326:428 => aspectRatio ~ 0.76
+  videoWrapper: {
+    position: "relative",
+    width: "100%",
+    aspectRatio: 0.76,
+    backgroundColor: "#000",
+    marginBottom: 15,
+    borderRadius: 10,
+    overflow: "hidden",
+  },
+  video: {
+    width: "100%",
+    height: "100%",
+  },
+  playOverlay: {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: [{ translateX: -24 }, { translateY: -24 }],
+    backgroundColor: "rgba(0,0,0,0.3)",
+    borderRadius: 50,
+    padding: 10,
+  },
+  removeIconTopRight: {
+    position: "absolute",
+    top: 5,
+    right: 5,
+  },
+  removeIconBackground: {
+    backgroundColor: "#E4423F",
+    borderRadius: 20,
+    padding: 4,
+  },
   uploadVideoButton: {
     flexDirection: "row",
     alignItems: "center",
@@ -517,68 +520,39 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginLeft: 8,
   },
-  uploadedVideoContainer: {
-    alignItems: "center",
-    marginBottom: 20,
-  },
-  video: {
-    width: "100%",
-    height: 200,
-    marginBottom: 10,
-  },
-  removeButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#E4423F",
-    padding: 10,
-    borderRadius: 25,
-  },
-  removeButtonText: {
-    color: "white",
-    fontSize: 14,
-    marginLeft: 5,
-  },
-  photoContainer: {
+
+  // Photo boxes in a row (3 boxes)
+  photoBoxesRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 30,
+    marginBottom: 20,
   },
-  photoWrapper: {
-    flex: 1,
-    marginHorizontal: 5,
-  },
-  photoPlaceholder: {
-    width: "100%",
+  photoBox: {
+    width: "30%",
     aspectRatio: 1,
+    borderRadius: 10,
     backgroundColor: "#F5F5F5",
-    borderRadius: 8,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  photo: {
-    width: "100%",
-    aspectRatio: 1,
+    overflow: "hidden",
     position: "relative",
   },
-  image: {
-    width: "100%",
-    height: "100%",
-    borderRadius: 8,
-  },
-  removePhotoButton: {
-    position: "absolute",
-    top: 5,
-    right: 5,
-    backgroundColor: "#E4423F",
-    padding: 5,
-    borderRadius: 15,
-  },
-  continueButton: {
-    height: 60,
-    borderRadius: 25,
+  emptyPhotoBox: {
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  photoImage: {
+    width: "100%",
+    height: "100%",
+  },
+
+  continueButton: {
+    height: 50,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#E4423F",
+    borderRadius: 30,
     marginBottom: 20,
+    marginTop: 50,
   },
   continueButtonText: {
     color: "#FFF",

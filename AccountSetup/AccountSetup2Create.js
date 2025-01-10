@@ -300,7 +300,7 @@ export default function AccountSetup2Create() {
             </View>
 
             {/* Already Have an Account */}
-            <TouchableOpacity onPress={() => navigation.navigate('AccountSetup1Login')}>
+            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
                 <Text style={styles.footerText}>
                     Already have an account? <Text style={styles.loginLink}>Log In</Text>
                 </Text>

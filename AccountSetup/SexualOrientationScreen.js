@@ -8,8 +8,10 @@ import {
   TouchableOpacity,
   Pressable,
   StyleSheet,
+  ScrollView,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import ProgressBar from '../src/Assets/Components/ProgressBar';
 
 export default function SexualOrientationScreen({ navigation }) {
@@ -35,15 +37,24 @@ export default function SexualOrientationScreen({ navigation }) {
   // The Continue button is enabled only if there's a selection
   const isFormComplete = selectedOption !== null;
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
     if (isFormComplete) {
-      // Move to the next screen or do something with the selected option
+      try {
+        // Store the selected orientation in AsyncStorage
+        await AsyncStorage.setItem('user_sexuality', selectedOption);
+        console.log('User sexuality stored:', selectedOption);
+      } catch (error) {
+        console.error('Error storing user_sexuality:', error);
+      }
+
+      // Move to the next screen
       navigation.navigate('OpenToScreen', { orientation: selectedOption });
     }
   };
 
   return (
     <SafeAreaView style={styles.container}>
+      <ScrollView> 
       {/* Back Button */}
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
         <Ionicons name="arrow-back" size={28} color="red" />
@@ -53,8 +64,9 @@ export default function SexualOrientationScreen({ navigation }) {
       <ProgressBar startProgress={40} endProgress={50} />
 
       {/* Title / Subtitle */}
-      <Text style={styles.header}>What’s your sexual orientation?</Text>
-      <Text style={styles.subHeader}>Your sexual orientation will be public.</Text>
+      <View style={styles.content}>
+      <Text style={styles.title}>What’s your sexual orientation?</Text>
+      <Text style={styles.subtitle}>Your sexual orientation will be public.</Text>
 
       {/* Options list */}
       {orientationOptions.map((option) => (
@@ -75,7 +87,9 @@ export default function SexualOrientationScreen({ navigation }) {
           </Text>
         </TouchableOpacity>
       ))}
-
+      </View>
+      
+    </ScrollView>
       {/* Continue Button */}
       <Pressable
         style={[
@@ -113,37 +127,42 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   // Title
-  header: {
+  content: {
+    flex: 1,
+    justifyContent: "flex-start",
+  },
+  title: {
     fontSize: 24,
-    fontWeight: 'bold',
-    color: '#000',
+    fontWeight: "bold",
+    color: "#000",
     marginBottom: 10,
   },
-  // Subtitle
-  subHeader: {
+  subtitle: {
     fontSize: 14,
-    color: 'gray',
+    color: "#888",
     marginBottom: 20,
   },
   // Each option button (pill-shaped)
   optionButton: {
     padding: 15,
     borderWidth: 1,
-    borderRadius: 25,
+    borderRadius: 30,
     marginVertical: 10,
     alignItems: 'center',
   },
   // Continue button styling
   continueButton: {
-    height: 60,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 25,
-    marginBottom: 20, // extra space at bottom
+    justifyContent: 'flex-end',
+    height: 50,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#E4423F",
+    borderRadius: 30,
+    marginBottom: 20,
   },
   continueButtonText: {
-    color: '#FFF',
+    color: "#FFF",
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 });

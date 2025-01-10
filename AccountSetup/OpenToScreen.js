@@ -8,8 +8,10 @@ import {
   TouchableOpacity,
   Pressable,
   StyleSheet,
+  ScrollView,
 } from 'react-native';
 import ProgressBar from '../src/Assets/Components/ProgressBar';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 
 export default function OpenToScreen({ navigation }) {
@@ -41,8 +43,16 @@ export default function OpenToScreen({ navigation }) {
   // Continue button is only enabled if at least 1 selection
   const isFormComplete = selectedOptions.length > 0;
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
     if (isFormComplete) {
+      try {
+        // Store the selected options array in AsyncStorage
+        await AsyncStorage.setItem('user_open_to', JSON.stringify(selectedOptions));
+        console.log('User open to stored:', selectedOptions);
+      } catch (error) {
+        console.error('Error storing user_open_to:', error);
+      }
+
       // Move to the next screen, passing the chosen preferences
       navigation.navigate('InterestsScreen', { openTo: selectedOptions });
     }
@@ -50,6 +60,7 @@ export default function OpenToScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
+       <ScrollView> 
       {/* Back Button */}
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
         <Ionicons name="arrow-back" size={28} color="red" />
@@ -59,8 +70,9 @@ export default function OpenToScreen({ navigation }) {
       <ProgressBar startProgress={50} endProgress={60} />
 
       {/* Title / Subtitle */}
-      <Text style={styles.header}>Who are you open to?</Text>
-      <Text style={styles.subHeader}>
+      <View style={styles.content}>
+      <Text style={styles.title}>Who are you open to?</Text>
+      <Text style={styles.subtitle}>
         We’ll only show your preferences to you.
       </Text>
 
@@ -99,7 +111,8 @@ export default function OpenToScreen({ navigation }) {
           </TouchableOpacity>
         );
       })}
-
+      </View>
+      </ScrollView>
       {/* Continue Button */}
       <Pressable
         style={[
@@ -133,22 +146,26 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginTop: 30,
   },
-  header: {
+  content: {
+    flex: 1,
+    justifyContent: "flex-start",
+  },
+  title: {
     fontSize: 24,
-    fontWeight: 'bold',
-    color: '#000',
+    fontWeight: "bold",
+    color: "#000",
     marginBottom: 10,
   },
-  subHeader: {
+  subtitle: {
     fontSize: 14,
-    color: 'gray',
+    color: "#888",
     marginBottom: 20,
   },
 
   /* Each option row is a large pill-shaped button */
   optionButton: {
     borderWidth: 1,
-    borderRadius: 25,
+    borderRadius: 30,
     padding: 15,
     marginVertical: 10,
   },
@@ -174,16 +191,16 @@ const styles = StyleSheet.create({
 
   /* Continue button styling, as in your other pages */
   continueButton: {
-    height: 60,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 25,
-    marginTop: 20,
-    marginBottom: 25,
+    height: 50,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#E4423F",
+    borderRadius: 30,
+    marginBottom: 20,
   },
   continueButtonText: {
-    color: '#FFF',
+    color: "#FFF",
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 });

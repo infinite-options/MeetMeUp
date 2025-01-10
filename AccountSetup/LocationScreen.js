@@ -1,5 +1,4 @@
-// still working on it this is the place holder and below code is he actujal one
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   SafeAreaView,
   Platform,
@@ -10,10 +9,18 @@ import {
   StyleSheet,
   TextInput,
   Pressable,
+  FlatList,
+  Keyboard,
+  Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import MapView, { Marker } from 'react-native-maps';
 import ProgressBar from '../src/Assets/Components/ProgressBar';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { REACT_APP_GOOGLE_API_KEY } from '@env';
+
+const GOOGLE_API_KEY = REACT_APP_GOOGLE_API_KEY;
 
 export default function LocationScreen({ navigation }) {
   // Track the text in the search bar
@@ -21,49 +28,169 @@ export default function LocationScreen({ navigation }) {
   // Track location (latitude & longitude). Null if not chosen yet
   const [location, setLocation] = useState(null);
 
-  // Some default region for the map to center on
+  // Default map region
   const [region, setRegion] = useState({
-    latitude: 37.7749, // e.g., San Francisco
+    latitude: 37.7749, // e.g., SF
     longitude: -122.4194,
     latitudeDelta: 0.06,
     longitudeDelta: 0.06,
   });
 
-  // Whether the user has a valid location to continue
+  // Autocomplete suggestions
+  const [suggestions, setSuggestions] = useState([]);
+
+  // Credentials from AsyncStorage (we’ll fetch them in `useEffect`)
+  const [userUid, setUserUid] = useState(null);
+  const [userEmail, setUserEmail] = useState(null);
+  
+
+  // Check if location is selected
   const isFormComplete = !!location;
 
-  // Placeholder: call a geocoding or Places API to convert `searchText` into lat/lng
-  const handleSearch = async () => {
-    // Example only: we’ll set a dummy lat/lng, then center the map & place the marker
-    if (searchText.trim().length === 0) {
-      alert('Please enter a location!');
+  // On mount, fetch user ID/email from AsyncStorage
+  useEffect(() => {
+    const fetchUserCredentials = async () => {
+      try {
+        const uid = await AsyncStorage.getItem('user_uid');
+        const email = await AsyncStorage.getItem('user_email_id');
+        if (!uid || !email) {
+          Alert.alert("Error", "User credentials not found in AsyncStorage.");
+          navigation.goBack();
+          return;
+        }
+        setUserUid(uid);
+        setUserEmail(email);
+      } catch (error) {
+        console.error("Error fetching user credentials:", error);
+      }
+    };
+    fetchUserCredentials();
+  }, [navigation]);
+
+  // 1) Autocomplete: query Google Places
+  const fetchAutocompleteSuggestions = async (input) => {
+    if (!input) {
+      setSuggestions([]);
       return;
     }
 
-    // In real usage, you'd call a geocoding endpoint here:
-    // e.g., fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${searchText}&key=YOUR_KEY`)
-    // parse JSON, and set lat/lng from the response
-    // For now, we do a dummy location (San Jose, CA):
-    const dummyLat = 37.3382;
-    const dummyLng = -121.8863;
-    setLocation({ latitude: dummyLat, longitude: dummyLng });
+    try {
+      const endpoint = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(
+        input
+      )}&key=${GOOGLE_API_KEY}&components=country:us`;
+      const response = await fetch(endpoint);
+      const data = await response.json();
 
-    // Also update map region to center on that location
-    setRegion({
-      ...region,
-      latitude: dummyLat,
-      longitude: dummyLng,
-    });
+      if (data.status === 'OK') {
+        setSuggestions(data.predictions);
+      } else {
+        setSuggestions([]);
+        console.warn('Autocomplete request error:', data.status, data.error_message);
+      }
+    } catch (error) {
+      console.error('Error fetching autocomplete:', error);
+    }
   };
 
-  // Handle map region changes if you want (optional)
+  // 2) On typing in search
+  const handleSearchTextChange = (text) => {
+    setSearchText(text);
+    fetchAutocompleteSuggestions(text);
+  };
+
+  // 3) Tapping a suggestion => get lat/lng
+  const handleSuggestionPress = async (suggestion) => {
+    Keyboard.dismiss();
+    setSearchText(suggestion.description);
+    setSuggestions([]);
+
+    try {
+      const detailsEndpoint = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${suggestion.place_id}&key=${GOOGLE_API_KEY}`;
+      const detailsResp = await fetch(detailsEndpoint);
+      const detailsData = await detailsResp.json();
+
+      if (detailsData.status === 'OK') {
+        const { lat, lng } = detailsData.result.geometry.location;
+        setLocation({ latitude: lat, longitude: lng });
+        setRegion((prev) => ({ ...prev, latitude: lat, longitude: lng }));
+      } else {
+        console.warn('Place Details error:', detailsData.status, detailsData.error_message);
+      }
+    } catch (error) {
+      console.error('Error fetching place details:', error);
+      Alert.alert('Error', 'Could not fetch place details. Please try again.');
+    }
+  };
+
+  // Optional: user presses search icon
+  const handleSearch = () => {
+    if (!searchText.trim()) {
+      Alert.alert('Warning', 'Please enter a location or pick from suggestions.');
+      return;
+    }
+    console.log('Search icon pressed:', searchText);
+  };
+
+  // Track map region changes
   const handleRegionChangeComplete = (newRegion) => {
     setRegion(newRegion);
   };
 
-  const handleContinue = () => {
+  // PUT request to store lat/long in userinfo
+  const updateLocationOnServer = async (lat, lng) => {
+    if (!userUid || !userEmail) {
+      Alert.alert("Error", "Missing user credentials. Please log in again.");
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append('user_uid', userUid);
+      formData.append('user_email_id', userEmail);
+      formData.append('user_latitude', lat);
+      formData.append('user_longitude', lng);
+
+      const response = await axios.put(
+        'https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo',
+        formData
+      );
+
+      if (response.status === 200) {
+        Alert.alert('Success', 'Location updated successfully!');
+      } else {
+        console.error('Update location failed:', response.data);
+        Alert.alert('Error', 'Failed to update location on the server.');
+      }
+    } catch (error) {
+      console.error('Error updating location on server:', error);
+      Alert.alert('Error', 'There was an error saving your location. Please try again.');
+    }
+  };
+
+  // Continue => Save lat/long to server
+  const handleContinue = async () => {
     if (location) {
-      // Move to the next screen or save the location
+      const url = "https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo";
+    const fd = new FormData();
+
+    fd.append("user_uid", userUid);
+    fd.append("user_email_id", userEmail);
+    fd.append("user_latitude", location.latitude);
+    fd.append("user_longitude", location.longitude);
+
+      try {
+        const response = await fetch(url, {
+          method: "PUT",
+          body: fd,
+        });
+        if (response.ok) {
+          const result = await response.json();
+          console.log("Response from server:", result);
+        }
+      } catch (error) {
+        console.log("Error updating user data:", error);
+      }
+      // Then navigate to the next screen
       navigation.navigate('EnableLocationScreen', { location });
     }
   };
@@ -80,34 +207,49 @@ export default function LocationScreen({ navigation }) {
 
       {/* Title & Subtitle */}
       <Text style={styles.title}>Add your location</Text>
-      <Text style={styles.subtitle}>
-        Discover matches within your preferred distance.
-      </Text>
+      <Text style={styles.subtitle}>Discover matches within your preferred distance.</Text>
 
       {/* Trial Version Notice */}
       <View style={styles.trialBox}>
         <Text style={styles.trialHeading}>TRIAL VERSION</Text>
         <Text style={styles.trialBody}>
           For the testing phase, the location function is only available{' '}
-          <Text style={styles.link}>here</Text> and the{' '}
-          <Text style={styles.link}>map setting</Text> in your profile.
+          <Text style={styles.link}>here</Text> and the <Text style={styles.link}>map setting</Text> in your profile.
         </Text>
       </View>
 
-      {/* Search Bar */}
+      {/* Search Row */}
       <View style={styles.searchRow}>
         <View style={styles.searchWrapper}>
           <TextInput
             style={styles.searchInput}
             placeholder="Search your location..."
             value={searchText}
-            onChangeText={setSearchText}
+            onChangeText={handleSearchTextChange}
           />
         </View>
         <TouchableOpacity onPress={handleSearch} style={styles.searchIconWrapper}>
           <Ionicons name="search" size={24} color="#888" />
         </TouchableOpacity>
       </View>
+
+      {/* Suggestions List */}
+      {suggestions.length > 0 && (
+        <View style={styles.suggestionsContainer}>
+          <FlatList
+            data={suggestions}
+            keyExtractor={(item) => item.place_id}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                style={styles.suggestionItem}
+                onPress={() => handleSuggestionPress(item)}
+              >
+                <Text numberOfLines={1}>{item.description}</Text>
+              </TouchableOpacity>
+            )}
+          />
+        </View>
+      )}
 
       {/* Map */}
       <View style={styles.mapContainer}>
@@ -123,7 +265,7 @@ export default function LocationScreen({ navigation }) {
               coordinate={location}
               title="Selected Location"
               description={searchText || 'Location'}
-              pinColor="red" // or any custom color
+              pinColor="red"
             />
           )}
         </MapView>
@@ -131,10 +273,7 @@ export default function LocationScreen({ navigation }) {
 
       {/* Continue Button */}
       <Pressable
-        style={[
-          styles.continueButton,
-          { backgroundColor: isFormComplete ? '#E4423F' : '#ccc' },
-        ]}
+        style={[styles.continueButton, { backgroundColor: isFormComplete ? '#E4423F' : '#ccc' }]}
         onPress={handleContinue}
         disabled={!isFormComplete}
       >
@@ -149,11 +288,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFF',
-    // Align content to the top
     justifyContent: 'flex-start',
     alignItems: 'stretch',
     paddingHorizontal: 20,
-    // Padding for Android devices
     paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
   backButton: {
@@ -191,11 +328,8 @@ const styles = StyleSheet.create({
   },
   link: {
     fontWeight: 'bold',
-    color: '#000',
     textDecorationLine: 'underline',
   },
-
-  // Search row: text input + icon
   searchRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -217,11 +351,21 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 15,
   },
-
-  // Map container
+  suggestionsContainer: {
+    backgroundColor: '#FFF',
+    borderColor: '#CCC',
+    borderWidth: 1,
+    borderRadius: 5,
+    marginBottom: 5,
+  },
+  suggestionItem: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#EEE',
+  },
   mapContainer: {
     width: '100%',
-    height: 250, // Adjust as needed
+    height: 250,
     borderRadius: 10,
     overflow: 'hidden',
     marginBottom: 20,
@@ -229,11 +373,9 @@ const styles = StyleSheet.create({
   map: {
     flex: 1,
   },
-
-  // Continue button
   continueButton: {
-    height: 60,
-    borderRadius: 25,
+    height: 50,
+    borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 20,
@@ -244,337 +386,3 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
-// import React, { useState } from "react";
-// import {
-//   SafeAreaView,
-//   Platform,
-//   StatusBar,
-//   View,
-//   Text,
-//   TouchableOpacity,
-//   StyleSheet,
-//   TextInput,
-//   Pressable,
-//   FlatList,
-//   Keyboard,
-// } from "react-native";
-// import { Ionicons } from "@expo/vector-icons";
-// import MapView, { Marker } from "react-native-maps";
-// import axios from "axios";
-// import ProgressBar from "../src/Assets/Components/ProgressBar";
-// import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
-
-// export default function LocationScreen({ navigation }) {
-//   const [searchText, setSearchText] = useState("");
-//   const [suggestions, setSuggestions] = useState([]);
-//   const [location, setLocation] = useState(null);
-//   const [region, setRegion] = useState({
-//     latitude: 37.7749, // Default: San Francisco
-//     longitude: -122.4194,
-//     latitudeDelta: 0.06,
-//     longitudeDelta: 0.06,
-//   });
-//   const [savedAddress, setSavedAddress] = useState("");
-//     const [center, setCenter] = useState({ lat: 37.3541079, lng: -121.9552356 });
-  
-//     const handleAddressSelection = (data, details) => {
-//       const selectedAddress = details.formatted_address;
-//       const lat = details.geometry.location.lat;
-//       const lng = details.geometry.location.lng;
-  
-//       setSavedAddress(selectedAddress);
-//       setCenter({ lat, lng });
-//     };
-
-//   const GOOGLE_API_KEY = process.env.REACT_APP_GOOGLE_API_KEY; // Replace with your API key
-
-//   const isFormComplete = !!location;
-
-//   // Fetch suggestions from Google Places API
-//   const handleSearch = async (text) => {
-//     setSearchText(text);
-
-//     if (text.trim().length > 2) {
-//       try {
-//         const response = await axios.get(
-//           `https://maps.googleapis.com/maps/api/place/autocomplete/json`,
-//           {
-//             params: {
-//               input: text,
-//               key: GOOGLE_PLACES_API_KEY,
-//               types: "geocode",
-//             },
-//           }
-//         );
-//         setSuggestions(response.data.predictions);
-//       } catch (error) {
-//         console.error("Error fetching suggestions:", error);
-//       }
-//     } else {
-//       setSuggestions([]);
-//     }
-//   };
-
-//   const handleSuggestionPress = async (placeId) => {
-//     try {
-//       const response = await axios.get(
-//         `https://maps.googleapis.com/maps/api/place/details/json`,
-//         {
-//           params: {
-//             place_id: placeId,
-//             key: GOOGLE_PLACES_API_KEY,
-//           },
-//         }
-//       );
-
-//       const { lat, lng } = response.data.result.geometry.location;
-//       const address = response.data.result.formatted_address;
-
-//       setLocation({ latitude: lat, longitude: lng });
-//       setSearchText(address);
-
-//       setRegion({
-//         latitude: lat,
-//         longitude: lng,
-//         latitudeDelta: 0.06,
-//         longitudeDelta: 0.06,
-//       });
-
-//       setSuggestions([]);
-//       Keyboard.dismiss();
-//     } catch (error) {
-//       console.error("Error fetching place details:", error);
-//     }
-//   };
-
-//   const handleContinue = () => {
-//     if (location) {
-//       navigation.navigate("EnableLocationScreen", { location });
-//     }
-//   };
-
-//   return (
-//     <SafeAreaView style={styles.container}>
-//       {/* Back Button */}
-//       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-//         <Ionicons name="arrow-back" size={28} color="red" />
-//       </TouchableOpacity>
-
-//       {/* Progress Bar */}
-//       <ProgressBar startProgress={80} endProgress={90} />
-
-//       {/* Title & Subtitle */}
-//       <Text style={styles.title}>Add your location</Text>
-//       <Text style={styles.subtitle}>
-//         Discover matches within your preferred distance.
-//       </Text>
-
-//       {/* Trial Version Notice */}
-//       <View style={styles.trialBox}>
-//         <Text style={styles.trialHeading}>TRIAL VERSION</Text>
-//         <Text style={styles.trialBody}>
-//           For the testing phase, the location function is only available{" "}
-//           <Text style={styles.link}>here</Text> and the{" "}
-//           <Text style={styles.link}>map setting</Text> in your profile.
-//         </Text>
-//       </View>
-
-//       {/* Search Bar */}
-//       {/* <View style={styles.searchRow}>
-//         <View style={styles.searchWrapper}>
-//           <TextInput
-//             style={styles.searchInput}
-//             placeholder="Search your location..."
-//             value={searchText}
-//             onChangeText={handleSearch}
-//           />
-//         </View>
-//         <TouchableOpacity style={styles.searchIconWrapper} onPress={() => Keyboard.dismiss()}>
-//           <Ionicons name="search" size={24} color="#888" />
-//         </TouchableOpacity>
-//       </View> */}
-
-//       {/* Suggestions */}
-//       {/* {suggestions.length > 0 && (
-//         <FlatList
-//           data={suggestions}
-//           keyExtractor={(item) => item.place_id}
-//           renderItem={({ item }) => (
-//             <TouchableOpacity
-//               style={styles.suggestionItem}
-//               onPress={() => handleSuggestionPress(item.place_id)}
-//             >
-//               <Text style={styles.suggestionText}>{item.description}</Text>
-//             </TouchableOpacity>
-//           )}
-//           style={styles.suggestionsList}
-//         />
-//       )} */}
-      
-//       <GooglePlacesAutocomplete
-//         placeholder="Search for a location"
-//         fetchDetails={true}  // This enables fetching more detailed location data
-//         onPress={handleAddressSelection}
-//         query={{
-//           key: GOOGLE_API_KEY,
-//           language: 'en',  // Language of the search results
-//         }}
-//         styles={{
-//           textInput: {
-//             height: 50,
-//             borderColor: "#ddd",
-//             borderWidth: 1,
-//             borderRadius: 5,
-//             paddingHorizontal: 10,
-//             marginBottom: 15,
-//           },
-//         }}
-//       />
-//       <MapView
-//         style={styles.mapContainer}
-//         initialRegion={{
-//           latitude: center.lat,
-//           longitude: center.lng,
-//           latitudeDelta: 0.02,
-//           longitudeDelta: 0.02,
-//         }}
-//       >
-//         <Marker coordinate={{ latitude: center.lat, longitude: center.lng }} />
-//       </MapView>
-//       {/* Map */}
-//       <View style={styles.mapContainer}>
-//         <MapView
-//           style={styles.map}
-//           region={region}
-//           onRegionChangeComplete={(newRegion) => setRegion(newRegion)}
-//         >
-//           {location && (
-//             <Marker
-//               coordinate={location}
-//               title="Selected Location"
-//               description={searchText || "Location"}
-//               pinColor="red"
-//             />
-//           )}
-//         </MapView>
-//       </View>
-
-//       {/* Continue Button */}
-//       <Pressable
-//         style={[
-//           styles.continueButton,
-//           { backgroundColor: isFormComplete ? "#E4423F" : "#ccc" },
-//         ]}
-//         onPress={handleContinue}
-//         disabled={!isFormComplete}
-//       >
-//         <Text style={styles.continueButtonText}>Continue</Text>
-//       </Pressable>
-//     </SafeAreaView>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: "#FFF",
-//     justifyContent: "flex-start",
-//     alignItems: "stretch",
-//     paddingHorizontal: 20,
-//     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
-//   },
-//   backButton: {
-//     alignSelf: "flex-start",
-//     backgroundColor: "#F5F5F5",
-//     borderRadius: 20,
-//     padding: 8,
-//     marginBottom: 20,
-//     marginTop: 30,
-//   },
-//   title: {
-//     fontSize: 24,
-//     fontWeight: "bold",
-//     color: "#000",
-//     marginBottom: 10,
-//   },
-//   subtitle: {
-//     fontSize: 14,
-//     color: "gray",
-//     marginBottom: 20,
-//   },
-//   trialBox: {
-//     marginBottom: 20,
-//   },
-//   trialHeading: {
-//     fontSize: 16,
-//     fontWeight: "bold",
-//     marginBottom: 5,
-//     textTransform: "uppercase",
-//   },
-//   trialBody: {
-//     fontSize: 14,
-//     color: "#000",
-//     lineHeight: 20,
-//   },
-//   link: {
-//     fontWeight: "bold",
-//     color: "#000",
-//     textDecorationLine: "underline",
-//   },
-//   searchRow: {
-//     flexDirection: "row",
-//     alignItems: "center",
-//     marginBottom: 10,
-//   },
-//   searchWrapper: {
-//     flex: 1,
-//     borderWidth: 1,
-//     borderColor: "#CCC",
-//     borderRadius: 25,
-//     paddingHorizontal: 15,
-//   },
-//   searchInput: {
-//     height: 48,
-//     fontSize: 16,
-//     color: "#000",
-//   },
-//   suggestionsList: {
-//     maxHeight: 100,
-//     backgroundColor: "#FFF",
-//     borderRadius: 10,
-//     borderWidth: 1,
-//     borderColor: "#CCC",
-//     marginBottom: 10,
-//   },
-//   suggestionItem: {
-//     padding: 10,
-//     borderBottomWidth: 1,
-//     borderBottomColor: "#EEE",
-//   },
-//   suggestionText: {
-//     fontSize: 16,
-//     color: "#000",
-//   },
-//   mapContainer: {
-//     width: "100%",
-//     height: 250,
-//     borderRadius: 10,
-//     overflow: "hidden",
-//     marginBottom: 20,
-//   },
-//   map: {
-//     flex: 1,
-//   },
-//   continueButton: {
-//     height: 60,
-//     borderRadius: 25,
-//     justifyContent: "center",
-//     alignItems: "center",
-//     marginBottom: 20,
-//   },
-//   continueButtonText: {
-//     color: "#FFF",
-//     fontSize: 18,
-//     fontWeight: "bold",
-//   },
-// });
