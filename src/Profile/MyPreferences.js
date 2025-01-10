@@ -16,7 +16,7 @@ import {
 	Toolbar,
 	IconButton,
 } from '@mui/material';
-import axios from "axios";
+import axios from 'axios';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -28,7 +28,7 @@ import DiamondIcon from '@mui/icons-material/Diamond';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
 const MyPreferences = () => {
 	const [anchorEl, setAnchorEl] = useState(null);
@@ -41,7 +41,7 @@ const MyPreferences = () => {
 	const [smoking, setSmoking] = useState('No');
 	const [drinking, setDrinking] = useState('No');
 	const [religion, setReligion] = useState(''); // Religious Preference
-  const navigate = useNavigate();
+	const navigate = useNavigate();
 	const open = Boolean(anchorEl);
 	const handleMenuOpen = (event) => setAnchorEl(event.currentTarget);
 	const handleMenuClose = () => setAnchorEl(null);
@@ -66,67 +66,65 @@ const MyPreferences = () => {
 		}
 	};
 
-  const updateUserInfo = async () => {
-    try { 
-      const user_uid = localStorage.getItem('user_uid');
-      const user_email_id = localStorage.getItem('user_email_id');
+	const updateUserInfo = async () => {
+		try {
+			const user_uid = localStorage.getItem('user_uid');
+			const user_email_id = localStorage.getItem('user_email_id');
 
-      const formData = new FormData();
-      formData.append("user_uid", user_uid);
-      formData.append("user_email_id", user_email_id);
-      formData.append("user_prefer_distance", parseInt(distance));
-      formData.append("user_prefer_age_min", parseInt(ageRange[0]));
-      formData.append("user_prefer_age_max", parseInt(ageRange[1]));
-      formData.append("user_prefer_height_min", heightRange[0]);
-      formData.append("user_prefer_kids", children);
+			const formData = new FormData();
+			formData.append('user_uid', user_uid);
+			formData.append('user_email_id', user_email_id);
+			formData.append('user_prefer_distance', parseInt(distance));
+			formData.append('user_prefer_age_min', parseInt(ageRange[0]));
+			formData.append('user_prefer_age_max', parseInt(ageRange[1]));
+			formData.append('user_prefer_height_min', heightRange[0]);
+			formData.append('user_prefer_kids', children);
 
-// Log the FormData to ensure everything was appended
-for (let pair of formData.entries()) {
-  console.log(`${pair[0]}: ${pair[1]}`);
-}
-  
-      // API call
-      const updateUserInfoUrl = "https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo";
-      const updateUserInfoResponse = await axios.put(updateUserInfoUrl, formData);
-  
-      console.log("Update User Info Response:", updateUserInfoResponse.data);
-  
-      // // Navigate to the next step
-      // navigate("/summary");
-    } catch (error) {
-      console.error("Error occurred during API calls:", error);
-      if (error.response) {
-        console.error("API Response Error:", error.response);
-      }
-    }
-  };
+			// Log the FormData to ensure everything was appended
+			for (let pair of formData.entries()) {
+				console.log(`${pair[0]}: ${pair[1]}`);
+			}
 
-  const findMyMatches = async () => {
-    try {
-      // Call updateUserInfo first
-      await updateUserInfo();
-  
-      const userId = localStorage.getItem('user_uid'); // Assign `user_uid` dynamically or hard-code for now if needed
-      const apiUrl = `https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/matches/${userId}`;
-  
-      // Fetch data from the API
-      const response = await fetch(apiUrl);
-      const data = await response.json();
-  
-      // Display the "message" from the response
-      if (data.message) {
-        const fetchdata = data.result; // Extract the result
-      navigate('/matchprofile', { state: { fetchdata } }); // Pass `fetchdata` to the route
-  
-      } else {
-        alert("No message found in the response.");
-      }
-    } catch (error) {
-      console.error("Error fetching matches:", error);
-      alert("An error occurred while finding matches.");
-    }
-  };
-  
+			// API call
+			const updateUserInfoUrl = 'https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/userinfo';
+			const updateUserInfoResponse = await axios.put(updateUserInfoUrl, formData);
+
+			console.log('Update User Info Response:', updateUserInfoResponse.data);
+
+			// // Navigate to the next step
+			// navigate("/summary");
+		} catch (error) {
+			console.error('Error occurred during API calls:', error);
+			if (error.response) {
+				console.error('API Response Error:', error.response);
+			}
+		}
+	};
+
+	const findMyMatches = async () => {
+		try {
+			// Call updateUserInfo first
+			await updateUserInfo();
+
+			const userId = localStorage.getItem('user_uid'); // Assign `user_uid` dynamically or hard-code for now if needed
+			const apiUrl = `https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/matches/${userId}`;
+
+			// Fetch data from the API
+			const response = await fetch(apiUrl);
+			const data = await response.json();
+
+			// Display the "message" from the response
+			if (data.message) {
+				const fetchdata = data.result; // Extract the result
+				navigate('/matchprofile', { state: { fetchdata } }); // Pass `fetchdata` to the route
+			} else {
+				alert('No message found in the response.');
+			}
+		} catch (error) {
+			console.error('Error fetching matches:', error);
+			alert('An error occurred while finding matches.');
+		}
+	};
 
 	return (
 		<Box sx={{ backgroundColor: 'white', minHeight: '100vh', padding: 2 }}>
@@ -271,26 +269,39 @@ for (let pair of formData.entries()) {
 					boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
 				}}
 			>
-				<Typography
-					style={{
-						textAlign: 'left',
-						color: '#757575',
-						fontFamily: 'Lexend',
-						fontSize: '14px',
-					}}
-				>
-					Maximum distance from you (km)
-				</Typography>
+				<Box display="flex" alignItems="center" justifyContent="space-between">
+					<Typography
+						style={{
+							textAlign: 'left',
+							color: '#757575',
+							fontFamily: 'Lexend',
+							fontSize: '14px',
+						}}
+					>
+						Maximum distance from you (km)
+					</Typography>
+
+					<Typography
+						style={{
+							marginLeft: '8px',
+							fontFamily: 'Lexend',
+							fontSize: '14px',
+							fontWeight: 'bold',
+							color: '#000',
+						}}
+					>
+						{distance} km
+					</Typography>
+				</Box>
 				<Slider
 					value={distance}
 					onChange={(e, newValue) => handleSliderChange(e, newValue, 'distance')}
 					min={0}
 					max={500}
-					valueLabelDisplay="auto"
-					valueLabelFormat={(value) => `${value} km`}
+					valueLabelDisplay="off"
 					sx={{
-						marginBottom: 3,
-						color: 'red', // This sets the color for the track and thumb
+						flex: 1, // Makes the slider occupy remaining space
+						color: 'red', // Red color for the slider
 						'& .MuiSlider-thumb': {
 							backgroundColor: 'red', // Thumb color
 						},
@@ -300,30 +311,42 @@ for (let pair of formData.entries()) {
 						'& .MuiSlider-rail': {
 							backgroundColor: 'lightcoral', // Rail color (lighter shade for contrast)
 						},
+            marginBottom: '10px'
 					}}
 				/>
+				<Box display="flex" alignItems="center" justifyContent="space-between">
+					<Typography
+						style={{
+							textAlign: 'left',
+							color: '#757575',
+							fontFamily: 'Lexend',
+							fontSize: '14px',
+						}}
+					>
+						Age Range
+					</Typography>
 
-				<Typography
-					style={{
-						textAlign: 'left',
-						color: '#757575',
-						fontFamily: 'Lexend',
-						fontSize: '14px',
-					}}
-				>
-					Age Range
-				</Typography>
+					<Typography
+						style={{
+							marginLeft: '8px',
+							fontFamily: 'Lexend',
+							fontSize: '14px',
+							fontWeight: 'bold',
+							color: '#000',
+						}}
+					>
+						{ageRange[0]} - {ageRange[1]}
+					</Typography>
+				</Box>
 				<Slider
 					value={ageRange}
 					onChange={(e, newValue) => handleSliderChange(e, newValue, 'ageRange')}
-					valueLabelDisplay="auto"
-					valueLabelFormat={(value) => `${value}`}
 					min={18}
 					max={99}
-					valueLabelDisplay="auto"
+					valueLabelDisplay="off"
 					sx={{
-						marginBottom: 3,
-						color: 'red', // This sets the color for the track and thumb
+						flex: 1, // Makes the slider occupy remaining space
+						color: 'red',
 						'& .MuiSlider-thumb': {
 							backgroundColor: 'red', // Thumb color
 						},
@@ -333,29 +356,42 @@ for (let pair of formData.entries()) {
 						'& .MuiSlider-rail': {
 							backgroundColor: 'lightcoral', // Rail color (lighter shade for contrast)
 						},
+            marginBottom: '10px'
 					}}
 				/>
+				<Box display="flex" alignItems="center" justifyContent="space-between">
+					<Typography
+						style={{
+							textAlign: 'left',
+							color: '#757575',
+							fontFamily: 'Lexend',
+							fontSize: '14px',
+						}}
+					>
+						Height Range (cm)
+					</Typography>
 
-				<Typography
-					style={{
-						textAlign: 'left',
-						color: '#757575',
-						fontFamily: 'Lexend',
-						fontSize: '14px',
-					}}
-				>
-					Height Range (cm)
-				</Typography>
+					<Typography
+						style={{
+							marginLeft: '8px',
+							fontFamily: 'Lexend',
+							fontSize: '14px',
+							fontWeight: 'bold',
+							color: '#000',
+						}}
+					>
+						{heightRange[0]} cm - {heightRange[1]} cm
+					</Typography>
+				</Box>
 				<Slider
 					value={heightRange}
 					onChange={(e, newValue) => handleSliderChange(e, newValue, 'heightRange')}
-					valueLabelDisplay="auto"
-					valueLabelFormat={(value) => `${value} cm`}
 					min={122}
 					max={213}
+					valueLabelDisplay="off"
 					sx={{
-						marginBottom: 3,
-						color: 'red', // This sets the color for the track and thumb
+						flex: 1, // Makes the slider occupy remaining space
+						color: 'red',
 						'& .MuiSlider-thumb': {
 							backgroundColor: 'red', // Thumb color
 						},
@@ -365,29 +401,42 @@ for (let pair of formData.entries()) {
 						'& .MuiSlider-rail': {
 							backgroundColor: 'lightcoral', // Rail color (lighter shade for contrast)
 						},
+            marginBottom: '10px'
 					}}
 				/>
+				<Box display="flex" alignItems="center" justifyContent="space-between">
+					<Typography
+						style={{
+							textAlign: 'left',
+							color: '#757575',
+							fontFamily: 'Lexend',
+							fontSize: '14px',
+						}}
+					>
+						Maximum # of children
+					</Typography>
 
-				<Typography
-					style={{
-						textAlign: 'left',
-						color: '#757575',
-						fontFamily: 'Lexend',
-						fontSize: '14px',
-					}}
-				>
-					Maximum # of children
-				</Typography>
+					<Typography
+						style={{
+							marginLeft: '8px',
+							fontFamily: 'Lexend',
+							fontSize: '14px',
+							fontWeight: 'bold',
+							color: '#000',
+						}}
+					>
+						{children}
+					</Typography>
+				</Box>
 				<Slider
 					value={children}
 					onChange={(e, newValue) => handleSliderChange(e, newValue, 'children')}
-					valueLabelDisplay="auto"
 					min={0}
 					max={10}
-					valueLabelFormat={(value) => `${value}`}
+					valueLabelDisplay="off"
 					sx={{
-						marginBottom: 3,
-						color: 'red', // This sets the color for the track and thumb
+						flex: 1, // Makes the slider occupy remaining space
+						color: 'red',
 						'& .MuiSlider-thumb': {
 							backgroundColor: 'red', // Thumb color
 						},
@@ -397,6 +446,7 @@ for (let pair of formData.entries()) {
 						'& .MuiSlider-rail': {
 							backgroundColor: 'lightcoral', // Rail color (lighter shade for contrast)
 						},
+            marginBottom: '10px'
 					}}
 				/>
 
@@ -561,7 +611,7 @@ for (let pair of formData.entries()) {
 				<Button
 					variant="contained"
 					color="error"
-          onClick={findMyMatches}
+					onClick={findMyMatches}
 					fullWidth
 					sx={{
 						padding: '12px 0',

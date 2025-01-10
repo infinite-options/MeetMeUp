@@ -71,11 +71,12 @@ const LoginPage = () => {
             { email, password: hashedPassword },
             { headers: { 'Content-Type': 'application/json' } }
           );
+          console.log('before loginResponse', loginResponse);
 
           localStorage.setItem('user_uid', loginResponse.data.result.user_uid);
           localStorage.setItem('user_email_id', loginResponse.data.result.user_email_id);
-
-          navigate('/accountSetup7Summary');
+          console.log('before naviagte');
+          navigate('/summary');
         } else {
           throw new Error('Hash algorithm or salt is missing.');
         }
