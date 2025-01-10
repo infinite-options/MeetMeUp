@@ -91,7 +91,8 @@ for (const [key, value] of Object.entries(updateUserInfoData)) {
   formData.append(key, value);
 }
 else if (key == "user_video"){
-  formData.append(key,value,"user_video.webm");
+  console.log(typeof value, value instanceof Blob, value);
+  formData.append(key,value,"user_video.mp4");
 }
 }
 

@@ -33,7 +33,7 @@ const PreferencePage = () => {
   };
 
   const savePreference = () => {
-    updateUserData('user_open_to', selectedOptions);};
+    updateUserData('user_open_to', JSON.stringify(selectedOptions));};
 
   return (
     <Container

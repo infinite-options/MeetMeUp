@@ -28,6 +28,7 @@ import DiamondIcon from '@mui/icons-material/Diamond';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
+import { useNavigate } from "react-router-dom";
 
 const MyPreferences = () => {
 	const [anchorEl, setAnchorEl] = useState(null);
@@ -40,7 +41,7 @@ const MyPreferences = () => {
 	const [smoking, setSmoking] = useState('No');
 	const [drinking, setDrinking] = useState('No');
 	const [religion, setReligion] = useState(''); // Religious Preference
-
+  const navigate = useNavigate();
 	const open = Boolean(anchorEl);
 	const handleMenuOpen = (event) => setAnchorEl(event.currentTarget);
 	const handleMenuClose = () => setAnchorEl(null);
@@ -114,7 +115,9 @@ for (let pair of formData.entries()) {
   
       // Display the "message" from the response
       if (data.message) {
-        alert(`Message: ${data.message}`);
+        const fetchdata = data.result; // Extract the result
+      navigate('/matchprofile', { state: { fetchdata } }); // Pass `fetchdata` to the route
+  
       } else {
         alert("No message found in the response.");
       }

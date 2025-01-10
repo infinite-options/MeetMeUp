@@ -28,8 +28,12 @@ const HeightPage = () => {
       let height;
     
       if (unit === 'ft-in') {
-        // Format height in feet and inches
-        height = `${heightFt}'${heightIn}"`; // Example: 5'11"
+        // Convert feet and inches to centimeters
+        const heightInInches = heightFt * 12 + heightIn; // Convert height to inches
+        const heightInCm = Math.round(heightInInches * 2.54); // Convert inches to cm and round it
+      
+        
+        height = `${heightInCm} cm`; 
       } else if (unit === 'cm') {
         // Use height in centimeters
         height = `${heightCm} cm`;
