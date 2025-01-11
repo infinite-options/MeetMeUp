@@ -45,6 +45,11 @@ import SmokingRoomsOutlinedIcon from '@mui/icons-material/SmokingRoomsOutlined';
 import LiquorOutlinedIcon from '@mui/icons-material/LiquorOutlined';
 import GavelOutlinedIcon from '@mui/icons-material/GavelOutlined';
 import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import SearchIcon from "@mui/icons-material/Search";
+import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
+import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 const ProfileSummary = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -104,136 +109,169 @@ const handleMenuClose = () => {
 	return (
 		<Box sx={{ backgroundColor: 'white', minHeight: '100vh' }}>
 			{/* Top Bar */}
-			<AppBar position="static" color="inherit" elevation={0}>
-				<Toolbar>
-					<Typography variant="h6" sx={{ flexGrow: 1, fontWeight: 'bold' }}>
-						My Profile
-					</Typography>
-					<IconButton>
-						<NotificationsNoneIcon />
-					</IconButton>
-					<IconButton onClick={handleMenuOpen}>
-  <MoreVertIcon />
-</IconButton>
-<Menu
-  anchorEl={anchorEl}
-  open={open}
-  onClose={handleMenuClose}
-  anchorOrigin={{ vertical: "top", horizontal: "right" }}
-  transformOrigin={{ vertical: "top", horizontal: "right" }}
-  PaperProps={{
-    style: {
-      borderRadius: "12px",
-      boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-      width: "200px",
-      padding: "2px 0",
-    },
-  }}
->
-  <MenuItem
-    onClick={handleMenuClose}
-    style={{
+      <AppBar position="static" color="inherit" elevation={0}>
+  <Toolbar
+    sx={{
       display: "flex",
+      justifyContent: "space-between",
       alignItems: "center",
-      gap: "12px",
-      padding: "0px 16px",
-      fontFamily: "Lexend",
-      fontWeight: "400",
-      fontSize: "14px",
-      color: "#1A1A1A",
+      padding: "0 16px",
     }}
   >
-    <EditNoteIcon style={{ color: "#000" }} />
-    Edit Profile
-  </MenuItem>
-  <MenuItem
-    onClick={handleMenuClose}
-    style={{
-      display: "flex",
-      alignItems: "center",
-      gap: "12px",
-      padding: "0px 16px",
-      fontFamily: "Lexend",
-      fontWeight: "400",
-      fontSize: "14px",
-      lineHeight: "10px",
-      color: "#1A1A1A",
-    }}
-  >
-    <SettingsIcon style={{ color: "#000" }} />
-    Settings
-  </MenuItem>
-  <MenuItem
-    onClick={handleMenuClose}
-    style={{
-      display: "flex",
-      alignItems: "center",
-      gap: "12px",
-      padding: "10px 16px",
-      fontFamily: "Lexend",
-      fontWeight: "400",
-      fontSize: "14px",
-      lineHeight: "10px",
-      color: "#1A1A1A",
-    }}
-  >
-    <DiamondIcon style={{ color: "#000" }} />
-    Manage Membership
-  </MenuItem>
-  <MenuItem
-    onClick={handleMenuClose}
-    style={{
-      display: "flex",
-      alignItems: "center",
-      gap: "12px",
-      padding: "10px 16px",
-      fontFamily: "Lexend",
-      fontWeight: "400",
-      fontSize: "14px",
-      lineHeight: "10px",
-      color: "#1A1A1A",
-    }}
-  >
-    <VisibilityOffIcon style={{ color: "#000" }} />
-    Hide Profile
-  </MenuItem>
-  <MenuItem
-    onClick={handleMenuClose}
-    style={{
-      display: "flex",
-      alignItems: "center",
-      gap: "12px",
-      padding: "10px 16px",
-      fontFamily: "Lexend",
-      fontWeight: "400",
-      fontSize: "14px",
-      lineHeight: "10px",
-      color: "#1A1A1A",
-    }}
-  >
-    <DeleteIcon style={{ color: "#000" }} />
-    Delete Account
-  </MenuItem>
-  <MenuItem
-    onClick={handleMenuClose}
-    style={{
-      display: "flex",
-      alignItems: "center",
-      gap: "12px",
-      padding: "10px 16px",
-      fontFamily: "Lexend",
-      fontWeight: "400",
-      fontSize: "14px",
-      lineHeight: "20px",
-      color: "#1A1A1A",
-    }}
-  >
-    <LogoutIcon style={{ color: "#000" }} />
-    Logout
-  </MenuItem>
-</Menu>
-				</Toolbar>
-			</AppBar>
+    {/* Title */}
+    <Typography
+      style={{
+        fontFamily: "Lexend",
+        fontWeight: 500,
+        fontSize: "21px",
+        lineHeight: "30px",
+        letterSpacing: "-0.04em",
+        textAlign: "left",
+        color: "#1A1A1A",
+        marginTop: "20px",
+        marginBottom: "20px",
+      }}
+    >
+      My Profile
+    </Typography>
+
+    {/* Icons */}
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        gap: "8px",
+      }}
+    >
+      <IconButton>
+        <NotificationsNoneIcon />
+      </IconButton>
+      <IconButton onClick={handleMenuOpen}>
+        <MoreVertIcon />
+      </IconButton>
+    </Box>
+
+    {/* Menu */}
+    <Menu
+      anchorEl={anchorEl}
+      open={open}
+      onClose={handleMenuClose}
+      anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      transformOrigin={{ vertical: "top", horizontal: "right" }}
+      PaperProps={{
+        style: {
+          borderRadius: "12px",
+          boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+          width: "200px",
+          padding: "2px 0",
+        },
+      }}
+    >
+      <MenuItem
+        onClick={handleMenuClose}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "12px",
+          padding: "0px 16px",
+          fontFamily: "Lexend",
+          fontWeight: "400",
+          fontSize: "14px",
+          color: "#1A1A1A",
+        }}
+      >
+        <EditNoteIcon style={{ color: "#000" }} />
+        Edit Profile
+      </MenuItem>
+      <MenuItem
+        onClick={handleMenuClose}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "12px",
+          padding: "0px 16px",
+          fontFamily: "Lexend",
+          fontWeight: "400",
+          fontSize: "14px",
+          lineHeight: "10px",
+          color: "#1A1A1A",
+        }}
+      >
+        <SettingsIcon style={{ color: "#000" }} />
+        Settings
+      </MenuItem>
+      <MenuItem
+        onClick={handleMenuClose}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "12px",
+          padding: "10px 16px",
+          fontFamily: "Lexend",
+          fontWeight: "400",
+          fontSize: "14px",
+          lineHeight: "10px",
+          color: "#1A1A1A",
+        }}
+      >
+        <DiamondIcon style={{ color: "#000" }} />
+        Manage Membership
+      </MenuItem>
+      <MenuItem
+        onClick={handleMenuClose}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "12px",
+          padding: "10px 16px",
+          fontFamily: "Lexend",
+          fontWeight: "400",
+          fontSize: "14px",
+          lineHeight: "10px",
+          color: "#1A1A1A",
+        }}
+      >
+        <VisibilityOffIcon style={{ color: "#000" }} />
+        Hide Profile
+      </MenuItem>
+      <MenuItem
+        onClick={handleMenuClose}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "12px",
+          padding: "10px 16px",
+          fontFamily: "Lexend",
+          fontWeight: "400",
+          fontSize: "14px",
+          lineHeight: "10px",
+          color: "#1A1A1A",
+        }}
+      >
+        <DeleteIcon style={{ color: "#000" }} />
+        Delete Account
+      </MenuItem>
+      <MenuItem
+        onClick={handleMenuClose}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "12px",
+          padding: "10px 16px",
+          fontFamily: "Lexend",
+          fontWeight: "400",
+          fontSize: "14px",
+          lineHeight: "20px",
+          color: "#1A1A1A",
+        }}
+      >
+        <LogoutIcon style={{ color: "#000" }} />
+        Logout
+      </MenuItem>
+    </Menu>
+  </Toolbar>
+</AppBar>
+
 
 			{/* Profile Content */}
 			<Box
@@ -562,6 +600,30 @@ const handleMenuClose = () => {
 					Find my match!
 				</Button>
 			</Box>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mt: "auto",
+          borderTop: "1px solid #ddd",
+          pt: 1,
+        }}
+      >
+        <IconButton>
+          <SearchIcon />
+        </IconButton>
+        <IconButton>
+          <FavoriteBorderIcon sx={{ color: "#E4423F" }} />
+        </IconButton>
+        <IconButton>
+          <ChatBubbleOutlineIcon />
+        </IconButton>
+        <IconButton>
+          <PersonOutlineIcon />
+        </IconButton>
+      </Box>
+    
 		</Box>
 	);
 };

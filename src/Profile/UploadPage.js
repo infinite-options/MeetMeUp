@@ -17,7 +17,7 @@ const UploadPage = () => {
 	const webcamRef = useRef(null);
 	const mediaRecorderRef = useRef(null);
 	const { updateUserData } = useUserContext(); // Context function to update user data
-
+  const [showRecordingButtons, setShowRecordingButtons] = useState(true);
 	const isFormValid = video || photos.some((photo) => photo !== null);
 
 	// Handle photo upload
@@ -42,6 +42,7 @@ const UploadPage = () => {
 	};
 
 	const handleStartCaptureClick = () => {
+    setShowRecordingButtons(true);
 		setCapturing(true);
 		setRecordedChunks([]);
 		mediaRecorderRef.current = new MediaRecorder(webcamRef.current.stream, {
@@ -60,6 +61,7 @@ const UploadPage = () => {
 	const handleStopCaptureClick = () => {
     mediaRecorderRef.current.stop();
     setCapturing(false);
+    setShowRecordingButtons(false);
   };
 
 	const handleViewVideo = () => {
@@ -215,75 +217,77 @@ const UploadPage = () => {
     <Webcam audio ref={webcamRef} style={{ width: '100%' }} />
   )}
 </div>
-			{capturing ? (
-				// Show "Stop Recording" button while recording
-				<Button
-					variant="contained"
-					onClick={handleStopCaptureClick}
-					style={{
-						backgroundColor: '#E4423F',
-						color: '#fff',
-						marginBottom: '16px',
-					}}
-				>
-					Stop Recording
-				</Button>
-			) : recordedChunks.length > 0 ? (
-				// Show "Record Again" and "Save Video" buttons after recording stops
-				<Box style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-					<Button
-						variant="outlined"
-						onClick={handleViewVideo}
-						style={{
-							borderColor: '#E4423F',
-							color: '#E4423F',
-							marginBottom: '16px',
-							flex: 1,
-							marginRight: '8px',
-						}}
-					>
-						View Video
-					</Button>
-          <Button
-						variant="outlined"
-						onClick={handleStartCaptureClick}
-						style={{
-							borderColor: '#E4423F',
-							color: '#E4423F',
-							marginBottom: '16px',
-							flex: 1,
-							marginRight: '8px',
-						}}
-					>
-						Record Again
-					</Button>
-					<Button
-						variant="outlined"
-						onClick={handleSaveVideo}
-						style={{
-							borderColor: '#E4423F',
-							color: '#E4423F',
-							marginBottom: '16px',
-							flex: 1,
-						}}
-					>
-						Save Video
-					</Button>
-				</Box>
-			) : (
-				// Show "Start Recording" button initially
-				<Button
-					variant="contained"
-					onClick={handleStartCaptureClick}
-					style={{
-						backgroundColor: '#E4423F',
-						color: '#fff',
-						marginBottom: '16px',
-					}}
-				>
-					Start Recording
-				</Button>
-			)}
+{/* Show Start/Stop buttons when `showRecordingButtons` is true */}
+{showRecordingButtons ? (
+  <Box style={{ display: "flex", justifyContent: "space-between", width: "100%", marginBottom: "16px" }}>
+    <Button
+      variant="contained"
+      onClick={handleStartCaptureClick}
+      disabled={capturing} // Disable when capturing
+      style={{
+        backgroundColor: capturing ? "#ccc" : "#E4423F", // Disabled color
+        color: capturing ? "#666" : "#fff",
+        flex: 1,
+        marginRight: "8px",
+      }}
+    >
+      Start Recording
+    </Button>
+    <Button
+      variant="contained"
+      onClick={handleStopCaptureClick}
+      disabled={!capturing} // Disable when not capturing
+      style={{
+        backgroundColor: capturing ? "#E4423F" : "#ccc", // Disabled color
+        color: capturing ? "#fff" : "#666",
+        flex: 1,
+      }}
+    >
+      Stop Recording
+    </Button>
+  </Box>
+) : (
+  // Show "View Video," "Re-Record," and "Save Video" after stopping
+  <Box style={{ display: "flex", justifyContent: "space-between", width: "100%", marginBottom: "16px" }}>
+    <Button
+      variant="outlined"
+      onClick={handleViewVideo}
+      style={{
+        backgroundColor: "#E4423F" , // Disabled color
+        color: "#fff",
+        flex: 1,
+        marginRight: "4px",
+      }}
+    >
+      View Video
+    </Button>
+    <Button
+      variant="outlined"
+      onClick={handleStartCaptureClick}
+      style={{
+        backgroundColor: "#E4423F" , // Disabled color
+        color: "#fff",
+        flex: 1,
+        marginRight: "4px",
+      }}
+    >
+      Re-Record
+    </Button>
+    <Button
+      variant="outlined"
+      onClick={handleSaveVideo}
+      style={{
+        backgroundColor: "#E4423F" , // Disabled color
+        color: "#fff",
+        flex: 1,
+      }}
+    >
+      Save Video
+    </Button>
+  </Box>
+)}
+
+
 			{/* Photo Upload Section */}
 			<Box
 				style={{

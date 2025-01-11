@@ -56,6 +56,8 @@ import ProfileSummaryPage from './Summary/ProfileSummaryPage';
 import MyPreferences from './Profile/MyPreferences';
 import EditProfileSummary from './Profile/EditProfileSummary';
 import MatchProfileDisplay from './Profile/MatchProfileDisplay';
+import MatchPageNew from './Profile/MatchPageNew';
+import MatchResultsPage from './Profile/MatchResultsPage';
 
 function Main() {
   const theme = createTheme({
@@ -130,6 +132,8 @@ function Main() {
         <Route path="/mypreferences" element={<MyPreferences/>}/>
         <Route path="/editprofile" element={<EditProfileSummary/>}/>
         <Route path="/matchprofile" element={<MatchProfileDisplay/>}/>
+        <Route path="/matchpage" element={<MatchPageNew/>}/>
+        <Route path="/matchresults" element={<MatchResultsPage/>}/>
       </Routes>
     </BrowserRouter>
     </AccountContext.Provider>
