@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import axios from 'axios';
-import { Slider, Box, IconButton, } from '@mui/material';
+import { Slider, Box, IconButton } from '@mui/material';
 import { IoChevronBack, IoChevronForward, IoClose, IoPlay, IoPause } from 'react-icons/io5';
 import heightImage from '../Assets/Images/heightIcon.png';
 import kidIcon from '../Assets/Images/kidIcon.png';
@@ -13,9 +13,9 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { useLocation } from 'react-router-dom';
-import SearchIcon from "@mui/icons-material/Search";
-import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
-import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+import SearchIcon from '@mui/icons-material/Search';
+import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import twohearts from '../Assets/Images/twohearts.png';
 
 export default function MatchProfileDisplay() {
@@ -32,7 +32,7 @@ export default function MatchProfileDisplay() {
 	const [videoDuration, setVideoDuration] = useState(0);
 	const [isLiked, setIsLiked] = useState(false);
 	const [theyLikedMe, settheyLikedMe] = useState(false);
-    const navigate = useNavigate();
+	const navigate = useNavigate();
 
 	// Helper function to validate URLs
 	const isValidUrl = (string) => {
@@ -45,8 +45,8 @@ export default function MatchProfileDisplay() {
 	};
 
 	const handleClick = () => {
-		setIsLiked(!isLiked); // Toggle the like state
-	};
+        setIsLiked((prevState) => !prevState); // Toggle the like state
+      };
 
 	const handlePlaybackStatusUpdate = (event) => {
 		const videoElement = event.target;
@@ -114,9 +114,42 @@ export default function MatchProfileDisplay() {
 		fetchData(arrposition);
 	}, [arrposition]);
 
-    const handleClickofhearts = () => {
-        navigate("/matchresults"); // Navigate to /testpage on click
-      };
+	const handleClickofhearts = () => {
+		navigate('/matchresults'); // Navigate to /testpage on click
+	};
+
+    useEffect(() => {
+        if (isLiked) {
+          // Call handleMatchClick when isLiked is set to true
+          handleMatchClick(userInfo?.user_uid);
+        }
+      }, [isLiked, userInfo]);
+
+	const handleMatchClick = async () => {
+		try {
+			// Construct the API URL
+			const apiUrl = `https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/likes`; // Replace with your actual API URL
+
+			// Prepare the data for the POST request (you can pass relevant match data here)
+			const data = {
+				liker_user_id: localStorage.getItem('user_uid'),
+				liked_user_id: userInfo.user_uid, // You can include other data from the match object
+			};
+
+			// Send the POST request
+			const response = await axios.post(apiUrl, data);
+
+			// Handle success
+			if (response.status === 200) {
+				console.log('Match success:', response.data);
+				alert('Matched successfully!');
+			}
+		} catch (error) {
+			// Handle error
+			console.error('Error calling the match API:', error);
+			alert('An error occurred while matching.');
+		}
+	};
 
 	if (loading) {
 		return (
@@ -165,7 +198,6 @@ export default function MatchProfileDisplay() {
 			) : (
 				<p style={styles.infoText}>Invalid or Missing Video URL</p>
 			)}
-
 			{/* Static Layer with Arrows */}
 			<div style={styles.staticLayer}>
 				<button style={styles.arrowContainer} onClick={handleLeftArrowPress}>
@@ -189,7 +221,6 @@ export default function MatchProfileDisplay() {
 					<IoChevronForward size={24} color="white" />
 				</button>
 			</div>
-
 			<div style={styles.scrollableLayer}>
 				<div style={styles.overlay}>
 					<div>
@@ -266,42 +297,40 @@ export default function MatchProfileDisplay() {
 					/>
 				</div>
 			</div>
-          
-          
-            <Box
-  sx={{
-    display: "flex",
-    justifyContent: "space-around", // Space out icons evenly
-    alignItems: "center",
-    position: "absolute",
-    bottom: 0, // Fix it to the bottom of the screen
-    width: "100%",
-    backgroundColor: "#000", // Match the background color of the page
-    padding: "10px 0", // Add some padding for spacing
-    borderTop: "1px solid #444", // Subtle border on top
-  }}
->
-  <IconButton>
-    <SearchIcon sx={{ color: "#FFF", fontSize: 28 }} />
-  </IconButton>
-  <IconButton onClick={handleClickofhearts}>
-      <img
-        src={twohearts}
-        alt="Two Hearts"
-        style={{
-          width: "28px", // Adjust size to match your design
-          height: "28px",
-        }}
-      />
-    </IconButton>
-  <IconButton>
-    <ChatBubbleOutlineIcon sx={{ color: "#FFF", fontSize: 28 }} />
-  </IconButton>
-  <IconButton>
-    <PersonOutlineIcon sx={{ color: "#FFF", fontSize: 28 }} />
-  </IconButton>
-</Box> </div>
-      
+			<Box
+				sx={{
+					display: 'flex',
+					justifyContent: 'space-around', // Space out icons evenly
+					alignItems: 'center',
+					position: 'absolute',
+					bottom: 0, // Fix it to the bottom of the screen
+					width: '100%',
+					backgroundColor: '#000', // Match the background color of the page
+					padding: '10px 0', // Add some padding for spacing
+					borderTop: '1px solid #444', // Subtle border on top
+				}}
+			>
+				<IconButton>
+					<SearchIcon sx={{ color: '#FFF', fontSize: 28 }} />
+				</IconButton>
+				<IconButton onClick={handleClickofhearts}>
+					<img
+						src={twohearts}
+						alt="Two Hearts"
+						style={{
+							width: '28px', // Adjust size to match your design
+							height: '28px',
+						}}
+					/>
+				</IconButton>
+				<IconButton>
+					<ChatBubbleOutlineIcon sx={{ color: '#FFF', fontSize: 28 }} />
+				</IconButton>
+				<IconButton>
+					<PersonOutlineIcon sx={{ color: '#FFF', fontSize: 28 }} />
+				</IconButton>
+			</Box>{' '}
+		</div>
 	);
 }
 
@@ -336,7 +365,7 @@ const styles = {
 		zIndex: 1,
 		height: '30%',
 		overflowY: 'auto',
-        marginBottom: '30px'
+		marginBottom: '30px',
 	},
 	overlay: {
 		padding: '20px',
@@ -375,15 +404,15 @@ const styles = {
 		zIndex: 10,
 	},
 	staticLayer: {
-        position: 'absolute',
-        bottom: '8%', // Move the whole layer upwards
-        left: 0,
-        right: 0,
-        display: 'flex',
-        justifyContent: 'space-between',
-        padding: '0 20px',
-        zIndex: 20,
-      },
+		position: 'absolute',
+		bottom: '8%', // Move the whole layer upwards
+		left: 0,
+		right: 0,
+		display: 'flex',
+		justifyContent: 'space-between',
+		padding: '0 20px',
+		zIndex: 20,
+	},
 	arrowContainer: {
 		width: '50px',
 		height: '50px',
@@ -402,19 +431,19 @@ const styles = {
 		alignItems: 'center',
 	},
 	redCircle: {
-        marginLeft: '20px',
-        width: '45px',
-        height: '45px',
-        borderRadius: '45px',
-        border: '2px solid red',
-        backgroundColor: 'white',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        cursor: 'pointer',
-        position: 'relative', // Keep it positioned relative to the container
-        bottom: '0px', // Move it slightly upwards
-      },
+		marginLeft: '20px',
+		width: '45px',
+		height: '45px',
+		borderRadius: '45px',
+		border: '2px solid red',
+		backgroundColor: 'white',
+		display: 'flex',
+		justifyContent: 'center',
+		alignItems: 'center',
+		cursor: 'pointer',
+		position: 'relative', // Keep it positioned relative to the container
+		bottom: '0px', // Move it slightly upwards
+	},
 	icon: {
 		color: 'red', // Red color for the icon
 	},
@@ -438,8 +467,8 @@ const styles = {
 		cursor: 'pointer',
 	},
 	progressContainer: {
-        padding: '0 20px',
-        position: 'absolute', // Ensure it stays positioned
-        bottom: '15%', // Adjust the distance from the bottom of the container
-      },
+		padding: '0 20px',
+		position: 'absolute', // Ensure it stays positioned
+		bottom: '15%', // Adjust the distance from the bottom of the container
+	},
 };

@@ -37,7 +37,33 @@ const MatchResultsPage = () => {
   const [interestedInMe, setInterestedInMe] = useState([]);
   const [interestedIn, setInterestedIn] = useState([]);
   
-  const renderMatchRow = (name, interests, imgSrc, buttonLabel) => (
+  const handleMatchClick = async (matchId) => {
+    try {
+      // Construct the API URL
+      const apiUrl = `https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/likes`;  // Replace with your actual API URL
+  
+      // Prepare the data for the POST request (you can pass relevant match data here)
+      const data = {
+        liker_user_id:localStorage.getItem('user_uid'),
+        liked_user_id: matchId, // You can include other data from the match object
+      };
+  
+      // Send the POST request
+      const response = await axios.post(apiUrl, data);
+  
+      // Handle success
+      if (response.status === 200) {
+        console.log('Match success:', response.data);
+        alert('Matched successfully!');
+      }
+    } catch (error) {
+      // Handle error
+      console.error('Error calling the match API:', error);
+      alert('An error occurred while matching.');
+    }
+  };
+  
+  const renderMatchRow = (name, interests, imgSrc, buttonLabel, matchId) => (
     <Box
       sx={{
         display: "flex",
@@ -72,6 +98,7 @@ const MatchResultsPage = () => {
             },
             mr: 1,
           }}
+          onClick={buttonLabel === "Match" ? () => handleMatchClick(matchId) : undefined} // Conditionally set the onClick handler
         >
           {buttonLabel}
         </Button>
@@ -81,6 +108,7 @@ const MatchResultsPage = () => {
       </Box>
     </Box>
   );
+  
 
   const findMatchesResult = async () => {
 		try {
@@ -335,7 +363,8 @@ const MatchResultsPage = () => {
       match.user_first_name, // Name
       match.common_interests || "0", // Interests (or fallback to "0")
       firstPhoto, // Use the first photo URL
-      "Match" // Button label
+      "Match", // Button label
+      match.user_uid // Match ID
     );
   })
 ) : (
