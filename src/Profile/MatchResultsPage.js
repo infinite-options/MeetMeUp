@@ -26,13 +26,17 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import LogoutIcon from '@mui/icons-material/Logout';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import DiamondIcon from '@mui/icons-material/Diamond';
+import redtwohearts from "../Assets/Images/redtwohearts.png";
 
 const MatchResultsPage = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 	const handleMenuOpen = (event) => setAnchorEl(event.currentTarget);
 	const handleMenuClose = () => setAnchorEl(null);
-
+  const [matchedResults, setMatchedResults] = useState([]);
+  const [interestedInMe, setInterestedInMe] = useState([]);
+  const [interestedIn, setInterestedIn] = useState([]);
+  
   const renderMatchRow = (name, interests, imgSrc, buttonLabel) => (
     <Box
       sx={{
@@ -77,6 +81,29 @@ const MatchResultsPage = () => {
       </Box>
     </Box>
   );
+
+  const findMatchesResult = async () => {
+		try {
+
+			const userId = localStorage.getItem('user_uid'); // Assign `user_uid` dynamically or hard-code for now if needed
+			const apiUrl = `https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/likes/100-000004`;
+
+			// Fetch data from the API
+			const response = await fetch(apiUrl);
+			const data = await response.json();
+      console.log('---data---', data);
+      setMatchedResults(data.matched_results);
+      setInterestedInMe(data.people_who_selected_you);
+      setInterestedIn(data.people_whom_you_selected);
+		} catch (error) {
+			console.error('Error fetching matches:', error);
+			alert('An error occurred while finding matches.');
+		}
+	};
+
+  useEffect(() => {
+    findMatchesResult();
+  }, []);
 
   return (
     <Box
@@ -267,9 +294,22 @@ const MatchResultsPage = () => {
         >
           My matches
         </Typography>
-        {renderMatchRow("Gemma Jones", "2", "/path/to/gemma.jpg", "Set up date")}
-        {renderMatchRow("Emma Carrick", "3", "/path/to/emma.jpg", "Set up date")}
-      </Box>
+        {matchedResults.length > 0 ? (
+  matchedResults.map((match, index) => {
+    // Parse the user_photo_url JSON string and extract the first photo URL
+    const photoUrls = JSON.parse(match.user_photo_url || "[]"); // Parse the JSON string safely
+    const firstPhoto = photoUrls[0] || ""; // Get the first photo URL or fallback to an empty string
+
+    return renderMatchRow(
+      match.user_first_name, // Name
+      match.common_interests || "0", // Interests (or fallback to "0")
+      firstPhoto, // Use the first photo URL
+      "Set up date" // Button label
+    );
+  })
+) : (
+  <Typography>No matches found</Typography>
+)}</Box>
       <Divider sx={{ my: 2 }} />
 
       <Box>
@@ -285,13 +325,22 @@ const MatchResultsPage = () => {
         >
           People interested in me
         </Typography>
-        {renderMatchRow("Kelsee Whyte", "1", "/path/to/kelsee.jpg", "Match")}
-        {renderMatchRow(
-          "Esmeralda Butterfly",
-          "2",
-          "/path/to/esmeralda.jpg",
-          "Match"
-        )}
+        {interestedInMe.length > 0 ? (
+  interestedInMe.map((match, index) => {
+    // Parse the user_photo_url JSON string and extract the first photo URL
+    const photoUrls = JSON.parse(match.user_photo_url || "[]"); // Parse the JSON string safely
+    const firstPhoto = photoUrls[0] || ""; // Get the first photo URL or fallback to an empty string
+
+    return renderMatchRow(
+      match.user_first_name, // Name
+      match.common_interests || "0", // Interests (or fallback to "0")
+      firstPhoto, // Use the first photo URL
+      "Match" // Button label
+    );
+  })
+) : (
+  <Typography>No matches found</Typography>
+)}
       </Box>
       <Divider sx={{ my: 2 }} />
 
@@ -308,14 +357,21 @@ const MatchResultsPage = () => {
         >
           People I’m interested in
         </Typography>
-        {renderMatchRow("Stacy Smith", "4", "/path/to/stacy.jpg", "")}
-        {renderMatchRow("Charlotte King", "2", "/path/to/charlotte.jpg", "")}
-        {renderMatchRow(
-          "Jessica Cherrywood",
-          "3",
-          "/path/to/jessica.jpg",
-          ""
-        )}
+        {interestedIn.length > 0 ? (
+  interestedIn.map((match, index) => {
+    // Parse the user_photo_url JSON string and extract the first photo URL
+    const photoUrls = JSON.parse(match.user_photo_url || "[]"); // Parse the JSON string safely
+    const firstPhoto = photoUrls[0] || ""; // Get the first photo URL or fallback to an empty string
+
+    return renderMatchRow(
+      match.user_first_name, // Name
+      match.common_interests || "0", // Interests (or fallback to "0")
+      firstPhoto, // Use the first photo URL
+    );
+  })
+) : (
+  <Typography>No matches found</Typography>
+)}
       </Box>
 
       {/* Bottom Navigation */}
@@ -332,9 +388,16 @@ const MatchResultsPage = () => {
         <IconButton>
           <SearchIcon />
         </IconButton>
-        <IconButton>
-          <FavoriteIcon sx={{ color: "#E4423F" }} />
-        </IconButton>
+        <IconButton >
+      <img
+        src={redtwohearts}
+        alt="Two Hearts"
+        style={{
+          width: "28px", // Adjust size to match your design
+          height: "28px",
+        }}
+      />
+    </IconButton>
         <IconButton>
           <ChatBubbleOutlineIcon />
         </IconButton>

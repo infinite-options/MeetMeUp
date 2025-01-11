@@ -107,15 +107,15 @@ const MyPreferences = () => {
 			await updateUserInfo();
 
 			const userId = localStorage.getItem('user_uid'); // Assign `user_uid` dynamically or hard-code for now if needed
-			const apiUrl = `https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/matches/${userId}`;
+			const apiUrl = `https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/matches/100-000004`;
 
 			// Fetch data from the API
 			const response = await fetch(apiUrl);
 			const data = await response.json();
-
 			// Display the "message" from the response
 			if (data.message) {
-				const fetchdata = data.result; // Extract the result
+				const fetchdata = data["result of 1 way match"]; // Extract the result
+        console.log('---fetchdata---', fetchdata);
 				navigate('/matchprofile', { state: { fetchdata } }); // Pass `fetchdata` to the route
 			} else {
 				alert('No message found in the response.');
