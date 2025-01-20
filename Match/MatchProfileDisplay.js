@@ -9,10 +9,12 @@ import {
   PanResponder,
   Dimensions,
   ScrollView,
+
 } from 'react-native';
 import { Video } from 'expo-av';
 import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Slider from '@react-native-community/slider';
 
@@ -27,7 +29,7 @@ export default function MatchProfileDisplay() {
   const screenHeight = Dimensions.get('window').height;
   const sheetOpenY = screenHeight * 0.15;   // how far from top when "open"
   const sheetClosedY = screenHeight * 0.55; // how far from top when "closed"
-
+  const navigation = useNavigation();
   const videoRef = useRef(null);
   const [status, setStatus] = useState({});
   const [userInfo, setUserInfo] = useState(null);
@@ -41,7 +43,7 @@ export default function MatchProfileDisplay() {
   const [videoPosition, setVideoPosition] = useState(0);
   const [videoDuration, setVideoDuration] = useState(0);
 
-  // Animated value controlling bottom sheet’s vertical position
+  // Animated value controlling bottom sheet's vertical position
   const sheetAnim = useRef(new Animated.Value(sheetClosedY)).current;
 
   // PanResponder to handle dragging of bottom sheet
@@ -128,6 +130,9 @@ export default function MatchProfileDisplay() {
       fetchData(0);
     }
   };
+  const handleLikePress = () => {
+    navigation.navigate('MatchPageNew');
+  }
 
   const handleClosePress = () => {
     // Example: skip to next profile on "X"
@@ -136,19 +141,31 @@ export default function MatchProfileDisplay() {
 
   const fetchData = async (position) => {
     try {
+      console.log('userUid', userUid);
       const response = await axios.get(
-        `https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/matches/${userUid}`
+        `https://41c664jpz1.execute-api.us-west-1.amazonaws.com/dev/matches/100-000004`
       );
-      const arrsize = response.data.result.length;
-      setArrlength(arrsize);
+      console.log('API Response MatchProfileDisplay:', response.data);
 
-      const fetchedData = response.data.result[position];
-      if (fetchedData) {
-        const uid = fetchedData.user_uid;
-        const data = await fetchUserInfo(uid);
-        setUserInfo(data);
+      const matchResults = response.data['result of 1 way match'];
+
+      if (Array.isArray(matchResults)) {
+        const arrsize = matchResults.length;
+        setArrlength(arrsize);
+
+        const fetchedData = matchResults[position];
+        if (fetchedData) {
+          const uid = fetchedData.user_uid;
+          const data = await fetchUserInfo(uid);
+          console.log('data', data);
+          console.log('fetchedData', fetchedData);
+          setUserInfo(fetchedData);
+          console.log('userInfo data', userInfo);
+        } else {
+          setError('No match data available.');
+        }
       } else {
-        setError('No match data available.');
+        setError('Invalid response format.');
       }
     } catch (err) {
       setError(err.message || 'An error occurred while fetching matches.');
@@ -198,19 +215,56 @@ export default function MatchProfileDisplay() {
     );
   }
 
+  // Parse userInfo.user_video_url if it's stored as a JSON string
   let videoUrl = userInfo?.user_video_url;
   if (videoUrl) {
     try {
-      videoUrl = JSON.parse(videoUrl);
+      // Some APIs return it with quotes or as a raw string. Adjust as needed:
+      videoUrl = JSON.parse(videoUrl); // remove if your string is already plain
     } catch (e) {
       console.error('Invalid video URL format:', e);
-      videoUrl = null;
+      videoUrl = userInfo.user_video_url.replace(/^"|"$/g, '');
+    }
+  }
+
+  // Parse userInfo.user_general_interests (which might be JSON string like ["Hiking","Biking"])
+  let generalInterests = [];
+  if (userInfo?.user_general_interests) {
+    try {
+      generalInterests = JSON.parse(userInfo.user_general_interests);
+    } catch (e) {
+      console.log('Failed to parse user_general_interests', e);
+      // Fallback if needed
+    }
+  }
+
+  // Parse userInfo.user_date_interests
+  let dateInterests = [];
+  if (userInfo?.user_date_interests) {
+    try {
+      dateInterests = JSON.parse(userInfo.user_date_interests);
+    } catch (e) {
+      console.log('Failed to parse user_date_interests', e);
+      // Fallback if needed
+    }
+  }
+
+  // Combine them into a single array for chips
+  const allInterests = [...generalInterests, ...dateInterests];
+
+  // Parse userInfo.user_open_to to show "open to ..."
+  let openToArray = [];
+  if (userInfo?.user_open_to) {
+    try {
+      openToArray = JSON.parse(userInfo.user_open_to);
+    } catch (e) {
+      console.log('Failed to parse user_open_to', e);
     }
   }
 
   return (
     <View style={styles.container}>
-      {/* Top bar with "12 of 47" and settings icon */}
+      {/* Top bar with "x of y" and settings icon */}
       <View style={styles.topBar}>
         <View style={{ flex: 1 }}>
           <Text style={styles.topCounter}>
@@ -256,10 +310,7 @@ export default function MatchProfileDisplay() {
         </View>
       )}
 
-      {/* 
-        MATCH ACTIONS CONTAINER 
-        Bring these to the top via high zIndex
-      */}
+      {/* MATCH ACTIONS CONTAINER */}
       <View style={styles.matchActionsContainer}>
         <TouchableOpacity style={styles.roundButton} onPress={handleLeftArrowPress}>
           <Ionicons name="chevron-back" size={28} color="white" />
@@ -275,6 +326,7 @@ export default function MatchProfileDisplay() {
 
           <TouchableOpacity
             style={[styles.roundButton, { backgroundColor: 'red', marginLeft: 25 }]}
+            onPress={handleLikePress}
           >
             <Image source={likeImg} style={styles.centerImage} />
           </TouchableOpacity>
@@ -285,7 +337,7 @@ export default function MatchProfileDisplay() {
         </TouchableOpacity>
       </View>
 
-      {/* BOTTOM SHEET (behind the matchActionContainer, zIndex lower) */}
+      {/* BOTTOM SHEET */}
       <Animated.View
         {...panResponder.panHandlers}
         style={[
@@ -302,10 +354,15 @@ export default function MatchProfileDisplay() {
             <Text style={styles.nameText}>
               {userInfo?.user_first_name}, {userInfo?.user_age}
             </Text>
-            <Ionicons name="heart" size={20} color="red" style={{ marginLeft: 6 }} />
+            <Ionicons
+              name={userInfo?.Likes === "YES" ? "heart" : "heart-outline"}
+              size={20}
+              color="red"
+              style={{ marginLeft: 6 }}
+            />
           </View>
 
-          {/* 5-star rating + attendance rating */}
+          {/* 5-star rating + attendance rating (example placeholder) */}
           <View style={styles.starRatingContainer}>
             {[...Array(5).keys()].map((i) => (
               <Ionicons key={i} name="star" size={18} color="#FFD700" />
@@ -313,113 +370,175 @@ export default function MatchProfileDisplay() {
             <Text style={styles.attendanceText}> attendance rating</Text>
           </View>
 
-          {/* Example "chips" for user interests */}
+          {/* Interests chips */}
           <View style={styles.chipsRow}>
-            <View style={styles.chip}>
-              <Text style={styles.chipText}>Cooking / Baking</Text>
-            </View>
-            <View style={styles.chip}>
-              <Text style={styles.chipText}>Music</Text>
-            </View>
-            <View style={styles.chip}>
-              <Text style={styles.chipText}>Health & Fitness</Text>
-            </View>
-            <View style={styles.chip}>
-              <Text style={styles.chipText}>Dance</Text>
-            </View>
-            <View style={styles.chip}>
-              <Text style={styles.chipText}>Animals & Wildlife</Text>
-            </View>
-            <View style={styles.chip}>
-              <Text style={styles.chipText}>Dinner</Text>
-            </View>
-            <View style={styles.chip}>
-              <Text style={styles.chipText}>Coffee</Text>
-            </View>
-            <View style={styles.chip}>
-              <Text style={styles.chipText}>Drinks</Text>
-            </View>
-            <View style={styles.chip}>
-              <Text style={styles.chipText}>Movies</Text>
-            </View>
+            {allInterests.map((interest, idx) => (
+              <View style={styles.chip} key={idx}>
+                <Text style={styles.chipText}>{interest}</Text>
+              </View>
+            ))}
           </View>
 
-          {/* Example details - use your userInfo if desired */}
+          {/* Distances */}
           <View style={styles.detailRow}>
-            <Ionicons name="location" size={16} color="#bbb" style={{ marginRight: 8 }} />
-            <Text style={styles.detailText}>12 miles away</Text>
+            <Ionicons
+              name="location"
+              size={16}
+              color="#bbb"
+              style={{ marginRight: 8 }}
+            />
+            <Text style={styles.detailText}>
+              {userInfo.distance
+                ? `${userInfo.distance.toFixed(2)} miles away`
+                : 'Distance unavailable'}
+            </Text>
           </View>
+
+          {/* Height */}
+          {userInfo?.user_height ? (
+            <View style={styles.detailRow}>
+              <Image source={heightImg} style={styles.detailIcon} />
+              <Text style={styles.detailText}>{userInfo.user_height} cm tall</Text>
+            </View>
+          ) : null}
+
+          {/* Kids */}
           <View style={styles.detailRow}>
-            <Image source={heightImg} style={styles.detailIcon} />
-            <Text style={styles.detailText}>{userInfo.user_height}</Text>
+            <Ionicons
+              name="people"
+              size={16}
+              color="#bbb"
+              style={{ marginRight: 8 }}
+            />
+            <Text style={styles.detailText}>
+              {userInfo.user_kids !== null
+                ? `${userInfo.user_kids} children`
+                : '0 children'}
+            </Text>
           </View>
-          <View style={styles.detailRow}>
-            <Ionicons name="people" size={16} color="#bbb" style={{ marginRight: 8 }} />
-            <Text style={styles.detailText}>{userInfo.user_kids !== null ? `${userInfo.user_kids} children` : '0 children'}</Text>
-          </View>
+
+          {/* Sex assigned at birth */}
           <View style={styles.detailRow}>
             <Image source={genderImg} style={styles.detailIcon} />
             <Text style={styles.detailText}>
-              Sex assigned at birth was {userInfo?.user_gender}
+              Sex assigned at birth: {userInfo?.user_gender || 'Unknown'}
             </Text>
           </View>
+
+          {/* Identity */}
           <View style={styles.detailRow}>
             <Ionicons name="wifi" size={16} color="#bbb" style={{ marginRight: 8 }} />
-            <Text style={styles.detailText}>Identifies as female temp</Text>
-          </View>
-          <View style={styles.detailRow}>
-            <Ionicons name="heart-half-outline" size={16} color="#bbb" style={{ marginRight: 8 }} />
-            <Text style={styles.detailText}>Straight temp</Text>
-          </View>
-          <View style={styles.detailRow}>
-            <Ionicons name="male-female" size={16} color="#bbb" style={{ marginRight: 8 }} />
-            <Text style={styles.detailText}>User is open to {Array.isArray(userInfo.user_open_to)
-                ? userInfo.user_open_to.join(', ')
-                : JSON.parse(userInfo.user_open_to).join(', ')}</Text>
-          </View>
-          <View style={styles.detailRow}>
-            <Ionicons name="flag" size={16} color="#bbb" style={{ marginRight: 8 }} />
-            <Text style={styles.detailText}>User sexuality {userInfo.user_sexuality}</Text>
-          </View>
-          <View style={styles.detailRow}>
-            <Ionicons name="flag" size={16} color="#bbb" style={{ marginRight: 8 }} />
-            <Text style={styles.detailText}>American</Text>
-          </View>
-          <View style={styles.detailRow}>
-            <Ionicons name="flag" size={16} color="#bbb" style={{ marginRight: 8 }} />
-            <Text style={styles.detailText}>User Suburb {userInfo.user_suburb}</Text>
-          </View>
-          <View style={styles.detailRow}>
-            <Ionicons name="body" size={16} color="#bbb" style={{ marginRight: 8 }} />
-            <Text style={styles.detailText}>Athletic body type</Text>
-          </View>
-          <View style={styles.detailRow}>
-            <Ionicons name="school" size={16} color="#bbb" style={{ marginRight: 8 }} />
-            <Text style={styles.detailText}>Bachelor’s Degree</Text>
-          </View>
-          <View style={styles.detailRow}>
-            <Ionicons name="briefcase" size={16} color="#bbb" style={{ marginRight: 8 }} />
-            <Text style={styles.detailText}>Accountant</Text>
-          </View>
-          <View style={styles.detailRow}>
-            <Ionicons name="cafe" size={16} color="#bbb" style={{ marginRight: 8 }} />
-            <Text style={styles.detailText}>Does not smoke</Text>
-          </View>
-          <View style={styles.detailRow}>
-            <Ionicons name="beer" size={16} color="#bbb" style={{ marginRight: 8 }} />
-            <Text style={styles.detailText}>Drinks 1-2 times per week</Text>
-          </View>
-          <View style={styles.detailRow}>
-            <Ionicons name="alert-circle" size={16} color="#bbb" style={{ marginRight: 8 }} />
-            <Text style={styles.detailText}>Atheist</Text>
-          </View>
-          <View style={styles.detailRow}>
-            <Ionicons name="planet" size={16} color="#bbb" style={{ marginRight: 8 }} />
-            <Text style={styles.detailText}>Virgo</Text>
+            <Text style={styles.detailText}>
+              Identifies as {userInfo?.user_identity || 'N/A'}
+            </Text>
           </View>
 
-          {/* Example slider for video position if you want */}
-          {/* 
+          {/* Sexuality */}
+          <View style={styles.detailRow}>
+            <Ionicons
+              name="heart-half-outline"
+              size={16}
+              color="#bbb"
+              style={{ marginRight: 8 }}
+            />
+            <Text style={styles.detailText}>
+              {userInfo?.user_sexuality || 'Orientation not provided'}
+            </Text>
+          </View>
+
+          {/* Open to */}
+          <View style={styles.detailRow}>
+            <Ionicons
+              name="male-female"
+              size={16}
+              color="#bbb"
+              style={{ marginRight: 8 }}
+            />
+            <Text style={styles.detailText}>
+              Open to {openToArray.join(', ') || 'No preference'}
+            </Text>
+          </View>
+
+          {/* Nationality */}
+          <View style={styles.detailRow}>
+            <Ionicons name="flag" size={16} color="#bbb" style={{ marginRight: 8 }} />
+            <Text style={styles.detailText}>
+              Nationality: {userInfo?.user_nationality || 'Not entered'}
+            </Text>
+          </View>
+
+          {/* Suburb */}
+          <View style={styles.detailRow}>
+            <Ionicons name="flag" size={16} color="#bbb" style={{ marginRight: 8 }} />
+            <Text style={styles.detailText}>
+              {userInfo?.user_suburb ? `Suburb: ${userInfo.user_suburb}` : 'No suburb'}
+            </Text>
+          </View>
+
+          {/* Body Composition */}
+          <View style={styles.detailRow}>
+            <Ionicons name="body" size={16} color="#bbb" style={{ marginRight: 8 }} />
+            <Text style={styles.detailText}>
+              {userInfo?.user_body_composition || 'Body type not specified'}
+            </Text>
+          </View>
+
+          {/* Education */}
+          <View style={styles.detailRow}>
+            <Ionicons name="school" size={16} color="#bbb" style={{ marginRight: 8 }} />
+            <Text style={styles.detailText}>
+              {userInfo?.user_education || 'Education not specified'}
+            </Text>
+          </View>
+
+          {/* Job */}
+          <View style={styles.detailRow}>
+            <Ionicons name="briefcase" size={16} color="#bbb" style={{ marginRight: 8 }} />
+            <Text style={styles.detailText}>
+              {userInfo?.user_job || 'Occupation not specified'}
+            </Text>
+          </View>
+
+          {/* Smoking */}
+          <View style={styles.detailRow}>
+            <Ionicons name="cafe" size={16} color="#bbb" style={{ marginRight: 8 }} />
+            <Text style={styles.detailText}>
+              {userInfo?.user_smoking && userInfo.user_smoking !== 'Not Entered'
+                ? userInfo.user_smoking
+                : 'Smoking habit not specified'}
+            </Text>
+          </View>
+
+          {/* Drinking */}
+          <View style={styles.detailRow}>
+            <Ionicons name="beer" size={16} color="#bbb" style={{ marginRight: 8 }} />
+            <Text style={styles.detailText}>
+              {userInfo?.user_drinking || 'Drinking habit not specified'}
+            </Text>
+          </View>
+
+          {/* Religion */}
+          <View style={styles.detailRow}>
+            <Ionicons
+              name="alert-circle"
+              size={16}
+              color="#bbb"
+              style={{ marginRight: 8 }}
+            />
+            <Text style={styles.detailText}>
+              {userInfo?.user_religion || 'Religion not specified'}
+            </Text>
+          </View>
+
+          {/* Star sign */}
+          <View style={styles.detailRow}>
+            <Ionicons name="planet" size={16} color="#bbb" style={{ marginRight: 8 }} />
+            <Text style={styles.detailText}>
+              {userInfo?.user_star_sign || 'Sign not specified'}
+            </Text>
+          </View>
+
+          {/* Example slider for video position if you want
           <View style={styles.progressContainer}>
             <Slider
               style={styles.slider}
@@ -436,10 +555,7 @@ export default function MatchProfileDisplay() {
         </ScrollView>
       </Animated.View>
 
-      {/* 
-        BOTTOM NAV BAR 
-        Also on top (high zIndex)
-      */}
+      {/* BOTTOM NAV BAR */}
       <View style={styles.bottomNavBar}>
         <TouchableOpacity style={styles.navItem}>
           <Ionicons name="search" size={28} color="#fff" />
@@ -467,7 +583,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#000',
   },
 
-  // Top bar (zIndex automatically above the video)
   topBar: {
     position: 'absolute',
     top: 40,
@@ -476,14 +591,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    zIndex: 9999, // ensure it's on top
+    zIndex: 9999,
   },
   topCounter: {
     color: '#ccc',
     fontSize: 16,
   },
 
-  // Background video
   backgroundVideo: {
     position: 'absolute',
     top: 0,
@@ -501,7 +615,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
 
-  // Play/Pause
   playPauseButton: {
     position: 'absolute',
     top: '50%',
@@ -518,16 +631,15 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 
-  // Floating L/R arrows, X, heart
   matchActionsContainer: {
     position: 'absolute',
-    bottom: 120, // above the nav bar
+    bottom: 120,
     left: 0,
     right: 0,
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    zIndex: 9999, // keep on top
+    zIndex: 9999,
   },
   roundButton: {
     width: 50,
@@ -543,7 +655,6 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
 
-  // The bottom sheet (zIndex lower than the top items, so behind them)
   bottomSheet: {
     position: 'absolute',
     left: 0,
@@ -552,7 +663,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.7)',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    zIndex: 11, // behind matchActions and nav bar
+    zIndex: 11,
   },
   dragIndicator: {
     alignSelf: 'center',
@@ -564,10 +675,9 @@ const styles = StyleSheet.create({
   },
   bottomSheetScroll: {
     paddingHorizontal: 20,
-    paddingBottom: 100, // space for nav
+    paddingBottom: 100,
   },
 
-  // Name + heart
   nameRow: {
     flexDirection: 'row',
     alignItems: 'flex-end',
@@ -589,7 +699,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
 
-  // Chips
   chipsRow: {
     flexWrap: 'wrap',
     flexDirection: 'row',
@@ -608,7 +717,6 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
 
-  // Details
   detailRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -633,7 +741,6 @@ const styles = StyleSheet.create({
     height: 40,
   },
 
-  // The persistent bottom nav bar
   bottomNavBar: {
     position: 'absolute',
     bottom: 0,
@@ -644,13 +751,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    zIndex: 9999, // always on top
+    zIndex: 9999,
   },
   navItem: {
     padding: 10,
   },
 
-  // Info text for loading/error
   infoText: {
     color: '#fff',
   },

@@ -71,6 +71,8 @@ import VerifyPhoneNumber2 from "./VerifyYourAccount/VerifyPhoneNumber2.js";
 import AddDriversLicense from "./VerifyYourAccount/AddDriversLicense.js";
 import Login from "./AccountSetup/Login.js";
 import EditProfile from "./Profile/EditProfile.js";
+import MatchPageNew from "./Match/MatchPageNew.js";
+import MatchResultsPage from "./Match/MatchResultsPage.js";
 const Stack = createNativeStackNavigator();
 // const Stack = createStackNavigator();
 SplashScreen.preventAutoHideAsync();
@@ -107,6 +109,8 @@ export default function App() {
       {/* <Stack.Navigator initialRouteName='Start' screenOptions={{ headerShown: false }}> */}
       <Stack.Navigator initialRouteName='Start' screenOptions={{ headerShown: false }}>
         <Stack.Screen name='Preferences' component={Preferences}/>
+        <Stack.Screen name='MatchPageNew' component={MatchPageNew}/>
+        <Stack.Screen name='MatchResultsPage' component={MatchResultsPage}/>
        <Stack.Screen name='MatchProfileDisplay' component={MatchProfileDisplay}/> 
        <Stack.Screen name='MatchPopUp' component={MatchPopUp}/>
         <Stack.Screen name='MatchPopUpTemp' component={MatchPopUpTemp}/>
